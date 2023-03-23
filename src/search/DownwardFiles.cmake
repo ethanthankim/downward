@@ -175,6 +175,13 @@ fast_downward_plugin(
 )
 
 fast_downward_plugin(
+    NAME TYPE_LOW_WATER_MARK_OPEN_LIST
+    HELP "Low-water mark based type system open list"
+    SOURCES
+        open_lists/type_low_water_mark_open_list
+)
+
+fast_downward_plugin(
     NAME DYNAMIC_BITSET
     HELP "Poor man's version of boost::dynamic_bitset"
     SOURCES
