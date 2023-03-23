@@ -1,0 +1,1375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>assign3-abs</title>
+<meta name="generator" content="https://txt2tags.org">
+<style>
+blockquote{margin: 1em 2em; border-left: 2px solid #999;
+  font-style: oblique; padding-left: 1em;}
+blockquote:first-letter{margin: .2em .1em .1em 0; font-size: 160%; font-weight: bold;}
+blockquote:first-line{font-weight: bold;}
+body{font-family: sans-serif;}
+hr{background-color:#000;border:0;color:#000;}
+hr.heavy{height:2px;}
+hr.light{height:1px;}
+img{border:0;display:block;}
+img.right{margin:0 0 0 auto;}
+img.center{border:0;margin:0 auto;}
+table{border-collapse: collapse;}
+table th,table td{padding: 3px 7px 2px 7px;}
+table th{background-color: lightgrey;}
+table.center{margin-left:auto; margin-right:auto;}
+.center{text-align:center;}
+.right{text-align:right;}
+.left{text-align:left;}
+.tableborder,.tableborder td,.tableborder th{border:1px solid #000;}
+.underline{text-decoration:underline;}
+</style>
+<style type="text/css">
+    body {
+        font-family: Ubuntu, Helvetica, Arial, sans-serif;
+    }
+    table {
+        border-collapse: collapse;
+    }
+    table th {
+        text-align: left;
+        padding-top: 5px;
+        padding-bottom: 4px;
+        background-color: #aaa;
+        color: #ffffff;
+    }
+</style>
+<script type="text/javascript">
+function toggle_element(element) {
+    if (element.style.display == "none") {
+        element.style.display = "";
+    } else {
+        element.style.display = "none";
+    }
+}
+
+function find_next(element, classname) {
+    element = element.nextSibling;
+    while(element.nodeName != classname)
+        element = element.nextSibling;
+    return element;
+}
+
+function toggle_table(toggle_button) {
+    var table = find_next(toggle_button, "TABLE");
+    toggle_element(table);
+    if (toggle_button.innerHTML == "Show table") {
+        toggle_button.innerHTML = "Hide table";
+    } else {
+        toggle_button.innerHTML = "Show table";
+    }
+}
+
+function show_table(section) {
+    heading = section.children[0];
+    var toggle_button = find_next(heading, "BUTTON");
+    var table = find_next(toggle_button, "TABLE");
+    table.style.display = "";
+    toggle_button.innerHTML = "Hide table";
+}
+
+function show_main_tables() {
+    var names = ["unexplained-errors", "info", "summary"];
+    for (var i = 0; i < names.length; i++) {
+        var section = document.getElementById(names[i]);
+        try {
+            show_table(section);
+        } catch (e) {
+            console.log("No table found for " + names[i]);
+        }
+    }
+
+    // If there is only one table, show it and hide the button.
+    var buttons = document.getElementsByTagName('button');
+    var tables = document.getElementsByTagName('table');
+    if (buttons.length == 1 && tables.length == 1) {
+        tables[0].style.display = "";
+        buttons[0].style.display = "none";
+    }
+}
+
+document.addEventListener("DOMContentLoaded", show_main_tables);
+</script>
+</head>
+<body>
+<header>
+<hgroup>
+<h1>assign3-abs</h1>
+<h3>2023-03-23</h3>
+</hgroup>
+</header>
+
+
+<div class="body">
+
+<ul>
+<li><strong><a href="#info" onclick="show_table(document.getElementById('info'));">Info</a></strong>
+</li>
+<li><strong><a href="#summary" onclick="show_table(document.getElementById('summary'));">Summary</a></strong>
+</li>
+<li><strong><a href="#coverage" onclick="show_table(document.getElementById('coverage'));">coverage</a></strong>
+  <ul>
+  <li><a href="#coverage-elevators-opt08-strips" onclick="show_table(document.getElementById('coverage-elevators-opt08-strips'));">elevators-opt08-strips</a> <a href="#coverage-miconic" onclick="show_table(document.getElementById('coverage-miconic'));">miconic</a> <a href="#coverage-openstacks" onclick="show_table(document.getElementById('coverage-openstacks'));">openstacks</a>
+  </li>
+  </ul>
+</li>
+<li><strong><a href="#error" onclick="show_table(document.getElementById('error'));">error</a></strong>
+  <ul>
+  <li><a href="#error-error-success" onclick="show_table(document.getElementById('error-error-success'));">error-success</a> <a href="#error-elevators-opt08-strips" onclick="show_table(document.getElementById('error-elevators-opt08-strips'));">elevators-opt08-strips</a> <a href="#error-miconic" onclick="show_table(document.getElementById('error-miconic'));">miconic</a> <a href="#error-openstacks" onclick="show_table(document.getElementById('error-openstacks'));">openstacks</a>
+  </li>
+  </ul>
+</li>
+<li><strong><a href="#evaluations_per_time" onclick="show_table(document.getElementById('evaluations_per_time'));">evaluations_per_time</a></strong>
+  <ul>
+  <li><a href="#evaluations_per_time-elevators-opt08-strips" onclick="show_table(document.getElementById('evaluations_per_time-elevators-opt08-strips'));">elevators-opt08-strips</a> <a href="#evaluations_per_time-miconic" onclick="show_table(document.getElementById('evaluations_per_time-miconic'));">miconic</a> <a href="#evaluations_per_time-openstacks" onclick="show_table(document.getElementById('evaluations_per_time-openstacks'));">openstacks</a>
+  </li>
+  </ul>
+</li>
+<li><strong><a href="#expansions" onclick="show_table(document.getElementById('expansions'));">expansions</a></strong>
+  <ul>
+  <li><a href="#expansions-elevators-opt08-strips" onclick="show_table(document.getElementById('expansions-elevators-opt08-strips'));">elevators-opt08-strips</a> <a href="#expansions-miconic" onclick="show_table(document.getElementById('expansions-miconic'));">miconic</a> <a href="#expansions-openstacks" onclick="show_table(document.getElementById('expansions-openstacks'));">openstacks</a>
+  </li>
+  </ul>
+</li>
+<li><strong><a href="#memory" onclick="show_table(document.getElementById('memory'));">memory</a></strong>
+  <ul>
+  <li><a href="#memory-elevators-opt08-strips" onclick="show_table(document.getElementById('memory-elevators-opt08-strips'));">elevators-opt08-strips</a> <a href="#memory-miconic" onclick="show_table(document.getElementById('memory-miconic'));">miconic</a> <a href="#memory-openstacks" onclick="show_table(document.getElementById('memory-openstacks'));">openstacks</a>
+  </li>
+  </ul>
+</li>
+<li><strong><a href="#total_time" onclick="show_table(document.getElementById('total_time'));">total_time</a></strong>
+  <ul>
+  <li><a href="#total_time-elevators-opt08-strips" onclick="show_table(document.getElementById('total_time-elevators-opt08-strips'));">elevators-opt08-strips</a> <a href="#total_time-miconic" onclick="show_table(document.getElementById('total_time-miconic'));">miconic</a> <a href="#total_time-openstacks" onclick="show_table(document.getElementById('total_time-openstacks'));">openstacks</a>
+  </li>
+  </ul>
+</li>
+</ul>
+
+<section~A~>
+<h1></h1>
+<section id="info">
+<h2>info</h2>
+
+<button type="button" class="toggle-table" onclick="toggle_table(this)">Show table</button><p></p>
+
+<table class="tableborder" style="display:none">
+<tr>
+<th>algorithm</th>
+<th>local_<wbr>revision</th>
+<th>global_<wbr>revision</th>
+<th>driver_<wbr>options</th>
+<th>component_<wbr>options</th>
+</tr>
+<tr>
+<td>main:lama-simple</td>
+<td>main</td>
+<td>c23fe3eeb7e93b9aa5094cd2d969854439c7c5bc</td>
+<td>['--validate', '--overall-time-limit', '30m', '--overall-memory-limit', '3584M', '--overall-time-limit', '5m']</td>
+<td>['--search', '--if-unit-cost', 'let(hlm, landmark_sum(lm_reasonable_orders_hps(lm_rhw()),pref=true),let(hff, ff(), lazy_greedy([hff,hlm],preferred=[hff,hlm])))', '--if-non-unit-cost', 'let(hlm1, landmark_sum(lm_reasonable_orders_hps(lm_rhw()),transform=adapt_costs(one),pref=true),let(hff1, ff(transform=adapt_costs(one)),let(hlm2, landmark_sum(lm_reasonable_orders_hps(lm_rhw()),transform=adapt_costs(plusone),pref=true),lazy_greedy([hff1,hlm1],preferred=[hff1,hlm1], cost_type=one,reopen_closed=false))))']</td>
+</tr>
+</table>
+
+<p>
+Used nodes: {dawson-Latitude-5490}
+</p>
+
+</section>
+<section id="summary">
+<h2>summary</h2>
+
+<button type="button" class="toggle-table" onclick="toggle_table(this)">Show table</button><p></p>
+
+<table class="tableborder" style="display:none">
+<tr>
+<th>Summary</th>
+<th>main:lama-simple</th>
+</tr>
+<tr>
+<td><a href="#coverage" onclick="show_table(document.getElementById('coverage'));">coverage - Sum</a></td>
+<td class="right"><span style="color:rgb(127,127,127)">30</span></td>
+</tr>
+<tr>
+<td><a href="#error-error-success" onclick="show_table(document.getElementById('error-error-success'));">error-success - Sum</a></td>
+<td class="right"><span style="color:rgb(127,127,127)">30</span></td>
+</tr>
+<tr>
+<td><a href="#evaluations_per_time" onclick="show_table(document.getElementById('evaluations_per_time'));">evaluations_per_time - Geometric mean</a></td>
+<td class="right"><span style="color:rgb(127,127,127)">15322.54</span></td>
+</tr>
+<tr>
+<td><a href="#expansions" onclick="show_table(document.getElementById('expansions'));">expansions - Geometric mean</a></td>
+<td class="right"><span style="color:rgb(127,127,127)">42.37</span></td>
+</tr>
+<tr>
+<td><a href="#memory" onclick="show_table(document.getElementById('memory'));">memory - Sum</a></td>
+<td class="right"><span style="color:rgb(127,127,127)">341696</span></td>
+</tr>
+<tr>
+<td><a href="#total_time" onclick="show_table(document.getElementById('total_time'));">total_time - Geometric mean</a></td>
+<td class="right"><span style="color:rgb(127,127,127)">0.03</span></td>
+</tr>
+</table>
+
+</section>
+<section id="coverage">
+<h2>coverage</h2>
+
+<button type="button" class="toggle-table" onclick="toggle_table(this)">Show table</button><p></p>
+
+<table class="tableborder" style="display:none">
+<tr>
+<th>coverage</th>
+<th>main:lama-simple</th>
+</tr>
+<tr>
+<td><a href="#coverage-elevators-opt08-strips" onclick="show_table(document.getElementById('coverage-elevators-opt08-strips'));">elevators-opt08-strips</a> (10)</td>
+<td class="right"><span style="color:rgb(127,127,127)">10</span></td>
+</tr>
+<tr>
+<td><a href="#coverage-miconic" onclick="show_table(document.getElementById('coverage-miconic'));">miconic</a> (10)</td>
+<td class="right"><span style="color:rgb(127,127,127)">10</span></td>
+</tr>
+<tr>
+<td><a href="#coverage-openstacks" onclick="show_table(document.getElementById('coverage-openstacks'));">openstacks</a> (10)</td>
+<td class="right"><span style="color:rgb(127,127,127)">10</span></td>
+</tr>
+<tr>
+<td><strong>Sum (30)</strong></td>
+<td class="right"><span style="color:rgb(127,127,127)">30</span></td>
+</tr>
+</table>
+
+<p>
+The bottom row reports the sum across all domains.
+</p>
+
+<section id="coverage-elevators-opt08-strips">
+<h3>elevators-opt08-strips</h3>
+
+<button type="button" class="toggle-table" onclick="toggle_table(this)">Show table</button><p></p>
+
+<table class="tableborder" style="display:none">
+<tr>
+<th>coverage</th>
+<th>main:lama-simple</th>
+</tr>
+<tr>
+<td>p01.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+</tr>
+<tr>
+<td>p02.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+</tr>
+<tr>
+<td>p03.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+</tr>
+<tr>
+<td>p04.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+</tr>
+<tr>
+<td>p05.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+</tr>
+<tr>
+<td>p06.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+</tr>
+<tr>
+<td>p07.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+</tr>
+<tr>
+<td>p08.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+</tr>
+<tr>
+<td>p09.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+</tr>
+<tr>
+<td>p10.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+</tr>
+</table>
+
+</section>
+<section id="coverage-miconic">
+<h3>miconic</h3>
+
+<button type="button" class="toggle-table" onclick="toggle_table(this)">Show table</button><p></p>
+
+<table class="tableborder" style="display:none">
+<tr>
+<th>coverage</th>
+<th>main:lama-simple</th>
+</tr>
+<tr>
+<td>s1-0.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+</tr>
+<tr>
+<td>s1-1.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+</tr>
+<tr>
+<td>s1-2.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+</tr>
+<tr>
+<td>s1-3.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+</tr>
+<tr>
+<td>s1-4.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+</tr>
+<tr>
+<td>s10-0.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+</tr>
+<tr>
+<td>s10-1.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+</tr>
+<tr>
+<td>s10-2.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+</tr>
+<tr>
+<td>s10-3.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+</tr>
+<tr>
+<td>s10-4.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+</tr>
+</table>
+
+</section>
+<section id="coverage-openstacks">
+<h3>openstacks</h3>
+
+<button type="button" class="toggle-table" onclick="toggle_table(this)">Show table</button><p></p>
+
+<table class="tableborder" style="display:none">
+<tr>
+<th>coverage</th>
+<th>main:lama-simple</th>
+</tr>
+<tr>
+<td>p01.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+</tr>
+<tr>
+<td>p02.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+</tr>
+<tr>
+<td>p03.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+</tr>
+<tr>
+<td>p04.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+</tr>
+<tr>
+<td>p05.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+</tr>
+<tr>
+<td>p06.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+</tr>
+<tr>
+<td>p07.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+</tr>
+<tr>
+<td>p08.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+</tr>
+<tr>
+<td>p09.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+</tr>
+<tr>
+<td>p10.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+</tr>
+</table>
+
+</section>
+</section>
+<section id="error">
+<h2>error</h2>
+
+<section id="error-error-success">
+<h3>error-success</h3>
+
+<button type="button" class="toggle-table" onclick="toggle_table(this)">Show table</button><p></p>
+
+<table class="tableborder" style="display:none">
+<tr>
+<th>error-success</th>
+<th>main:lama-simple</th>
+</tr>
+<tr>
+<td><a href="#error-elevators-opt08-strips" onclick="show_table(document.getElementById('error-elevators-opt08-strips'));">elevators-opt08-strips</a></td>
+<td class="right"><span style="color:rgb(127,127,127)">10</span></td>
+</tr>
+<tr>
+<td><a href="#error-miconic" onclick="show_table(document.getElementById('error-miconic'));">miconic</a></td>
+<td class="right"><span style="color:rgb(127,127,127)">10</span></td>
+</tr>
+<tr>
+<td><a href="#error-openstacks" onclick="show_table(document.getElementById('error-openstacks'));">openstacks</a></td>
+<td class="right"><span style="color:rgb(127,127,127)">10</span></td>
+</tr>
+<tr>
+<td><strong>Sum</strong></td>
+<td class="right"><span style="color:rgb(127,127,127)">30</span></td>
+</tr>
+</table>
+
+</section>
+<section id="error-elevators-opt08-strips">
+<h3>elevators-opt08-strips</h3>
+
+<button type="button" class="toggle-table" onclick="toggle_table(this)">Show table</button><p></p>
+
+<table class="tableborder" style="display:none">
+<tr>
+<th>error</th>
+<th>main:lama-simple</th>
+</tr>
+<tr>
+<td>p01.pddl</td>
+<td>success</td>
+</tr>
+<tr>
+<td>p02.pddl</td>
+<td>success</td>
+</tr>
+<tr>
+<td>p03.pddl</td>
+<td>success</td>
+</tr>
+<tr>
+<td>p04.pddl</td>
+<td>success</td>
+</tr>
+<tr>
+<td>p05.pddl</td>
+<td>success</td>
+</tr>
+<tr>
+<td>p06.pddl</td>
+<td>success</td>
+</tr>
+<tr>
+<td>p07.pddl</td>
+<td>success</td>
+</tr>
+<tr>
+<td>p08.pddl</td>
+<td>success</td>
+</tr>
+<tr>
+<td>p09.pddl</td>
+<td>success</td>
+</tr>
+<tr>
+<td>p10.pddl</td>
+<td>success</td>
+</tr>
+</table>
+
+</section>
+<section id="error-miconic">
+<h3>miconic</h3>
+
+<button type="button" class="toggle-table" onclick="toggle_table(this)">Show table</button><p></p>
+
+<table class="tableborder" style="display:none">
+<tr>
+<th>error</th>
+<th>main:lama-simple</th>
+</tr>
+<tr>
+<td>s1-0.pddl</td>
+<td>success</td>
+</tr>
+<tr>
+<td>s1-1.pddl</td>
+<td>success</td>
+</tr>
+<tr>
+<td>s1-2.pddl</td>
+<td>success</td>
+</tr>
+<tr>
+<td>s1-3.pddl</td>
+<td>success</td>
+</tr>
+<tr>
+<td>s1-4.pddl</td>
+<td>success</td>
+</tr>
+<tr>
+<td>s10-0.pddl</td>
+<td>success</td>
+</tr>
+<tr>
+<td>s10-1.pddl</td>
+<td>success</td>
+</tr>
+<tr>
+<td>s10-2.pddl</td>
+<td>success</td>
+</tr>
+<tr>
+<td>s10-3.pddl</td>
+<td>success</td>
+</tr>
+<tr>
+<td>s10-4.pddl</td>
+<td>success</td>
+</tr>
+</table>
+
+</section>
+<section id="error-openstacks">
+<h3>openstacks</h3>
+
+<button type="button" class="toggle-table" onclick="toggle_table(this)">Show table</button><p></p>
+
+<table class="tableborder" style="display:none">
+<tr>
+<th>error</th>
+<th>main:lama-simple</th>
+</tr>
+<tr>
+<td>p01.pddl</td>
+<td>success</td>
+</tr>
+<tr>
+<td>p02.pddl</td>
+<td>success</td>
+</tr>
+<tr>
+<td>p03.pddl</td>
+<td>success</td>
+</tr>
+<tr>
+<td>p04.pddl</td>
+<td>success</td>
+</tr>
+<tr>
+<td>p05.pddl</td>
+<td>success</td>
+</tr>
+<tr>
+<td>p06.pddl</td>
+<td>success</td>
+</tr>
+<tr>
+<td>p07.pddl</td>
+<td>success</td>
+</tr>
+<tr>
+<td>p08.pddl</td>
+<td>success</td>
+</tr>
+<tr>
+<td>p09.pddl</td>
+<td>success</td>
+</tr>
+<tr>
+<td>p10.pddl</td>
+<td>success</td>
+</tr>
+</table>
+
+</section>
+</section>
+<section id="evaluations_per_time">
+<h2>evaluations_per_time</h2>
+
+<button type="button" class="toggle-table" onclick="toggle_table(this)">Show table</button><p></p>
+
+<table class="tableborder" style="display:none">
+<tr>
+<th>evaluations_<wbr>per_<wbr>time</th>
+<th>main:lama-simple</th>
+</tr>
+<tr>
+<td><a href="#evaluations_per_time-elevators-opt08-strips" onclick="show_table(document.getElementById('evaluations_per_time-elevators-opt08-strips'));">elevators-opt08-strips</a> (9)</td>
+<td class="right"><span style="color:rgb(127,127,127)">16393.2</span></td>
+</tr>
+<tr>
+<td><a href="#evaluations_per_time-miconic" onclick="show_table(document.getElementById('evaluations_per_time-miconic'));">miconic</a> (5)</td>
+<td class="right"><span style="color:rgb(127,127,127)">24528.0</span></td>
+</tr>
+<tr>
+<td><a href="#evaluations_per_time-openstacks" onclick="show_table(document.getElementById('evaluations_per_time-openstacks'));">openstacks</a> (5)</td>
+<td class="right"><span style="color:rgb(127,127,127)">8946.7</span></td>
+</tr>
+<tr>
+<td><strong>Geometric mean (19)</strong></td>
+<td class="right"><span style="color:rgb(127,127,127)">15322.5</span></td>
+</tr>
+</table>
+
+<p>
+Only tasks where all algorithms have a value for "evaluations_per_time" are considered. Each table entry gives the geometric mean of "evaluations_per_time" for that domain. The bottom row reports the geometric mean across all domains.
+</p>
+
+<section id="evaluations_per_time-elevators-opt08-strips">
+<h3>elevators-opt08-strips</h3>
+
+<button type="button" class="toggle-table" onclick="toggle_table(this)">Show table</button><p></p>
+
+<table class="tableborder" style="display:none">
+<tr>
+<th>evaluations_<wbr>per_<wbr>time</th>
+<th>main:lama-simple</th>
+</tr>
+<tr>
+<td>p01.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">13200.0</span></td>
+</tr>
+<tr>
+<td>p02.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">None</span></td>
+</tr>
+<tr>
+<td>p03.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">11600.0</span></td>
+</tr>
+<tr>
+<td>p04.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">13400.0</span></td>
+</tr>
+<tr>
+<td>p05.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">16800.0</span></td>
+</tr>
+<tr>
+<td>p06.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">17617.9</span></td>
+</tr>
+<tr>
+<td>p07.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">25400.0</span></td>
+</tr>
+<tr>
+<td>p08.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">11600.0</span></td>
+</tr>
+<tr>
+<td>p09.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">25392.6</span></td>
+</tr>
+<tr>
+<td>p10.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">18818.5</span></td>
+</tr>
+</table>
+
+</section>
+<section id="evaluations_per_time-miconic">
+<h3>miconic</h3>
+
+<button type="button" class="toggle-table" onclick="toggle_table(this)">Show table</button><p></p>
+
+<table class="tableborder" style="display:none">
+<tr>
+<th>evaluations_<wbr>per_<wbr>time</th>
+<th>main:lama-simple</th>
+</tr>
+<tr>
+<td>s1-0.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">None</span></td>
+</tr>
+<tr>
+<td>s1-1.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">None</span></td>
+</tr>
+<tr>
+<td>s1-2.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">None</span></td>
+</tr>
+<tr>
+<td>s1-3.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">None</span></td>
+</tr>
+<tr>
+<td>s1-4.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">None</span></td>
+</tr>
+<tr>
+<td>s10-0.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">26519.6</span></td>
+</tr>
+<tr>
+<td>s10-1.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">24484.3</span></td>
+</tr>
+<tr>
+<td>s10-2.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">25478.6</span></td>
+</tr>
+<tr>
+<td>s10-3.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">20800.0</span></td>
+</tr>
+<tr>
+<td>s10-4.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">25800.0</span></td>
+</tr>
+</table>
+
+</section>
+<section id="evaluations_per_time-openstacks">
+<h3>openstacks</h3>
+
+<button type="button" class="toggle-table" onclick="toggle_table(this)">Show table</button><p></p>
+
+<table class="tableborder" style="display:none">
+<tr>
+<th>evaluations_<wbr>per_<wbr>time</th>
+<th>main:lama-simple</th>
+</tr>
+<tr>
+<td>p01.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">None</span></td>
+</tr>
+<tr>
+<td>p02.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">None</span></td>
+</tr>
+<tr>
+<td>p03.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">None</span></td>
+</tr>
+<tr>
+<td>p04.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">None</span></td>
+</tr>
+<tr>
+<td>p05.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">None</span></td>
+</tr>
+<tr>
+<td>p06.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">10400.0</span></td>
+</tr>
+<tr>
+<td>p07.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">10800.0</span></td>
+</tr>
+<tr>
+<td>p08.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">8790.4</span></td>
+</tr>
+<tr>
+<td>p09.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">7053.5</span></td>
+</tr>
+<tr>
+<td>p10.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">8231.1</span></td>
+</tr>
+</table>
+
+</section>
+</section>
+<section id="expansions">
+<h2>expansions</h2>
+
+<button type="button" class="toggle-table" onclick="toggle_table(this)">Show table</button><p></p>
+
+<table class="tableborder" style="display:none">
+<tr>
+<th>expansions</th>
+<th>main:lama-simple</th>
+</tr>
+<tr>
+<td><a href="#expansions-elevators-opt08-strips" onclick="show_table(document.getElementById('expansions-elevators-opt08-strips'));">elevators-opt08-strips</a> (10)</td>
+<td class="right"><span style="color:rgb(127,127,127)">78.20</span></td>
+</tr>
+<tr>
+<td><a href="#expansions-miconic" onclick="show_table(document.getElementById('expansions-miconic'));">miconic</a> (10)</td>
+<td class="right"><span style="color:rgb(127,127,127)">21.94</span></td>
+</tr>
+<tr>
+<td><a href="#expansions-openstacks" onclick="show_table(document.getElementById('expansions-openstacks'));">openstacks</a> (10)</td>
+<td class="right"><span style="color:rgb(127,127,127)">44.34</span></td>
+</tr>
+<tr>
+<td><strong>Geometric mean (30)</strong></td>
+<td class="right"><span style="color:rgb(127,127,127)">42.37</span></td>
+</tr>
+</table>
+
+<p>
+Only tasks where all algorithms have a value for "expansions" are considered. Each table entry gives the geometric mean of "expansions" for that domain. The bottom row reports the geometric mean across all domains.
+</p>
+
+<section id="expansions-elevators-opt08-strips">
+<h3>elevators-opt08-strips</h3>
+
+<button type="button" class="toggle-table" onclick="toggle_table(this)">Show table</button><p></p>
+
+<table class="tableborder" style="display:none">
+<tr>
+<th>expansions</th>
+<th>main:lama-simple</th>
+</tr>
+<tr>
+<td>p01.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">65</span></td>
+</tr>
+<tr>
+<td>p02.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">15</span></td>
+</tr>
+<tr>
+<td>p03.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">57</span></td>
+</tr>
+<tr>
+<td>p04.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">66</span></td>
+</tr>
+<tr>
+<td>p05.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">83</span></td>
+</tr>
+<tr>
+<td>p06.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">118</span></td>
+</tr>
+<tr>
+<td>p07.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">126</span></td>
+</tr>
+<tr>
+<td>p08.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">57</span></td>
+</tr>
+<tr>
+<td>p09.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">224</span></td>
+</tr>
+<tr>
+<td>p10.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">148</span></td>
+</tr>
+</table>
+
+</section>
+<section id="expansions-miconic">
+<h3>miconic</h3>
+
+<button type="button" class="toggle-table" onclick="toggle_table(this)">Show table</button><p></p>
+
+<table class="tableborder" style="display:none">
+<tr>
+<th>expansions</th>
+<th>main:lama-simple</th>
+</tr>
+<tr>
+<td>s1-0.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">4</span></td>
+</tr>
+<tr>
+<td>s1-1.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">3</span></td>
+</tr>
+<tr>
+<td>s1-2.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">4</span></td>
+</tr>
+<tr>
+<td>s1-3.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">4</span></td>
+</tr>
+<tr>
+<td>s1-4.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">4</span></td>
+</tr>
+<tr>
+<td>s10-0.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">143</span></td>
+</tr>
+<tr>
+<td>s10-1.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">125</span></td>
+</tr>
+<tr>
+<td>s10-2.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">143</span></td>
+</tr>
+<tr>
+<td>s10-3.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">103</span></td>
+</tr>
+<tr>
+<td>s10-4.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">128</span></td>
+</tr>
+</table>
+
+</section>
+<section id="expansions-openstacks">
+<h3>openstacks</h3>
+
+<button type="button" class="toggle-table" onclick="toggle_table(this)">Show table</button><p></p>
+
+<table class="tableborder" style="display:none">
+<tr>
+<th>expansions</th>
+<th>main:lama-simple</th>
+</tr>
+<tr>
+<td>p01.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">26</span></td>
+</tr>
+<tr>
+<td>p02.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">25</span></td>
+</tr>
+<tr>
+<td>p03.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">26</span></td>
+</tr>
+<tr>
+<td>p04.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">26</span></td>
+</tr>
+<tr>
+<td>p05.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">25</span></td>
+</tr>
+<tr>
+<td>p06.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">51</span></td>
+</tr>
+<tr>
+<td>p07.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">53</span></td>
+</tr>
+<tr>
+<td>p08.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">98</span></td>
+</tr>
+<tr>
+<td>p09.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">98</span></td>
+</tr>
+<tr>
+<td>p10.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">103</span></td>
+</tr>
+</table>
+
+</section>
+</section>
+<section id="memory">
+<h2>memory</h2>
+
+<button type="button" class="toggle-table" onclick="toggle_table(this)">Show table</button><p></p>
+
+<table class="tableborder" style="display:none">
+<tr>
+<th>memory</th>
+<th>main:lama-simple</th>
+</tr>
+<tr>
+<td><a href="#memory-elevators-opt08-strips" onclick="show_table(document.getElementById('memory-elevators-opt08-strips'));">elevators-opt08-strips</a> (10)</td>
+<td class="right"><span style="color:rgb(127,127,127)">114148</span></td>
+</tr>
+<tr>
+<td><a href="#memory-miconic" onclick="show_table(document.getElementById('memory-miconic'));">miconic</a> (10)</td>
+<td class="right"><span style="color:rgb(127,127,127)">111460</span></td>
+</tr>
+<tr>
+<td><a href="#memory-openstacks" onclick="show_table(document.getElementById('memory-openstacks'));">openstacks</a> (10)</td>
+<td class="right"><span style="color:rgb(127,127,127)">116088</span></td>
+</tr>
+<tr>
+<td><strong>Sum (30)</strong></td>
+<td class="right"><span style="color:rgb(127,127,127)">341696</span></td>
+</tr>
+</table>
+
+<p>
+Only tasks where all algorithms have a value for "memory" are considered. Each table entry gives the sum of "memory" for that domain. The bottom row reports the sum across all domains.
+</p>
+
+<section id="memory-elevators-opt08-strips">
+<h3>elevators-opt08-strips</h3>
+
+<button type="button" class="toggle-table" onclick="toggle_table(this)">Show table</button><p></p>
+
+<table class="tableborder" style="display:none">
+<tr>
+<th>memory</th>
+<th>main:lama-simple</th>
+</tr>
+<tr>
+<td>p01.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">11212</span></td>
+</tr>
+<tr>
+<td>p02.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">11348</span></td>
+</tr>
+<tr>
+<td>p03.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">11344</span></td>
+</tr>
+<tr>
+<td>p04.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">11344</span></td>
+</tr>
+<tr>
+<td>p05.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">11336</span></td>
+</tr>
+<tr>
+<td>p06.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">11468</span></td>
+</tr>
+<tr>
+<td>p07.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">11356</span></td>
+</tr>
+<tr>
+<td>p08.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">11620</span></td>
+</tr>
+<tr>
+<td>p09.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">11500</span></td>
+</tr>
+<tr>
+<td>p10.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">11620</span></td>
+</tr>
+</table>
+
+</section>
+<section id="memory-miconic">
+<h3>miconic</h3>
+
+<button type="button" class="toggle-table" onclick="toggle_table(this)">Show table</button><p></p>
+
+<table class="tableborder" style="display:none">
+<tr>
+<th>memory</th>
+<th>main:lama-simple</th>
+</tr>
+<tr>
+<td>s1-0.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">11080</span></td>
+</tr>
+<tr>
+<td>s1-1.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">11080</span></td>
+</tr>
+<tr>
+<td>s1-2.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">11080</span></td>
+</tr>
+<tr>
+<td>s1-3.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">11080</span></td>
+</tr>
+<tr>
+<td>s1-4.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">11080</span></td>
+</tr>
+<tr>
+<td>s10-0.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">11212</span></td>
+</tr>
+<tr>
+<td>s10-1.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">11212</span></td>
+</tr>
+<tr>
+<td>s10-2.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">11212</span></td>
+</tr>
+<tr>
+<td>s10-3.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">11212</span></td>
+</tr>
+<tr>
+<td>s10-4.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">11212</span></td>
+</tr>
+</table>
+
+</section>
+<section id="memory-openstacks">
+<h3>openstacks</h3>
+
+<button type="button" class="toggle-table" onclick="toggle_table(this)">Show table</button><p></p>
+
+<table class="tableborder" style="display:none">
+<tr>
+<th>memory</th>
+<th>main:lama-simple</th>
+</tr>
+<tr>
+<td>p01.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">11212</span></td>
+</tr>
+<tr>
+<td>p02.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">11212</span></td>
+</tr>
+<tr>
+<td>p03.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">11212</span></td>
+</tr>
+<tr>
+<td>p04.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">11212</span></td>
+</tr>
+<tr>
+<td>p05.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">11212</span></td>
+</tr>
+<tr>
+<td>p06.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">11476</span></td>
+</tr>
+<tr>
+<td>p07.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">11472</span></td>
+</tr>
+<tr>
+<td>p08.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">12332</span></td>
+</tr>
+<tr>
+<td>p09.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">12312</span></td>
+</tr>
+<tr>
+<td>p10.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">12436</span></td>
+</tr>
+</table>
+
+</section>
+</section>
+<section id="total_time">
+<h2>total_time</h2>
+
+<button type="button" class="toggle-table" onclick="toggle_table(this)">Show table</button><p></p>
+
+<table class="tableborder" style="display:none">
+<tr>
+<th>total_<wbr>time</th>
+<th>main:lama-simple</th>
+</tr>
+<tr>
+<td><a href="#total_time-elevators-opt08-strips" onclick="show_table(document.getElementById('total_time-elevators-opt08-strips'));">elevators-opt08-strips</a> (10)</td>
+<td class="right"><span style="color:rgb(127,127,127)">0.03</span></td>
+</tr>
+<tr>
+<td><a href="#total_time-miconic" onclick="show_table(document.getElementById('total_time-miconic'));">miconic</a> (10)</td>
+<td class="right"><span style="color:rgb(127,127,127)">0.02</span></td>
+</tr>
+<tr>
+<td><a href="#total_time-openstacks" onclick="show_table(document.getElementById('total_time-openstacks'));">openstacks</a> (10)</td>
+<td class="right"><span style="color:rgb(127,127,127)">0.03</span></td>
+</tr>
+<tr>
+<td><strong>Geometric mean (30)</strong></td>
+<td class="right"><span style="color:rgb(127,127,127)">0.03</span></td>
+</tr>
+</table>
+
+<p>
+Only tasks where all algorithms have a value for "total_time" are considered. Each table entry gives the geometric mean of "total_time" for that domain. The bottom row reports the geometric mean across all domains.
+</p>
+
+<section id="total_time-elevators-opt08-strips">
+<h3>elevators-opt08-strips</h3>
+
+<button type="button" class="toggle-table" onclick="toggle_table(this)">Show table</button><p></p>
+
+<table class="tableborder" style="display:none">
+<tr>
+<th>total_<wbr>time</th>
+<th>main:lama-simple</th>
+</tr>
+<tr>
+<td>p01.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">0.02</span></td>
+</tr>
+<tr>
+<td>p02.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">0.02</span></td>
+</tr>
+<tr>
+<td>p03.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">0.03</span></td>
+</tr>
+<tr>
+<td>p04.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">0.03</span></td>
+</tr>
+<tr>
+<td>p05.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">0.03</span></td>
+</tr>
+<tr>
+<td>p06.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">0.05</span></td>
+</tr>
+<tr>
+<td>p07.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">0.04</span></td>
+</tr>
+<tr>
+<td>p08.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">0.04</span></td>
+</tr>
+<tr>
+<td>p09.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">0.05</span></td>
+</tr>
+<tr>
+<td>p10.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">0.06</span></td>
+</tr>
+</table>
+
+</section>
+<section id="total_time-miconic">
+<h3>miconic</h3>
+
+<button type="button" class="toggle-table" onclick="toggle_table(this)">Show table</button><p></p>
+
+<table class="tableborder" style="display:none">
+<tr>
+<th>total_<wbr>time</th>
+<th>main:lama-simple</th>
+</tr>
+<tr>
+<td>s1-0.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">0.01</span></td>
+</tr>
+<tr>
+<td>s1-1.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">0.01</span></td>
+</tr>
+<tr>
+<td>s1-2.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">0.01</span></td>
+</tr>
+<tr>
+<td>s1-3.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">0.01</span></td>
+</tr>
+<tr>
+<td>s1-4.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">0.01</span></td>
+</tr>
+<tr>
+<td>s10-0.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">0.02</span></td>
+</tr>
+<tr>
+<td>s10-1.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">0.03</span></td>
+</tr>
+<tr>
+<td>s10-2.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">0.03</span></td>
+</tr>
+<tr>
+<td>s10-3.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">0.03</span></td>
+</tr>
+<tr>
+<td>s10-4.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">0.03</span></td>
+</tr>
+</table>
+
+</section>
+<section id="total_time-openstacks">
+<h3>openstacks</h3>
+
+<button type="button" class="toggle-table" onclick="toggle_table(this)">Show table</button><p></p>
+
+<table class="tableborder" style="display:none">
+<tr>
+<th>total_<wbr>time</th>
+<th>main:lama-simple</th>
+</tr>
+<tr>
+<td>p01.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">0.02</span></td>
+</tr>
+<tr>
+<td>p02.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">0.01</span></td>
+</tr>
+<tr>
+<td>p03.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">0.02</span></td>
+</tr>
+<tr>
+<td>p04.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">0.01</span></td>
+</tr>
+<tr>
+<td>p05.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">0.02</span></td>
+</tr>
+<tr>
+<td>p06.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">0.03</span></td>
+</tr>
+<tr>
+<td>p07.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">0.04</span></td>
+</tr>
+<tr>
+<td>p08.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">0.12</span></td>
+</tr>
+<tr>
+<td>p09.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">0.12</span></td>
+</tr>
+<tr>
+<td>p10.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">0.13</span></td>
+</tr>
+</table>
+
+</section>
+</section>
+</section>
+</div>
+</body></html>

@@ -1,0 +1,1 @@
+../../../../../../../benchmarks/elevators-opt08-strips/p05.pddl

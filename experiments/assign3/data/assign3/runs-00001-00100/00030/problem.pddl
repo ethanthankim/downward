@@ -1,0 +1,1 @@
+../../../../../../../benchmarks/openstacks/p10.pddl
