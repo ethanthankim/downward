@@ -1,1 +1,1 @@
-../../../../../../../benchmarks/openstacks/p04.pddl
+../../../../../../../benchmarks/miconic/s3-1.pddl

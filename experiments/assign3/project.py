@@ -45,13 +45,10 @@ def _get_suite(benchmark_path: str, suite_path: str) -> List[str]:
         suite_object = json.loads(file.read())
 
     suite = []
-    for folder, params in suite_object.items():
-        benchmarks_dir = os.path.abspath(benchmark_path)
-        suite_folder = os.path.join(benchmarks_dir, folder)
-        instance_files = [f for f in os.listdir(suite_folder) if os.path.isfile(os.path.join(suite_folder, f)) and not f.startswith("domain")]
-        instance_files.sort()
-        suite.extend([f'{folder}:{instance}' for instance in instance_files[params['skip']:params['take']]])
+    for folder, files in suite_object.items():
+        suite.extend([f'{folder}:{file}' for file in files])
 
+    print(suite)
     return suite
 
 def parse_args():
@@ -352,4 +349,4 @@ def add_absolute_report(exp, *, name=None, outfile=None, **kwargs):
     exp.add_report(report, name=name, outfile=outfile)
     if not REMOTE:
         exp.add_step(f"open-{name}", subprocess.call, ["xdg-open", outfile])
-    exp.add_step(f"publish-{name}", subprocess.call, ["publish", outfile])
+    # exp.add_step(f"publish-{name}", subprocess.call, ["publish", outfile])

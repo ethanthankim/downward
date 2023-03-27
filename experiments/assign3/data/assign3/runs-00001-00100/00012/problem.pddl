@@ -1,1 +1,1 @@
-../../../../../../../benchmarks/miconic/s1-1.pddl
+../../../../../../../benchmarks/elevators-opt08-strips/p02.pddl

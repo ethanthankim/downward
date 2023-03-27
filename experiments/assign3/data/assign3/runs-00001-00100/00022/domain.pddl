@@ -1,1 +1,1 @@
-../../../../../../../benchmarks/openstacks/domain.pddl
+../../../../../../../benchmarks/miconic/domain.pddl

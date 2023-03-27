@@ -1,1 +1,1 @@
-../../../../../../../benchmarks/elevators-opt08-strips/domain.pddl
+../../../../../../../benchmarks/blocks/domain.pddl
