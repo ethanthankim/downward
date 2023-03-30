@@ -1,1 +1,1 @@
-../../../../../../../benchmarks/elevators-opt08-strips/p05.pddl
+../../../../../../../benchmarks/blocks/probBLOCKS-8-2.pddl

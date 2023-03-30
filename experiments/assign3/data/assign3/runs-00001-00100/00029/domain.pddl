@@ -1,1 +1,1 @@
-../../../../../../../benchmarks/miconic/domain.pddl
+../../../../../../../benchmarks/blocks/domain.pddl

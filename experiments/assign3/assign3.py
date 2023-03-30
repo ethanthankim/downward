@@ -12,24 +12,18 @@ SCP_LOGIN = "myname@myserver.com"
 REMOTE_REPOS_DIR = "/infai/seipp/projects"
 # If REVISION_CACHE is None, the default ./data/revision-cache is used.
 REVISION_CACHE = os.environ.get("DOWNWARD_REVISION_CACHE")
-SUITE = project._get_suite(BENCHMARKS_DIR, "suite.json")
+# SUITE = project._get_suite(BENCHMARKS_DIR, "suite.json")
+SUITE = ["blocks", "elevators-opt08-strips", "miconic", "openstacks"]
 
 ENV = project.LocalEnvironment(processes=None)
 
-def _get_lama_simple(pref):
+def _get_lama_simple():
     return [
-        "--search",
-
-        "--if-unit-cost",
-        f"let(hlm, landmark_sum(lm_reasonable_orders_hps(lm_rhw()),pref={pref}),"
-        "let(hff, ff(), lazy_greedy([hff,hlm],preferred=[hff,hlm])))",
-
-        "--if-non-unit-cost",
-        f"let(hlm1, landmark_sum(lm_reasonable_orders_hps(lm_rhw()),transform=adapt_costs(one),pref={pref}),"
-        "let(hff1, ff(transform=adapt_costs(one)),"
-        f"let(hlm2, landmark_sum(lm_reasonable_orders_hps(lm_rhw()),transform=adapt_costs(plusone),pref={pref}),"
-        "lazy_greedy([hff1,hlm1],preferred=[hff1,hlm1], cost_type=one,reopen_closed=false))))"
-        ]
+    "--search",
+    "let(hlm, landmark_sum(lm_factory=lm_reasonable_orders_hps(lm_rhw()),transform=adapt_costs(one),pref=false),"
+    "let(hff, ff(transform=adapt_costs(one)),"
+    """lazy_greedy([hff,hlm],preferred=[hff,hlm],
+                               cost_type=one,reopen_closed=false)))"""]
 
 def _get_lama(pref):
     return [
@@ -68,8 +62,8 @@ CONFIGS = [
     ('ff-def', ['--search', 'lazy_greedy([ff()])']),
     ('ff-pref', ['--search', 'eager_greedy([ff()], preferred=[ff()])']),
     ('ff-pref-boost', ['--search', 'eager_greedy([ff()], preferred=[ff()], boost=1000)']),
-    ('ff-def-boost', ['--search', 'lazy_greedy([ff()], boost=1000)']),
-    ('lama-simple', _get_lama_simple(pref="true"))
+    ('ff-def-boost', ['--search', 'lazy_greedy([ff()], preferred=[ff()], boost=1000)']),
+    ('lama-simple', _get_lama_simple())
 ]
 
 BUILD_OPTIONS = []

@@ -1,1 +1,1 @@
-../../../../../../../benchmarks/miconic/s6-3.pddl
+../../../../../../../benchmarks/blocks/probBLOCKS-13-1.pddl
