@@ -12,8 +12,8 @@ SCP_LOGIN = "myname@myserver.com"
 REMOTE_REPOS_DIR = "/infai/seipp/projects"
 # If REVISION_CACHE is None, the default ./data/revision-cache is used.
 REVISION_CACHE = os.environ.get("DOWNWARD_REVISION_CACHE")
-# SUITE = project._get_suite(BENCHMARKS_DIR, "suite.json")
-SUITE = ["blocks", "elevators-opt08-strips", "miconic", "openstacks"]
+SUITE = project._get_suite("suite")
+# SUITE = ["depot:p01.pddl", "grid:prob01.pddl", "gripper:prob01.pddl"]
 
 ENV = project.LocalEnvironment(processes=None)
 
@@ -57,17 +57,25 @@ def _get_lama(pref):
         # additional options later.
         "--always"]
 
+AWA_STAR_WS_CONFIG = [
+    '--search',
+    """iterated([
+            lazy_greedy([ff()]),
+            lazy_wastar([ff()],w=5),
+            lazy_wastar([ff()],w=3),
+            lazy_wastar([ff()],w=2),
+            lazy_wastar([ff()],w=1.5),
+            lazy_wastar([ff()],w=1)
+        ],repeat_last=true,continue_on_fail=true)"""
+]
+
+
 CONFIGS = [
-    ('ff', ['--search', 'eager_greedy([ff()])']),
-    ('ff-def', ['--search', 'lazy_greedy([ff()])']),
-    ('ff-pref', ['--search', 'eager_greedy([ff()], preferred=[ff()])']),
-    ('ff-pref-boost', ['--search', 'eager_greedy([ff()], preferred=[ff()], boost=1000)']),
-    ('ff-def-boost', ['--search', 'lazy_greedy([ff()], preferred=[ff()], boost=1000)']),
-    ('lama-simple', _get_lama_simple())
+    ('AWA', ["--search", "let(hff, ff(), iterated([lazy_greedy([hff]), lazy_wastar([hff],w=5)],repeat_last=true,continue_on_fail=true))", "--always"]),
 ]
 
 BUILD_OPTIONS = []
-DRIVER_OPTIONS = ["--overall-time-limit", "5m"]
+DRIVER_OPTIONS = ["--overall-time-limit", "10m"]
 REVS = [
     ("main", "main"),
 ]
@@ -96,7 +104,7 @@ exp.add_suite(BENCHMARKS_DIR, SUITE)
 
 exp.add_parser(exp.EXITCODE_PARSER)
 exp.add_parser(exp.TRANSLATOR_PARSER)
-exp.add_parser(exp.SINGLE_SEARCH_PARSER)
+exp.add_parser(exp.ANYTIME_SEARCH_PARSER)
 exp.add_parser(project.DIR / "parser.py")
 exp.add_parser(exp.PLANNER_PARSER)
 

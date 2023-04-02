@@ -1,1 +1,1 @@
-../../../../../../../benchmarks/blocks/probBLOCKS-4-0.pddl
+../../../../../../../benchmarks/depot/p01.pddl

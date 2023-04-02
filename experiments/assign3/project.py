@@ -39,16 +39,11 @@ REMOTE = NODE.endswith((".scicore.unibas.ch", ".cluster.bc2.ch")) or re.match(
     r"tetralith\d+\.nsc\.liu\.se|n\d+", NODE
 )
 
-def _get_suite(benchmark_path: str, suite_path: str) -> List[str]:
-    suite_object: dict 
+def _get_suite(suite_path: str) -> List[str]:
+    suite: list 
     with open(suite_path, 'r') as file:
-        suite_object = json.loads(file.read())
+        suite = [line.rstrip('\n') for line in file]
 
-    suite = []
-    for folder, files in suite_object.items():
-        suite.extend([f'{folder}:{file}' for file in files])
-
-    print(suite)
     return suite
 
 def parse_args():
