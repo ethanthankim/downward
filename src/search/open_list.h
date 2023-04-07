@@ -123,6 +123,11 @@ public:
     virtual bool is_dead_end(EvaluationContext &eval_context) const = 0;
     virtual bool is_reliable_dead_end(
         EvaluationContext &eval_context) const = 0;
+
+    /*
+    set/change the openlist's evaluator
+    */
+    // virtual void set_evaluator(std::shared_ptr<Evaluator> eval) {};
 };
 
 

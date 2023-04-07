@@ -39,7 +39,15 @@ public:
         EvaluationContext &eval_context) const override;
     virtual bool is_reliable_dead_end(
         EvaluationContext &eval_context) const override;
+
+    // virtual void set_evaluator(std::shared_ptr<Evaluator> eval) override;
 };
+
+
+// template<class Entry>
+// void BestFirstOpenList<Entry>::set_evaluator(std::shared_ptr<Evaluator> eval) {
+//     evaluator = std::move(eval);
+// }
 
 
 template<class Entry>

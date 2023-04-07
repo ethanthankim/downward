@@ -12,72 +12,98 @@ SCP_LOGIN = "myname@myserver.com"
 REMOTE_REPOS_DIR = "/infai/seipp/projects"
 # If REVISION_CACHE is None, the default ./data/revision-cache is used.
 REVISION_CACHE = os.environ.get("DOWNWARD_REVISION_CACHE")
+# exit()
 SUITE = project._get_suite("suite")
 # SUITE = ["depot:p01.pddl", "grid:prob01.pddl", "gripper:prob01.pddl"]
 
 ENV = project.LocalEnvironment(processes=None)
 
-def _get_lama_simple():
-    return [
-    "--search",
-    "let(hlm, landmark_sum(lm_factory=lm_reasonable_orders_hps(lm_rhw()),transform=adapt_costs(one),pref=false),"
-    "let(hff, ff(transform=adapt_costs(one)),"
-    """lazy_greedy([hff,hlm],preferred=[hff,hlm],
-                               cost_type=one,reopen_closed=false)))"""]
-
-def _get_lama(pref):
-    return [
-        "--search",
-        "--if-unit-cost",
-        f"let(hlm, landmark_sum(lm_reasonable_orders_hps(lm_rhw()),pref={pref}),"
-        "let(hff, ff(),"
-        """iterated([
-            lazy_greedy([hff,hlm],preferred=[hff,hlm]),
-            lazy_wastar([hff,hlm],preferred=[hff,hlm],w=5),
-            lazy_wastar([hff,hlm],preferred=[hff,hlm],w=3),
-            lazy_wastar([hff,hlm],preferred=[hff,hlm],w=2),
-            lazy_wastar([hff,hlm],preferred=[hff,hlm],w=1)
-         ],repeat_last=true,continue_on_fail=true)))""",
-        "--if-non-unit-cost",
-        f"let(hlm1, landmark_sum(lm_reasonable_orders_hps(lm_rhw()),transform=adapt_costs(one),pref={pref}),"
-        "let(hff1, ff(transform=adapt_costs(one)),"
-        f"let(hlm2, landmark_sum(lm_reasonable_orders_hps(lm_rhw()),transform=adapt_costs(plusone),pref={pref}),"
-        "let(hff2, ff(transform=adapt_costs(plusone)),"
-        """iterated([
-            lazy_greedy([hff1,hlm1],preferred=[hff1,hlm1],
-                 cost_type=one,reopen_closed=false),
-            lazy_greedy([hff2,hlm2],preferred=[hff2,hlm2],
-                 reopen_closed=false),
-            lazy_wastar([hff2,hlm2],preferred=[hff2,hlm2],w=5),
-            lazy_wastar([hff2,hlm2],preferred=[hff2,hlm2],w=3),
-            lazy_wastar([hff2,hlm2],preferred=[hff2,hlm2],w=2),
-            lazy_wastar([hff2,hlm2],preferred=[hff2,hlm2],w=1)
-        ],repeat_last=true,continue_on_fail=true)))))""",
-        # Append --always to be on the safe side if we want to append
-        # additional options later.
-        "--always"]
-
-AWA_STAR_WS_CONFIG = [
+AWA_CONFIG = [
+    "--evaluator",
+    "h=lmcut()",
     '--search',
-    """iterated([
-            lazy_greedy([ff()]),
-            lazy_wastar([ff()],w=5),
-            lazy_wastar([ff()],w=3),
-            lazy_wastar([ff()],w=2),
-            lazy_wastar([ff()],w=1.5),
-            lazy_wastar([ff()],w=1)
-        ],repeat_last=true,continue_on_fail=true)"""
+    "eager_anytime(single(sum([weight(h, 2, verbosity=normal), g()])), reopen_closed=true, f_eval=sum([h, g()]))"
 ]
 
+# AWA_WS_CONFIG = [
+#     "--evaluator",
+#     "h=ff()",
+#     "--search",
+#     """iterated([
+#             lazy_greedy([h]),
+#             lazy_wastar([h],w=5),
+#             lazy_wastar([h],w=3),
+#             lazy_wastar([h],w=2),
+#             lazy_wastar([h],w=1)
+#         ],continue_on_fail=true)"""
+# ]
 
+EAWA_CONFIG = [
+    "--evaluator",
+    "h=lmcut()",
+    "--search",
+    """iterated([
+            lazy_greedy([h]),
+            lazy(epsilon_greedy(weight([h], 2, verbosity=normal), pref_only=false, epsilon=0.5, random_seed=-1))
+        ],repeat_last=true,continue_on_fail=true)""" 
+]
+
+TYPE_AWA_CONFIG = [
+    "--evaluator",
+    "h=lmcut()",
+    "--search",
+    """iterated([
+            lazy_greedy([h]),
+            lazy(alt([single(weight([h], 2, verbosity=normal)), type_based([h, g()], random_seed=-1)])
+        ],repeat_last=true,continue_on_fail=true)""" 
+]
+
+# EAWA_WS_CONFIG = [
+#     "--evaluator",
+#     "h=ff()",
+#     "--search",
+#     """iterated([
+#             lazy_greedy([h]),
+#             lazy(epsilon_greedy(weight(h, 5, verbosity=normal), pref_only=false, epsilon=0.5, random_seed=-1)),
+#             lazy(epsilon_greedy(weight(h, 3, verbosity=normal), pref_only=false, epsilon=0.5, random_seed=-1)),
+#             lazy(epsilon_greedy(weight(h, 2, verbosity=normal), pref_only=false, epsilon=0.5, random_seed=-1)),
+#             lazy(epsilon_greedy(weight(h, 1, verbosity=normal), pref_only=false, epsilon=0.5, random_seed=-1)),
+#             lazy_wastar(h,w=1)
+#         ],continue_on_fail=true)""" 
+# ]
+
+# TYPE_AWA_WS_CONFIG = [
+#     "--evaluator",
+#     "h=ff()",
+#     "--search",
+#     """iterated([
+#             lazy_greedy([h]),
+#             lazy(alt([single(weight(h, 5, verbosity=normal)), type_based([h, g()], random_seed=-1)]),
+#             lazy(alt([single(weight(h, 3, verbosity=normal)), type_based([h, g()], random_seed=-1)]),
+#             lazy(alt([single(weight(h, 2, verbosity=normal)), type_based([h, g()], random_seed=-1)]),
+#             lazy(alt([single(weight(h, 1, verbosity=normal)), type_based([h, g()], random_seed=-1)]),
+#             lazy_wastar(h,w=1)
+#         ],continue_on_fail=true)""" 
+# ]
+
+RWA_CONFIG = [
+
+]
+    
 CONFIGS = [
-    ('AWA', ["--search", "let(hff, ff(), iterated([lazy_greedy([hff]), lazy_wastar([hff],w=5)],repeat_last=true,continue_on_fail=true))", "--always"]),
+    ('AWA', AWA_CONFIG),
+    # ('EAWA', EAWA_CONFIG),
+    # ('TYPE_AWA', TYPE_AWA_CONFIG),
+
+    # ('AWA-WS', AWA_WS_CONFIG),
+    # ('EAWA-WS', EAWA_WS_CONFIG),
+    # ('TYPE_AWA_WS', TYPE_AWA_WS_CONFIG)
 ]
 
 BUILD_OPTIONS = []
 DRIVER_OPTIONS = ["--overall-time-limit", "10m"]
 REVS = [
-    ("main", "main"),
+    ("dawson-masters", "assign3"),
 ]
 ATTRIBUTES = [
     "error",
@@ -89,6 +115,7 @@ ATTRIBUTES = [
 ]
 
 exp = project.FastDownwardExperiment(environment=ENV, revision_cache=REVISION_CACHE)
+# exp = project.FastDownwardExperiment(environment=ENV)
 for config_nick, config in CONFIGS:
     for rev, rev_nick in REVS:
         algo_name = f"{rev_nick}:{config_nick}" if rev_nick else config_nick
@@ -104,7 +131,8 @@ exp.add_suite(BENCHMARKS_DIR, SUITE)
 
 exp.add_parser(exp.EXITCODE_PARSER)
 exp.add_parser(exp.TRANSLATOR_PARSER)
-exp.add_parser(exp.ANYTIME_SEARCH_PARSER)
+# exp.add_parser(exp.ANYTIME_SEARCH_PARSER)
+exp.add_parser(exp.SINGLE_SEARCH_PARSER)
 exp.add_parser(project.DIR / "parser.py")
 exp.add_parser(exp.PLANNER_PARSER)
 
@@ -118,7 +146,7 @@ project.add_absolute_report(
 
 attributes = ["expansions"]
 pairs = [
-    ("20.06:01-cg", "20.06:02-ff"),
+    ("AWA", "AWA_WS"),
 ]
 suffix = "-rel" if project.RELATIVE else ""
 for algo1, algo2 in pairs:

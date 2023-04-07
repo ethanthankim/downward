@@ -1,10 +1,11 @@
 {
-  "algorithm": "main:AWA",
+  "algorithm": "assign3:AWA",
   "build_options": [],
   "component_options": [
+    "--evaluator",
+    "h=lmcut()",
     "--search",
-    "let(hff, ff(), iterated([lazy_greedy([hff]), lazy_wastar([hff],w=5)],repeat_last=true,continue_on_fail=true))",
-    "--always"
+    "eager_anytime(single(sum([weight(h, 2, verbosity=normal), g()])), reopen_closed=true, f_eval=sum([h, g()]))"
   ],
   "domain": "gripper",
   "driver_options": [
@@ -17,13 +18,13 @@
     "10m"
   ],
   "experiment_name": "assign3",
-  "global_revision": "c23fe3eeb7e93b9aa5094cd2d969854439c7c5bc",
+  "global_revision": "0bda2ad2ad5f71bb3197f07c93c4fe386096403c",
   "id": [
-    "main:AWA",
+    "assign3:AWA",
     "gripper",
     "prob01.pddl"
   ],
-  "local_revision": "main",
+  "local_revision": "dawson-masters",
   "problem": "prob01.pddl",
   "repo": "/home/dawson/Documents/Masters/Thesis/search/code/downward-projects/downward",
   "run_dir": "runs-00001-00100/00003"

@@ -400,6 +400,15 @@ fast_downward_plugin(
 )
 
 fast_downward_plugin(
+    NAME EAGER_ANYTIME_SEARCH
+    HELP "Eager anytime search algorithm"
+    SOURCES
+        search_engines/eager_search_anytime
+    DEPENDS NULL_PRUNING_METHOD ORDERED_SET SUCCESSOR_GENERATOR
+    DEPENDENCY_ONLY
+)
+
+fast_downward_plugin(
     NAME PLUGIN_ASTAR
     HELP "A* search"
     SOURCES
@@ -413,6 +422,14 @@ fast_downward_plugin(
     SOURCES
         search_engines/plugin_eager
     DEPENDS EAGER_SEARCH SEARCH_COMMON
+)
+
+fast_downward_plugin(
+    NAME PLUGIN_EAGER_ANYTIME
+    HELP "Eager (i.e., normal) anytime best-first search"
+    SOURCES
+        search_engines/plugin_eager_anytime
+    DEPENDS EAGER_ANYTIME_SEARCH SEARCH_COMMON
 )
 
 fast_downward_plugin(

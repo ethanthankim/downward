@@ -102,7 +102,7 @@ document.addEventListener("DOMContentLoaded", show_main_tables);
 <header>
 <hgroup>
 <h1>assign3-abs</h1>
-<h3>2023-04-02</h3>
+<h3>2023-04-07</h3>
 </hgroup>
 </header>
 
@@ -110,6 +110,8 @@ document.addEventListener("DOMContentLoaded", show_main_tables);
 <div class="body">
 
 <ul>
+<li><strong><a href="#unexplained-errors" onclick="show_table(document.getElementById('unexplained-errors'));">Unexplained Errors</a></strong>
+</li>
 <li><strong><a href="#info" onclick="show_table(document.getElementById('info'));">Info</a></strong>
 </li>
 <li><strong><a href="#summary" onclick="show_table(document.getElementById('summary'));">Summary</a></strong>
@@ -122,13 +124,7 @@ document.addEventListener("DOMContentLoaded", show_main_tables);
 </li>
 <li><strong><a href="#error" onclick="show_table(document.getElementById('error'));">error</a></strong>
   <ul>
-  <li><a href="#error-error-success" onclick="show_table(document.getElementById('error-error-success'));">error-success</a> <a href="#error-depot" onclick="show_table(document.getElementById('error-depot'));">depot</a> <a href="#error-grid" onclick="show_table(document.getElementById('error-grid'));">grid</a> <a href="#error-gripper" onclick="show_table(document.getElementById('error-gripper'));">gripper</a>
-  </li>
-  </ul>
-</li>
-<li><strong><a href="#memory" onclick="show_table(document.getElementById('memory'));">memory</a></strong>
-  <ul>
-  <li><a href="#memory-depot" onclick="show_table(document.getElementById('memory-depot'));">depot</a> <a href="#memory-grid" onclick="show_table(document.getElementById('memory-grid'));">grid</a> <a href="#memory-gripper" onclick="show_table(document.getElementById('memory-gripper'));">gripper</a>
+  <li><a href="#error-error-search-input-error" onclick="show_table(document.getElementById('error-error-search-input-error'));">error-search-input-error</a> <a href="#error-depot" onclick="show_table(document.getElementById('error-depot'));">depot</a> <a href="#error-grid" onclick="show_table(document.getElementById('error-grid'));">grid</a> <a href="#error-gripper" onclick="show_table(document.getElementById('error-gripper'));">gripper</a>
   </li>
   </ul>
 </li>
@@ -136,6 +132,59 @@ document.addEventListener("DOMContentLoaded", show_main_tables);
 
 <section~A~>
 <h1></h1>
+<section id="unexplained-errors">
+<h2>unexplained-errors</h2>
+
+<button type="button" class="toggle-table" onclick="toggle_table(this)">Show table</button><p></p>
+
+<table class="tableborder" style="display:none">
+<tr>
+<th>Unexplained errors</th>
+<th>domain</th>
+<th>problem</th>
+<th>algorithm</th>
+<th>unexplained_<wbr>errors</th>
+<th>error</th>
+<th>planner_<wbr>wall_<wbr>clock_<wbr>time</th>
+<th>raw_<wbr>memory</th>
+<th>node</th>
+</tr>
+<tr>
+<td>runs-00001-00100/00001</td>
+<td>depot</td>
+<td>p01.pddl</td>
+<td>assign3:AWA</td>
+<td>['search-input-error',&nbsp;'run.err:&nbsp;Usage&nbsp;error&nbsp;occurred.<br />']</td>
+<td>search-input-error</td>
+<td class="right">0.22</td>
+<td class="right">11116</td>
+<td>dawson-Latitude-5490</td>
+</tr>
+<tr>
+<td>runs-00001-00100/00002</td>
+<td>grid</td>
+<td>prob01.pddl</td>
+<td>assign3:AWA</td>
+<td>['search-input-error',&nbsp;'run.err:&nbsp;Usage&nbsp;error&nbsp;occurred.<br />']</td>
+<td>search-input-error</td>
+<td class="right">0.59</td>
+<td class="right">11868</td>
+<td>dawson-Latitude-5490</td>
+</tr>
+<tr>
+<td>runs-00001-00100/00003</td>
+<td>gripper</td>
+<td>prob01.pddl</td>
+<td>assign3:AWA</td>
+<td>['search-input-error',&nbsp;'run.err:&nbsp;Usage&nbsp;error&nbsp;occurred.<br />']</td>
+<td>search-input-error</td>
+<td class="right">0.19</td>
+<td class="right">11116</td>
+<td>dawson-Latitude-5490</td>
+</tr>
+</table>
+
+</section>
 <section id="info">
 <h2>info</h2>
 
@@ -150,11 +199,11 @@ document.addEventListener("DOMContentLoaded", show_main_tables);
 <th>component_<wbr>options</th>
 </tr>
 <tr>
-<td>main:AWA</td>
-<td>main</td>
-<td>c23fe3eeb7e93b9aa5094cd2d969854439c7c5bc</td>
+<td>assign3:AWA</td>
+<td>dawson-masters</td>
+<td>0bda2ad2ad5f71bb3197f07c93c4fe386096403c</td>
 <td>['--validate', '--overall-time-limit', '30m', '--overall-memory-limit', '3584M', '--overall-time-limit', '10m']</td>
-<td>['--search', 'let(hff, ff(), iterated([lazy_greedy([hff]), lazy_wastar([hff],w=5)],repeat_last=true,continue_on_fail=true))', '--always']</td>
+<td>['--evaluator', 'h=lmcut()', '--search', 'eager_anytime(single(sum([weight(h, 2, verbosity=normal), g()])), reopen_closed=true, f_eval=sum([h, g()]))']</td>
 </tr>
 </table>
 
@@ -171,19 +220,15 @@ Used nodes: {dawson-Latitude-5490}
 <table class="tableborder" style="display:none">
 <tr>
 <th>Summary</th>
-<th>main:AWA</th>
+<th>assign3:AWA</th>
 </tr>
 <tr>
 <td><a href="#coverage" onclick="show_table(document.getElementById('coverage'));">coverage - Sum</a></td>
-<td class="right"><span style="color:rgb(127,127,127)">3</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">0</span></td>
 </tr>
 <tr>
-<td><a href="#error-error-success" onclick="show_table(document.getElementById('error-error-success'));">error-success - Sum</a></td>
+<td><a href="#error-error-search-input-error" onclick="show_table(document.getElementById('error-error-search-input-error'));">error-search-input-error - Sum</a></td>
 <td class="right"><span style="color:rgb(127,127,127)">3</span></td>
-</tr>
-<tr>
-<td><a href="#memory" onclick="show_table(document.getElementById('memory'));">memory - Sum</a></td>
-<td class="right"><span style="color:rgb(127,127,127)">34824</span></td>
 </tr>
 </table>
 
@@ -196,23 +241,23 @@ Used nodes: {dawson-Latitude-5490}
 <table class="tableborder" style="display:none">
 <tr>
 <th>coverage</th>
-<th>main:AWA</th>
+<th>assign3:AWA</th>
 </tr>
 <tr>
 <td><a href="#coverage-depot" onclick="show_table(document.getElementById('coverage-depot'));">depot</a> (1)</td>
-<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">0</span></td>
 </tr>
 <tr>
 <td><a href="#coverage-grid" onclick="show_table(document.getElementById('coverage-grid'));">grid</a> (1)</td>
-<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">0</span></td>
 </tr>
 <tr>
 <td><a href="#coverage-gripper" onclick="show_table(document.getElementById('coverage-gripper'));">gripper</a> (1)</td>
-<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">0</span></td>
 </tr>
 <tr>
 <td><strong>Sum (3)</strong></td>
-<td class="right"><span style="color:rgb(127,127,127)">3</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">0</span></td>
 </tr>
 </table>
 
@@ -228,11 +273,11 @@ The bottom row reports the sum across all domains.
 <table class="tableborder" style="display:none">
 <tr>
 <th>coverage</th>
-<th>main:AWA</th>
+<th>assign3:AWA</th>
 </tr>
 <tr>
 <td>p01.pddl</td>
-<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">0</span></td>
 </tr>
 </table>
 
@@ -245,11 +290,11 @@ The bottom row reports the sum across all domains.
 <table class="tableborder" style="display:none">
 <tr>
 <th>coverage</th>
-<th>main:AWA</th>
+<th>assign3:AWA</th>
 </tr>
 <tr>
 <td>prob01.pddl</td>
-<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">0</span></td>
 </tr>
 </table>
 
@@ -262,11 +307,11 @@ The bottom row reports the sum across all domains.
 <table class="tableborder" style="display:none">
 <tr>
 <th>coverage</th>
-<th>main:AWA</th>
+<th>assign3:AWA</th>
 </tr>
 <tr>
 <td>prob01.pddl</td>
-<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">0</span></td>
 </tr>
 </table>
 
@@ -275,15 +320,15 @@ The bottom row reports the sum across all domains.
 <section id="error">
 <h2>error</h2>
 
-<section id="error-error-success">
-<h3>error-success</h3>
+<section id="error-error-search-input-error">
+<h3>error-search-input-error</h3>
 
 <button type="button" class="toggle-table" onclick="toggle_table(this)">Show table</button><p></p>
 
 <table class="tableborder" style="display:none">
 <tr>
-<th>error-success</th>
-<th>main:AWA</th>
+<th>error-search-input-error</th>
+<th>assign3:AWA</th>
 </tr>
 <tr>
 <td><a href="#error-depot" onclick="show_table(document.getElementById('error-depot'));">depot</a></td>
@@ -312,11 +357,11 @@ The bottom row reports the sum across all domains.
 <table class="tableborder" style="display:none">
 <tr>
 <th>error</th>
-<th>main:AWA</th>
+<th>assign3:AWA</th>
 </tr>
 <tr>
 <td>p01.pddl</td>
-<td>success</td>
+<td>search-input-error</td>
 </tr>
 </table>
 
@@ -329,11 +374,11 @@ The bottom row reports the sum across all domains.
 <table class="tableborder" style="display:none">
 <tr>
 <th>error</th>
-<th>main:AWA</th>
+<th>assign3:AWA</th>
 </tr>
 <tr>
 <td>prob01.pddl</td>
-<td>success</td>
+<td>search-input-error</td>
 </tr>
 </table>
 
@@ -346,95 +391,11 @@ The bottom row reports the sum across all domains.
 <table class="tableborder" style="display:none">
 <tr>
 <th>error</th>
-<th>main:AWA</th>
+<th>assign3:AWA</th>
 </tr>
 <tr>
 <td>prob01.pddl</td>
-<td>success</td>
-</tr>
-</table>
-
-</section>
-</section>
-<section id="memory">
-<h2>memory</h2>
-
-<button type="button" class="toggle-table" onclick="toggle_table(this)">Show table</button><p></p>
-
-<table class="tableborder" style="display:none">
-<tr>
-<th>memory</th>
-<th>main:AWA</th>
-</tr>
-<tr>
-<td><a href="#memory-depot" onclick="show_table(document.getElementById('memory-depot'));">depot</a> (1)</td>
-<td class="right"><span style="color:rgb(127,127,127)">11080</span></td>
-</tr>
-<tr>
-<td><a href="#memory-grid" onclick="show_table(document.getElementById('memory-grid'));">grid</a> (1)</td>
-<td class="right"><span style="color:rgb(127,127,127)">12664</span></td>
-</tr>
-<tr>
-<td><a href="#memory-gripper" onclick="show_table(document.getElementById('memory-gripper'));">gripper</a> (1)</td>
-<td class="right"><span style="color:rgb(127,127,127)">11080</span></td>
-</tr>
-<tr>
-<td><strong>Sum (3)</strong></td>
-<td class="right"><span style="color:rgb(127,127,127)">34824</span></td>
-</tr>
-</table>
-
-<p>
-Only tasks where all algorithms have a value for "memory" are considered. Each table entry gives the sum of "memory" for that domain. The bottom row reports the sum across all domains.
-</p>
-
-<section id="memory-depot">
-<h3>depot</h3>
-
-<button type="button" class="toggle-table" onclick="toggle_table(this)">Show table</button><p></p>
-
-<table class="tableborder" style="display:none">
-<tr>
-<th>memory</th>
-<th>main:AWA</th>
-</tr>
-<tr>
-<td>p01.pddl</td>
-<td class="right"><span style="color:rgb(127,127,127)">11080</span></td>
-</tr>
-</table>
-
-</section>
-<section id="memory-grid">
-<h3>grid</h3>
-
-<button type="button" class="toggle-table" onclick="toggle_table(this)">Show table</button><p></p>
-
-<table class="tableborder" style="display:none">
-<tr>
-<th>memory</th>
-<th>main:AWA</th>
-</tr>
-<tr>
-<td>prob01.pddl</td>
-<td class="right"><span style="color:rgb(127,127,127)">12664</span></td>
-</tr>
-</table>
-
-</section>
-<section id="memory-gripper">
-<h3>gripper</h3>
-
-<button type="button" class="toggle-table" onclick="toggle_table(this)">Show table</button><p></p>
-
-<table class="tableborder" style="display:none">
-<tr>
-<th>memory</th>
-<th>main:AWA</th>
-</tr>
-<tr>
-<td>prob01.pddl</td>
-<td class="right"><span style="color:rgb(127,127,127)">11080</span></td>
+<td>search-input-error</td>
 </tr>
 </table>
 
