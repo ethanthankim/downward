@@ -79,6 +79,10 @@ SearchStatus IteratedSearch::step() {
             plan_manager.save_plan(found_plan, task_proxy, true);
             best_bound = plan_cost;
             set_plan(found_plan);
+            std::chrono::milliseconds ms = std::chrono::duration_cast< std::chrono::milliseconds >(
+                std::chrono::system_clock::now().time_since_epoch()
+            );
+            log << "Timestamp: " << ms << " milliseconds" << endl;
         }
     }
     current_search->print_statistics();

@@ -1,1 +1,1 @@
-../../../../../../../benchmarks/blocks/probBLOCKS-10-2.pddl
+../../../../../../../benchmarks/blocks/probBLOCKS-9-2.pddl

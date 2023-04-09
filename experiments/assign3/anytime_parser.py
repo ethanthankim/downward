@@ -9,6 +9,9 @@ import re
 from lab.parser import Parser
 
 
+def _get_states_pattern(attribute, name):
+    return (attribute, rf"{name} (\d+) state\(s\)\.", int)
+
 def find_all_matches(attribute, regex, type=int):
     """
     Look for all occurences of *regex*, cast what is found in brackets to
@@ -60,12 +63,17 @@ def main():
     parser.add_function(
         find_all_matches("steps:all", r"Plan length: (.+) step\(s\).\n", type=float)
     )
+    parser.add_function(
+        find_all_matches("cost:all", r"Plan cost: (.+)\n", type=float)
+    )
 
     # todo: additional anytime strings
     # modify anytime algorithms to print "final" search statistics for each incumbent solution
-    parser.add_function(
-        find_all_matches("expansions", r"", type=int)
-    )
+    exp, exp_re, exp_type = _get_states_pattern("expansions:all", "Expanded")
+    parser.add_function(find_all_matches(exp, exp_re, type=exp_type))
+    gen, gen_re, gen_type = _get_states_pattern("generated:all", "Generated")
+    parser.add_function(find_all_matches(gen, gen_re, type=gen_type))
+
     parser.add_function(reduce_to_min("cost:all", "cost"))
     parser.add_function(reduce_to_min("steps:all", "steps"))
     parser.add_function(coverage)

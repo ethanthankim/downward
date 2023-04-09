@@ -110,11 +110,21 @@ document.addEventListener("DOMContentLoaded", show_main_tables);
 <div class="body">
 
 <ul>
-<li><strong><a href="#unexplained-errors" onclick="show_table(document.getElementById('unexplained-errors'));">Unexplained Errors</a></strong>
-</li>
 <li><strong><a href="#info" onclick="show_table(document.getElementById('info'));">Info</a></strong>
 </li>
 <li><strong><a href="#summary" onclick="show_table(document.getElementById('summary'));">Summary</a></strong>
+</li>
+<li><strong><a href="#cost" onclick="show_table(document.getElementById('cost'));">cost</a></strong>
+  <ul>
+  <li><a href="#cost-blocks" onclick="show_table(document.getElementById('cost-blocks'));">blocks</a>
+  </li>
+  </ul>
+</li>
+<li><strong>[cost:all #cost:all]</strong>
+  <ul>
+  <li>[blocks #cost:all-blocks]
+  </li>
+  </ul>
 </li>
 <li><strong><a href="#coverage" onclick="show_table(document.getElementById('coverage'));">coverage</a></strong>
   <ul>
@@ -128,15 +138,9 @@ document.addEventListener("DOMContentLoaded", show_main_tables);
   </li>
   </ul>
 </li>
-<li><strong><a href="#evaluations_per_time" onclick="show_table(document.getElementById('evaluations_per_time'));">evaluations_per_time</a></strong>
+<li><strong>[expansions:all #expansions:all]</strong>
   <ul>
-  <li><a href="#evaluations_per_time-blocks" onclick="show_table(document.getElementById('evaluations_per_time-blocks'));">blocks</a>
-  </li>
-  </ul>
-</li>
-<li><strong><a href="#expansions" onclick="show_table(document.getElementById('expansions'));">expansions</a></strong>
-  <ul>
-  <li><a href="#expansions-blocks" onclick="show_table(document.getElementById('expansions-blocks'));">blocks</a>
+  <li>[blocks #expansions:all-blocks]
   </li>
   </ul>
 </li>
@@ -146,9 +150,15 @@ document.addEventListener("DOMContentLoaded", show_main_tables);
   </li>
   </ul>
 </li>
-<li><strong><a href="#total_time" onclick="show_table(document.getElementById('total_time'));">total_time</a></strong>
+<li><strong><a href="#steps" onclick="show_table(document.getElementById('steps'));">steps</a></strong>
   <ul>
-  <li><a href="#total_time-blocks" onclick="show_table(document.getElementById('total_time-blocks'));">blocks</a>
+  <li><a href="#steps-blocks" onclick="show_table(document.getElementById('steps-blocks'));">blocks</a>
+  </li>
+  </ul>
+</li>
+<li><strong>[steps:all #steps:all]</strong>
+  <ul>
+  <li>[blocks #steps:all-blocks]
   </li>
   </ul>
 </li>
@@ -156,114 +166,6 @@ document.addEventListener("DOMContentLoaded", show_main_tables);
 
 <section~A~>
 <h1></h1>
-<section id="unexplained-errors">
-<h2>unexplained-errors</h2>
-
-<button type="button" class="toggle-table" onclick="toggle_table(this)">Show table</button><p></p>
-
-<table class="tableborder" style="display:none">
-<tr>
-<th>Unexplained errors</th>
-<th>domain</th>
-<th>problem</th>
-<th>algorithm</th>
-<th>unexplained_<wbr>errors</th>
-<th>error</th>
-<th>planner_<wbr>wall_<wbr>clock_<wbr>time</th>
-<th>raw_<wbr>memory</th>
-<th>node</th>
-</tr>
-<tr>
-<td>runs-00001-00100/00001</td>
-<td>blocks</td>
-<td>probBLOCKS-10-2.pddl</td>
-<td>assign3:AWA</td>
-<td>["Found&nbsp;multiple&nbsp;occurences&nbsp;of&nbsp;Plan&nbsp;cost:&nbsp;(.+)<br />\&nbsp;in&nbsp;logfile.&nbsp;Single-search&nbsp;parser&nbsp;can't&nbsp;be&nbsp;used&nbsp;for&nbsp;anytime&nbsp;planner.",&nbsp;"Found&nbsp;multiple&nbsp;occurences&nbsp;of&nbsp;Plan&nbsp;length:&nbsp;(<br />d+)&nbsp;step<br />(s<br />)<br />.&nbsp;in&nbsp;logfile.&nbsp;Single-search&nbsp;parser&nbsp;can't&nbsp;be&nbsp;used&nbsp;for&nbsp;anytime&nbsp;planner."]</td>
-<td>success</td>
-<td class="right">37.86</td>
-<td class="right">26184</td>
-<td>dawson-Latitude-5490</td>
-</tr>
-<tr>
-<td>runs-00001-00100/00002</td>
-<td>blocks</td>
-<td>probBLOCKS-8-2.pddl</td>
-<td>assign3:AWA</td>
-<td>["Found&nbsp;multiple&nbsp;occurences&nbsp;of&nbsp;Plan&nbsp;cost:&nbsp;(.+)<br />\&nbsp;in&nbsp;logfile.&nbsp;Single-search&nbsp;parser&nbsp;can't&nbsp;be&nbsp;used&nbsp;for&nbsp;anytime&nbsp;planner.",&nbsp;"Found&nbsp;multiple&nbsp;occurences&nbsp;of&nbsp;Plan&nbsp;length:&nbsp;(<br />d+)&nbsp;step<br />(s<br />)<br />.&nbsp;in&nbsp;logfile.&nbsp;Single-search&nbsp;parser&nbsp;can't&nbsp;be&nbsp;used&nbsp;for&nbsp;anytime&nbsp;planner."]</td>
-<td>success</td>
-<td class="right">0.93</td>
-<td class="right">11268</td>
-<td>dawson-Latitude-5490</td>
-</tr>
-<tr>
-<td>runs-00001-00100/00003</td>
-<td>blocks</td>
-<td>probBLOCKS-10-2.pddl</td>
-<td>assign3:EAWA</td>
-<td>["Found&nbsp;multiple&nbsp;occurences&nbsp;of&nbsp;Plan&nbsp;cost:&nbsp;(.+)<br />\&nbsp;in&nbsp;logfile.&nbsp;Single-search&nbsp;parser&nbsp;can't&nbsp;be&nbsp;used&nbsp;for&nbsp;anytime&nbsp;planner.",&nbsp;"Found&nbsp;multiple&nbsp;occurences&nbsp;of&nbsp;Plan&nbsp;length:&nbsp;(<br />d+)&nbsp;step<br />(s<br />)<br />.&nbsp;in&nbsp;logfile.&nbsp;Single-search&nbsp;parser&nbsp;can't&nbsp;be&nbsp;used&nbsp;for&nbsp;anytime&nbsp;planner."]</td>
-<td>success</td>
-<td class="right">36.96</td>
-<td class="right">25828</td>
-<td>dawson-Latitude-5490</td>
-</tr>
-<tr>
-<td>runs-00001-00100/00004</td>
-<td>blocks</td>
-<td>probBLOCKS-8-2.pddl</td>
-<td>assign3:EAWA</td>
-<td>["Found&nbsp;multiple&nbsp;occurences&nbsp;of&nbsp;Plan&nbsp;cost:&nbsp;(.+)<br />\&nbsp;in&nbsp;logfile.&nbsp;Single-search&nbsp;parser&nbsp;can't&nbsp;be&nbsp;used&nbsp;for&nbsp;anytime&nbsp;planner.",&nbsp;"Found&nbsp;multiple&nbsp;occurences&nbsp;of&nbsp;Plan&nbsp;length:&nbsp;(<br />d+)&nbsp;step<br />(s<br />)<br />.&nbsp;in&nbsp;logfile.&nbsp;Single-search&nbsp;parser&nbsp;can't&nbsp;be&nbsp;used&nbsp;for&nbsp;anytime&nbsp;planner."]</td>
-<td>success</td>
-<td class="right">0.93</td>
-<td class="right">11268</td>
-<td>dawson-Latitude-5490</td>
-</tr>
-<tr>
-<td>runs-00001-00100/00005</td>
-<td>blocks</td>
-<td>probBLOCKS-10-2.pddl</td>
-<td>assign3:TYPE_AWA</td>
-<td>["Found&nbsp;multiple&nbsp;occurences&nbsp;of&nbsp;Plan&nbsp;cost:&nbsp;(.+)<br />\&nbsp;in&nbsp;logfile.&nbsp;Single-search&nbsp;parser&nbsp;can't&nbsp;be&nbsp;used&nbsp;for&nbsp;anytime&nbsp;planner.",&nbsp;"Found&nbsp;multiple&nbsp;occurences&nbsp;of&nbsp;Plan&nbsp;length:&nbsp;(<br />d+)&nbsp;step<br />(s<br />)<br />.&nbsp;in&nbsp;logfile.&nbsp;Single-search&nbsp;parser&nbsp;can't&nbsp;be&nbsp;used&nbsp;for&nbsp;anytime&nbsp;planner."]</td>
-<td>success</td>
-<td class="right">31.14</td>
-<td class="right">24468</td>
-<td>dawson-Latitude-5490</td>
-</tr>
-<tr>
-<td>runs-00001-00100/00006</td>
-<td>blocks</td>
-<td>probBLOCKS-8-2.pddl</td>
-<td>assign3:TYPE_AWA</td>
-<td>["Found&nbsp;multiple&nbsp;occurences&nbsp;of&nbsp;Plan&nbsp;cost:&nbsp;(.+)<br />\&nbsp;in&nbsp;logfile.&nbsp;Single-search&nbsp;parser&nbsp;can't&nbsp;be&nbsp;used&nbsp;for&nbsp;anytime&nbsp;planner.",&nbsp;"Found&nbsp;multiple&nbsp;occurences&nbsp;of&nbsp;Plan&nbsp;length:&nbsp;(<br />d+)&nbsp;step<br />(s<br />)<br />.&nbsp;in&nbsp;logfile.&nbsp;Single-search&nbsp;parser&nbsp;can't&nbsp;be&nbsp;used&nbsp;for&nbsp;anytime&nbsp;planner."]</td>
-<td>success</td>
-<td class="right">0.97</td>
-<td class="right">11268</td>
-<td>dawson-Latitude-5490</td>
-</tr>
-<tr>
-<td>runs-00001-00100/00007</td>
-<td>blocks</td>
-<td>probBLOCKS-10-2.pddl</td>
-<td>assign3:RWA</td>
-<td>["Single-search&nbsp;parser&nbsp;can't&nbsp;be&nbsp;used&nbsp;for&nbsp;iterated&nbsp;search.",&nbsp;"Found&nbsp;multiple&nbsp;occurences&nbsp;of&nbsp;Plan&nbsp;cost:&nbsp;(.+)<br />\&nbsp;in&nbsp;logfile.&nbsp;Single-search&nbsp;parser&nbsp;can't&nbsp;be&nbsp;used&nbsp;for&nbsp;anytime&nbsp;planner.",&nbsp;"Found&nbsp;multiple&nbsp;occurences&nbsp;of&nbsp;Plan&nbsp;length:&nbsp;(<br />d+)&nbsp;step<br />(s<br />)<br />.&nbsp;in&nbsp;logfile.&nbsp;Single-search&nbsp;parser&nbsp;can't&nbsp;be&nbsp;used&nbsp;for&nbsp;anytime&nbsp;planner.",&nbsp;"Found&nbsp;multiple&nbsp;occurences&nbsp;of&nbsp;Evaluations:&nbsp;(.+)<br />\&nbsp;in&nbsp;logfile.&nbsp;Single-search&nbsp;parser&nbsp;can't&nbsp;be&nbsp;used&nbsp;for&nbsp;anytime&nbsp;planner.",&nbsp;"Found&nbsp;multiple&nbsp;occurences&nbsp;of&nbsp;Dead&nbsp;ends:&nbsp;(<br />d+)&nbsp;state<br />(s<br />)<br />.&nbsp;in&nbsp;logfile.&nbsp;Single-search&nbsp;parser&nbsp;can't&nbsp;be&nbsp;used&nbsp;for&nbsp;anytime&nbsp;planner.",&nbsp;"Found&nbsp;multiple&nbsp;occurences&nbsp;of&nbsp;Evaluated&nbsp;(<br />d+)&nbsp;state<br />(s<br />)<br />.&nbsp;in&nbsp;logfile.&nbsp;Single-search&nbsp;parser&nbsp;can't&nbsp;be&nbsp;used&nbsp;for&nbsp;anytime&nbsp;planner.",&nbsp;"Found&nbsp;multiple&nbsp;occurences&nbsp;of&nbsp;Expanded&nbsp;(<br />d+)&nbsp;state<br />(s<br />)<br />.&nbsp;in&nbsp;logfile.&nbsp;Single-search&nbsp;parser&nbsp;can't&nbsp;be&nbsp;used&nbsp;for&nbsp;anytime&nbsp;planner.",&nbsp;"Found&nbsp;multiple&nbsp;occurences&nbsp;of&nbsp;Generated&nbsp;(<br />d+)&nbsp;state<br />(s<br />)<br />.&nbsp;in&nbsp;logfile.&nbsp;Single-search&nbsp;parser&nbsp;can't&nbsp;be&nbsp;used&nbsp;for&nbsp;anytime&nbsp;planner.",&nbsp;"Found&nbsp;multiple&nbsp;occurences&nbsp;of&nbsp;Reopened&nbsp;(<br />d+)&nbsp;state<br />(s<br />)<br />.&nbsp;in&nbsp;logfile.&nbsp;Single-search&nbsp;parser&nbsp;can't&nbsp;be&nbsp;used&nbsp;for&nbsp;anytime&nbsp;planner.",&nbsp;'multiple&nbsp;initial&nbsp;h&nbsp;values&nbsp;found&nbsp;for&nbsp;ff()']</td>
-<td>success</td>
-<td class="right">16.06</td>
-<td class="right">62920</td>
-<td>dawson-Latitude-5490</td>
-</tr>
-<tr>
-<td>runs-00001-00100/00008</td>
-<td>blocks</td>
-<td>probBLOCKS-8-2.pddl</td>
-<td>assign3:RWA</td>
-<td>["Single-search&nbsp;parser&nbsp;can't&nbsp;be&nbsp;used&nbsp;for&nbsp;iterated&nbsp;search.",&nbsp;"Found&nbsp;multiple&nbsp;occurences&nbsp;of&nbsp;Plan&nbsp;cost:&nbsp;(.+)<br />\&nbsp;in&nbsp;logfile.&nbsp;Single-search&nbsp;parser&nbsp;can't&nbsp;be&nbsp;used&nbsp;for&nbsp;anytime&nbsp;planner.",&nbsp;"Found&nbsp;multiple&nbsp;occurences&nbsp;of&nbsp;Plan&nbsp;length:&nbsp;(<br />d+)&nbsp;step<br />(s<br />)<br />.&nbsp;in&nbsp;logfile.&nbsp;Single-search&nbsp;parser&nbsp;can't&nbsp;be&nbsp;used&nbsp;for&nbsp;anytime&nbsp;planner.",&nbsp;"Found&nbsp;multiple&nbsp;occurences&nbsp;of&nbsp;Evaluations:&nbsp;(.+)<br />\&nbsp;in&nbsp;logfile.&nbsp;Single-search&nbsp;parser&nbsp;can't&nbsp;be&nbsp;used&nbsp;for&nbsp;anytime&nbsp;planner.",&nbsp;"Found&nbsp;multiple&nbsp;occurences&nbsp;of&nbsp;Dead&nbsp;ends:&nbsp;(<br />d+)&nbsp;state<br />(s<br />)<br />.&nbsp;in&nbsp;logfile.&nbsp;Single-search&nbsp;parser&nbsp;can't&nbsp;be&nbsp;used&nbsp;for&nbsp;anytime&nbsp;planner.",&nbsp;"Found&nbsp;multiple&nbsp;occurences&nbsp;of&nbsp;Evaluated&nbsp;(<br />d+)&nbsp;state<br />(s<br />)<br />.&nbsp;in&nbsp;logfile.&nbsp;Single-search&nbsp;parser&nbsp;can't&nbsp;be&nbsp;used&nbsp;for&nbsp;anytime&nbsp;planner.",&nbsp;"Found&nbsp;multiple&nbsp;occurences&nbsp;of&nbsp;Expanded&nbsp;(<br />d+)&nbsp;state<br />(s<br />)<br />.&nbsp;in&nbsp;logfile.&nbsp;Single-search&nbsp;parser&nbsp;can't&nbsp;be&nbsp;used&nbsp;for&nbsp;anytime&nbsp;planner.",&nbsp;"Found&nbsp;multiple&nbsp;occurences&nbsp;of&nbsp;Generated&nbsp;(<br />d+)&nbsp;state<br />(s<br />)<br />.&nbsp;in&nbsp;logfile.&nbsp;Single-search&nbsp;parser&nbsp;can't&nbsp;be&nbsp;used&nbsp;for&nbsp;anytime&nbsp;planner.",&nbsp;"Found&nbsp;multiple&nbsp;occurences&nbsp;of&nbsp;Reopened&nbsp;(<br />d+)&nbsp;state<br />(s<br />)<br />.&nbsp;in&nbsp;logfile.&nbsp;Single-search&nbsp;parser&nbsp;can't&nbsp;be&nbsp;used&nbsp;for&nbsp;anytime&nbsp;planner.",&nbsp;'multiple&nbsp;initial&nbsp;h&nbsp;values&nbsp;found&nbsp;for&nbsp;ff()']</td>
-<td>success</td>
-<td class="right">6.27</td>
-<td class="right">27652</td>
-<td>dawson-Latitude-5490</td>
-</tr>
-</table>
-
-</section>
 <section id="info">
 <h2>info</h2>
 
@@ -280,28 +182,28 @@ document.addEventListener("DOMContentLoaded", show_main_tables);
 <tr>
 <td>assign3:AWA</td>
 <td>dawson-masters</td>
-<td>0c68bd563f070e713e85e361904e05f30a494062</td>
+<td>3b555b80a418bac7325850d137e8366dd6555cd9</td>
 <td>['--validate', '--overall-time-limit', '30m', '--overall-memory-limit', '3584M', '--overall-time-limit', '10m']</td>
 <td>['--evaluator', 'h=lmcut()', '--search', 'eager_anytime(single(sum([weight(h, 2, verbosity=normal), g()])), reopen_closed=true, f_eval=sum([h, g()]))']</td>
 </tr>
 <tr>
 <td>assign3:EAWA</td>
 <td>dawson-masters</td>
-<td>0c68bd563f070e713e85e361904e05f30a494062</td>
+<td>3b555b80a418bac7325850d137e8366dd6555cd9</td>
 <td>['--validate', '--overall-time-limit', '30m', '--overall-memory-limit', '3584M', '--overall-time-limit', '10m']</td>
 <td>['--evaluator', 'h=lmcut()', '--search', 'eager_anytime(epsilon_greedy(\n        sum([weight(h, 2, verbosity=normal), g()]), epsilon=0.5, random_seed=1234), \n        reopen_closed=true, f_eval=sum([h, g()]))']</td>
 </tr>
 <tr>
 <td>assign3:RWA</td>
 <td>dawson-masters</td>
-<td>0c68bd563f070e713e85e361904e05f30a494062</td>
+<td>3b555b80a418bac7325850d137e8366dd6555cd9</td>
 <td>['--validate', '--overall-time-limit', '30m', '--overall-memory-limit', '3584M', '--overall-time-limit', '10m']</td>
 <td>['--evaluator', 'h=ff()', '--search', 'iterated([\n            eager_wastar([h],w=5),\n            eager_wastar([h],w=4),\n            eager_wastar([h],w=3),\n            eager_wastar([h],w=2),\n            eager_wastar([h],w=1)\n        ],continue_on_fail=true)']</td>
 </tr>
 <tr>
 <td>assign3:TYPE_AWA</td>
 <td>dawson-masters</td>
-<td>0c68bd563f070e713e85e361904e05f30a494062</td>
+<td>3b555b80a418bac7325850d137e8366dd6555cd9</td>
 <td>['--validate', '--overall-time-limit', '30m', '--overall-memory-limit', '3584M', '--overall-time-limit', '10m']</td>
 <td>['--evaluator', 'h=lmcut()', '--search', 'eager_anytime(alt(\n        [single(weight(h, 2, verbosity=normal)), type_based([h, g()], random_seed=1234)]), \n        reopen_closed=true, f_eval=sum([h, g()]))']</td>
 </tr>
@@ -326,6 +228,13 @@ Used nodes: {dawson-Latitude-5490}
 <th>assign3:TYPE_<wbr>AWA</th>
 </tr>
 <tr>
+<td><a href="#cost" onclick="show_table(document.getElementById('cost'));">cost - Sum</a></td>
+<td class="right"><span style="color:rgb(127,127,127)">42.00</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">42.00</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">42.00</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">42.00</span></td>
+</tr>
+<tr>
 <td><a href="#coverage" onclick="show_table(document.getElementById('coverage'));">coverage - Sum</a></td>
 <td class="right"><span style="color:rgb(127,127,127)">2</span></td>
 <td class="right"><span style="color:rgb(127,127,127)">2</span></td>
@@ -340,35 +249,121 @@ Used nodes: {dawson-Latitude-5490}
 <td class="right"><span style="color:rgb(127,127,127)">2</span></td>
 </tr>
 <tr>
-<td><a href="#evaluations_per_time" onclick="show_table(document.getElementById('evaluations_per_time'));">evaluations_per_time - Geometric mean</a></td>
-<td class="right"><span style="color:rgb(0,178,0)">11542.25</span></td>
-<td class="right"><span style="color:rgb(0,178,37)">10342.17</span></td>
-<td class="right"><span style="color:rgb(0,0,178)">65.59</span></td>
-<td class="right"><span style="color:rgb(0,178,60)">9589.74</span></td>
-</tr>
-<tr>
-<td><a href="#expansions" onclick="show_table(document.getElementById('expansions'));">expansions - Geometric mean</a></td>
-<td class="right"><span style="color:rgb(0,81,178)">4709.68</span></td>
-<td class="right"><span style="color:rgb(0,0,178)">6019.41</span></td>
-<td class="right"><span style="color:rgb(0,178,0)">268.77</span></td>
-<td class="right"><span style="color:rgb(0,46,178)">5272.48</span></td>
-</tr>
-<tr>
 <td><a href="#memory" onclick="show_table(document.getElementById('memory'));">memory - Sum</a></td>
-<td class="right"><span style="color:rgb(0,178,11)">37452</span></td>
-<td class="right"><span style="color:rgb(0,178,8)">37096</span></td>
-<td class="right"><span style="color:rgb(0,0,178)">90572</span></td>
-<td class="right"><span style="color:rgb(0,178,0)">35736</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">22688</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">22828</span></td>
+<td class="right"><span style="color:rgb(0,0,178)">275832</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">22824</span></td>
 </tr>
 <tr>
-<td><a href="#total_time" onclick="show_table(document.getElementById('total_time'));">total_time - Geometric mean</a></td>
-<td class="right"><span style="color:rgb(0,178,0)">1.30</span></td>
-<td class="right"><span style="color:rgb(0,178,15)">1.61</span></td>
-<td class="right"><span style="color:rgb(0,0,178)">8.66</span></td>
-<td class="right"><span style="color:rgb(0,178,5)">1.41</span></td>
+<td><a href="#steps" onclick="show_table(document.getElementById('steps'));">steps - Sum</a></td>
+<td class="right"><span style="color:rgb(127,127,127)">42.00</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">42.00</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">42.00</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">42.00</span></td>
 </tr>
 </table>
 
+</section>
+<section id="cost">
+<h2>cost</h2>
+
+<button type="button" class="toggle-table" onclick="toggle_table(this)">Show table</button><p></p>
+
+<table class="tableborder" style="display:none">
+<tr>
+<th>cost</th>
+<th>assign3:AWA</th>
+<th>assign3:EAWA</th>
+<th>assign3:RWA</th>
+<th>assign3:TYPE_<wbr>AWA</th>
+</tr>
+<tr>
+<td><a href="#cost-blocks" onclick="show_table(document.getElementById('cost-blocks'));">blocks</a> (2)</td>
+<td class="right"><span style="color:rgb(127,127,127)">42.00</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">42.00</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">42.00</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">42.00</span></td>
+</tr>
+<tr>
+<td><strong>Sum (2)</strong></td>
+<td class="right"><span style="color:rgb(127,127,127)">42.00</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">42.00</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">42.00</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">42.00</span></td>
+</tr>
+</table>
+
+<p>
+Only tasks where all algorithms have a value for "cost" are considered. Each table entry gives the sum of "cost" for that domain. The bottom row reports the sum across all domains.
+</p>
+
+<section id="cost-blocks">
+<h3>blocks</h3>
+
+<button type="button" class="toggle-table" onclick="toggle_table(this)">Show table</button><p></p>
+
+<table class="tableborder" style="display:none">
+<tr>
+<th>cost</th>
+<th>assign3:AWA</th>
+<th>assign3:EAWA</th>
+<th>assign3:RWA</th>
+<th>assign3:TYPE_<wbr>AWA</th>
+</tr>
+<tr>
+<td>probBLOCKS-8-2.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">16.00</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">16.00</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">16.00</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">16.00</span></td>
+</tr>
+<tr>
+<td>probBLOCKS-9-2.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">26.00</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">26.00</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">26.00</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">26.00</span></td>
+</tr>
+</table>
+
+<p>
+== cost:all ==[cost:all]
+</p>
+<p>
+Per-domain reports only support numeric attributes, but cost:all has type list.
+</p>
+<p>
+=== blocks ===[cost:all-blocks]
+</p>
+
+<button type="button" class="toggle-table" onclick="toggle_table(this)">Show table</button><p></p>
+
+<table class="tableborder" style="display:none">
+<tr>
+<th>cost:all</th>
+<th>assign3:AWA</th>
+<th>assign3:EAWA</th>
+<th>assign3:RWA</th>
+<th>assign3:TYPE_<wbr>AWA</th>
+</tr>
+<tr>
+<td>probBLOCKS-8-2.pddl</td>
+<td>[18.0, 16.0, 16.0]</td>
+<td>[18.0, 16.0, 16.0]</td>
+<td>[26.0, 22.0, 18.0, 16.0]</td>
+<td>[18.0, 16.0, 16.0]</td>
+</tr>
+<tr>
+<td>probBLOCKS-9-2.pddl</td>
+<td>[28.0, 26.0, 26.0]</td>
+<td>[32.0, 28.0, 26.0, 26.0]</td>
+<td>[40.0, 36.0, 32.0, 26.0]</td>
+<td>[40.0, 36.0, 32.0, 30.0, 26.0, 26.0]</td>
+</tr>
+</table>
+
+</section>
 </section>
 <section id="coverage">
 <h2>coverage</h2>
@@ -424,7 +419,7 @@ The bottom row reports the sum across all domains.
 <td class="right"><span style="color:rgb(127,127,127)">1</span></td>
 </tr>
 <tr>
-<td>probBLOCKS-10-2.pddl</td>
+<td>probBLOCKS-9-2.pddl</td>
 <td class="right"><span style="color:rgb(127,127,127)">1</span></td>
 <td class="right"><span style="color:rgb(127,127,127)">1</span></td>
 <td class="right"><span style="color:rgb(127,127,127)">1</span></td>
@@ -488,57 +483,29 @@ The bottom row reports the sum across all domains.
 <td>success</td>
 </tr>
 <tr>
-<td>probBLOCKS-10-2.pddl</td>
+<td>probBLOCKS-9-2.pddl</td>
 <td>success</td>
 <td>success</td>
 <td>success</td>
 <td>success</td>
-</tr>
-</table>
-
-</section>
-</section>
-<section id="evaluations_per_time">
-<h2>evaluations_per_time</h2>
-
-<button type="button" class="toggle-table" onclick="toggle_table(this)">Show table</button><p></p>
-
-<table class="tableborder" style="display:none">
-<tr>
-<th>evaluations_<wbr>per_<wbr>time</th>
-<th>assign3:AWA</th>
-<th>assign3:EAWA</th>
-<th>assign3:RWA</th>
-<th>assign3:TYPE_<wbr>AWA</th>
-</tr>
-<tr>
-<td><a href="#evaluations_per_time-blocks" onclick="show_table(document.getElementById('evaluations_per_time-blocks'));">blocks</a> (2)</td>
-<td class="right"><span style="color:rgb(0,178,0)">11542.2</span></td>
-<td class="right"><span style="color:rgb(0,178,37)">10342.2</span></td>
-<td class="right"><span style="color:rgb(0,0,178)">65.6</span></td>
-<td class="right"><span style="color:rgb(0,178,60)">9589.7</span></td>
-</tr>
-<tr>
-<td><strong>Geometric mean (2)</strong></td>
-<td class="right"><span style="color:rgb(0,178,0)">11542.2</span></td>
-<td class="right"><span style="color:rgb(0,178,37)">10342.2</span></td>
-<td class="right"><span style="color:rgb(0,0,178)">65.6</span></td>
-<td class="right"><span style="color:rgb(0,178,60)">9589.7</span></td>
 </tr>
 </table>
 
 <p>
-Only tasks where all algorithms have a value for "evaluations_per_time" are considered. Each table entry gives the geometric mean of "evaluations_per_time" for that domain. The bottom row reports the geometric mean across all domains.
+== expansions:all ==[expansions:all]
 </p>
-
-<section id="evaluations_per_time-blocks">
-<h3>blocks</h3>
+<p>
+Per-domain reports only support numeric attributes, but expansions:all has type list.
+</p>
+<p>
+=== blocks ===[expansions:all-blocks]
+</p>
 
 <button type="button" class="toggle-table" onclick="toggle_table(this)">Show table</button><p></p>
 
 <table class="tableborder" style="display:none">
 <tr>
-<th>evaluations_<wbr>per_<wbr>time</th>
+<th>expansions:all</th>
 <th>assign3:AWA</th>
 <th>assign3:EAWA</th>
 <th>assign3:RWA</th>
@@ -546,81 +513,17 @@ Only tasks where all algorithms have a value for "evaluations_per_time" are cons
 </tr>
 <tr>
 <td>probBLOCKS-8-2.pddl</td>
-<td class="right"><span style="color:rgb(0,178,0)">12408.7</span></td>
-<td class="right"><span style="color:rgb(0,178,51)">10639.2</span></td>
-<td class="right"><span style="color:rgb(0,0,178)">23.8</span></td>
-<td class="right"><span style="color:rgb(0,178,103)">8826.1</span></td>
+<td>[36, 96, 145]</td>
+<td>[63, 159, 259]</td>
+<td>[56, 63, 50, 119, 439349, 439637]</td>
+<td>[48, 122, 190]</td>
 </tr>
 <tr>
-<td>probBLOCKS-10-2.pddl</td>
-<td class="right"><span style="color:rgb(0,178,0)">10736.3</span></td>
-<td class="right"><span style="color:rgb(0,178,23)">10053.4</span></td>
-<td class="right"><span style="color:rgb(0,0,178)">180.6</span></td>
-<td class="right"><span style="color:rgb(0,178,10)">10419.4</span></td>
-</tr>
-</table>
-
-</section>
-</section>
-<section id="expansions">
-<h2>expansions</h2>
-
-<button type="button" class="toggle-table" onclick="toggle_table(this)">Show table</button><p></p>
-
-<table class="tableborder" style="display:none">
-<tr>
-<th>expansions</th>
-<th>assign3:AWA</th>
-<th>assign3:EAWA</th>
-<th>assign3:RWA</th>
-<th>assign3:TYPE_<wbr>AWA</th>
-</tr>
-<tr>
-<td><a href="#expansions-blocks" onclick="show_table(document.getElementById('expansions-blocks'));">blocks</a> (2)</td>
-<td class="right"><span style="color:rgb(0,81,178)">4709.68</span></td>
-<td class="right"><span style="color:rgb(0,0,178)">6019.41</span></td>
-<td class="right"><span style="color:rgb(0,178,0)">268.77</span></td>
-<td class="right"><span style="color:rgb(0,46,178)">5272.48</span></td>
-</tr>
-<tr>
-<td><strong>Geometric mean (2)</strong></td>
-<td class="right"><span style="color:rgb(0,81,178)">4709.68</span></td>
-<td class="right"><span style="color:rgb(0,0,178)">6019.41</span></td>
-<td class="right"><span style="color:rgb(0,178,0)">268.77</span></td>
-<td class="right"><span style="color:rgb(0,46,178)">5272.48</span></td>
-</tr>
-</table>
-
-<p>
-Only tasks where all algorithms have a value for "expansions" are considered. Each table entry gives the geometric mean of "expansions" for that domain. The bottom row reports the geometric mean across all domains.
-</p>
-
-<section id="expansions-blocks">
-<h3>blocks</h3>
-
-<button type="button" class="toggle-table" onclick="toggle_table(this)">Show table</button><p></p>
-
-<table class="tableborder" style="display:none">
-<tr>
-<th>expansions</th>
-<th>assign3:AWA</th>
-<th>assign3:EAWA</th>
-<th>assign3:RWA</th>
-<th>assign3:TYPE_<wbr>AWA</th>
-</tr>
-<tr>
-<td>probBLOCKS-8-2.pddl</td>
-<td class="right"><span style="color:rgb(0,178,156)">145</span></td>
-<td class="right"><span style="color:rgb(0,0,178)">259</span></td>
-<td class="right"><span style="color:rgb(0,178,0)">56</span></td>
-<td class="right"><span style="color:rgb(0,121,178)">190</span></td>
-</tr>
-<tr>
-<td>probBLOCKS-10-2.pddl</td>
-<td class="right"><span style="color:rgb(0,0,178)">152973</span></td>
-<td class="right"><span style="color:rgb(0,30,178)">139897</span></td>
-<td class="right"><span style="color:rgb(0,178,0)">1290</span></td>
-<td class="right"><span style="color:rgb(0,15,178)">146311</span></td>
+<td>probBLOCKS-9-2.pddl</td>
+<td>[453, 548, 1324]</td>
+<td>[490, 959, 1510, 2764]</td>
+<td>[124, 231, 336, 1886, 6085190, 6087767]</td>
+<td>[125, 167, 1156, 1522, 2166, 3180]</td>
 </tr>
 </table>
 
@@ -641,17 +544,17 @@ Only tasks where all algorithms have a value for "expansions" are considered. Ea
 </tr>
 <tr>
 <td><a href="#memory-blocks" onclick="show_table(document.getElementById('memory-blocks'));">blocks</a> (2)</td>
-<td class="right"><span style="color:rgb(0,178,11)">37452</span></td>
-<td class="right"><span style="color:rgb(0,178,8)">37096</span></td>
-<td class="right"><span style="color:rgb(0,0,178)">90572</span></td>
-<td class="right"><span style="color:rgb(0,178,0)">35736</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">22688</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">22828</span></td>
+<td class="right"><span style="color:rgb(0,0,178)">275832</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">22824</span></td>
 </tr>
 <tr>
 <td><strong>Sum (2)</strong></td>
-<td class="right"><span style="color:rgb(0,178,11)">37452</span></td>
-<td class="right"><span style="color:rgb(0,178,8)">37096</span></td>
-<td class="right"><span style="color:rgb(0,0,178)">90572</span></td>
-<td class="right"><span style="color:rgb(0,178,0)">35736</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">22688</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">22828</span></td>
+<td class="right"><span style="color:rgb(0,0,178)">275832</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">22824</span></td>
 </tr>
 </table>
 
@@ -680,57 +583,57 @@ Only tasks where all algorithms have a value for "memory" are considered. Each t
 <td class="right"><span style="color:rgb(0,178,0)">11268</span></td>
 </tr>
 <tr>
-<td>probBLOCKS-10-2.pddl</td>
-<td class="right"><span style="color:rgb(0,178,15)">26184</span></td>
-<td class="right"><span style="color:rgb(0,178,12)">25828</span></td>
-<td class="right"><span style="color:rgb(0,0,178)">62920</span></td>
-<td class="right"><span style="color:rgb(0,178,0)">24468</span></td>
+<td>probBLOCKS-9-2.pddl</td>
+<td class="right"><span style="color:rgb(0,178,0)">11420</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">11560</span></td>
+<td class="right"><span style="color:rgb(0,0,178)">248180</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">11556</span></td>
 </tr>
 </table>
 
 </section>
 </section>
-<section id="total_time">
-<h2>total_time</h2>
+<section id="steps">
+<h2>steps</h2>
 
 <button type="button" class="toggle-table" onclick="toggle_table(this)">Show table</button><p></p>
 
 <table class="tableborder" style="display:none">
 <tr>
-<th>total_<wbr>time</th>
+<th>steps</th>
 <th>assign3:AWA</th>
 <th>assign3:EAWA</th>
 <th>assign3:RWA</th>
 <th>assign3:TYPE_<wbr>AWA</th>
 </tr>
 <tr>
-<td><a href="#total_time-blocks" onclick="show_table(document.getElementById('total_time-blocks'));">blocks</a> (2)</td>
-<td class="right"><span style="color:rgb(0,178,0)">1.30</span></td>
-<td class="right"><span style="color:rgb(0,178,15)">1.61</span></td>
-<td class="right"><span style="color:rgb(0,0,178)">8.66</span></td>
-<td class="right"><span style="color:rgb(0,178,5)">1.41</span></td>
+<td><a href="#steps-blocks" onclick="show_table(document.getElementById('steps-blocks'));">blocks</a> (2)</td>
+<td class="right"><span style="color:rgb(127,127,127)">42.00</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">42.00</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">42.00</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">42.00</span></td>
 </tr>
 <tr>
-<td><strong>Geometric mean (2)</strong></td>
-<td class="right"><span style="color:rgb(0,178,0)">1.30</span></td>
-<td class="right"><span style="color:rgb(0,178,15)">1.61</span></td>
-<td class="right"><span style="color:rgb(0,0,178)">8.66</span></td>
-<td class="right"><span style="color:rgb(0,178,5)">1.41</span></td>
+<td><strong>Sum (2)</strong></td>
+<td class="right"><span style="color:rgb(127,127,127)">42.00</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">42.00</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">42.00</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">42.00</span></td>
 </tr>
 </table>
 
 <p>
-Only tasks where all algorithms have a value for "total_time" are considered. Each table entry gives the geometric mean of "total_time" for that domain. The bottom row reports the geometric mean across all domains.
+Only tasks where all algorithms have a value for "steps" are considered. Each table entry gives the sum of "steps" for that domain. The bottom row reports the sum across all domains.
 </p>
 
-<section id="total_time-blocks">
+<section id="steps-blocks">
 <h3>blocks</h3>
 
 <button type="button" class="toggle-table" onclick="toggle_table(this)">Show table</button><p></p>
 
 <table class="tableborder" style="display:none">
 <tr>
-<th>total_<wbr>time</th>
+<th>steps</th>
 <th>assign3:AWA</th>
 <th>assign3:EAWA</th>
 <th>assign3:RWA</th>
@@ -738,17 +641,53 @@ Only tasks where all algorithms have a value for "total_time" are considered. Ea
 </tr>
 <tr>
 <td>probBLOCKS-8-2.pddl</td>
-<td class="right"><span style="color:rgb(0,178,0)">0.05</span></td>
-<td class="right"><span style="color:rgb(0,178,1)">0.07</span></td>
-<td class="right"><span style="color:rgb(0,0,178)">5.14</span></td>
-<td class="right"><span style="color:rgb(0,178,1)">0.07</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">16.00</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">16.00</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">16.00</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">16.00</span></td>
 </tr>
 <tr>
-<td>probBLOCKS-10-2.pddl</td>
-<td class="right"><span style="color:rgb(0,0,178)">36.10</span></td>
-<td class="right"><span style="color:rgb(0,20,178)">34.84</span></td>
-<td class="right"><span style="color:rgb(0,178,0)">14.60</span></td>
-<td class="right"><span style="color:rgb(0,108,178)">29.54</span></td>
+<td>probBLOCKS-9-2.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">26.00</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">26.00</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">26.00</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">26.00</span></td>
+</tr>
+</table>
+
+<p>
+== steps:all ==[steps:all]
+</p>
+<p>
+Per-domain reports only support numeric attributes, but steps:all has type list.
+</p>
+<p>
+=== blocks ===[steps:all-blocks]
+</p>
+
+<button type="button" class="toggle-table" onclick="toggle_table(this)">Show table</button><p></p>
+
+<table class="tableborder" style="display:none">
+<tr>
+<th>steps:all</th>
+<th>assign3:AWA</th>
+<th>assign3:EAWA</th>
+<th>assign3:RWA</th>
+<th>assign3:TYPE_<wbr>AWA</th>
+</tr>
+<tr>
+<td>probBLOCKS-8-2.pddl</td>
+<td>[18.0, 16.0, 16.0]</td>
+<td>[18.0, 16.0, 16.0]</td>
+<td>[26.0, 22.0, 18.0, 16.0]</td>
+<td>[18.0, 16.0, 16.0]</td>
+</tr>
+<tr>
+<td>probBLOCKS-9-2.pddl</td>
+<td>[28.0, 26.0, 26.0]</td>
+<td>[32.0, 28.0, 26.0, 26.0]</td>
+<td>[40.0, 36.0, 32.0, 26.0]</td>
+<td>[40.0, 36.0, 32.0, 30.0, 26.0, 26.0]</td>
 </tr>
 </table>
 

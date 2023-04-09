@@ -117,7 +117,11 @@ ATTRIBUTES = [
     "error",
     "total_time",
     "coverage",
-    "expansions",
+    "cost:all",
+    "cost",
+    "steps:all",
+    "steps",
+    "expansions:all",
     "memory",
     project.EVALUATIONS_PER_TIME,
 ]
@@ -139,8 +143,9 @@ exp.add_suite(BENCHMARKS_DIR, SUITE)
 
 exp.add_parser(exp.EXITCODE_PARSER)
 exp.add_parser(exp.TRANSLATOR_PARSER)
-exp.add_parser(exp.ANYTIME_SEARCH_PARSER)
-exp.add_parser(exp.SINGLE_SEARCH_PARSER)
+# exp.add_parser(exp.ANYTIME_SEARCH_PARSER)
+# exp.add_parser(exp.SINGLE_SEARCH_PARSER)
+exp.add_parser(project.DIR / "anytime_parser.py")
 exp.add_parser(project.DIR / "common_parser.py")
 exp.add_parser(exp.PLANNER_PARSER)
 

@@ -7,6 +7,7 @@
 
 #include <memory>
 #include <vector>
+#include <chrono>
 
 namespace iterated_search {
 class IteratedSearch : public SearchEngine {
