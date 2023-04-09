@@ -42,20 +42,18 @@ EAWA_CONFIG = [
     "--evaluator",
     "h=lmcut()",
     "--search",
-    """iterated([
-            lazy_greedy([h]),
-            lazy(epsilon_greedy(weight([h], 2, verbosity=normal), pref_only=false, epsilon=0.5, random_seed=-1))
-        ],repeat_last=true,continue_on_fail=true)""" 
+    """eager_anytime(epsilon_greedy(
+        sum([weight(h, 2, verbosity=normal), g()]), epsilon=0.5, random_seed=1234), 
+        reopen_closed=true, f_eval=sum([h, g()]))"""
 ]
 
 TYPE_AWA_CONFIG = [
     "--evaluator",
     "h=lmcut()",
     "--search",
-    """iterated([
-            lazy_greedy([h]),
-            lazy(alt([single(weight([h], 2, verbosity=normal)), type_based([h, g()], random_seed=-1)])
-        ],repeat_last=true,continue_on_fail=true)""" 
+    """eager_anytime(alt(
+        [single(weight(h, 2, verbosity=normal)), type_based([h, g()], random_seed=1234)]), 
+        reopen_closed=true, f_eval=sum([h, g()]))"""
 ]
 
 # EAWA_WS_CONFIG = [
@@ -87,13 +85,23 @@ TYPE_AWA_CONFIG = [
 # ]
 
 RWA_CONFIG = [
-
+    "--evaluator",
+    "h=ff()",
+    "--search",
+    """iterated([
+            eager_wastar([h],w=5),
+            eager_wastar([h],w=4),
+            eager_wastar([h],w=3),
+            eager_wastar([h],w=2),
+            eager_wastar([h],w=1)
+        ],continue_on_fail=true)"""
 ]
     
 CONFIGS = [
     ('AWA', AWA_CONFIG),
-    # ('EAWA', EAWA_CONFIG),
-    # ('TYPE_AWA', TYPE_AWA_CONFIG),
+    ('EAWA', EAWA_CONFIG),
+    ('TYPE_AWA', TYPE_AWA_CONFIG),
+    ('RWA', RWA_CONFIG)
 
     # ('AWA-WS', AWA_WS_CONFIG),
     # ('EAWA-WS', EAWA_WS_CONFIG),
@@ -131,9 +139,9 @@ exp.add_suite(BENCHMARKS_DIR, SUITE)
 
 exp.add_parser(exp.EXITCODE_PARSER)
 exp.add_parser(exp.TRANSLATOR_PARSER)
-# exp.add_parser(exp.ANYTIME_SEARCH_PARSER)
+exp.add_parser(exp.ANYTIME_SEARCH_PARSER)
 exp.add_parser(exp.SINGLE_SEARCH_PARSER)
-exp.add_parser(project.DIR / "parser.py")
+exp.add_parser(project.DIR / "common_parser.py")
 exp.add_parser(exp.PLANNER_PARSER)
 
 exp.add_step("build", exp.build)

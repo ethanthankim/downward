@@ -114,6 +114,7 @@ SearchStatus EagerSearchAnytime::step() {
         if (plan_cost < best_bound) {  
             plan_manager.save_plan(found_plan, task_proxy, true);
             best_bound = plan_cost;
+            print_statistics();
 
             // if (num_found_solutions <= evaluators.size()) {
             //     log << "================================> " <<

@@ -18,15 +18,17 @@ redirects = {"stdout": run_log, "stderr": run_err}
 # Make sure we're in the run directory.
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
-Call(['/home/dawson/Documents/Masters/Thesis/search/code/downward-projects/downward/experiments/assign3/.venv/bin/python3', '../../code-0bda2ad2ad5f71bb3197f07c93c4fe386096403c_e5e41175/fast-downward.py', '--validate', '--overall-time-limit', '30m', '--overall-memory-limit', '3584M', '--overall-time-limit', '10m', 'domain.pddl', 'problem.pddl', '--evaluator', 'h=lmcut()', '--search', 'eager_anytime(single(sum([weight(h, 2, verbosity=normal), g()])), reopen_closed=true, f_eval=sum([h, g()]))'], hard_stderr_limit=10240, hard_stdout_limit=10240, memory_limit=None, name='planner', soft_stderr_limit=64, soft_stdout_limit=1024, time_limit=None, **redirects).wait()
+Call(['/home/dawson/Documents/Masters/Thesis/search/code/downward-projects/downward/experiments/assign3/.venv/bin/python3', '../../code-0c68bd563f070e713e85e361904e05f30a494062_e5e41175/fast-downward.py', '--validate', '--overall-time-limit', '30m', '--overall-memory-limit', '3584M', '--overall-time-limit', '10m', 'domain.pddl', 'problem.pddl', '--evaluator', 'h=lmcut()', '--search', 'eager_anytime(epsilon_greedy(\n        sum([weight(h, 2, verbosity=normal), g()]), epsilon=0.5, random_seed=1234), \n        reopen_closed=true, f_eval=sum([h, g()]))'], hard_stderr_limit=10240, hard_stdout_limit=10240, memory_limit=None, name='planner', soft_stderr_limit=64, soft_stdout_limit=1024, time_limit=None, **redirects).wait()
 
 Call(['/home/dawson/Documents/Masters/Thesis/search/code/downward-projects/downward/experiments/assign3/.venv/bin/python3', '../../exitcode-parser.py'], hard_stderr_limit=10240, hard_stdout_limit=10240, memory_limit=None, name='exitcode_parser', soft_stderr_limit=64, soft_stdout_limit=1024, time_limit=None, **redirects).wait()
 
 Call(['/home/dawson/Documents/Masters/Thesis/search/code/downward-projects/downward/experiments/assign3/.venv/bin/python3', '../../translator-parser.py'], hard_stderr_limit=10240, hard_stdout_limit=10240, memory_limit=None, name='translator_parser', soft_stderr_limit=64, soft_stdout_limit=1024, time_limit=None, **redirects).wait()
 
+Call(['/home/dawson/Documents/Masters/Thesis/search/code/downward-projects/downward/experiments/assign3/.venv/bin/python3', '../../anytime-search-parser.py'], hard_stderr_limit=10240, hard_stdout_limit=10240, memory_limit=None, name='anytime_search_parser', soft_stderr_limit=64, soft_stdout_limit=1024, time_limit=None, **redirects).wait()
+
 Call(['/home/dawson/Documents/Masters/Thesis/search/code/downward-projects/downward/experiments/assign3/.venv/bin/python3', '../../single-search-parser.py'], hard_stderr_limit=10240, hard_stdout_limit=10240, memory_limit=None, name='single_search_parser', soft_stderr_limit=64, soft_stdout_limit=1024, time_limit=None, **redirects).wait()
 
-Call(['/home/dawson/Documents/Masters/Thesis/search/code/downward-projects/downward/experiments/assign3/.venv/bin/python3', '../../parser.py'], hard_stderr_limit=10240, hard_stdout_limit=10240, memory_limit=None, name='parser', soft_stderr_limit=64, soft_stdout_limit=1024, time_limit=None, **redirects).wait()
+Call(['/home/dawson/Documents/Masters/Thesis/search/code/downward-projects/downward/experiments/assign3/.venv/bin/python3', '../../common_parser.py'], hard_stderr_limit=10240, hard_stdout_limit=10240, memory_limit=None, name='common_parser', soft_stderr_limit=64, soft_stdout_limit=1024, time_limit=None, **redirects).wait()
 
 Call(['/home/dawson/Documents/Masters/Thesis/search/code/downward-projects/downward/experiments/assign3/.venv/bin/python3', '../../planner-parser.py'], hard_stderr_limit=10240, hard_stdout_limit=10240, memory_limit=None, name='planner_parser', soft_stderr_limit=64, soft_stdout_limit=1024, time_limit=None, **redirects).wait()
 

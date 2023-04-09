@@ -1,1 +1,1 @@
-../../../../../../../benchmarks/depot/domain.pddl
+../../../../../../../benchmarks/blocks/domain.pddl
