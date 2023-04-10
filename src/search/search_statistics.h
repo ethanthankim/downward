@@ -75,6 +75,9 @@ public:
     void print_checkpoint_line(int g) const;
 
     // output
+
+    int64_t current_millis_timestamp() const;
+    void print_timestamp() const;
     void print_basic_statistics() const;
     void print_detailed_statistics() const;
 };

@@ -64,11 +64,18 @@ void SearchStatistics::print_basic_statistics() const {
     }
 }
 
-void SearchStatistics::print_detailed_statistics() const {
+int64_t SearchStatistics::current_millis_timestamp() const {
     std::chrono::time_point<std::chrono::system_clock> now = std::chrono::system_clock::now();
     auto duration = now.time_since_epoch();
-    auto millis = std::chrono::duration_cast<std::chrono::milliseconds>(duration).count();
-    log << "Timestamp: " << millis << " millisecond(s)" << endl;
+    return std::chrono::duration_cast<std::chrono::milliseconds>(duration).count();
+}
+
+void SearchStatistics::print_timestamp() const {
+    log << "Timestamp: " << current_millis_timestamp() << " millisecond(s)" << endl;
+}
+
+void SearchStatistics::print_detailed_statistics() const {
+    print_timestamp();
     log << "Expanded " << expanded_states << " state(s)." << endl;
     log << "Reopened " << reopened_states << " state(s)." << endl;
     log << "Evaluated " << evaluated_states << " state(s)." << endl;
