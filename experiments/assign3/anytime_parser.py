@@ -34,6 +34,14 @@ def reduce_to_min(list_name, single_name):
 
     return reduce_to_minimum
 
+def reduce_to_max(list_name, single_name):
+    def reduce_to_maximum(content, props):
+        values = props.get(list_name, [])
+        if values:
+            props[single_name] = max(values)
+
+    return reduce_to_maximum
+
 
 def coverage(content, props):
     props["coverage"] = int("cost" in props)
@@ -67,15 +75,24 @@ def main():
         find_all_matches("cost:all", r"Plan cost: (.+)\n", type=float)
     )
 
-    # todo: additional anytime strings
-    # modify anytime algorithms to print "final" search statistics for each incumbent solution
+    #timestamps
+    parser.add_function(
+        find_all_matches("timestamps:all", r"Timestamp: (.+) millisecond\(s\).\n", type=float)
+    )
+
+    #expansions
     exp, exp_re, exp_type = _get_states_pattern("expansions:all", "Expanded")
     parser.add_function(find_all_matches(exp, exp_re, type=exp_type))
+    parser.add_function(reduce_to_max("expansions:all", "expansions"))
+
+    #generated
     gen, gen_re, gen_type = _get_states_pattern("generated:all", "Generated")
     parser.add_function(find_all_matches(gen, gen_re, type=gen_type))
+    parser.add_function(reduce_to_max("generated:all", "generated"))
 
     parser.add_function(reduce_to_min("cost:all", "cost"))
     parser.add_function(reduce_to_min("steps:all", "steps"))
+    
     parser.add_function(coverage)
     parser.add_function(add_memory)
     # todo: add functions to get averages and whatnot (see coverage function)

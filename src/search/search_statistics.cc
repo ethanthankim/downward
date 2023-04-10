@@ -71,7 +71,7 @@ signed long SearchStatistics::current_millis_timestamp() const {
 }
 
 void SearchStatistics::print_timestamp() const {
-    log << "Timestamp: " << current_millis_timestamp() << " millisecond(s)" << endl;
+    log << "Timestamp: " << current_millis_timestamp() << " millisecond(s)." << endl;
 }
 
 void SearchStatistics::print_detailed_statistics() const {

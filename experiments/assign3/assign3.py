@@ -57,11 +57,6 @@ exp.add_parser(exp.ANYTIME_SEARCH_PARSER)
 # exp.add_parser(common_setup.DIR / "common_parser.py")
 exp.add_parser(exp.PLANNER_PARSER)
 
-exp.add_step('build', exp.build)
-exp.add_step('start', exp.start_runs)
-exp.add_fetcher(name='fetch')
-
-
 exp.add_step("build", exp.build)
 exp.add_step("start", exp.start_runs)
 exp.add_fetcher(name="fetch")
