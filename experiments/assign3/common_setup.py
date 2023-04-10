@@ -2,9 +2,11 @@
 
 import itertools
 import os
+from pathlib import Path
 import platform
 import subprocess
 import sys
+from typing import List
 
 from lab.experiment import ARGPARSER
 from lab import tools
@@ -13,6 +15,9 @@ from downward.experiment import FastDownwardExperiment
 from downward.reports.absolute import AbsoluteReport
 from downward.reports.compare import ComparativeReport
 from downward.reports.scatter import ScatterPlotReport
+
+
+DIR = Path(__file__).resolve().parent
 
 def parse_args():
     ARGPARSER.add_argument(
@@ -86,6 +91,10 @@ DEFAULT_SATISFICING_SUITE = [
     'visitall-sat11-strips', 'visitall-sat14-strips',
     'woodworking-sat08-strips', 'woodworking-sat11-strips',
     'zenotravel']
+
+def get_ipcs_sat_domains() -> List[str]:
+    return ["blocks:probBLOCKS-9-2.pddl", "blocks:probBLOCKS-8-2.pddl", "gripper:prob01.pddl"]
+    # return [domain for domain in DEFAULT_SATISFICING_SUITE if '08' in domain or '11' in domain or '14' in domain]
 
 
 def get_script():

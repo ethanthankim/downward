@@ -85,7 +85,8 @@ void SearchEngine::set_plan(const Plan &p) {
 
 void SearchEngine::search() {
     initialize();
-    statistics.print_detailed_statistics();
+    // statistics.print_detailed_statistics();
+    statistics.print_timestamp();
 
     utils::CountdownTimer timer(max_time);
     while (status == IN_PROGRESS) {

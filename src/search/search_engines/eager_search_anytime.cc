@@ -82,7 +82,7 @@ SearchStatus EagerSearchAnytime::step() {
                 log << "Completely explored state space -- no solution!" << endl;
                 return FAILED;
             } else { //optimal solution found
-                log << "Optimal solution found!" << endl;
+                log << "Solution: Optimal solution found!" << endl;
                 return SOLVED;
             }
         }
@@ -115,6 +115,7 @@ SearchStatus EagerSearchAnytime::step() {
             plan_manager.save_plan(found_plan, task_proxy, true);
             best_bound = plan_cost;
             
+            log << "Solution: Incumbent solution found!" << endl;
             print_statistics();
 
             // if (num_found_solutions <= evaluators.size()) {
