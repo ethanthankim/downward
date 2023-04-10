@@ -5,6 +5,7 @@
 #include "utils/system.h"
 
 #include <iostream>
+#include <chrono>
 
 using namespace std;
 
@@ -64,6 +65,10 @@ void SearchStatistics::print_basic_statistics() const {
 }
 
 void SearchStatistics::print_detailed_statistics() const {
+    std::chrono::milliseconds ms = std::chrono::duration_cast< std::chrono::milliseconds >(
+        std::chrono::system_clock::now().time_since_epoch()
+    );
+    log << "Timestamp: " << ms << " millisecond(s)" << endl;
     log << "Expanded " << expanded_states << " state(s)." << endl;
     log << "Reopened " << reopened_states << " state(s)." << endl;
     log << "Evaluated " << evaluated_states << " state(s)." << endl;

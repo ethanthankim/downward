@@ -6,7 +6,6 @@
 
 #include <memory>
 #include <vector>
-#include <chrono>
 
 class Evaluator;
 class PruningMethod;

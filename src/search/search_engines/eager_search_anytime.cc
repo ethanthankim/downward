@@ -29,11 +29,6 @@ EagerSearchAnytime::EagerSearchAnytime(const plugins::Options &opts)
       num_found_solutions(0) {}
 
 void EagerSearchAnytime::initialize() {
-    std::chrono::milliseconds ms = std::chrono::duration_cast< std::chrono::milliseconds >(
-        std::chrono::system_clock::now().time_since_epoch()
-    );
-    log << "Timestamp: " << ms << " milliseconds" << endl;
-
     log << "Conducting best first anytime search"
         << (reopen_closed_nodes ? " with" : " without")
         << " reopening closed nodes, (real) bound = " << bound
@@ -121,10 +116,6 @@ SearchStatus EagerSearchAnytime::step() {
             best_bound = plan_cost;
             
             print_statistics();
-            std::chrono::milliseconds ms = std::chrono::duration_cast< std::chrono::milliseconds >(
-                std::chrono::system_clock::now().time_since_epoch()
-            );
-            log << "Timestamp: " << ms << " milliseconds" << endl;
 
             // if (num_found_solutions <= evaluators.size()) {
             //     log << "================================> " <<
