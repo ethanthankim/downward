@@ -326,19 +326,17 @@ class IssueExperiment(FastDownwardExperiment):
         kwargs.setdefault("attributes", self.DEFAULT_TABLE_ATTRIBUTES)
 
         def make_comparison_tables():
-            for rev1, rev2 in itertools.combinations(self._revisions, 2):
-                compared_configs = []
-                for config in self._configs:
-                    config_nick = config.nick
-                    compared_configs.append(
-                        ("%s-%s" % (rev1, config_nick),
-                         "%s-%s" % (rev2, config_nick),
-                         "Diff (%s)" % config_nick))
+            compared_configs = []
+            rev = self._revisions[0]
+            for conf1, conf2 in itertools.combinations(self._configs, 2):
+                compared_configs.append(
+                    ("%s-%s" % (rev, conf1.nick),
+                        "%s-%s" % (rev, conf2.nick)))
                 report = ComparativeReport(compared_configs, **kwargs)
                 outfile = os.path.join(
                     self.eval_dir,
-                    "%s-%s-%s-compare.%s" % (
-                        self.name, rev1, rev2, report.output_format))
+                    "%s-%s-compare.%s" % (
+                        self.name, rev, report.output_format))
                 report(self.eval_dir, outfile)
 
         self.add_step("make-comparison-tables", make_comparison_tables)
@@ -364,13 +362,12 @@ class IssueExperiment(FastDownwardExperiment):
         if attributes is None:
             attributes = self.DEFAULT_SCATTER_PLOT_ATTRIBUTES
 
-        def make_scatter_plot(config_nick, rev1, rev2, attribute, config_nick2=None):
-            name = "-".join([self.name, rev1, rev2, attribute, config_nick])
-            if config_nick2 is not None:
-                name += "-" + config_nick2
+        def make_scatter_plot(config_nick1, config_nick2, rev, attribute):
+            name = "-".join([self.name, rev, attribute, config_nick1, config_nick2])
             print("Make scatter plot for", name)
-            algo1 = get_algo_nick(rev1, config_nick)
-            algo2 = get_algo_nick(rev2, config_nick if config_nick2 is None else config_nick2)
+            algo1 = get_algo_nick(rev, config_nick1)
+            algo2 = get_algo_nick(rev, config_nick2)
+
             if attribute == "cost":
                 report = ScatterPlotReport(
                     filter_algorithm=[algo1, algo2],
@@ -386,15 +383,12 @@ class IssueExperiment(FastDownwardExperiment):
                     get_category=lambda run1, run2: run1["domain"])
             report(
                 self.eval_dir,
-                os.path.join(scatter_dir, rev1 + "-" + rev2, name))
+                os.path.join(scatter_dir, rev + "-" + config_nick1 + "-" + config_nick2, name))
 
         def make_scatter_plots():
-            for config in self._configs:
-                for rev1, rev2 in itertools.combinations(self._revisions, 2):
-                    for attribute in self.get_supported_attributes(
-                            config.nick, attributes):
-                        make_scatter_plot(config.nick, rev1, rev2, attribute)
-            for nick1, nick2, rev1, rev2, attribute in additional:
-                make_scatter_plot(nick1, rev1, rev2, attribute, config_nick2=nick2)
+            rev = self._revisions[0]
+            for config1, config2 in itertools.combinations(self._configs, 2):
+                for attribute in self.get_supported_attributes(config1.nick, attributes):
+                    make_scatter_plot(config1.nick, config2.nick, rev, attribute)
 
         self.add_step(step_name, make_scatter_plots)

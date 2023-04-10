@@ -15,10 +15,7 @@ SEARCH_REVS = ["dawson-masters"]
 BUILD_OPTIONS = []
 DRIVER_OPTIONS = ["--overall-time-limit", "10m"]
 ENVIRONMENT = LocalEnvironment(processes=None)
-if common_setup.is_test_run():
-    SUITE = IssueExperiment.DEFAULT_TEST_SUITE
-else:
-    SUITE = common_setup.get_ipcs_sat_domains()
+SUITE = common_setup.get_ipcs_sat_domains()
 
 CONFIGS = [
     IssueConfig("AWA*", ["--evaluator", "h=lmcut()", '--search',
@@ -52,9 +49,9 @@ exp.add_suite(BENCHMARKS_DIR, SUITE)
 
 exp.add_parser(exp.EXITCODE_PARSER)
 exp.add_parser(exp.TRANSLATOR_PARSER)
-exp.add_parser(exp.ANYTIME_SEARCH_PARSER)
-# exp.add_parser(common_setup.DIR / "anytime_parser.py")
-# exp.add_parser(common_setup.DIR / "common_parser.py")
+# exp.add_parser(exp.ANYTIME_SEARCH_PARSER)
+exp.add_parser(common_setup.DIR / "anytime_parser.py")
+exp.add_parser(common_setup.DIR / "common_parser.py")
 exp.add_parser(exp.PLANNER_PARSER)
 
 exp.add_step("build", exp.build)
@@ -62,6 +59,6 @@ exp.add_step("start", exp.start_runs)
 exp.add_fetcher(name="fetch")
 
 exp.add_comparison_table_step()
-exp.add_scatter_plot_step(relative=True, attributes=["total_time", "memory"])
+exp.add_scatter_plot_step(relative=True, attributes=["expansions"])
 
 exp.run_steps()
