@@ -57,7 +57,6 @@ void PlanManager::save_plan(
     }
     OperatorsProxy operators = task_proxy.get_operators();
 
-    cout << "Found Plan:" << endl;
     for (OperatorID op_id : plan) {
         cout << operators[op_id].get_name() << " (" << operators[op_id].get_cost() << ")" << endl;
         outfile << "(" << operators[op_id].get_name() << ")" << endl;
@@ -68,7 +67,7 @@ void PlanManager::save_plan(
     outfile << "; cost = " << plan_cost << " ("
             << (is_unit_cost ? "unit cost" : "general cost") << ")" << endl;
     outfile.close();
-    utils::g_log << "Plan cost: " << plan_cost << endl;
     utils::g_log << "Plan length: " << plan.size() << " step(s)." << endl;
+    utils::g_log << "Plan cost: " << plan_cost << endl;
     ++num_previously_generated_plans;
 }

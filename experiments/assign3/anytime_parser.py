@@ -4,7 +4,9 @@
 Custom Parser for anytime-search runs of Fast Downward.
 """
 
+from itertools import tee
 import re
+from typing import List, Tuple
 
 from lab.parser import Parser
 
@@ -43,11 +45,27 @@ def get_solution_timestamp_steps(time_step, total_time):
 
 
 def get_solution_change_indices(indices_prop):
+    def pairwise(iterable):
+        "s -> (s0,s1), (s1,s2), (s2, s3), ..."
+        a, b = tee(iterable)
+        next(b, None)
+        return zip(a, b)
 
-    def store_all_change_indices(content, props):
-        pass
+    def get_solution_change_indices(content, props):
+        plan_regex = r"(sas_plan\.\d+) (\d+)"
+        matches: List[Tuple[str, str]] = re.findall(plan_regex, content)
+        converted_matches = [(f, float(c) ) for f, c in matches]
+        first_diffs = []
+        for s1, s2 in pairwise(converted_matches):
+            with open(s1[0], 'r') as sol_1_f, open(s2[0], 'r') as sol_2_f:
+                sol_1 = sol_1_f.readlines()
+                sol_2 = sol_2_f.readlines()
+                for i in range(len(sol_1)):
+                    if sol_1[i] != sol_2[i]:
+                        first_diffs.append(i)         
+        props[indices_prop] = first_diffs
 
-    return store_all_change_indices
+    return get_solution_change_indices
 
 
 

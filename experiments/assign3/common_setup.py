@@ -100,7 +100,7 @@ DEFAULT_SATISFICING_SUITE = [
     'zenotravel']
 
 def get_ipcs_sat_domains() -> List[str]:
-    return ["blocks:probBLOCKS-9-2.pddl", "blocks:probBLOCKS-8-2.pddl"]
+    return ["blocks:probBLOCKS-8-3.pddl", "blocks:probBLOCKS-8-2.pddl"]
     # return [domain for domain in DEFAULT_SATISFICING_SUITE if '08' in domain or '11' in domain or '14' in domain]
 
 
