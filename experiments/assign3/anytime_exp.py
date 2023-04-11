@@ -59,8 +59,8 @@ if not common_setup.no_search():
     exp.add_step("start", exp.start_runs)
 
 exp.add_fetcher(name="fetch")
-
-exp.add_comparison_table_step(attributes=["expansions"])
+# exp.add_anytime_analysis_report_step()
+# exp.add_comparison_table_step(attributes=["expansions"])
 # exp.add_scatter_plot_step(relative=True, attributes=["expansions"])
 
 exp.run_steps()

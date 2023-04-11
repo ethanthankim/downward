@@ -100,8 +100,10 @@ DEFAULT_SATISFICING_SUITE = [
     'zenotravel']
 
 def get_ipcs_sat_domains() -> List[str]:
-    return ["blocks:probBLOCKS-8-3.pddl", "blocks:probBLOCKS-8-2.pddl"]
-    # return [domain for domain in DEFAULT_SATISFICING_SUITE if '08' in domain or '11' in domain or '14' in domain]
+    # return ["blocks:probBLOCKS-9-1.pddl", "blocks:probBLOCKS-10-2.pddl", "blocks:probBLOCKS-8-2.pddl", "blocks:probBLOCKS-10-1.pddl"]
+    return ["barman-sat11-strips:pfile07-028.pddl"] #, "elevators-sat08-strips:p15.pddl", "openstacks-sat08-strips:p13.pddl"]
+    # return [domain for domain in DEFAULT_SATISFICING_SUITE if '08' in domain or '11' in domain]
+    
 
 
 def get_script():
@@ -295,6 +297,36 @@ class IssueExperiment(FastDownwardExperiment):
             return [attr for attr in attributes
                     if attr in cls.PORTFOLIO_ATTRIBUTES]
         return attributes
+
+    def add_anytime_analysis_report_step(self, **kwargs):
+
+        def report_domain_summary(results, algo, domain, prop):
+            pass
+
+        def report_algo_summary(results, algo, prop):
+            pass
+
+        properties = []
+
+        algo_prefix_len = len("dawson-masters-")
+        props_file = os.path.join(self.eval_dir, "properties")
+        props = tools.Properties(filename=props_file)
+
+        results = dict()
+        for k, prop in props.items():
+            algo = props["algorithm"][algo_prefix_len:]
+            domain = props["domain"]
+            
+            if algo not in results:
+                results[algo] = dict()
+
+            if domain not in results[algo]:
+                results[algo][domain] = dict()
+
+            report_domain_summary(results, algo, domain, prop)
+            report_algo_summary(results, algo, prop)
+
+            
 
     def add_absolute_report_step(self, **kwargs):
         """Add step that makes an absolute report.

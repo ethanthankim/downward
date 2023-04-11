@@ -51,7 +51,7 @@ def get_solution_change_indices(indices_prop):
         next(b, None)
         return zip(a, b)
 
-    def get_solution_change_indices(content, props):
+    def store_solution_change_indices(content, props):
         plan_regex = r"(sas_plan\.\d+) (\d+)"
         matches: List[Tuple[str, str]] = re.findall(plan_regex, content)
         converted_matches = [(f, float(c) ) for f, c in matches]
@@ -60,12 +60,14 @@ def get_solution_change_indices(indices_prop):
             with open(s1[0], 'r') as sol_1_f, open(s2[0], 'r') as sol_2_f:
                 sol_1 = sol_1_f.readlines()
                 sol_2 = sol_2_f.readlines()
-                for i in range(len(sol_1)):
+                lim = len(sol_2) if len(sol_2) < len(sol_1) else len(sol_1)
+                for i in range(lim):
                     if sol_1[i] != sol_2[i]:
-                        first_diffs.append(i)         
+                        first_diffs.append(i)
+                        break         
         props[indices_prop] = first_diffs
 
-    return get_solution_change_indices
+    return store_solution_change_indices
 
 
 
@@ -118,7 +120,7 @@ def main():
         find_all_matches("cost:all", r"Plan cost: (.+)\n", type=float)
     )
 
-    #timestamps
+    # timestamps
     parser.add_function(
         get_solution_timestamp_steps("timestamps:steps", "timestamps:total")
     )
