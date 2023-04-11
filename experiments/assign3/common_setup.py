@@ -27,6 +27,13 @@ def parse_args():
         dest="test_run",
         help="test experiment locally on a small suite if --test=yes or "
              "--test=auto and we are not on a cluster")
+    ARGPARSER.add_argument(
+        "--no-search",
+        action='store_true',
+        default=False,
+        dest="no_search",
+        help="if set only fetching and parsing steps will be run.")
+    
     return ARGPARSER.parse_args()
 
 ARGS = parse_args()
@@ -151,6 +158,9 @@ def is_running_on_cluster():
 def is_test_run():
     return ARGS.test_run == "yes" or (
         ARGS.test_run == "auto" and not is_running_on_cluster())
+
+def no_search():
+    return bool(ARGS.no_search)
 
 
 def get_algo_nick(revision, config_nick):

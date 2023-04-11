@@ -25,6 +25,31 @@ def find_all_matches(attribute, regex, type=int):
 
     return store_all_occurences
 
+def get_solution_timestamp_steps(time_step, total_time):
+
+    def store_all_timestamp_steps(content, props):
+        matches = re.findall(r"Timestamp: (.+) millisecond\(s\).\n", content)
+        converted_matches = [int(m) for m in matches]
+        steps = []
+        abs_time = []
+        for i in range(len(converted_matches)-1):
+            steps.append(converted_matches[i+1] - converted_matches[i])
+            abs_time.append(converted_matches[i+1] - converted_matches[0])
+        props[time_step] = steps
+        props[total_time] = abs_time
+        
+    
+    return store_all_timestamp_steps
+
+
+def get_solution_change_indices(indices_prop):
+
+    def store_all_change_indices(content, props):
+        pass
+
+    return store_all_change_indices
+
+
 
 def reduce_to_min(list_name, single_name):
     def reduce_to_minimum(content, props):
@@ -69,7 +94,7 @@ def main():
     parser.add_pattern("raw_memory", r"Peak memory: (.+) KB", type=int),
     parser.add_function(find_all_matches("cost:all", r"Plan cost: (.+)\n", type=float))
     parser.add_function(
-        find_all_matches("steps:all", r"Plan length: (.+) step\(s\).\n", type=float)
+        find_all_matches("steps:all", r"Plan length: (.+) step\(s\).\n", type=int)
     )
     parser.add_function(
         find_all_matches("cost:all", r"Plan cost: (.+)\n", type=float)
@@ -77,7 +102,12 @@ def main():
 
     #timestamps
     parser.add_function(
-        find_all_matches("timestamps:all", r"Timestamp: (.+) millisecond\(s\).\n", type=float)
+        get_solution_timestamp_steps("timestamps:steps", "timestamps:total")
+    )
+
+    # solution first change index
+    parser.add_function(
+        get_solution_change_indices("change_indices")
     )
 
     #expansions

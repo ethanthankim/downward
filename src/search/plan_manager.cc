@@ -56,16 +56,19 @@ void PlanManager::save_plan(
         utils::exit_with(utils::ExitCode::SEARCH_INPUT_ERROR);
     }
     OperatorsProxy operators = task_proxy.get_operators();
+
+    cout << "Found Plan:" << endl;
     for (OperatorID op_id : plan) {
         cout << operators[op_id].get_name() << " (" << operators[op_id].get_cost() << ")" << endl;
         outfile << "(" << operators[op_id].get_name() << ")" << endl;
     }
+
     int plan_cost = calculate_plan_cost(plan, task_proxy);
     bool is_unit_cost = task_properties::is_unit_cost(task_proxy);
     outfile << "; cost = " << plan_cost << " ("
             << (is_unit_cost ? "unit cost" : "general cost") << ")" << endl;
     outfile.close();
-    utils::g_log << "Plan length: " << plan.size() << " step(s)." << endl;
     utils::g_log << "Plan cost: " << plan_cost << endl;
+    utils::g_log << "Plan length: " << plan.size() << " step(s)." << endl;
     ++num_previously_generated_plans;
 }

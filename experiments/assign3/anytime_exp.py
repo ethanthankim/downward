@@ -51,14 +51,16 @@ exp.add_parser(exp.EXITCODE_PARSER)
 exp.add_parser(exp.TRANSLATOR_PARSER)
 # exp.add_parser(exp.ANYTIME_SEARCH_PARSER)
 exp.add_parser(common_setup.DIR / "anytime_parser.py")
-exp.add_parser(common_setup.DIR / "common_parser.py")
+# exp.add_parser(common_setup.DIR / "common_parser.py")
 exp.add_parser(exp.PLANNER_PARSER)
 
-exp.add_step("build", exp.build)
-exp.add_step("start", exp.start_runs)
+if not common_setup.no_search():
+    exp.add_step("build", exp.build)
+    exp.add_step("start", exp.start_runs)
+
 exp.add_fetcher(name="fetch")
 
-exp.add_comparison_table_step()
-exp.add_scatter_plot_step(relative=True, attributes=["expansions"])
+exp.add_comparison_table_step(attributes=["expansions"])
+# exp.add_scatter_plot_step(relative=True, attributes=["expansions"])
 
 exp.run_steps()
