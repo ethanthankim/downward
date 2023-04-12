@@ -49,15 +49,15 @@ SUITE = common_setup.get_ipcs_sat_domains()
 CONFIGS = [
     IssueConfig("AWA*", ["--evaluator", "h=lmcut()", '--search',
         """eager_anytime(single(sum([weight(h, 2, verbosity=normal), g()])), 
-        reopen_closed=true, f_eval=sum([h, g()]))"""], driver_options=DRIVER_OPTIONS),
+        reopen_closed=true, f_eval=sum([h, g()]))"""], driver_options=DRIVER_OPTIONS, build_options=BUILD_OPTIONS),
     IssueConfig("e-AWA*", ["--evaluator", "h=lmcut()", "--search",
         """eager_anytime(epsilon_greedy(
         sum([weight(h, 2, verbosity=normal), g()]), epsilon=0.5, random_seed=1234), 
-        reopen_closed=true, f_eval=sum([h, g()]))"""], driver_options=DRIVER_OPTIONS),
+        reopen_closed=true, f_eval=sum([h, g()]))"""], driver_options=DRIVER_OPTIONS, build_options=BUILD_OPTIONS),
     IssueConfig("Type-AWA*", ["--evaluator", "h=lmcut()", "--search",
         """eager_anytime(alt(
         [single(weight(h, 2, verbosity=normal)), type_based([h, g()], random_seed=1234)]), 
-        reopen_closed=true, f_eval=sum([h, g()]))"""], driver_options=DRIVER_OPTIONS),
+        reopen_closed=true, f_eval=sum([h, g()]))"""], driver_options=DRIVER_OPTIONS, build_options=BUILD_OPTIONS),
     IssueConfig("RWA*", ["--evaluator", "h=lmcut()", "--search",
         """iterated([
             eager_wastar([h],w=5),
@@ -65,7 +65,7 @@ CONFIGS = [
             eager_wastar([h],w=3),
             eager_wastar([h],w=2),
             eager_wastar([h],w=1)
-        ],continue_on_fail=true)"""], driver_options=DRIVER_OPTIONS),
+        ],continue_on_fail=true)"""], driver_options=DRIVER_OPTIONS, build_options=BUILD_OPTIONS),
 ]
 
 exp = IssueExperiment(
