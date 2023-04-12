@@ -29,7 +29,7 @@ CONFIGS = [
         """eager_anytime(alt(
         [single(weight(h, 2, verbosity=normal)), type_based([h, g()], random_seed=1234)]), 
         reopen_closed=true, f_eval=sum([h, g()]))"""], driver_options=DRIVER_OPTIONS),
-    IssueConfig("RWA*", ["--evaluator", "h=ff()", "--search",
+    IssueConfig("RWA*", ["--evaluator", "h=lmcut()", "--search",
         """iterated([
             eager_wastar([h],w=5),
             eager_wastar([h],w=4),
@@ -60,7 +60,7 @@ if not common_setup.no_search():
 
 exp.add_fetcher(name="fetch")
 # exp.add_anytime_analysis_report_step()
-# exp.add_comparison_table_step(attributes=["expansions"])
+exp.add_comparison_table_step(attributes=["expansions"])
 # exp.add_scatter_plot_step(relative=True, attributes=["expansions"])
 
 exp.run_steps()

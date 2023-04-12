@@ -153,12 +153,12 @@ fast_downward_plugin(
         open_lists/epsilon_greedy_open_list
 )
 
-# fast_downward_plugin(
-#     NAME PARETO_OPEN_LIST
-#     HELP "Pareto open list"
-#     SOURCES
-#         open_lists/pareto_open_list
-# )
+fast_downward_plugin(
+    NAME PARETO_OPEN_LIST
+    HELP "Pareto open list"
+    SOURCES
+        open_lists/pareto_open_list
+)
 
 fast_downward_plugin(
     NAME TIEBREAKING_OPEN_LIST
@@ -221,13 +221,13 @@ fast_downward_plugin(
     DEPENDENCY_ONLY
 )
 
-# fast_downward_plugin(
-#     NAME MAX_CLIQUES
-#     HELP "Implementation of the Max Cliques algorithm by Tomita et al."
-#     SOURCES
-#         algorithms/max_cliques
-#     DEPENDENCY_ONLY
-# )
+fast_downward_plugin(
+    NAME MAX_CLIQUES
+    HELP "Implementation of the Max Cliques algorithm by Tomita et al."
+    SOURCES
+        algorithms/max_cliques
+    DEPENDENCY_ONLY
+)
 
 fast_downward_plugin(
     NAME PRIORITY_QUEUES
@@ -268,13 +268,13 @@ fast_downward_plugin(
         evaluators/subcategory
 )
 
-# fast_downward_plugin(
-#     NAME CONST_EVALUATOR
-#     HELP "The constant evaluator"
-#     SOURCES
-#         evaluators/const_evaluator
-#     DEPENDS EVALUATORS_SUBCATEGORY
-# )
+fast_downward_plugin(
+    NAME CONST_EVALUATOR
+    HELP "The constant evaluator"
+    SOURCES
+        evaluators/const_evaluator
+    DEPENDS EVALUATORS_SUBCATEGORY
+)
 
 fast_downward_plugin(
     NAME G_EVALUATOR
@@ -324,13 +324,13 @@ fast_downward_plugin(
     DEPENDS COMBINING_EVALUATOR EVALUATORS_SUBCATEGORY
 )
 
-# fast_downward_plugin(
-#     NAME NULL_PRUNING_METHOD
-#     HELP "Pruning method that does nothing"
-#     SOURCES
-#         pruning/null_pruning_method
-#     DEPENDENCY_ONLY
-# )
+fast_downward_plugin(
+    NAME NULL_PRUNING_METHOD
+    HELP "Pruning method that does nothing"
+    SOURCES
+        pruning/null_pruning_method
+    DEPENDENCY_ONLY
+)
 
 fast_downward_plugin(
     NAME LIMITED_PRUNING
@@ -408,13 +408,13 @@ fast_downward_plugin(
     DEPENDENCY_ONLY
 )
 
-# fast_downward_plugin(
-#     NAME PLUGIN_ASTAR
-#     HELP "A* search"
-#     SOURCES
-#         search_engines/plugin_astar
-#     DEPENDS EAGER_SEARCH SEARCH_COMMON
-# )
+fast_downward_plugin(
+    NAME PLUGIN_ASTAR
+    HELP "A* search"
+    SOURCES
+        search_engines/plugin_astar
+    DEPENDS EAGER_SEARCH SEARCH_COMMON
+)
 
 fast_downward_plugin(
     NAME PLUGIN_EAGER
@@ -472,13 +472,13 @@ fast_downward_plugin(
     DEPENDS LAZY_SEARCH SEARCH_COMMON
 )
 
-# fast_downward_plugin(
-#     NAME ENFORCED_HILL_CLIMBING_SEARCH
-#     HELP "Lazy enforced hill-climbing search algorithm"
-#     SOURCES
-#         search_engines/enforced_hill_climbing_search
-#     DEPENDS G_EVALUATOR ORDERED_SET PREF_EVALUATOR SEARCH_COMMON SUCCESSOR_GENERATOR
-# )
+fast_downward_plugin(
+    NAME ENFORCED_HILL_CLIMBING_SEARCH
+    HELP "Lazy enforced hill-climbing search algorithm"
+    SOURCES
+        search_engines/enforced_hill_climbing_search
+    DEPENDS G_EVALUATOR ORDERED_SET PREF_EVALUATOR SEARCH_COMMON SUCCESSOR_GENERATOR
+)
 
 fast_downward_plugin(
     NAME ITERATED_SEARCH
@@ -496,15 +496,15 @@ fast_downward_plugin(
     DEPENDENCY_ONLY
 )
 
-# fast_downward_plugin(
-#     NAME LP_SOLVER
-#     HELP "Interface to an LP solver"
-#     SOURCES
-#         lp/lp_internals
-#         lp/lp_solver
-#     DEPENDS NAMED_VECTOR
-#     DEPENDENCY_ONLY
-# )
+fast_downward_plugin(
+    NAME LP_SOLVER
+    HELP "Interface to an LP solver"
+    SOURCES
+        lp/lp_internals
+        lp/lp_solver
+    DEPENDS NAMED_VECTOR
+    DEPENDENCY_ONLY
+)
 
 fast_downward_plugin(
     NAME RELAXATION_HEURISTIC
@@ -555,28 +555,28 @@ fast_downward_plugin(
     DEPENDENCY_ONLY
 )
 
-# fast_downward_plugin(
-#     NAME FF_HEURISTIC
-#     HELP "The FF heuristic (an implementation of the RPG heuristic)"
-#     SOURCES
-#         heuristics/ff_heuristic
-#     DEPENDS ADDITIVE_HEURISTIC TASK_PROPERTIES
-# )
+fast_downward_plugin(
+    NAME FF_HEURISTIC
+    HELP "The FF heuristic (an implementation of the RPG heuristic)"
+    SOURCES
+        heuristics/ff_heuristic
+    DEPENDS ADDITIVE_HEURISTIC TASK_PROPERTIES
+)
 
-# fast_downward_plugin(
-#     NAME GOAL_COUNT_HEURISTIC
-#     HELP "The goal-counting heuristic"
-#     SOURCES
-#         heuristics/goal_count_heuristic
-# )
+fast_downward_plugin(
+    NAME GOAL_COUNT_HEURISTIC
+    HELP "The goal-counting heuristic"
+    SOURCES
+        heuristics/goal_count_heuristic
+)
 
-# fast_downward_plugin(
-#     NAME HM_HEURISTIC
-#     HELP "The h^m heuristic"
-#     SOURCES
-#         heuristics/hm_heuristic
-#     DEPENDS TASK_PROPERTIES
-# )
+fast_downward_plugin(
+    NAME HM_HEURISTIC
+    HELP "The h^m heuristic"
+    SOURCES
+        heuristics/hm_heuristic
+    DEPENDS TASK_PROPERTIES
+)
 
 fast_downward_plugin(
     NAME LANDMARK_CUT_HEURISTIC
@@ -587,13 +587,13 @@ fast_downward_plugin(
     DEPENDS PRIORITY_QUEUES TASK_PROPERTIES
 )
 
-# fast_downward_plugin(
-#     NAME MAX_HEURISTIC
-#     HELP "The Max heuristic"
-#     SOURCES
-#         heuristics/max_heuristic
-#     DEPENDS PRIORITY_QUEUES RELAXATION_HEURISTIC
-# )
+fast_downward_plugin(
+    NAME MAX_HEURISTIC
+    HELP "The Max heuristic"
+    SOURCES
+        heuristics/max_heuristic
+    DEPENDS PRIORITY_QUEUES RELAXATION_HEURISTIC
+)
 
 fast_downward_plugin(
     NAME CORE_TASKS
@@ -661,166 +661,166 @@ fast_downward_plugin(
     DEPENDENCY_ONLY
 )
 
-# fast_downward_plugin(
-#     NAME CEGAR
-#     HELP "Plugin containing the code for CEGAR heuristics"
-#     SOURCES
-#         cegar/abstraction
-#         cegar/abstract_search
-#         cegar/abstract_state
-#         cegar/additive_cartesian_heuristic
-#         cegar/cartesian_heuristic_function
-#         cegar/cartesian_set
-#         cegar/cegar
-#         cegar/cost_saturation
-#         cegar/refinement_hierarchy
-#         cegar/split_selector
-#         cegar/subtask_generators
-#         cegar/transition
-#         cegar/transition_system
-#         cegar/types
-#         cegar/utils
-#         cegar/utils_landmarks
-#     DEPENDS ADDITIVE_HEURISTIC DYNAMIC_BITSET EXTRA_TASKS LANDMARKS PRIORITY_QUEUES TASK_PROPERTIES
-# )
+fast_downward_plugin(
+    NAME CEGAR
+    HELP "Plugin containing the code for CEGAR heuristics"
+    SOURCES
+        cegar/abstraction
+        cegar/abstract_search
+        cegar/abstract_state
+        cegar/additive_cartesian_heuristic
+        cegar/cartesian_heuristic_function
+        cegar/cartesian_set
+        cegar/cegar
+        cegar/cost_saturation
+        cegar/refinement_hierarchy
+        cegar/split_selector
+        cegar/subtask_generators
+        cegar/transition
+        cegar/transition_system
+        cegar/types
+        cegar/utils
+        cegar/utils_landmarks
+    DEPENDS ADDITIVE_HEURISTIC DYNAMIC_BITSET EXTRA_TASKS LANDMARKS PRIORITY_QUEUES TASK_PROPERTIES
+)
 
-# fast_downward_plugin(
-#     NAME MAS_HEURISTIC
-#     HELP "The Merge-and-Shrink heuristic"
-#     SOURCES
-#         merge_and_shrink/distances
-#         merge_and_shrink/factored_transition_system
-#         merge_and_shrink/fts_factory
-#         merge_and_shrink/label_reduction
-#         merge_and_shrink/labels
-#         merge_and_shrink/merge_and_shrink_algorithm
-#         merge_and_shrink/merge_and_shrink_heuristic
-#         merge_and_shrink/merge_and_shrink_representation
-#         merge_and_shrink/merge_scoring_function
-#         merge_and_shrink/merge_scoring_function_dfp
-#         merge_and_shrink/merge_scoring_function_goal_relevance
-#         merge_and_shrink/merge_scoring_function_miasm
-#         merge_and_shrink/merge_scoring_function_miasm_utils
-#         merge_and_shrink/merge_scoring_function_single_random
-#         merge_and_shrink/merge_scoring_function_total_order
-#         merge_and_shrink/merge_selector
-#         merge_and_shrink/merge_selector_score_based_filtering
-#         merge_and_shrink/merge_strategy
-#         merge_and_shrink/merge_strategy_factory
-#         merge_and_shrink/merge_strategy_factory_precomputed
-#         merge_and_shrink/merge_strategy_factory_sccs
-#         merge_and_shrink/merge_strategy_factory_stateless
-#         merge_and_shrink/merge_strategy_precomputed
-#         merge_and_shrink/merge_strategy_sccs
-#         merge_and_shrink/merge_strategy_stateless
-#         merge_and_shrink/merge_tree
-#         merge_and_shrink/merge_tree_factory
-#         merge_and_shrink/merge_tree_factory_linear
-#         merge_and_shrink/shrink_bisimulation
-#         merge_and_shrink/shrink_bucket_based
-#         merge_and_shrink/shrink_fh
-#         merge_and_shrink/shrink_random
-#         merge_and_shrink/shrink_strategy
-#         merge_and_shrink/transition_system
-#         merge_and_shrink/types
-#         merge_and_shrink/utils
-#     DEPENDS PRIORITY_QUEUES EQUIVALENCE_RELATION SCCS TASK_PROPERTIES VARIABLE_ORDER_FINDER
-# )
+fast_downward_plugin(
+    NAME MAS_HEURISTIC
+    HELP "The Merge-and-Shrink heuristic"
+    SOURCES
+        merge_and_shrink/distances
+        merge_and_shrink/factored_transition_system
+        merge_and_shrink/fts_factory
+        merge_and_shrink/label_reduction
+        merge_and_shrink/labels
+        merge_and_shrink/merge_and_shrink_algorithm
+        merge_and_shrink/merge_and_shrink_heuristic
+        merge_and_shrink/merge_and_shrink_representation
+        merge_and_shrink/merge_scoring_function
+        merge_and_shrink/merge_scoring_function_dfp
+        merge_and_shrink/merge_scoring_function_goal_relevance
+        merge_and_shrink/merge_scoring_function_miasm
+        merge_and_shrink/merge_scoring_function_miasm_utils
+        merge_and_shrink/merge_scoring_function_single_random
+        merge_and_shrink/merge_scoring_function_total_order
+        merge_and_shrink/merge_selector
+        merge_and_shrink/merge_selector_score_based_filtering
+        merge_and_shrink/merge_strategy
+        merge_and_shrink/merge_strategy_factory
+        merge_and_shrink/merge_strategy_factory_precomputed
+        merge_and_shrink/merge_strategy_factory_sccs
+        merge_and_shrink/merge_strategy_factory_stateless
+        merge_and_shrink/merge_strategy_precomputed
+        merge_and_shrink/merge_strategy_sccs
+        merge_and_shrink/merge_strategy_stateless
+        merge_and_shrink/merge_tree
+        merge_and_shrink/merge_tree_factory
+        merge_and_shrink/merge_tree_factory_linear
+        merge_and_shrink/shrink_bisimulation
+        merge_and_shrink/shrink_bucket_based
+        merge_and_shrink/shrink_fh
+        merge_and_shrink/shrink_random
+        merge_and_shrink/shrink_strategy
+        merge_and_shrink/transition_system
+        merge_and_shrink/types
+        merge_and_shrink/utils
+    DEPENDS PRIORITY_QUEUES EQUIVALENCE_RELATION SCCS TASK_PROPERTIES VARIABLE_ORDER_FINDER
+)
 
-# fast_downward_plugin(
-#     NAME LANDMARKS
-#     HELP "Plugin containing the code to reason with landmarks"
-#     SOURCES
-#         landmarks/exploration
-#         landmarks/landmark
-#         landmarks/landmark_cost_assignment
-#         landmarks/landmark_cost_partitioning_heuristic
-#         landmarks/landmark_factory
-#         landmarks/landmark_factory_h_m
-#         landmarks/landmark_factory_reasonable_orders_hps
-#         landmarks/landmark_factory_merged
-#         landmarks/landmark_factory_relaxation
-#         landmarks/landmark_factory_rpg_exhaust
-#         landmarks/landmark_factory_rpg_sasp
-#         landmarks/landmark_factory_zhu_givan
-#         landmarks/landmark_graph
-#         landmarks/landmark_heuristic
-#         landmarks/landmark_status_manager
-#         landmarks/landmark_sum_heuristic
-#         landmarks/util
-#     DEPENDS LP_SOLVER PRIORITY_QUEUES SUCCESSOR_GENERATOR TASK_PROPERTIES
-# )
+fast_downward_plugin(
+    NAME LANDMARKS
+    HELP "Plugin containing the code to reason with landmarks"
+    SOURCES
+        landmarks/exploration
+        landmarks/landmark
+        landmarks/landmark_cost_assignment
+        landmarks/landmark_cost_partitioning_heuristic
+        landmarks/landmark_factory
+        landmarks/landmark_factory_h_m
+        landmarks/landmark_factory_reasonable_orders_hps
+        landmarks/landmark_factory_merged
+        landmarks/landmark_factory_relaxation
+        landmarks/landmark_factory_rpg_exhaust
+        landmarks/landmark_factory_rpg_sasp
+        landmarks/landmark_factory_zhu_givan
+        landmarks/landmark_graph
+        landmarks/landmark_heuristic
+        landmarks/landmark_status_manager
+        landmarks/landmark_sum_heuristic
+        landmarks/util
+    DEPENDS LP_SOLVER PRIORITY_QUEUES SUCCESSOR_GENERATOR TASK_PROPERTIES
+)
 
-# fast_downward_plugin(
-#     NAME OPERATOR_COUNTING
-#     HELP "Plugin containing the code for operator-counting heuristics"
-#     SOURCES
-#         operator_counting/constraint_generator
-#         operator_counting/delete_relaxation_constraints
-#         operator_counting/lm_cut_constraints
-#         operator_counting/operator_counting_heuristic
-#         operator_counting/pho_constraints
-#         operator_counting/state_equation_constraints
-#     DEPENDS LP_SOLVER LANDMARK_CUT_HEURISTIC PDBS TASK_PROPERTIES
-# )
+fast_downward_plugin(
+    NAME OPERATOR_COUNTING
+    HELP "Plugin containing the code for operator-counting heuristics"
+    SOURCES
+        operator_counting/constraint_generator
+        operator_counting/delete_relaxation_constraints
+        operator_counting/lm_cut_constraints
+        operator_counting/operator_counting_heuristic
+        operator_counting/pho_constraints
+        operator_counting/state_equation_constraints
+    DEPENDS LP_SOLVER LANDMARK_CUT_HEURISTIC PDBS TASK_PROPERTIES
+)
 
-# fast_downward_plugin(
-#     NAME PDBS
-#     HELP "Plugin containing the code for PDBs"
-#     SOURCES
-#         pdbs/abstract_operator
-#         pdbs/canonical_pdbs
-#         pdbs/canonical_pdbs_heuristic
-#         pdbs/cegar
-#         pdbs/dominance_pruning
-#         pdbs/incremental_canonical_pdbs
-#         pdbs/match_tree
-#         pdbs/max_cliques
-#         pdbs/pattern_cliques
-#         pdbs/pattern_collection_information
-#         pdbs/pattern_collection_generator_combo
-#         pdbs/pattern_collection_generator_disjoint_cegar
-#         pdbs/pattern_collection_generator_genetic
-#         pdbs/pattern_collection_generator_hillclimbing
-#         pdbs/pattern_collection_generator_manual
-#         pdbs/pattern_collection_generator_multiple_cegar
-#         pdbs/pattern_collection_generator_multiple_random
-#         pdbs/pattern_collection_generator_multiple
-#         pdbs/pattern_collection_generator_systematic
-#         pdbs/pattern_database_factory
-#         pdbs/pattern_database
-#         pdbs/pattern_generator_cegar
-#         pdbs/pattern_generator_greedy
-#         pdbs/pattern_generator_manual
-#         pdbs/pattern_generator_random
-#         pdbs/pattern_generator
-#         pdbs/pattern_information
-#         pdbs/pdb_heuristic
-#         pdbs/random_pattern
-#         pdbs/subcategory
-#         pdbs/types
-#         pdbs/utils
-#         pdbs/validation
-#         pdbs/zero_one_pdbs
-#         pdbs/zero_one_pdbs_heuristic
-#     DEPENDS CAUSAL_GRAPH MAX_CLIQUES PRIORITY_QUEUES SAMPLING SUCCESSOR_GENERATOR TASK_PROPERTIES VARIABLE_ORDER_FINDER
-# )
+fast_downward_plugin(
+    NAME PDBS
+    HELP "Plugin containing the code for PDBs"
+    SOURCES
+        pdbs/abstract_operator
+        pdbs/canonical_pdbs
+        pdbs/canonical_pdbs_heuristic
+        pdbs/cegar
+        pdbs/dominance_pruning
+        pdbs/incremental_canonical_pdbs
+        pdbs/match_tree
+        pdbs/max_cliques
+        pdbs/pattern_cliques
+        pdbs/pattern_collection_information
+        pdbs/pattern_collection_generator_combo
+        pdbs/pattern_collection_generator_disjoint_cegar
+        pdbs/pattern_collection_generator_genetic
+        pdbs/pattern_collection_generator_hillclimbing
+        pdbs/pattern_collection_generator_manual
+        pdbs/pattern_collection_generator_multiple_cegar
+        pdbs/pattern_collection_generator_multiple_random
+        pdbs/pattern_collection_generator_multiple
+        pdbs/pattern_collection_generator_systematic
+        pdbs/pattern_database_factory
+        pdbs/pattern_database
+        pdbs/pattern_generator_cegar
+        pdbs/pattern_generator_greedy
+        pdbs/pattern_generator_manual
+        pdbs/pattern_generator_random
+        pdbs/pattern_generator
+        pdbs/pattern_information
+        pdbs/pdb_heuristic
+        pdbs/random_pattern
+        pdbs/subcategory
+        pdbs/types
+        pdbs/utils
+        pdbs/validation
+        pdbs/zero_one_pdbs
+        pdbs/zero_one_pdbs_heuristic
+    DEPENDS CAUSAL_GRAPH MAX_CLIQUES PRIORITY_QUEUES SAMPLING SUCCESSOR_GENERATOR TASK_PROPERTIES VARIABLE_ORDER_FINDER
+)
 
-# fast_downward_plugin(
-#     NAME POTENTIALS
-#     HELP "Plugin containing the code for potential heuristics"
-#     SOURCES
-#         potentials/diverse_potential_heuristics
-#         potentials/potential_function
-#         potentials/potential_heuristic
-#         potentials/potential_max_heuristic
-#         potentials/potential_optimizer
-#         potentials/sample_based_potential_heuristics
-#         potentials/single_potential_heuristics
-#         potentials/subcategory
-#         potentials/util
-#     DEPENDS LP_SOLVER SAMPLING SUCCESSOR_GENERATOR TASK_PROPERTIES
-# )
+fast_downward_plugin(
+    NAME POTENTIALS
+    HELP "Plugin containing the code for potential heuristics"
+    SOURCES
+        potentials/diverse_potential_heuristics
+        potentials/potential_function
+        potentials/potential_heuristic
+        potentials/potential_max_heuristic
+        potentials/potential_optimizer
+        potentials/sample_based_potential_heuristics
+        potentials/single_potential_heuristics
+        potentials/subcategory
+        potentials/util
+    DEPENDS LP_SOLVER SAMPLING SUCCESSOR_GENERATOR TASK_PROPERTIES
+)
 
 fast_downward_plugin(
     NAME SCCS
