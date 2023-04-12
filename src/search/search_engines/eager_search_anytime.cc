@@ -82,7 +82,7 @@ SearchStatus EagerSearchAnytime::step() {
                 log << "Completely explored state space -- no solution!" << endl;
                 return FAILED;
             } else { //optimal solution found
-                log << "Solution: Optimal solution found!" << endl;
+                log << "Optimal Solution: found" << endl;
                 return SOLVED;
             }
         }
