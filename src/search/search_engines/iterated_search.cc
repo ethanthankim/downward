@@ -59,6 +59,7 @@ shared_ptr<SearchEngine> IteratedSearch::create_current_phase() {
 SearchStatus IteratedSearch::step() {
     shared_ptr<SearchEngine> current_search = create_current_phase();
     if (!current_search) {
+        log << "Solution: Optimal solution found!" << endl;
         return found_solution() ? SOLVED : FAILED;
     }
     if (pass_bound) {

@@ -122,7 +122,7 @@ def main():
 
     # timestamps
     parser.add_function(
-        get_solution_timestamp_steps("timestamps:steps", "timestamps:total")
+        get_solution_timestamp_steps("time:steps", "time:total")
     )
 
     # solution first change index
