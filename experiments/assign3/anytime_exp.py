@@ -7,6 +7,28 @@ import common_setup
 from common_setup import IssueConfig, IssueExperiment
 from lab.environments import LocalEnvironment
 
+def _anytime_props_processor(props: dict, **kwargs):
+
+    def add_run_data(k, algo, domain):
+        prop = props[k]
+        prop["add_run_data"] = k
+
+    def update_domain_summary(k, algo, domain):
+        prop = props[k]
+        prop["update_domain_summary"] = domain
+
+    def update_algo_summary(k, algo, domain):
+        prop = props[k]
+        prop["update_algo_summary"] = algo
+    
+    for k, prop in props.items():
+        algo = prop["algorithm"]
+        domain = prop["domain"]
+
+        add_run_data(k, algo, domain)
+        update_domain_summary(k, algo, domain)
+        update_algo_summary(k, algo, domain)
+
 
 REPO = common_setup.get_repo_base()
 BENCHMARKS_DIR = os.environ["DOWNWARD_BENCHMARKS"]
@@ -59,8 +81,9 @@ if not common_setup.no_search():
     exp.add_step("start", exp.start_runs)
 
 exp.add_fetcher(name="fetch")
-# exp.add_anytime_analysis_report_step()
+exp.add_properties_processing_step({"anytime-experiment": _anytime_props_processor})
 exp.add_comparison_table_step(attributes=["expansions"])
 # exp.add_scatter_plot_step(relative=True, attributes=["expansions"])
 
 exp.run_steps()
+

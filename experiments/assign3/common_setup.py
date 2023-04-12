@@ -6,7 +6,7 @@ from pathlib import Path
 import platform
 import subprocess
 import sys
-from typing import List
+from typing import Callable, Dict, List
 
 from lab.experiment import ARGPARSER
 from lab import tools
@@ -100,7 +100,7 @@ DEFAULT_SATISFICING_SUITE = [
     'zenotravel']
 
 def get_ipcs_sat_domains() -> List[str]:
-    return ["blocks:probBLOCKS-9-1.pddl", "blocks:probBLOCKS-10-2.pddl", "blocks:probBLOCKS-8-2.pddl", "blocks:probBLOCKS-10-1.pddl"]
+    return ["blocks:probBLOCKS-9-1.pddl", "blocks:probBLOCKS-10-2.pddl"]
     # return ["barman-sat11-strips:pfile07-028.pddl"] #, "elevators-sat08-strips:p15.pddl", "openstacks-sat08-strips:p13.pddl"]
     # return [domain for domain in DEFAULT_SATISFICING_SUITE if '08' in domain or '11' in domain]
     
@@ -298,34 +298,18 @@ class IssueExperiment(FastDownwardExperiment):
                     if attr in cls.PORTFOLIO_ATTRIBUTES]
         return attributes
 
-    def add_anytime_analysis_report_step(self, **kwargs):
+    def add_properties_processing_step(self, processors: Dict[str, Callable], **kwargs):
 
-        def report_domain_summary(results, algo, domain, prop):
-            pass
+        def properties_processing():
+            props_file = os.path.join(self.eval_dir, "properties")
+            props = tools.Properties(filename=props_file)
+            for name, processor in processors.items():
+                processor(props, **kwargs)
 
-        def report_algo_summary(results, algo, prop):
-            pass
+            props.write()
 
-        properties = []
-
-        algo_prefix_len = len("dawson-masters-")
-        props_file = os.path.join(self.eval_dir, "properties")
-        props = tools.Properties(filename=props_file)
-
-        results = dict()
-        for k, prop in props.items():
-            algo = props["algorithm"][algo_prefix_len:]
-            domain = props["domain"]
-            
-            if algo not in results:
-                results[algo] = dict()
-
-            if domain not in results[algo]:
-                results[algo][domain] = dict()
-
-            report_domain_summary(results, algo, domain, prop)
-            report_algo_summary(results, algo, prop)
-
+        self.add_step("do-properties-processing", properties_processing)
+        
             
 
     def add_absolute_report_step(self, **kwargs):
