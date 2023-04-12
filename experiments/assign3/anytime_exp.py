@@ -34,7 +34,9 @@ REPO = common_setup.get_repo_base()
 BENCHMARKS_DIR = os.environ["DOWNWARD_BENCHMARKS"]
 REVISION_CACHE = os.environ.get("DOWNWARD_REVISION_CACHE")
 SEARCH_REVS = ["dawson-masters"]
-BUILD_OPTIONS = []
+BUILD_OPTIONS = [
+    "-DPLUGIN_CEGAR_ENABLED=False"
+]
 DRIVER_OPTIONS = ["--overall-time-limit", "10m"]
 ENVIRONMENT = LocalEnvironment(processes=None)
 SUITE = common_setup.get_ipcs_sat_domains()
@@ -82,7 +84,7 @@ if not common_setup.no_search():
 
 exp.add_fetcher(name="fetch")
 exp.add_properties_processing_step({"anytime-experiment": _anytime_props_processor})
-exp.add_comparison_table_step(attributes=["expansions"])
+# exp.add_comparison_table_step(attributes=["expansions"])
 # exp.add_scatter_plot_step(relative=True, attributes=["expansions"])
 
 exp.run_steps()
