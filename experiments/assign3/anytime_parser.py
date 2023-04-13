@@ -120,6 +120,9 @@ def main():
         find_all_matches("cost:all", r"Plan cost: (.+)\n", type=float)
     )
 
+    # indicate if optimal solution was found
+    parser.add_pattern("optimal:found", r"Optimal Solution: (.+)", type=str)
+
     # timestamps
     parser.add_function(
         get_solution_timestamp_steps("time:steps", "time:total")
