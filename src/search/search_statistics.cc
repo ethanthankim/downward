@@ -70,6 +70,10 @@ signed long SearchStatistics::current_millis_timestamp() const {
     return std::chrono::duration_cast<std::chrono::milliseconds>(duration).count();
 }
 
+void SearchStatistics::print_timestamp(const std::string log_msg) const {
+    log << log_msg << current_millis_timestamp() << " millisecond(s)." << endl;
+}
+
 void SearchStatistics::print_timestamp() const {
     log << "Timestamp: " << current_millis_timestamp() << " millisecond(s)." << endl;
 }

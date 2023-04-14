@@ -151,7 +151,6 @@ CONFIGS = [
     IssueConfig("RWA*", ["--evaluator", "h=lmcut()", "--search",
         """iterated([
             eager_wastar([h],w=5),
-            eager_wastar([h],w=4),
             eager_wastar([h],w=3),
             eager_wastar([h],w=2),
             astar(h)

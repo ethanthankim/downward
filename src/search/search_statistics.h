@@ -77,6 +77,7 @@ public:
     // output
 
     signed long current_millis_timestamp() const;
+    void print_timestamp(const string log_msg) const;
     void print_timestamp() const;
     void print_basic_statistics() const;
     void print_detailed_statistics() const;

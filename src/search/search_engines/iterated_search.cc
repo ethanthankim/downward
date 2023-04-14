@@ -80,7 +80,7 @@ SearchStatus IteratedSearch::step() {
             plan_manager.save_plan(found_plan, task_proxy, true);
             best_bound = plan_cost;
             set_plan(found_plan);
-            statistics.print_timestamp();
+            statistics.print_timestamp("Solution Timestep: ");
             current_search->print_statistics();
         }
     }

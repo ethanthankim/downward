@@ -116,7 +116,7 @@ SearchStatus EagerSearchAnytime::step() {
             best_bound = plan_cost;
             
             log << "Solution: Incumbent solution found!" << endl;
-            statistics.print_timestamp();
+            statistics.print_timestamp("Solution Timestep: ");
             print_statistics();
 
             // if (num_found_solutions <= weights.size()) {

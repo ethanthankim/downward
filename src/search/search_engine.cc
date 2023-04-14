@@ -86,7 +86,7 @@ void SearchEngine::set_plan(const Plan &p) {
 void SearchEngine::search() {
     initialize();
     // statistics.print_detailed_statistics();
-    statistics.print_timestamp();
+    statistics.print_timestamp("Start Timestep: ");
 
     utils::CountdownTimer timer(max_time);
     while (status == IN_PROGRESS) {
@@ -98,7 +98,7 @@ void SearchEngine::search() {
         }
     }
 
-    statistics.print_timestamp();
+    statistics.print_timestamp("End Timestep: ");
     // TODO: Revise when and which search times are logged.
     log << "Actual search time: " << timer.get_elapsed_time() << endl;
 }
