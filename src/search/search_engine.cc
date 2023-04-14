@@ -97,6 +97,8 @@ void SearchEngine::search() {
             break;
         }
     }
+
+    statistics.print_timestamp();
     // TODO: Revise when and which search times are logged.
     log << "Actual search time: " << timer.get_elapsed_time() << endl;
 }

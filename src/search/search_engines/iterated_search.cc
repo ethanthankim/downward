@@ -80,9 +80,10 @@ SearchStatus IteratedSearch::step() {
             plan_manager.save_plan(found_plan, task_proxy, true);
             best_bound = plan_cost;
             set_plan(found_plan);
+            statistics.print_timestamp();
+            current_search->print_statistics();
         }
     }
-    current_search->print_statistics();
 
     const SearchStatistics &current_stats = current_search->get_statistics();
     statistics.inc_expanded(current_stats.get_expanded());

@@ -8,7 +8,7 @@ from typing import List
 import common_setup
 from common_setup import IssueConfig, IssueExperiment
 from lab.environments import LocalEnvironment
-from lab.reports import Attribute, arithmetic_mean
+from lab.reports import Attribute, arithmetic_mean, geometric_mean, finite_sum
 
 from dataclasses import dataclass
 
@@ -184,9 +184,11 @@ exp.add_absolute_report_step(attributes=[
     Attribute("time:steps:optimal:avg", min_wins=True, function=arithmetic_mean),
     Attribute("change_index:first", min_wins=True, function=arithmetic_mean),
     Attribute("cost", min_wins=True, function=arithmetic_mean),
-    "coverage", "coverage:optimal", 
-    "expansions", "expansions:optimal",
-    "planner_time:optimal"])
+    "coverage", 
+    Attribute("coverage:optimal", min_wins=True, absolute=True, function=finite_sum), 
+    Attribute("expansions", min_wins=True, function=geometric_mean),
+    Attribute("expansions:optimal", min_wins=True, function=geometric_mean),
+    Attribute("planner_time:optimal", min_wins=True, function=geometric_mean)])
 
 
 # exp.add_comparison_table_step(attributes=["expansions"])
