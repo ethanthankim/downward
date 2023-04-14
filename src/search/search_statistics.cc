@@ -79,6 +79,7 @@ void SearchStatistics::print_timestamp() const {
 }
 
 void SearchStatistics::print_detailed_statistics() const {
+    print_timestamp();
     log << "Expanded " << expanded_states << " state(s)." << endl;
     log << "Reopened " << reopened_states << " state(s)." << endl;
     log << "Evaluated " << evaluated_states << " state(s)." << endl;

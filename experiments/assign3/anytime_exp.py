@@ -46,7 +46,7 @@ def _anytime_props_processor(props: dict, **kwargs):
             prop["time:steps:avg"] = avg_time
 
         # first change index if more than one solution found
-        if len(incumbent_costs)>1:
+        if len(prop["change_indices"])>0:
             first_change: list = prop["change_indices"][0]
             prop["change_index:first"] = first_change / incumbent_costs[0]
 
@@ -150,9 +150,10 @@ CONFIGS = [
         reopen_closed=true, f_eval=sum([h, g()]))"""], driver_options=DRIVER_OPTIONS),
     IssueConfig("RWA*", ["--evaluator", "h=lmcut()", "--search",
         """iterated([
-            eager_wastar([h],w=5),
-            eager_wastar([h],w=3),
-            eager_wastar([h],w=2),
+            lazy_wastar([h],w=5),
+            lazy_wastar([h],w=4),
+            lazy_wastar([h],w=3),
+            lazy_wastar([h],w=2),
             astar(h)
         ],continue_on_fail=true)"""], driver_options=DRIVER_OPTIONS),
 ]
