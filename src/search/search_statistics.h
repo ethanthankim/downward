@@ -1,6 +1,8 @@
 #ifndef SEARCH_STATISTICS_H
 #define SEARCH_STATISTICS_H
 
+#include <string>
+
 /*
   This class keeps track of search statistics.
 
