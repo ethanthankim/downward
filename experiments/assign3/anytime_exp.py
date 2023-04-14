@@ -27,7 +27,7 @@ class IncumbentSolution:
 
 def _anytime_props_processor(props: dict, **kwargs):
 
-    problem_summaries = dict()
+    problem_best_sol_cost = dict()
     algo_incumbents = dict()
     quality_v_time = dict()
 
@@ -52,16 +52,13 @@ def _anytime_props_processor(props: dict, **kwargs):
 
         # update problem best solution
         if len(incumbent_costs)>=1:
-            if problem in problem_summaries:
+            if problem in problem_best_sol_cost:
                 this_sol = incumbent_costs[-1]
-                best_sol = problem_summaries[problem]["best_solution"]
+                best_sol = problem_best_sol_cost[problem]
                 if this_sol < best_sol:
-                    problem_summaries[problem]["best_solution"] = this_sol
+                    problem_best_sol_cost[problem] = this_sol
             else:
-                problem_sum = dict()
-                problem_sum["best_solution"] = incumbent_costs[-1]
-                problem_sum["curr"] = 0
-                problem_summaries[problem] = problem_sum
+                problem_best_sol_cost[problem] = incumbent_costs[-1]
         
         # being in here means the optimal solution was proved optimal
         if "optimal:found" in prop and prop["optimal:found"] == "found":
@@ -86,7 +83,7 @@ def _anytime_props_processor(props: dict, **kwargs):
         
         for _, incumbents in algo_incumbents.items():
             for incumbent in incumbents:
-                incumbent.cost = problem_summaries[incumbent.problem]["best_solution"]/incumbent.cost
+                incumbent.cost = problem_best_sol_cost[incumbent.problem]/incumbent.cost
 
     def build_quality_v_time_points():
         normalize_and_sort_costs()
@@ -99,7 +96,7 @@ def _anytime_props_processor(props: dict, **kwargs):
                 quality_v_time[algo]["quality"] = []
                 quality_v_time[algo]["time"] = []
             
-            problem_curr_best_sol = dict.fromkeys(problem_summaries.keys(),0)
+            problem_curr_best_sol = dict.fromkeys(problem_best_sol_cost.keys(),0)
             i = 0
             while i < len(incumbents):
                 time = incumbents[i].time
@@ -123,7 +120,7 @@ def _anytime_props_processor(props: dict, **kwargs):
         add_task_data(k, algo, domain)
     
     build_quality_v_time_points()
-    pprint(quality_v_time)
+    # pprint(quality_v_time)
     # pprint(problem_summaries)
 
 
@@ -148,14 +145,14 @@ CONFIGS = [
         """eager_anytime(alt(
         [single(weight(h, 2, verbosity=normal)), type_based([h, g()], random_seed=1234)]), 
         reopen_closed=true, f_eval=sum([h, g()]))"""], driver_options=DRIVER_OPTIONS),
-    IssueConfig("RWA*", ["--evaluator", "h=lmcut()", "--search",
-        """iterated([
-            lazy_wastar([h],w=5),
-            lazy_wastar([h],w=4),
-            lazy_wastar([h],w=3),
-            lazy_wastar([h],w=2),
-            astar(h)
-        ],continue_on_fail=true)"""], driver_options=DRIVER_OPTIONS),
+    # IssueConfig("RWA*", ["--evaluator", "h=lmcut()", "--search",
+    #     """iterated([
+    #         lazy_wastar([h],w=5),
+    #         lazy_wastar([h],w=4),
+    #         lazy_wastar([h],w=3),
+    #         lazy_wastar([h],w=2),
+    #         astar(h)
+    #     ],continue_on_fail=true)"""], driver_options=DRIVER_OPTIONS),
 ]
 
 exp = IssueExperiment(

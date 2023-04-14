@@ -32,12 +32,13 @@ def get_solution_timestamp_steps(time_step, total_time):
     def store_all_timestamp_steps(content, props):
 
         start_match = re.search(r"Start Timestep: (.+) millisecond\(s\).\n", content).group(1)
-        end_match = re.findall(r"Timestamp: (.+) millisecond\(s\).\n", content)[-1]
+        end_matches = re.findall(r"Timestamp: (.+) millisecond\(s\).\n", content)
         matches = re.findall(r"Solution Timestep: (.+) millisecond\(s\).\n", content)
         converted_matches = [int(start_match)]
-        converted_matches = [int(m) for m in matches]
-        converted_matches.append(int(end_match))
-        print(converted_matches)
+        converted_matches.extend([int(m) for m in matches])
+        if len(end_matches) > 0:
+            converted_matches.append(int(end_matches[-1]))
+
         steps = []
         abs_time = []
         for i in range(len(converted_matches)-1):
