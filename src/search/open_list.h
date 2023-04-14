@@ -127,7 +127,7 @@ public:
     /*
     set/change the openlist's evaluator
     */
-    // virtual void set_evaluator(std::shared_ptr<Evaluator> eval) {};
+    // virtual void set_evaluator_weight(int weight) {};
 };
 
 

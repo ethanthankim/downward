@@ -48,7 +48,7 @@ def _anytime_props_processor(props: dict, **kwargs):
         # first change index if more than one solution found
         if len(incumbent_costs)>1:
             first_change: list = prop["change_indices"][0]
-            prop["change_indices:first"] = first_change / incumbent_costs[0]
+            prop["change_index:first"] = first_change / incumbent_costs[0]
 
         # update problem best solution
         if len(incumbent_costs)>=1:
@@ -99,8 +99,7 @@ def _anytime_props_processor(props: dict, **kwargs):
                 quality_v_time[algo]["quality"] = []
                 quality_v_time[algo]["time"] = []
             
-            print(algo)
-            pprint(incumbents)
+            problem_curr_best_sol = dict.fromkeys(problem_summaries.keys(),0)
             i = 0
             while i < len(incumbents):
                 time = incumbents[i].time
@@ -109,24 +108,18 @@ def _anytime_props_processor(props: dict, **kwargs):
                 j = i
                 while j < len(incumbents) and incumbents[j].time == time: j+=1
                 for incumbent in incumbents[i:j]:
-                    problem_summaries[incumbent.problem]["curr"] = incumbent.cost
+                    problem_curr_best_sol[incumbent.problem] = incumbent.cost
 
                 quality_v_time[algo]["quality"].append(
-                    sum([problem["curr"] for _,problem in problem_summaries.items()]) / len(problem_summaries)
+                    sum([quality for _,quality in problem_curr_best_sol.items()]) / len(problem_curr_best_sol)
                 )
                 quality_v_time[algo]["time"].append(time)
-                i=j
-
-            for _,problem in problem_summaries.items():
-                problem["curr"] = 0
-
-                
+                i=j                
             
     
     for k, prop in props.items():
         algo = prop["algorithm"]
         domain = prop["domain"]
-
         add_task_data(k, algo, domain)
     
     build_quality_v_time_points()
@@ -155,14 +148,14 @@ CONFIGS = [
         """eager_anytime(alt(
         [single(weight(h, 2, verbosity=normal)), type_based([h, g()], random_seed=1234)]), 
         reopen_closed=true, f_eval=sum([h, g()]))"""], driver_options=DRIVER_OPTIONS),
-    # IssueConfig("RWA*", ["--evaluator", "h=lmcut()", "--search",
-    #     """iterated([
-    #         eager_wastar([h],w=5),
-    #         eager_wastar([h],w=4),
-    #         eager_wastar([h],w=3),
-    #         eager_wastar([h],w=2),
-    #         eager_wastar([h],w=1)
-    #     ],continue_on_fail=true)"""], driver_options=DRIVER_OPTIONS),
+    IssueConfig("RWA*", ["--evaluator", "h=lmcut()", "--search",
+        """iterated([
+            eager_wastar([h],w=5),
+            eager_wastar([h],w=4),
+            eager_wastar([h],w=3),
+            eager_wastar([h],w=2),
+            astar(h)
+        ],continue_on_fail=true)"""], driver_options=DRIVER_OPTIONS),
 ]
 
 exp = IssueExperiment(
@@ -188,9 +181,12 @@ exp.add_fetcher(name="fetch")
 exp.add_properties_processing_step({"anytime-experiment": _anytime_props_processor})
 exp.add_absolute_report_step(attributes=[
     Attribute("time:steps:avg", min_wins=True, function=arithmetic_mean), 
-    Attribute("change_indices:avg", min_wins=True, function=arithmetic_mean),
+    Attribute("time:steps:optimal:avg", min_wins=True, function=arithmetic_mean),
+    Attribute("change_index:first", min_wins=True, function=arithmetic_mean),
     Attribute("cost", min_wins=True, function=arithmetic_mean),
-    "coverage", "expansions", "generated"])
+    "coverage", "coverage:optimal", 
+    "expansions", "expansions:optimal",
+    "planner_time:optimal"])
 
 
 # exp.add_comparison_table_step(attributes=["expansions"])

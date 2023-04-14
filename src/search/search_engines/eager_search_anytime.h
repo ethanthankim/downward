@@ -19,7 +19,7 @@ class EagerSearchAnytime : public SearchEngine {
     const bool reopen_closed_nodes;
 
     std::unique_ptr<StateOpenList> open_list;
-    // std::vector<std::shared_ptr<Evaluator>> evaluators;
+    // std::vector<int> weights;
     std::shared_ptr<Evaluator> f_evaluator;
     int best_bound;
     unsigned int num_found_solutions;

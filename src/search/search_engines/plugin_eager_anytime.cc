@@ -13,9 +13,9 @@ public:
         document_synopsis("");
 
         add_option<shared_ptr<OpenListFactory>>("open", "open list");
-        // add_list_option<shared_ptr<Evaluator>>(
-        //     "evaluators",
-        //     "Evaluator schedule used for anytime search improved solutions.");
+        // add_list_option<int>(
+        //     "weights",
+        //     "Evaluator weight schedule. Go to the next weight whenever a new improved solution is found");
         add_option<bool>(
             "reopen_closed",
             "reopen closed nodes",

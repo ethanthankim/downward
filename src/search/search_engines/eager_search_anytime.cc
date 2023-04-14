@@ -23,7 +23,7 @@ EagerSearchAnytime::EagerSearchAnytime(const plugins::Options &opts)
       reopen_closed_nodes(opts.get<bool>("reopen_closed")),
       open_list(opts.get<shared_ptr<OpenListFactory>>("open")->
                 create_state_open_list()),
-    //   evaluators(opts.get_list<shared_ptr<Evaluator>>("evaluators")),
+    //   weights(opts.get_list<int>("weights")),
       f_evaluator(opts.get<shared_ptr<Evaluator>>("f_eval", nullptr)),
       best_bound(bound),
       num_found_solutions(0) {}
@@ -118,10 +118,9 @@ SearchStatus EagerSearchAnytime::step() {
             log << "Solution: Incumbent solution found!" << endl;
             print_statistics();
 
-            // if (num_found_solutions <= evaluators.size()) {
-            //     log << "================================> " <<
-            //     "Goal found, shifting to next evaluator..." << endl;
-            //     open_list->set_evaluator(evaluators[num_found_solutions-1]);
+            // if (num_found_solutions <= weights.size()) {
+            //     log << "Goal found, shifting to next evaluator..." << endl;
+            //     open_list->set_evaluator_weight(weights[num_found_solutions-1]);
             // }
         }
     }
