@@ -5,6 +5,8 @@ from pprint import pprint
 import shutil
 from typing import List
 import matplotlib.pyplot as plt
+import re
+import json
 
 import common_setup
 from common_setup import IssueConfig, IssueExperiment
@@ -29,6 +31,7 @@ class IncumbentSolution:
 
 def _anytime_props_processor(props: dict, **kwargs):
 
+    eval_dir = kwargs['eval']
     problem_best_sol_cost = dict()
     algo_incumbents = dict()
     domains = []
@@ -81,32 +84,30 @@ def _anytime_props_processor(props: dict, **kwargs):
 
 
     def normalize_and_sort_costs():
-        incumbents: List[IncumbentSolution]
-        for _, incumbents in algo_incumbents.items():
-            incumbents.sort()
-        
+        incumbents: List[IncumbentSolution]       
         for _, incumbents in algo_incumbents.items():
             for incumbent in incumbents:
                 incumbent.cost = problem_best_sol_cost[incumbent.problem]/incumbent.cost
+
+        for _, incumbents in algo_incumbents.items():
+            incumbents.sort()
 
     def calculate_quality_v_time_points():
 
         def calculate_for_algo_block(algo_block: dict, filter_domain=None) -> dict:
             quality_v_time = dict()
-            incumbents: List[IncumbentSolution]
-            for algo, incumbents in algo_block.items():
+            incumbents_all: List[IncumbentSolution]
+            for algo, incumbents_all in algo_block.items():
+                incumbents = [incumbent for incumbent in incumbents_all if filter_domain == incumbent.domain or filter_domain is None]
+                problem_curr_best_sol = dict.fromkeys([incumbent.problem for incumbent in incumbents], 0)
+
                 if algo not in quality_v_time:
                     quality_v_time[algo] = dict()
                     quality_v_time[algo]["quality"] = []
                     quality_v_time[algo]["time"] = []
 
-                problem_curr_best_sol = dict.fromkeys(problem_best_sol_cost.keys(),0)
                 i = 0
                 while i < len(incumbents):
-
-                    if filter_domain is not None and filter_domain != incumbents[i].domain:
-                        i+=1
-                        continue
 
                     time = incumbents[i].time
 
@@ -133,38 +134,44 @@ def _anytime_props_processor(props: dict, **kwargs):
         return quality_v_time_all, quality_v_time_domain
 
     def save_quality_v_time_scatter_plots(quality_v_time_all: dict, quality_v_time_domain: dict):
+        SYMBOLS = r'[\.-_\(\)]'
 
-        # all domains
-        for algo_long, algo_data in quality_v_time_all.items():
-            algo = algo_long[15:]
-            plt.plot(algo_data["time"], algo_data["quality"], '-o', label=algo)
-        
-        plt.legend(loc='best')
-        plt.title("Solution Quality vs. Time")
-        plt.xlabel("Time (milliseconds)")
-        plt.ylabel("Solution Quality (C/C*)")
-        plt.xscale('log')
-        plt.savefig(f'quality_v_time.png', dpi=400)
+        def title_to_filename(title: str) -> str:
+            filename = re.sub(SYMBOLS, '', title.lower())
+            return filename.replace(' ', '_')
 
-        plt.cla()
-        plt.clf()
-
-        # per domain
-        # all domains
-        for domain, algo_block in quality_v_time_domain.items():
+        def save_algo_block_scatter(algo_block: dict, x_name: str, y_name: str, title: str, scale='linear'):
             for algo_long, algo_data in algo_block.items():
                 algo = algo_long[15:]
                 plt.plot(algo_data["time"], algo_data["quality"], '-o', label=algo)
             
             plt.legend(loc='best')
-            plt.title("Solution Quality vs. Time")
-            plt.xlabel("Time (milliseconds)")
-            plt.ylabel(f"{domain} - Solution Quality (C/C*)")
+            plt.title(title)
+            plt.xlabel(x_name)
+            plt.ylabel(y_name)
             plt.xscale('log')
-            plt.savefig(f'{domain} - quality_v_time.png', dpi=400)
-            
+            plt.savefig(os.path.join(eval_dir, title_to_filename(title)), dpi=400)
+
+
+        # all domains
+        save_algo_block_scatter(quality_v_time_all, 
+                                "Time (milliseconds)", 
+                                "Solution Quality (C/C*)",
+                                "Solution Quality vs. Time",
+                                'log')
+        plt.cla()
+        plt.clf()
+
+        # per domain
+        for domain, algo_block in quality_v_time_domain.items():
+            save_algo_block_scatter(algo_block, 
+                                "Time (milliseconds)", 
+                                "Solution Quality (C/C*)",
+                                f"{domain} - Solution Quality vs. Time",
+                                'log')
             plt.cla()
             plt.clf()
+            
 
     for k, prop in props.items():
         algo = prop["algorithm"]
@@ -173,8 +180,11 @@ def _anytime_props_processor(props: dict, **kwargs):
     
     all_scatter, domain_scatter = calculate_quality_v_time_points()
     save_quality_v_time_scatter_plots(all_scatter, domain_scatter)
-    # pprint(quality_v_time)
-    # pprint(problem_summaries)
+
+    with open(os.path.join(eval_dir, 'quality_v_time_all.json'), 'w', encoding='utf-8') as f: 
+        json.dump(all_scatter, f, ensure_ascii=False, indent=4)
+    with open(os.path.join(eval_dir, 'quality_v_time_per_domain.json'), 'w', encoding='utf-8') as f: 
+        json.dump(domain_scatter, f, ensure_ascii=False, indent=4)
 
 
 REPO = common_setup.get_repo_base()
