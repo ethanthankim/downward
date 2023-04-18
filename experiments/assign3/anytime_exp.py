@@ -4,6 +4,7 @@ import os
 from pprint import pprint
 import shutil
 from typing import List
+import matplotlib.pyplot as plt
 
 import common_setup
 from common_setup import IssueConfig, IssueExperiment
@@ -17,6 +18,7 @@ from dataclasses import dataclass
 class IncumbentSolution:
     """A class keeping track of an incumbent solution."""
     problem: str
+    domain: str
     cost: float = 0
     time: int = 0
 
@@ -29,7 +31,7 @@ def _anytime_props_processor(props: dict, **kwargs):
 
     problem_best_sol_cost = dict()
     algo_incumbents = dict()
-    quality_v_time = dict()
+    domains = []
 
     def add_task_data(k, algo, domain):
 
@@ -38,6 +40,7 @@ def _anytime_props_processor(props: dict, **kwargs):
         time_steps = prop["time:steps"]
         time_totals = prop["time:total"]
         problem = prop["problem"]
+        domains.append(domain)
 
         # average time between solutions
         # this includes the time it takes to prove the optimal solution is actually optimal
@@ -74,7 +77,8 @@ def _anytime_props_processor(props: dict, **kwargs):
         # algo_summaries
         if algo not in algo_incumbents:
             algo_incumbents[algo] = []
-        algo_incumbents[algo].extend([IncumbentSolution(problem, cost, time) for cost, time in zip(incumbent_costs, time_totals)])
+        algo_incumbents[algo].extend([IncumbentSolution(problem, domain, cost, time) for cost, time in zip(incumbent_costs, time_totals)])
+
 
     def normalize_and_sort_costs():
         incumbents: List[IncumbentSolution]
@@ -85,41 +89,90 @@ def _anytime_props_processor(props: dict, **kwargs):
             for incumbent in incumbents:
                 incumbent.cost = problem_best_sol_cost[incumbent.problem]/incumbent.cost
 
-    def build_quality_v_time_points():
-        normalize_and_sort_costs()
+    def calculate_quality_v_time_points():
+
+        def calculate_for_algo_block(algo_block: dict, filter_domain=None) -> dict:
+            quality_v_time = dict()
+            incumbents: List[IncumbentSolution]
+            for algo, incumbents in algo_block.items():
+                if algo not in quality_v_time:
+                    quality_v_time[algo] = dict()
+                    quality_v_time[algo]["quality"] = []
+                    quality_v_time[algo]["time"] = []
+
+                problem_curr_best_sol = dict.fromkeys(problem_best_sol_cost.keys(),0)
+                i = 0
+                while i < len(incumbents):
+
+                    if filter_domain is not None and filter_domain != incumbents[i].domain:
+                        i+=1
+                        continue
+
+                    time = incumbents[i].time
+
+                    # update problem "curr"
+                    j = i
+                    while j < len(incumbents) and incumbents[j].time == time: j+=1
+                    for incumbent in incumbents[i:j]:
+                        problem_curr_best_sol[incumbent.problem] = incumbent.cost
+
+                    quality_v_time[algo]["quality"].append(
+                        sum([quality for _,quality in problem_curr_best_sol.items()]) / len(problem_curr_best_sol)
+                    )
+                    quality_v_time[algo]["time"].append(time)
+                    i=j 
+
+            return quality_v_time
+
+        normalize_and_sort_costs() 
+        quality_v_time_domain = dict()       
+        quality_v_time_all = calculate_for_algo_block(algo_incumbents, filter_domain=None)
+        for domain in domains:
+            quality_v_time_domain[domain] = calculate_for_algo_block(algo_incumbents, filter_domain=domain)              
+
+        return quality_v_time_all, quality_v_time_domain
+
+    def save_quality_v_time_scatter_plots(quality_v_time_all: dict, quality_v_time_domain: dict):
+
+        # all domains
+        for algo_long, algo_data in quality_v_time_all.items():
+            algo = algo_long[15:]
+            plt.plot(algo_data["time"], algo_data["quality"], '-o', label=algo)
         
-        incumbents: List[IncumbentSolution]
-        for algo, incumbents in algo_incumbents.items():
-            
-            if algo not in quality_v_time:
-                quality_v_time[algo] = dict()
-                quality_v_time[algo]["quality"] = []
-                quality_v_time[algo]["time"] = []
-            
-            problem_curr_best_sol = dict.fromkeys(problem_best_sol_cost.keys(),0)
-            i = 0
-            while i < len(incumbents):
-                time = incumbents[i].time
+        plt.legend(loc='best')
+        plt.title("Solution Quality vs. Time")
+        plt.xlabel("Time (milliseconds)")
+        plt.ylabel("Solution Quality (C/C*)")
+        plt.xscale('log')
+        plt.savefig(f'quality_v_time.png', dpi=400)
 
-                # update problem "curr"
-                j = i
-                while j < len(incumbents) and incumbents[j].time == time: j+=1
-                for incumbent in incumbents[i:j]:
-                    problem_curr_best_sol[incumbent.problem] = incumbent.cost
+        plt.cla()
+        plt.clf()
 
-                quality_v_time[algo]["quality"].append(
-                    sum([quality for _,quality in problem_curr_best_sol.items()]) / len(problem_curr_best_sol)
-                )
-                quality_v_time[algo]["time"].append(time)
-                i=j                
+        # per domain
+        # all domains
+        for domain, algo_block in quality_v_time_domain.items():
+            for algo_long, algo_data in algo_block.items():
+                algo = algo_long[15:]
+                plt.plot(algo_data["time"], algo_data["quality"], '-o', label=algo)
             
-    
+            plt.legend(loc='best')
+            plt.title("Solution Quality vs. Time")
+            plt.xlabel("Time (milliseconds)")
+            plt.ylabel(f"{domain} - Solution Quality (C/C*)")
+            plt.xscale('log')
+            plt.savefig(f'{domain} - quality_v_time.png', dpi=400)
+            
+            plt.cla()
+            plt.clf()
+
     for k, prop in props.items():
         algo = prop["algorithm"]
         domain = prop["domain"]
         add_task_data(k, algo, domain)
     
-    build_quality_v_time_points()
+    all_scatter, domain_scatter = calculate_quality_v_time_points()
+    save_quality_v_time_scatter_plots(all_scatter, domain_scatter)
     # pprint(quality_v_time)
     # pprint(problem_summaries)
 
@@ -145,14 +198,14 @@ CONFIGS = [
         """eager_anytime(alt(
         [single(weight(h, 2, verbosity=normal)), type_based([h, g()], random_seed=1234)]), 
         reopen_closed=true, f_eval=sum([h, g()]))"""], driver_options=DRIVER_OPTIONS),
-    # IssueConfig("RWA*", ["--evaluator", "h=lmcut()", "--search",
-    #     """iterated([
-    #         lazy_wastar([h],w=5),
-    #         lazy_wastar([h],w=4),
-    #         lazy_wastar([h],w=3),
-    #         lazy_wastar([h],w=2),
-    #         astar(h)
-    #     ],continue_on_fail=true)"""], driver_options=DRIVER_OPTIONS),
+    IssueConfig("RWA*", ["--evaluator", "h=lmcut()", "--search",
+        """iterated([
+            lazy_wastar([h],w=5),
+            lazy_wastar([h],w=4),
+            lazy_wastar([h],w=3),
+            lazy_wastar([h],w=2),
+            astar(h)
+        ],continue_on_fail=true)"""], driver_options=DRIVER_OPTIONS),
 ]
 
 exp = IssueExperiment(
