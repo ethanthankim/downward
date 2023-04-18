@@ -3,7 +3,7 @@
 import os
 from pprint import pprint
 import shutil
-from typing import List
+from typing import Dict, List
 import matplotlib.pyplot as plt
 import re
 import json
@@ -35,6 +35,7 @@ def _anytime_props_processor(props: dict, **kwargs):
     problem_best_sol_cost = dict()
     algo_incumbents = dict()
     domains = []
+    algo_change_indices: Dict[str, List[List[float]]] = dict()
 
     def add_task_data(k, algo, domain):
 
@@ -51,10 +52,24 @@ def _anytime_props_processor(props: dict, **kwargs):
             avg_time = sum(time_steps)/len(time_steps)
             prop["time:steps:avg"] = avg_time
 
+        # normalize change index
+        prop["change_indices"] = [ci / incumbent_costs[i] for i,ci in enumerate(prop["change_indices"])]
+        
+        # all change indices per incumbent solution index
+        if algo not in algo_change_indices:
+            algo_change_indices[algo] = []
+        for i, ci in enumerate(prop["change_indices"]):
+            if len(algo_change_indices[algo]) <= i:
+                algo_change_indices[algo].append([])
+            algo_change_indices[algo][i].append(ci)
+
         # first change index if more than one solution found
         if len(prop["change_indices"])>0:
-            first_change: list = prop["change_indices"][0]
-            prop["change_index:first"] = first_change / incumbent_costs[0]
+            prop["change_index:first"] = prop["change_indices"][0]
+
+            # first four change indices
+            if len(prop["change_indices"])>=4:
+                prop["change_index:top_4"] = prop["change_indices"][:5]
 
         # update problem best solution
         if len(incumbent_costs)>=1:
@@ -91,6 +106,32 @@ def _anytime_props_processor(props: dict, **kwargs):
 
         for _, incumbents in algo_incumbents.items():
             incumbents.sort()
+
+    def calculate_ci_v_si() -> dict:
+        ci_v_si: Dict[str, Dict[str, List[float]]] = dict()
+        for algo, cis in algo_change_indices.items():
+            if algo not in ci_v_si:
+                ci_v_si[algo] = dict()
+                ci_v_si[algo]['incumbent'] = []
+                ci_v_si[algo]['c.i.'] = []
+
+            for i,l in enumerate(cis):
+                ci_v_si[algo]['incumbent'].append(i)
+                ci_v_si[algo]['c.i.'].append( sum(l) / len(l) )
+
+        return ci_v_si
+
+    def save_ci_v_si_scatter_plots(ci_v_si: dict):
+        
+        for algo_long, algo_data in ci_v_si.items():
+            algo = algo_long[15:]
+            plt.plot(algo_data["incumbent"], algo_data["c.i."], '-o', label=algo)
+            
+            plt.legend(loc='best')
+            plt.title("Average Change Index per Incumbent Solution")
+            plt.xlabel("Incumbent Solution Index")
+            plt.ylabel("Average Change Index")
+            plt.savefig(os.path.join(eval_dir, "average_ci_v_si"), dpi=400)   
 
     def calculate_quality_v_time_points():
 
@@ -135,7 +176,6 @@ def _anytime_props_processor(props: dict, **kwargs):
 
     def save_quality_v_time_scatter_plots(quality_v_time_all: dict, quality_v_time_domain: dict):
         SYMBOLS = r'[\.-_\(\)]'
-
         def title_to_filename(title: str) -> str:
             filename = re.sub(SYMBOLS, '', title.lower())
             return filename.replace(' ', '_')
@@ -180,11 +220,15 @@ def _anytime_props_processor(props: dict, **kwargs):
     
     all_scatter, domain_scatter = calculate_quality_v_time_points()
     save_quality_v_time_scatter_plots(all_scatter, domain_scatter)
+    avg_cis = calculate_ci_v_si()
+    save_ci_v_si_scatter_plots(avg_cis)
 
     with open(os.path.join(eval_dir, 'quality_v_time_all.json'), 'w', encoding='utf-8') as f: 
         json.dump(all_scatter, f, ensure_ascii=False, indent=4)
     with open(os.path.join(eval_dir, 'quality_v_time_per_domain.json'), 'w', encoding='utf-8') as f: 
         json.dump(domain_scatter, f, ensure_ascii=False, indent=4)
+    with open(os.path.join(eval_dir, 'average_ci_v_si.json'), 'w', encoding='utf-8') as f: 
+        json.dump(avg_cis, f, ensure_ascii=False, indent=4)
 
 
 REPO = common_setup.get_repo_base()
