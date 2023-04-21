@@ -28,7 +28,6 @@ class IncumbentSolution:
         return self.time < other.time
     
 
-
 def _anytime_props_processor(props: dict, **kwargs):
 
     eval_dir = kwargs['eval']
@@ -72,14 +71,14 @@ def _anytime_props_processor(props: dict, **kwargs):
                 prop["change_index:top_4"] = prop["change_indices"][:5]
 
         # update problem best solution
-        if len(incumbent_costs)>=1:
+        if "cost" in prop:
+            this_sol = prop["cost"]
             if problem in problem_best_sol_cost:
-                this_sol = incumbent_costs[-1]
                 best_sol = problem_best_sol_cost[problem]
                 if this_sol < best_sol:
                     problem_best_sol_cost[problem] = this_sol
             else:
-                problem_best_sol_cost[problem] = incumbent_costs[-1]
+                problem_best_sol_cost[problem] = this_sol
         
         # being in here means the optimal solution was proved optimal
         if "optimal:found" in prop and prop["optimal:found"] == "found":
@@ -216,6 +215,10 @@ def _anytime_props_processor(props: dict, **kwargs):
     for k, prop in props.items():
         algo = prop["algorithm"]
         domain = prop["domain"]
+
+        if "unexplained_errors" in prop:
+            continue
+
         add_task_data(k, algo, domain)
     
     all_scatter, domain_scatter = calculate_quality_v_time_points()
@@ -254,10 +257,10 @@ CONFIGS = [
         reopen_closed=true, f_eval=sum([h, g()]))"""], driver_options=DRIVER_OPTIONS),
     IssueConfig("RWA*", ["--evaluator", "h=lmcut()", "--search",
         """iterated([
-            lazy_wastar([h],w=5),
-            lazy_wastar([h],w=4),
-            lazy_wastar([h],w=3),
-            lazy_wastar([h],w=2),
+            eager_wastar([h],w=5),
+            eager_wastar([h],w=4),
+            eager_wastar([h],w=3),
+            eager_wastar([h],w=2),
             astar(h)
         ],continue_on_fail=true)"""], driver_options=DRIVER_OPTIONS),
 ]

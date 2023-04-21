@@ -5,6 +5,7 @@ Custom Parser for anytime-search runs of Fast Downward.
 """
 
 from itertools import tee
+from pprint import pprint
 import re
 from typing import List, Tuple
 
@@ -30,10 +31,12 @@ def find_all_matches(attribute, regex, type=int):
 def get_solution_timestamp_steps(time_step, total_time):
 
     def store_all_timestamp_steps(content, props):
-
-        start_match = re.search(r"Start Timestep: (.+) millisecond\(s\).\n", content).group(1)
-        end_matches = re.findall(r"Timestamp: (.+) millisecond\(s\).\n", content)
-        matches = re.findall(r"Solution Timestep: (.+) millisecond\(s\).\n", content)
+    
+        start_match = re.search(r"Start Timestep: (.+) millisecond\(s\)\.\n", content)
+        props["test:start"] = start_match
+        print(f'==========================> {start_match}')
+        end_matches = re.findall(r"Timestamp: (.+) millisecond\(s\)\.\n", content)
+        matches = re.findall(r"Solution Timestep: (.+) millisecond\(s\)\.\n", content)
         converted_matches = [int(start_match)]
         converted_matches.extend([int(m) for m in matches])
         if len(end_matches) > 0:
