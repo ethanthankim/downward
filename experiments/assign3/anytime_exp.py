@@ -36,14 +36,19 @@ def _anytime_props_processor(props: dict, **kwargs):
     domains = []
     algo_change_indices: Dict[str, List[List[float]]] = dict()
 
+    def _problem_key(domain, problem):
+        return f'{domain}-{problem}'
+
     def add_task_data(k, algo, domain):
 
         prop = props[k]
+        domains.append(domain)
+
         incumbent_costs = prop["cost:all"]
         time_steps = prop["time:steps"]
         time_totals = prop["time:total"]
         problem = prop["problem"]
-        domains.append(domain)
+        problem_key = _problem_key(domain, problem)
 
         # average time between solutions
         # this includes the time it takes to prove the optimal solution is actually optimal
@@ -74,11 +79,11 @@ def _anytime_props_processor(props: dict, **kwargs):
         if "cost" in prop:
             this_sol = prop["cost"]
             if problem in problem_best_sol_cost:
-                best_sol = problem_best_sol_cost[problem]
+                best_sol = problem_best_sol_cost[problem_key]
                 if this_sol < best_sol:
-                    problem_best_sol_cost[problem] = this_sol
+                    problem_best_sol_cost[problem_key] = this_sol
             else:
-                problem_best_sol_cost[problem] = this_sol
+                problem_best_sol_cost[problem_key] = this_sol
         
         # being in here means the optimal solution was proved optimal
         if "optimal:found" in prop and prop["optimal:found"] == "found":
@@ -101,7 +106,7 @@ def _anytime_props_processor(props: dict, **kwargs):
         incumbents: List[IncumbentSolution]       
         for _, incumbents in algo_incumbents.items():
             for incumbent in incumbents:
-                incumbent.cost = problem_best_sol_cost[incumbent.problem]/incumbent.cost
+                incumbent.cost = problem_best_sol_cost[_problem_key(incumbent.domain, incumbent.problem)]/incumbent.cost
 
         for _, incumbents in algo_incumbents.items():
             incumbents.sort()
@@ -139,7 +144,7 @@ def _anytime_props_processor(props: dict, **kwargs):
             incumbents_all: List[IncumbentSolution]
             for algo, incumbents_all in algo_block.items():
                 incumbents = [incumbent for incumbent in incumbents_all if filter_domain == incumbent.domain or filter_domain is None]
-                problem_curr_best_sol = dict.fromkeys([incumbent.problem for incumbent in incumbents], 0)
+                problem_curr_best_sol = dict.fromkeys([_problem_key(incumbent.domain, incumbent.problem) for incumbent in incumbents], 0)
 
                 if algo not in quality_v_time:
                     quality_v_time[algo] = dict()
@@ -155,7 +160,7 @@ def _anytime_props_processor(props: dict, **kwargs):
                     j = i
                     while j < len(incumbents) and incumbents[j].time == time: j+=1
                     for incumbent in incumbents[i:j]:
-                        problem_curr_best_sol[incumbent.problem] = incumbent.cost
+                        problem_curr_best_sol[_problem_key(incumbent.domain, incumbent.problem)] = incumbent.cost
 
                     quality_v_time[algo]["quality"].append(
                         sum([quality for _,quality in problem_curr_best_sol.items()]) / len(problem_curr_best_sol)
@@ -195,7 +200,7 @@ def _anytime_props_processor(props: dict, **kwargs):
         # all domains
         save_algo_block_scatter(quality_v_time_all, 
                                 "Time (milliseconds)", 
-                                "Solution Quality (C/C*)",
+                                "Solution Quality (C*/C)",
                                 "Solution Quality vs. Time",
                                 'log')
         plt.cla()
@@ -233,13 +238,12 @@ def _anytime_props_processor(props: dict, **kwargs):
     with open(os.path.join(eval_dir, 'average_ci_v_si.json'), 'w', encoding='utf-8') as f: 
         json.dump(avg_cis, f, ensure_ascii=False, indent=4)
 
-
 REPO = common_setup.get_repo_base()
 BENCHMARKS_DIR = os.environ["DOWNWARD_BENCHMARKS"]
 REVISION_CACHE = os.environ.get("DOWNWARD_REVISION_CACHE")
 SEARCH_REVS = ["dawson-masters"]
 BUILD_OPTIONS = []
-DRIVER_OPTIONS = ["--overall-time-limit", "10m"]
+DRIVER_OPTIONS = ["--overall-time-limit", "30m"]
 ENVIRONMENT = LocalEnvironment(processes=None)
 SUITE = common_setup.get_ipcs_sat_domains()
 

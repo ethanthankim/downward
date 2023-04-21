@@ -135,9 +135,9 @@ def main():
     parser.add_pattern("optimal:found", r"Optimal Solution: (.+)", type=str)
 
     # timestamps
-    parser.add_function(
-        get_solution_timestamp_steps("time:steps", "time:total")
-    )
+    # parser.add_function(
+    #     get_solution_timestamp_steps("time:steps", "time:total")
+    # )
 
     # solution first change index
     parser.add_function(
