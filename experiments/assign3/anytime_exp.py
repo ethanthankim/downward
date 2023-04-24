@@ -45,6 +45,7 @@ def _anytime_props_processor(props: dict, **kwargs):
         domains.append(domain)
 
         incumbent_costs = prop["cost:all"]
+        incumbent_steps = prop["steps:all"]
         time_steps = prop["time:steps"]
         time_totals = prop["time:total"]
         problem = prop["problem"]
@@ -57,7 +58,7 @@ def _anytime_props_processor(props: dict, **kwargs):
             prop["time:steps:avg"] = avg_time
 
         # normalize change index
-        prop["change_indices"] = [ci / incumbent_costs[i] for i,ci in enumerate(prop["change_indices"])]
+        prop["change_indices"] = [ci / incumbent_steps[i] for i,ci in enumerate(prop["change_indices"])]
         
         # all change indices per incumbent solution index
         if algo not in algo_change_indices:
@@ -78,7 +79,7 @@ def _anytime_props_processor(props: dict, **kwargs):
         # update problem best solution
         if "cost" in prop:
             this_sol = prop["cost"]
-            if problem in problem_best_sol_cost:
+            if problem_key in problem_best_sol_cost:
                 best_sol = problem_best_sol_cost[problem_key]
                 if this_sol < best_sol:
                     problem_best_sol_cost[problem_key] = this_sol
@@ -253,7 +254,7 @@ CONFIGS = [
         reopen_closed=true, f_eval=sum([h, g()]))"""], driver_options=DRIVER_OPTIONS),
     IssueConfig("e-AWA*", ["--evaluator", "h=lmcut()", "--search",
         """eager_anytime(epsilon_greedy(
-        sum([weight(h, 2, verbosity=normal), g()]), epsilon=0.5, random_seed=1234), 
+        sum([weight(h, 2, verbosity=normal), g()]), epsilon=0.2, random_seed=1234), 
         reopen_closed=true, f_eval=sum([h, g()]))"""], driver_options=DRIVER_OPTIONS),
     IssueConfig("Type-AWA*", ["--evaluator", "h=lmcut()", "--search",
         """eager_anytime(alt(
