@@ -138,7 +138,7 @@ BestFirstOpenListFactory::create_edge_open_list() {
 
 class BestFirstOpenListFeature : public plugins::TypedFeature<OpenListFactory, BestFirstOpenListFactory> {
 public:
-    BestFirstOpenListFeature() : TypedFeature("single") {
+    BestFirstOpenListFeature() : TypedFeature("best_first") {
         document_title("Best-first open list");
         document_synopsis(
             "Open list that uses a single evaluator and FIFO tiebreaking.");

@@ -4,6 +4,7 @@ import os
 import shutil
 
 import project
+import common_setup
 
 
 REPO = project.get_repo_base()
@@ -12,7 +13,7 @@ SCP_LOGIN = "myname@myserver.com"
 REMOTE_REPOS_DIR = "/infai/seipp/projects"
 # If REVISION_CACHE is None, the default ./data/revision-cache is used.
 REVISION_CACHE = os.environ.get("DOWNWARD_REVISION_CACHE")
-SUITE = project._get_suite(BENCHMARKS_DIR, "suite.json")
+SUITE = common_setup.get_ipcs_sat_domains()
 
 ENV = project.LocalEnvironment(processes=None)
 
@@ -55,7 +56,7 @@ CONFIGS = [
     # ('ff-pref-boost', ['--search', 'eager_greedy([ff()], preferred=[ff()], boost=1000)']),
     # ('ff-def-boost', ['--search', 'lazy_greedy([ff()], boost=1000)']),
     # ('lama-2011', _get_lama(pref="true"))
-    ('lwm', ["--evaluator", "h=lmcut()" '--search', 'eager(lwm_based_type(h))'])
+    ('lwm', ["--evaluator", "h=lmcut()", '--search', 'eager(lwm_based_type(h))'])
 ]
 
 BUILD_OPTIONS = []
