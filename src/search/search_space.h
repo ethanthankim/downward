@@ -22,6 +22,7 @@ public:
     SearchNode(const State &state, SearchNodeInfo &info);
 
     const State &get_state() const;
+    const SearchNodeInfo &get_info() const;
 
     bool is_new() const;
     bool is_open() const;

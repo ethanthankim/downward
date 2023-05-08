@@ -49,12 +49,13 @@ def _get_lama(pref):
         "--always"]
 
 CONFIGS = [
-    ('ff', ['--search', 'eager_greedy([ff()])']),
-    ('ff-def', ['--search', 'lazy_greedy([ff()])']),
-    ('ff-pref', ['--search', 'eager_greedy([ff()], preferred=[ff()])']),
-    ('ff-pref-boost', ['--search', 'eager_greedy([ff()], preferred=[ff()], boost=1000)']),
-    ('ff-def-boost', ['--search', 'lazy_greedy([ff()], boost=1000)']),
-    ('lama-2011', _get_lama(pref="true"))
+    # ('ff', ['--search', 'eager_greedy([ff()])']),
+    # ('ff-def', ['--search', 'lazy_greedy([ff()])']),
+    # ('ff-pref', ['--search', 'eager_greedy([ff()], preferred=[ff()])']),
+    # ('ff-pref-boost', ['--search', 'eager_greedy([ff()], preferred=[ff()], boost=1000)']),
+    # ('ff-def-boost', ['--search', 'lazy_greedy([ff()], boost=1000)']),
+    # ('lama-2011', _get_lama(pref="true"))
+    ('lwm', ["--evaluator", "h=lmcut()" '--search', 'eager(lwm_based_type(h))'])
 ]
 
 BUILD_OPTIONS = []

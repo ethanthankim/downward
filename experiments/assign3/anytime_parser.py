@@ -5,6 +5,7 @@ Custom Parser for anytime-search runs of Fast Downward.
 """
 
 from itertools import tee
+import os
 from pprint import pprint
 import re
 from typing import List, Tuple
@@ -33,8 +34,11 @@ def get_solution_timestamp_steps(time_step, total_time):
     def store_all_timestamp_steps(content, props):
     
         start_match = re.search(r"Start Timestep: (.+) millisecond\(s\)\.\n", content)
-        props["test:start"] = start_match
-        print(f'==========================> {start_match}')
+        if start_match is None:
+            props[time_step] = []
+            props[total_time] = []
+            return
+        start_match = start_match.group(1)
         end_matches = re.findall(r"Timestamp: (.+) millisecond\(s\)\.\n", content)
         matches = re.findall(r"Solution Timestep: (.+) millisecond\(s\)\.\n", content)
         converted_matches = [int(start_match)]
@@ -56,6 +60,7 @@ def get_solution_timestamp_steps(time_step, total_time):
 
 
 def get_solution_change_indices(indices_prop):
+
     def pairwise(iterable):
         "s -> (s0,s1), (s1,s2), (s2, s3), ..."
         a, b = tee(iterable)
@@ -64,10 +69,19 @@ def get_solution_change_indices(indices_prop):
 
     def store_solution_change_indices(content, props):
         plan_regex = r"(sas_plan\.\d+) (\d+)"
-        matches: List[Tuple[str, str]] = re.findall(plan_regex, content)
-        converted_matches = [(f, float(c) ) for f, c in matches]
+        plan_filename_regex = re.compile(r"sas_plan\.(\d+)")
+        for _,_, files in os.walk('.'):
+            plans = []
+            for file in files:
+                plan_match = plan_filename_regex.match(file)
+                if plan_match:
+                    plan = (plan_match.string, float(plan_match.group(1)))
+                    plans.append(plan)
+
+        plans.sort(key=lambda tup: tup[1])    
+
         first_diffs = []
-        for s1, s2 in pairwise(converted_matches):
+        for s1, s2 in pairwise(plans):
             with open(s1[0], 'r') as sol_1_f, open(s2[0], 'r') as sol_2_f:
                 sol_1 = sol_1_f.readlines()
                 sol_2 = sol_2_f.readlines()
@@ -75,7 +89,7 @@ def get_solution_change_indices(indices_prop):
                 for i in range(lim):
                     if sol_1[i] != sol_2[i]:
                         first_diffs.append(i)
-                        break         
+                        break    
         props[indices_prop] = first_diffs
 
     return store_solution_change_indices
@@ -135,9 +149,9 @@ def main():
     parser.add_pattern("optimal:found", r"Optimal Solution: (.+)", type=str)
 
     # timestamps
-    # parser.add_function(
-    #     get_solution_timestamp_steps("time:steps", "time:total")
-    # )
+    parser.add_function(
+        get_solution_timestamp_steps("time:steps", "time:total")
+    )
 
     # solution first change index
     parser.add_function(

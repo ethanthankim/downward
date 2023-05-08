@@ -19,6 +19,10 @@ const State &SearchNode::get_state() const {
     return state;
 }
 
+const SearchNodeInfo &SearchNode::get_info() const {
+    return info;
+}
+
 bool SearchNode::is_open() const {
     return info.status == SearchNodeInfo::OPEN;
 }

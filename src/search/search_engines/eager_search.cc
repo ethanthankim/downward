@@ -32,6 +32,7 @@ EagerSearch::EagerSearch(const plugins::Options &opts)
         cerr << "lazy_evaluator must cache its estimates" << endl;
         utils::exit_with(utils::ExitCode::SEARCH_INPUT_ERROR);
     }
+    open_list->set_search_space(search_space);
 }
 
 void EagerSearch::initialize() {

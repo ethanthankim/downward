@@ -72,9 +72,13 @@ def _anytime_props_processor(props: dict, **kwargs):
         if len(prop["change_indices"])>0:
             prop["change_index:first"] = prop["change_indices"][0]
 
-            # first four change indices
-            if len(prop["change_indices"])>=4:
-                prop["change_index:top_4"] = prop["change_indices"][:5]
+        # second change index
+        if len(prop["change_indices"])>1:
+            prop["change_index:second"] = prop["change_indices"][1]
+
+        # third change index
+        if len(prop["change_indices"])>2:
+            prop["change_index:third"] = prop["change_indices"][2]
 
         # update problem best solution
         if "cost" in prop:
@@ -289,12 +293,15 @@ if not common_setup.no_search():
     exp.add_step("build", exp.build)
     exp.add_step("start", exp.start_runs)
 
+exp.add_parse_again_step()
 exp.add_fetcher(name="fetch")
 exp.add_properties_processing_step({"anytime-experiment": _anytime_props_processor})
 exp.add_absolute_report_step(attributes=[
-    Attribute("time:steps:avg", min_wins=True, function=arithmetic_mean), 
+    Attribute("time:steps:avg", min_wins=True, absolute=True, function=arithmetic_mean), 
     Attribute("time:steps:optimal:avg", min_wins=True, function=arithmetic_mean),
-    Attribute("change_index:first", min_wins=True, function=arithmetic_mean),
+    Attribute("change_index:first", min_wins=True, absolute=True, function=arithmetic_mean),
+    Attribute("change_index:second", min_wins=True, absolute=True, function=arithmetic_mean),
+    Attribute("change_index:third", min_wins=True, absolute=True, function=arithmetic_mean),
     Attribute("cost", min_wins=True, function=arithmetic_mean),
     "coverage", 
     Attribute("coverage:optimal", min_wins=True, absolute=True, function=finite_sum), 

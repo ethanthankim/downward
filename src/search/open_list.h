@@ -3,6 +3,7 @@
 
 #include <set>
 
+#include "search_engine.h"
 #include "evaluation_context.h"
 #include "operator_id.h"
 
@@ -27,6 +28,9 @@ protected:
 public:
     explicit OpenList(bool preferred_only = false);
     virtual ~OpenList() = default;
+
+
+    void set_search_space(SearchSpace &search_space) {};
 
     /*
       Insert an entry into the open list.
