@@ -126,8 +126,7 @@ bool LWMBasedOpenList<Entry>::empty() const {
 template<class Entry>
 void LWMBasedOpenList<Entry>::clear() {
     buckets.clear();
-    nodeid_to_typeid.clear();
-    typeid_to_h_and_index.clear();
+    nodeid_to_type_index.clear();
 }
 
 template<class Entry>
