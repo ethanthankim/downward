@@ -26,20 +26,20 @@ class LWMBasedOpenList : public OpenList<Entry> {
     shared_ptr<Evaluator> evaluator;
     SearchSpace *search_space;
 
-    // utils::HashMap<int, int> nodeid_to_type_info_index;
-    // using H = int;
-    // using Bucket = vector<Entry>;
-    // vector<tuple<int, H, Bucket>> type_buckets;
+    struct LWMType {
+        int h;
+        vector<Entry> entries;
+        LWMType(int h, const vector<Entry> &entries)
+            : h(h), entries{std::move(entries)} {}
+    };
 
-    using Bucket = vector<Entry>;
-    utils::HashMap<int, int> nodeid_to_typeid;
-    utils::HashMap<int, pair<int, int>> typeid_to_h_and_index;
-    vector<pair<int, Bucket>> buckets;
+    utils::HashMap<int, int> nodeid_to_type_index;
+    utils::HashMap<int, LWMType> buckets;
 
 protected:
     virtual void do_insertion(
         EvaluationContext &eval_context, const Entry &entry) override;
-    void add_to_type(int node_id, int type_id, int type_index, const Entry &entry);
+    void add_to_type(int node_id, int type_index, const Entry &entry);
     void add_new_type(int node_id, int h, const Entry &entry);
 
 public:
@@ -65,21 +65,15 @@ void LWMBasedOpenList<Entry>::set_search_space(SearchSpace &search_space) {
 
 template<class Entry>
 void LWMBasedOpenList<Entry>::add_new_type(int node_id, int h, const Entry &entry) {
-
-    // utils::HashMap<int, int> nodeid_to_typeid;
-    // utils::HashMap<int, pair<int, int>> typeid_to_h_and_index;
-    // vector<pair<int, Bucket>> buckets;
-
-    nodeid_to_typeid[node_id] = node_id;
-    buckets.push_back(make_pair(node_id, Bucket({entry})));
-    typeid_to_h_and_index[node_id] = make_pair(h, buckets.size()-1);
+    LWMType new_type(h, {entry});
+    buckets[node_id] = new_type;
+    nodeid_to_type_index[node_id] = node_id;
 }
 
 template<class Entry>
-void LWMBasedOpenList<Entry>::add_to_type(int node_id, int type_id, int type_index, const Entry &entry) {
-    pair<int, Bucket> type_bucket = buckets[type_index];
-    type_bucket.second.push_back(entry);
-    nodeid_to_typeid[node_id] = type_id;
+void LWMBasedOpenList<Entry>::add_to_type(int node_id, int type_index, const Entry &entry) {
+    buckets[type_index].entries.push_back(entry);
+    nodeid_to_type_index[node_id] = type_index;
 }
 
 template<class Entry>
@@ -96,37 +90,24 @@ void LWMBasedOpenList<Entry>::do_insertion(
         return;
     }
 
-    // utils::HashMap<int, int> nodeid_to_typeid;
-    // utils::HashMap<int, pair<int, int>> typeid_to_h_and_index;
-    // vector<pair<int, Bucket>> buckets;
-
     // get parent and type info
-    int type_id = nodeid_to_typeid[parent_id];
-    pair<int, int> h_and_type_index = typeid_to_h_and_index[type_id];
-
-    if (new_h < h_and_type_index.first) {
+    int type_index = nodeid_to_type_index[parent_id];
+    if (new_h < buckets[type_index].h) {
         add_new_type(new_id, new_h, entry);
     } else {
-        add_to_type(new_id, type_id, h_and_type_index.second, entry);
+        add_to_type(new_id, type_index, entry);
     }
 }
 
 template<class Entry>
 Entry LWMBasedOpenList<Entry>::remove_min() {
     size_t bucket_i = rng->random(buckets.size());
-    pair<int, Bucket> &typeid_and_bucket = buckets[bucket_i];
+    LWMType &bucket = buckets[bucket_i];
+    int pos = rng->random(bucket.entries.size());
+    Entry result = utils::swap_and_pop_from_vector(bucket.entries, pos);
 
-    const int &type_id = typeid_and_bucket.first;
-    Bucket &bucket = typeid_and_bucket.second;
-    int pos = rng->random(bucket.size());
-    Entry result = utils::swap_and_pop_from_vector(bucket, pos);
-
-    if (bucket.empty()) {
-        // Swap the empty bucket with the last bucket, then delete it.
-        int last_type_id = buckets.back().first;
-        typeid_to_h_and_index[last_type_id].second = bucket_i;
-        typeid_to_h_and_index.erase(type_id);
-        utils::swap_and_pop_from_vector(buckets, bucket_i);
+    if (bucket.entries.empty()) {
+        buckets.erase(bucket_i);
     }
     return result;
 }

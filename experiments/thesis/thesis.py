@@ -6,16 +6,18 @@ import shutil
 import project
 import common_setup
 
+from common_setup import IssueConfig, IssueExperiment
+from lab.environments import LocalEnvironment
 
-REPO = project.get_repo_base()
+
+REPO = common_setup.get_repo_base()
 BENCHMARKS_DIR = os.environ["DOWNWARD_BENCHMARKS"]
-SCP_LOGIN = "myname@myserver.com"
-REMOTE_REPOS_DIR = "/infai/seipp/projects"
-# If REVISION_CACHE is None, the default ./data/revision-cache is used.
 REVISION_CACHE = os.environ.get("DOWNWARD_REVISION_CACHE")
+SEARCH_REVS = ["dawson-masters"]
+BUILD_OPTIONS = []
+DRIVER_OPTIONS = ["--overall-time-limit", "5m"]
+ENVIRONMENT = LocalEnvironment(processes=None)
 SUITE = common_setup.get_ipcs_sat_domains()
-
-ENV = project.LocalEnvironment(processes=None)
 
 def _get_lama(pref):
     return [
@@ -56,7 +58,7 @@ CONFIGS = [
     # ('ff-pref-boost', ['--search', 'eager_greedy([ff()], preferred=[ff()], boost=1000)']),
     # ('ff-def-boost', ['--search', 'lazy_greedy([ff()], boost=1000)']),
     # ('lama-2011', _get_lama(pref="true"))
-    ('lwm', ["--evaluator", "h=lmcut()", '--search', 'eager(lwm_based_type(h))'])
+    IssueConfig('lwm', ["--evaluator", "h=lmcut()", '--search', 'eager(lwm_based_type(h))'], driver_options=DRIVER_OPTIONS)
 ]
 
 BUILD_OPTIONS = []
@@ -73,18 +75,11 @@ ATTRIBUTES = [
     project.EVALUATIONS_PER_TIME,
 ]
 
-exp = project.FastDownwardExperiment(environment=ENV, revision_cache=REVISION_CACHE)
-for config_nick, config in CONFIGS:
-    for rev, rev_nick in REVS:
-        algo_name = f"{rev_nick}:{config_nick}" if rev_nick else config_nick
-        exp.add_algorithm(
-            algo_name,
-            REPO,
-            rev,
-            config,
-            build_options=BUILD_OPTIONS,
-            driver_options=DRIVER_OPTIONS,
-        )
+exp = IssueExperiment(
+    revisions=SEARCH_REVS,
+    configs=CONFIGS,
+    environment=ENVIRONMENT,
+)
 exp.add_suite(BENCHMARKS_DIR, SUITE)
 
 exp.add_parser(exp.EXITCODE_PARSER)
@@ -100,24 +95,6 @@ exp.add_fetcher(name="fetch")
 project.add_absolute_report(
     exp, attributes=ATTRIBUTES, filter=[project.add_evaluations_per_time]
 )
-
-attributes = ["expansions"]
-pairs = [
-    ("20.06:01-cg", "20.06:02-ff"),
-]
-suffix = "-rel" if project.RELATIVE else ""
-for algo1, algo2 in pairs:
-    for attr in attributes:
-        exp.add_report(
-            project.ScatterPlotReport(
-                relative=project.RELATIVE,
-                get_category=None if project.TEX else lambda run1, run2: run1["domain"],
-                attributes=[attr],
-                filter_algorithm=[algo1, algo2],
-                filter=[project.add_evaluations_per_time],
-                format="tex" if project.TEX else "png",
-            ),
-            name=f"{exp.name}-{algo1}-vs-{algo2}-{attr}{suffix}",
-        )
+exp.add_comparison_table_step(attributes=["expansions"])
 
 exp.run_steps()
