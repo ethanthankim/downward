@@ -84,6 +84,8 @@ void LWMBasedOpenList<Entry>::do_insertion(
     int new_id = eval_context.get_state().get_id().get_value();
     int parent_id = this->search_space->get_node(eval_context.get_state()).get_info().parent_state_id.get_value();
     
+    const StateRegistry *registry = eval_context.get_state().get_registry();
+    const segmented_vector::SegmentedVector<Entry> *seg = get_entries(registry);
     // special case for a node that has no parent (i.e. the start node)
     if (parent_id == -1) {
         add_new_type(new_id, new_h, entry);
