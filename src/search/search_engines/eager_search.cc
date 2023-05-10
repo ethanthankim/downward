@@ -32,7 +32,6 @@ EagerSearch::EagerSearch(const plugins::Options &opts)
         cerr << "lazy_evaluator must cache its estimates" << endl;
         utils::exit_with(utils::ExitCode::SEARCH_INPUT_ERROR);
     }
-    open_list->set_search_space(search_space);
 }
 
 void EagerSearch::initialize() {
@@ -43,7 +42,7 @@ void EagerSearch::initialize() {
     assert(open_list);
 
     set<Evaluator *> evals;
-    open_list->get_path_dependent_evaluators(evals);
+
 
     /*
       Collect path-dependent evaluators that are used for preferred operators
@@ -94,6 +93,7 @@ void EagerSearch::initialize() {
         SearchNode node = search_space.get_node(initial_state);
         node.open_initial();
 
+        open_list->notify_initial_state(initial_state);
         open_list->insert(eval_context, initial_state.get_id());
     }
 
@@ -201,9 +201,13 @@ SearchStatus EagerSearch::step() {
 
         SearchNode succ_node = search_space.get_node(succ_state);
 
+        // notify path dependent evaluators of transition
         for (Evaluator *evaluator : path_dependent_evaluators) {
             evaluator->notify_state_transition(s, op_id, succ_state);
         }
+
+        // notify path dependent openlist of transition
+        open_list->notify_state_transition(s, op_id, succ_state);
 
         // Previously encountered dead end. Don't re-evaluate.
         if (succ_node.is_dead_end())

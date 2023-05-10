@@ -30,7 +30,23 @@ public:
     virtual ~OpenList() = default;
 
 
-    void set_search_space(SearchSpace &search_space) {};
+
+    /**
+     * @brief notify the openlist of the initial state
+     * 
+     */
+    virtual void notify_initial_state(const State & /*initial_state*/) {
+    }
+
+    /**
+     * @brief notify the openlist of the parent state for a given successor state
+     * 
+     */
+    virtual void notify_state_transition(
+        const State & /*parent_state*/,
+        OperatorID /*op_id*/,
+        const State & /*state*/) {
+    }
 
     /*
       Insert an entry into the open list.

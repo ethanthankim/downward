@@ -2,7 +2,6 @@
 
 #include "../evaluator.h"
 #include "../open_list.h"
-#include "../search_engine.h"
 
 #include "../plugins/plugin.h"
 #include "../utils/collections.h"
@@ -21,32 +20,33 @@ using namespace std;
 namespace lwm_based_open_list {
 template<class Entry>
 class LWMBasedOpenList : public OpenList<Entry> {
-
     shared_ptr<utils::RandomNumberGenerator> rng;
     shared_ptr<Evaluator> evaluator;
-    SearchSpace *search_space;
-
-    struct LWMType {
+    struct TypeInfo {
         int h;
-        vector<Entry> entries;
-        LWMType(int h, const vector<Entry> &entries)
-            : h(h), entries{std::move(entries)} {}
+        int type_key;
     };
+    using Key = int;
+    using Bucket = vector<Entry>;
 
-    utils::HashMap<int, int> nodeid_to_type_index;
-    utils::HashMap<int, LWMType> buckets;
+    // TODO: use PerStateInformation for state_type_infos
+    utils::HashMap<Key, TypeInfo> state_type_infos;
+    vector<pair<Key, Bucket>> keys_and_buckets;
+    utils::HashMap<Key, int> key_to_bucket_index;
+
+    int parent_cache;
+
 
 protected:
     virtual void do_insertion(
         EvaluationContext &eval_context, const Entry &entry) override;
-    void add_to_type(int node_id, int type_index, const Entry &entry);
-    void add_new_type(int node_id, int h, const Entry &entry);
+
+private:
+    TypeInfo insert_type_info(int new_h, int new_id);
 
 public:
     explicit LWMBasedOpenList(const plugins::Options &opts);
     virtual ~LWMBasedOpenList() override = default;
-
-    void set_search_space(SearchSpace &search_space);
 
     virtual Entry remove_min() override;
     virtual bool empty() const override;
@@ -55,26 +55,48 @@ public:
     virtual bool is_reliable_dead_end(
         EvaluationContext &eval_context) const override;
     virtual void get_path_dependent_evaluators(set<Evaluator *> &evals) override;
+
+    virtual void notify_initial_state(const State &initial_state) override;
+    virtual void notify_state_transition(const State &parent_state,
+                                         OperatorID op_id,
+                                         const State &state) override;
 };
 
 
 template<class Entry>
-void LWMBasedOpenList<Entry>::set_search_space(SearchSpace &search_space) {
-    this->search_space = &search_space;
+void LWMBasedOpenList<Entry>::notify_initial_state(const State &initial_state) {
+    
+    // using no_state as a parent to the initial feels both stupid and not...
+    parent_cache = StateID::no_state.get_value();
+    state_type_infos[parent_cache] = {INT32_MAX, -1};
+    key_to_bucket_index[parent_cache] = 0;
 }
 
 template<class Entry>
-void LWMBasedOpenList<Entry>::add_new_type(int node_id, int h, const Entry &entry) {
-    std::vector<Entry> v = {entry};
-    LWMType new_type(h, v);
-    buckets[node_id] = new_type;
-    nodeid_to_type_index[node_id] = node_id;
+void LWMBasedOpenList<Entry>::notify_state_transition(
+    const State &parent_state, OperatorID op_id, const State &state) {
+    parent_cache = parent_state.get_id().get_value();
 }
 
 template<class Entry>
-void LWMBasedOpenList<Entry>::add_to_type(int node_id, int type_index, const Entry &entry) {
-    buckets[type_index].entries.push_back(entry);
-    nodeid_to_type_index[node_id] = type_index;
+LWMBasedOpenList<Entry>::TypeInfo LWMBasedOpenList<Entry>::insert_type_info(int new_h, int new_id) {
+
+    TypeInfo parent_type_info = state_type_infos[parent_cache];
+
+    int new_type_h, new_type_key;
+    if (new_h < parent_type_info.h) { 
+        // if the new node is a new local minimum, it gets a new bucket
+        new_type_h = new_h;
+        new_type_key = new_id;
+    } else {
+        // if the new node isn't a new local minimum, it gets bucketted with its parent
+        new_type_h = parent_type_info.h;
+        new_type_key = parent_type_info.type_key;
+    }
+    TypeInfo new_info = { new_type_h, new_type_key };
+    state_type_infos[new_id] = new_info;
+
+    return new_info;
 }
 
 template<class Entry>
@@ -83,34 +105,33 @@ void LWMBasedOpenList<Entry>::do_insertion(
 
     int new_h = eval_context.get_evaluator_value_or_infinity(evaluator.get());
     int new_id = eval_context.get_state().get_id().get_value();
-    int parent_id = this->search_space->get_node(eval_context.get_state()).get_info().parent_state_id.get_value();
+    TypeInfo info = insert_type_info(new_h, new_id);
     
-    const StateRegistry *registry = eval_context.get_state().get_registry();
-
-    // special case for a node that has no parent (i.e. the start node)
-    if (parent_id == -1) {
-        add_new_type(new_id, new_h, entry);
-        return;
-    }
-
-    // get parent and type info
-    int type_index = nodeid_to_type_index[parent_id];
-    if (new_h < buckets[type_index].h) {
-        add_new_type(new_id, new_h, entry);
+    auto it = key_to_bucket_index.find(info.type_key);
+    if (it == key_to_bucket_index.end()) {
+        key_to_bucket_index[info.type_key] = keys_and_buckets.size();
+        keys_and_buckets.push_back(make_pair(info.type_key, Bucket({entry})));
     } else {
-        add_to_type(new_id, type_index, entry);
+        size_t bucket_index = it->second;
+        assert(utils::in_bounds(bucket_index, keys_and_buckets));
+        keys_and_buckets[bucket_index].second.push_back(entry);
     }
 }
 
 template<class Entry>
 Entry LWMBasedOpenList<Entry>::remove_min() {
-    size_t bucket_i = rng->random(buckets.size());
-    LWMType &bucket = buckets[bucket_i];
-    int pos = rng->random(bucket.entries.size());
-    Entry result = utils::swap_and_pop_from_vector(bucket.entries, pos);
+    size_t bucket_id = rng->random(keys_and_buckets.size());
+    auto &key_and_bucket = keys_and_buckets[bucket_id];
+    const Key &min_key = key_and_bucket.first;
+    Bucket &bucket = key_and_bucket.second;
+    int pos = rng->random(bucket.size());
+    Entry result = utils::swap_and_pop_from_vector(bucket, pos);
 
-    if (bucket.entries.empty()) {
-        buckets.erase(bucket_i);
+    if (bucket.empty()) { 
+        // Swap the empty bucket with the last bucket, then delete it.
+        key_to_bucket_index[keys_and_buckets.back().first] = bucket_id;
+        key_to_bucket_index.erase(min_key);
+        utils::swap_and_pop_from_vector(keys_and_buckets, bucket_id);  
     }
     return result;
 }
@@ -123,13 +144,13 @@ LWMBasedOpenList<Entry>::LWMBasedOpenList(const plugins::Options &opts)
 
 template<class Entry>
 bool LWMBasedOpenList<Entry>::empty() const {
-    return buckets.empty();
+    return keys_and_buckets.empty();
 }
 
 template<class Entry>
 void LWMBasedOpenList<Entry>::clear() {
-    buckets.clear();
-    nodeid_to_type_index.clear();
+    keys_and_buckets.clear();
+    key_to_bucket_index.clear();
 }
 
 template<class Entry>
