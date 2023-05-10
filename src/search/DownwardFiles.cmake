@@ -277,6 +277,14 @@ fast_downward_plugin(
 )
 
 fast_downward_plugin(
+    NAME PROGRESS_RATE_EVALUATOR
+    HELP "The progress rate evaluator"
+    SOURCES
+        evaluators/progress_rate_evaluator
+    DEPENDS EVALUATORS_SUBCATEGORY
+)
+
+fast_downward_plugin(
     NAME G_EVALUATOR
     HELP "The g-evaluator"
     SOURCES
