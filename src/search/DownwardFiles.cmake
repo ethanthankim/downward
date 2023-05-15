@@ -182,6 +182,13 @@ fast_downward_plugin(
 )
 
 fast_downward_plugin(
+    NAME MONTE_CARLO_OPEN_LIST
+    HELP "Monte carlo based open list"
+    SOURCES
+        open_lists/monte_carlo_open_list
+)
+
+fast_downward_plugin(
     NAME DYNAMIC_BITSET
     HELP "Poor man's version of boost::dynamic_bitset"
     SOURCES
