@@ -31,7 +31,6 @@ int main(int argc, const char **argv) {
 
     shared_ptr<SearchEngine> engine = parse_cmd_line(argc, argv, unit_cost);
 
-
     utils::Timer search_timer;
     engine->search();
     search_timer.stop();

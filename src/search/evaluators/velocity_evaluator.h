@@ -8,10 +8,7 @@ namespace velocity_evaluator {
 class VelocityEvaluator : public Evaluator {
     std::shared_ptr<Evaluator> evaluator;
 
-    using Progress = int;
-    using H = int;
-    PerStateInformation<std::pair<H, Progress>> eval_cache;
-    std::pair<H, Progress> parent_cache;
+    std::pair<int, int> cached_initial;
 
 public:
     explicit VelocityEvaluator(const plugins::Options &opts);
@@ -26,9 +23,9 @@ public:
     }
 
     virtual void notify_initial_state(const State &initial_state) override;
-    virtual void notify_state_transition(const State &parent_state,
-                                         OperatorID op_id,
-                                         const State &state) override;
+    // virtual void notify_state_transition(const State &parent_state,
+    //                                      OperatorID op_id,
+    //                                      const State &state) override;
 };
 }
 

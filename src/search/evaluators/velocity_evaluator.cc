@@ -13,25 +13,30 @@ VelocityEvaluator::VelocityEvaluator(const plugins::Options &opts)
 }
 
 void VelocityEvaluator::notify_initial_state(const State &initial_state) {
-    parent_cache = make_pair(INT32_MAX, 0);
+    cached_initial = make_pair(initial_state.get_id().get_value(), 0);
 }
 
-void VelocityEvaluator::notify_state_transition(
-    const State &parent_state, OperatorID op_id, const State &state) {
-    parent_cache = eval_cache[parent_state];
-}
+// void VelocityEvaluator::notify_state_transition(
+//     const State &parent_state, OperatorID op_id, const State &state) {
+//     parent_cache = eval_cache[parent_state];
+// }
 
 EvaluationResult VelocityEvaluator::compute_result(EvaluationContext &eval_context) {
     EvaluationResult result;
-    int new_h = eval_context.get_evaluator_value_or_infinity(evaluator.get());
-    H parent_h = parent_cache.first;
 
-    int succ_quant = new_h < parent_h ? parent_cache.second+(parent_h - new_h) : 0;
-    double succ_rate = (double) (succ_quant / eval_context.get_g_value());
-    eval_cache[eval_context.get_state()] = make_pair(new_h, succ_quant);
+    int new_id = eval_context.get_state().get_id().get_value();
+    int new_h = eval_context.get_evaluator_value_or_infinity(evaluator.get());
+    if (new_id == cached_initial.first) {
+        // special case for initial node insertion
+        cached_initial.second = new_h;
+    }
+
+    int g = eval_context.get_g_value() == 0 ? 1 : eval_context.get_g_value();
+    int initial_h = cached_initial.second;
+    double avg_velocity = (initial_h - new_h) / g;
     
-    int new_eval = (int) 100 * succ_rate;
-    result.set_evaluator_value(new_eval);
+    // int new_eval = initial_h - avg_velocity;
+    result.set_evaluator_value(initial_h - avg_velocity);
     return result;
 }
 

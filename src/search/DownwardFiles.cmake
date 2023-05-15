@@ -292,6 +292,14 @@ fast_downward_plugin(
 )
 
 fast_downward_plugin(
+    NAME VELOCITY_EVALUATOR
+    HELP "The velocity evaluator"
+    SOURCES
+        evaluators/velocity_evaluator
+    DEPENDS EVALUATORS_SUBCATEGORY
+)
+
+fast_downward_plugin(
     NAME G_EVALUATOR
     HELP "The g-evaluator"
     SOURCES

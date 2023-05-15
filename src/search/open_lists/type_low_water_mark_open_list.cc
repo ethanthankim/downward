@@ -22,19 +22,18 @@ template<class Entry>
 class LWMBasedOpenList : public OpenList<Entry> {
     shared_ptr<utils::RandomNumberGenerator> rng;
     shared_ptr<Evaluator> evaluator;
+
     struct TypeInfo {
         int h;
         int type_key;
     };
     using Key = int;
     using Bucket = vector<Entry>;
-
-    // TODO: use PerStateInformation for state_type_infos
-    utils::HashMap<Key, TypeInfo> state_type_infos;
+    PerStateInformation<TypeInfo> state_type_infos;
     vector<pair<Key, Bucket>> keys_and_buckets;
     utils::HashMap<Key, int> key_to_bucket_index;
 
-    int parent_cache;
+    TypeInfo cached_parent_info;
 
 
 protected:
@@ -42,7 +41,7 @@ protected:
         EvaluationContext &eval_context, const Entry &entry) override;
 
 private:
-    TypeInfo insert_type_info(int new_h, int new_id);
+    TypeInfo insert_type_info(EvaluationContext &eval_context);
 
 public:
     explicit LWMBasedOpenList(const plugins::Options &opts);
@@ -65,36 +64,33 @@ public:
 
 template<class Entry>
 void LWMBasedOpenList<Entry>::notify_initial_state(const State &initial_state) {
-    
-    // using no_state as a parent to the initial feels both stupid and not...
-    parent_cache = StateID::no_state.get_value();
-    state_type_infos[parent_cache] = {INT32_MAX, -1};
-    key_to_bucket_index[parent_cache] = 0;
+    cached_parent_info = {INT32_MAX, -1};
 }
 
 template<class Entry>
 void LWMBasedOpenList<Entry>::notify_state_transition(
     const State &parent_state, OperatorID op_id, const State &state) {
-    parent_cache = parent_state.get_id().get_value();
+    cached_parent_info = state_type_infos[parent_state];
 }
 
 template<class Entry>
-LWMBasedOpenList<Entry>::TypeInfo LWMBasedOpenList<Entry>::insert_type_info(int new_h, int new_id) {
+LWMBasedOpenList<Entry>::TypeInfo LWMBasedOpenList<Entry>::insert_type_info(EvaluationContext &eval_context) {
 
-    TypeInfo parent_type_info = state_type_infos[parent_cache];
+    int new_h = eval_context.get_evaluator_value_or_infinity(evaluator.get());
+    int new_id = eval_context.get_state().get_id().get_value();
 
     int new_type_h, new_type_key;
-    if (new_h < parent_type_info.h) { 
+    if (new_h < cached_parent_info.h) { 
         // if the new node is a new local minimum, it gets a new bucket
         new_type_h = new_h;
         new_type_key = new_id;
     } else {
         // if the new node isn't a new local minimum, it gets bucketted with its parent
-        new_type_h = parent_type_info.h;
-        new_type_key = parent_type_info.type_key;
+        new_type_h = cached_parent_info.h;
+        new_type_key = cached_parent_info.type_key;
     }
     TypeInfo new_info = { new_type_h, new_type_key };
-    state_type_infos[new_id] = new_info;
+    state_type_infos[eval_context.get_state()] = new_info;
 
     return new_info;
 }
@@ -103,10 +99,7 @@ template<class Entry>
 void LWMBasedOpenList<Entry>::do_insertion(
     EvaluationContext &eval_context, const Entry &entry) {
 
-    int new_h = eval_context.get_evaluator_value_or_infinity(evaluator.get());
-    int new_id = eval_context.get_state().get_id().get_value();
-    TypeInfo info = insert_type_info(new_h, new_id);
-    
+    TypeInfo info = insert_type_info(eval_context);
     auto it = key_to_bucket_index.find(info.type_key);
     if (it == key_to_bucket_index.end()) {
         key_to_bucket_index[info.type_key] = keys_and_buckets.size();
