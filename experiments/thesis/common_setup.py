@@ -3,12 +3,10 @@
 import itertools
 import os
 from pathlib import Path
-import platform
 import subprocess
 import sys
 from typing import Callable, Dict, List
 
-from lab.experiment import ARGPARSER
 from lab import tools
 
 from downward.experiment import FastDownwardExperiment
@@ -18,25 +16,6 @@ from downward.reports.scatter import ScatterPlotReport
 
 
 DIR = Path(__file__).resolve().parent
-
-def parse_args():
-    ARGPARSER.add_argument(
-        "--test",
-        choices=["yes", "no", "auto"],
-        default="auto",
-        dest="test_run",
-        help="test experiment locally on a small suite if --test=yes or "
-             "--test=auto and we are not on a cluster")
-    ARGPARSER.add_argument(
-        "--no-search",
-        action='store_true',
-        default=False,
-        dest="no_search",
-        help="if set only fetching and parsing steps will be run.")
-    
-    return ARGPARSER.parse_args()
-
-ARGS = parse_args()
 
 
 DEFAULT_OPTIMAL_SUITE = [
@@ -99,12 +78,12 @@ DEFAULT_SATISFICING_SUITE = [
     'woodworking-sat08-strips', 'woodworking-sat11-strips',
     'zenotravel']
 
-def get_ipcs_sat_domains() -> List[str]:
-    sat08 = ["blocks:probBLOCKS-7-1.pddl","blocks:probBLOCKS-7-0.pddl", "blocks:probBLOCKS-8-0.pddl", "blocks:probBLOCKS-8-1.pddl"]
-    return sat08
+def get_suite(benchmark_dir: str) -> List[str]:
+    suite = [ item for item in os.listdir(benchmark_dir) if os.path.isdir(os.path.join(benchmark_dir, item)) ]
+    return suite
     
-
-
+    
+    
 def get_script():
     """Get file name of main script."""
     return tools.get_script_path()
@@ -149,19 +128,6 @@ def get_repo_base():
             return path
         path = os.path.dirname(path)
     sys.exit("repo base could not be found")
-
-
-def is_running_on_cluster():
-    node = platform.node()
-    return node.endswith(".scicore.unibas.ch") or node.endswith(".cluster.bc2.ch")
-
-
-def is_test_run():
-    return ARGS.test_run == "yes" or (
-        ARGS.test_run == "auto" and not is_running_on_cluster())
-
-def no_search():
-    return bool(ARGS.no_search)
 
 
 def get_algo_nick(revision, config_nick):
