@@ -1,0 +1,89 @@
+INFO     planner time limit: 600s
+INFO     planner memory limit: 3584 MB
+
+INFO     Running translator.
+INFO     translator stdin: None
+INFO     translator time limit: 599s
+INFO     translator memory limit: 3584 MB
+INFO     translator command line string: /usr/local/downward-projects/downward/experiments/assign3/.venv/bin/python3 /usr/local/downward-projects/downward/experiments/assign3/data/assign3-anytime_exp/code-1fb14623350588fb782db39ad332c8a25eda53d6_e5e41175/builds/release/bin/translate/translate.py domain.pddl problem.pddl --sas-file output.sas
+Parsing...
+Parsing: [0.000s CPU, 0.002s wall-clock]
+Normalizing task... [0.000s CPU, 0.000s wall-clock]
+Instantiating...
+Generating Datalog program... [0.000s CPU, 0.001s wall-clock]
+Normalizing Datalog program...
+Normalizing Datalog program: [0.000s CPU, 0.001s wall-clock]
+Preparing model... [0.000s CPU, 0.002s wall-clock]
+Generated 27 rules.
+Computing model... [0.040s CPU, 0.036s wall-clock]
+6318 relevant atoms
+745 auxiliary atoms
+7063 final queue length
+17105 total queue pushes
+Completing instantiation... [0.120s CPU, 0.130s wall-clock]
+Instantiating: [0.160s CPU, 0.173s wall-clock]
+Computing fact groups...
+Finding invariants...
+10 initial candidates
+Finding invariants: [0.000s CPU, 0.002s wall-clock]
+Checking invariant weight... [0.010s CPU, 0.001s wall-clock]
+Instantiating groups... [0.000s CPU, 0.001s wall-clock]
+Collecting mutex groups... [0.000s CPU, 0.000s wall-clock]
+Choosing groups...
+150 uncovered facts
+Choosing groups: [0.010s CPU, 0.001s wall-clock]
+Building translation key... [0.000s CPU, 0.000s wall-clock]
+Computing fact groups: [0.020s CPU, 0.006s wall-clock]
+Building STRIPS to SAS dictionary... [0.000s CPU, 0.000s wall-clock]
+Building dictionary for full mutex groups... [0.000s CPU, 0.000s wall-clock]
+Building mutex information...
+Building mutex information: [0.000s CPU, 0.000s wall-clock]
+Translating task...
+Processing axioms...
+Simplifying axioms... [0.000s CPU, 0.001s wall-clock]
+Translator axioms removed by simplifying: 0
+Computing negative axioms... [0.000s CPU, 0.001s wall-clock]
+Processing axioms: [0.010s CPU, 0.013s wall-clock]
+Translating task: [0.150s CPU, 0.160s wall-clock]
+0 effect conditions simplified
+0 implied preconditions added
+Detecting unreachable propositions...
+0 operators removed
+121 axioms removed
+51 propositions removed
+Detecting unreachable propositions: [0.060s CPU, 0.061s wall-clock]
+Reordering and filtering variables...
+201 of 201 variables necessary.
+0 of 101 mutex groups necessary.
+5100 of 5100 operators necessary.
+463 of 463 axiom rules necessary.
+Reordering and filtering variables: [0.020s CPU, 0.019s wall-clock]
+Translator variables: 201
+Translator derived variables: 100
+Translator facts: 501
+Translator goal facts: 50
+Translator mutex groups: 0
+Translator total mutex groups size: 0
+Translator operators: 5100
+Translator axioms: 463
+Translator task size: 29670
+Translator peak memory: 51792 KB
+Writing output... [0.020s CPU, 0.023s wall-clock]
+Done! [0.440s CPU, 0.455s wall-clock]
+translate exit code: 0
+
+INFO     Running search (release).
+INFO     search stdin: output.sas
+INFO     search time limit: 599s
+INFO     search memory limit: 3584 MB
+INFO     search command line string: /usr/local/downward-projects/downward/experiments/assign3/data/assign3-anytime_exp/code-1fb14623350588fb782db39ad332c8a25eda53d6_e5e41175/builds/release/bin/downward --evaluator 'h=lmcut()' --search 'eager_anytime(epsilon_greedy(
+        sum([weight(h, 2, verbosity=normal), g()]), epsilon=0.5, random_seed=1234), 
+        reopen_closed=true, f_eval=sum([h, g()]))' --internal-plan-file sas_plan < output.sas
+[t=0.00105192s, 10884 KB] reading input...
+[t=0.0157384s, 12420 KB] done reading input!
+Peak memory: 12684 KB
+Remove intermediate file output.sas
+search exit code: 34
+
+Driver aborting after search
+INFO     Planner time: 0.55s

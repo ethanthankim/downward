@@ -14,6 +14,7 @@
 #include <memory>
 #include <unordered_map>
 #include <vector>
+#include <fstream>
 
 using namespace std;
 
@@ -34,6 +35,8 @@ class LWMBasedOpenList : public OpenList<Entry> {
     utils::HashMap<Key, int> key_to_bucket_index;
 
     TypeInfo cached_parent_info;
+    // int cached_parent_id;
+    // ofstream outfile;
 
 
 protected:
@@ -64,12 +67,14 @@ public:
 
 template<class Entry>
 void LWMBasedOpenList<Entry>::notify_initial_state(const State &initial_state) {
+    // cached_parent_id = StateID::no_state.get_value();
     cached_parent_info = {INT32_MAX, -1};
 }
 
 template<class Entry>
 void LWMBasedOpenList<Entry>::notify_state_transition(
     const State &parent_state, OperatorID op_id, const State &state) {
+    // cached_parent_id = parent_state.get_id().get_value();
     cached_parent_info = state_type_infos[parent_state];
 }
 
@@ -91,6 +96,10 @@ LWMBasedOpenList<Entry>::TypeInfo LWMBasedOpenList<Entry>::insert_type_info(Eval
     }
     TypeInfo new_info = { new_type_h, new_type_key };
     state_type_infos[eval_context.get_state()] = new_info;
+        
+        // outfile.open ("spanning.out", ios_base::app);
+        // outfile << new_id << "," << cached_parent_id << "," << new_h << "," << new_type_h << "," << new_type_key << std::endl;
+        // outfile.close();
 
     return new_info;
 }

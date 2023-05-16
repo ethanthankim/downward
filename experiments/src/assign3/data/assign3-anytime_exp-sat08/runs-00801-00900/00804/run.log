@@ -1,0 +1,787 @@
+INFO     planner time limit: 600s
+INFO     planner memory limit: 3584 MB
+
+INFO     Running translator.
+INFO     translator stdin: None
+INFO     translator time limit: 599s
+INFO     translator memory limit: 3584 MB
+INFO     translator command line string: /usr/local/downward-projects/downward/experiments/assign3/.venv/bin/python3 /usr/local/downward-projects/downward/experiments/assign3/data/assign3-anytime_exp/code-1fb14623350588fb782db39ad332c8a25eda53d6_e5e41175/builds/release/bin/translate/translate.py domain.pddl problem.pddl --sas-file output.sas
+Parsing...
+Parsing: [0.000s CPU, 0.004s wall-clock]
+Normalizing task... [0.000s CPU, 0.000s wall-clock]
+Instantiating...
+Generating Datalog program... [0.010s CPU, 0.001s wall-clock]
+Normalizing Datalog program...
+Normalizing Datalog program: [0.000s CPU, 0.006s wall-clock]
+Preparing model... [0.010s CPU, 0.003s wall-clock]
+Generated 198 rules.
+Computing model... [0.040s CPU, 0.043s wall-clock]
+2431 relevant atoms
+4429 auxiliary atoms
+6860 final queue length
+13203 total queue pushes
+Completing instantiation... [0.070s CPU, 0.077s wall-clock]
+Instantiating: [0.130s CPU, 0.132s wall-clock]
+Computing fact groups...
+Finding invariants...
+24 initial candidates
+Finding invariants: [0.010s CPU, 0.011s wall-clock]
+Checking invariant weight... [0.000s CPU, 0.000s wall-clock]
+Instantiating groups... [0.010s CPU, 0.002s wall-clock]
+Collecting mutex groups... [0.000s CPU, 0.000s wall-clock]
+Choosing groups...
+127 uncovered facts
+Choosing groups: [0.000s CPU, 0.000s wall-clock]
+Building translation key... [0.000s CPU, 0.000s wall-clock]
+Computing fact groups: [0.020s CPU, 0.015s wall-clock]
+Building STRIPS to SAS dictionary... [0.000s CPU, 0.000s wall-clock]
+Building dictionary for full mutex groups... [0.000s CPU, 0.000s wall-clock]
+Building mutex information...
+Building mutex information: [0.000s CPU, 0.000s wall-clock]
+Translating task...
+Processing axioms...
+Simplifying axioms... [0.000s CPU, 0.000s wall-clock]
+Translator axioms removed by simplifying: 0
+Computing negative axioms... [0.000s CPU, 0.000s wall-clock]
+Processing axioms: [0.000s CPU, 0.003s wall-clock]
+Translating task: [0.070s CPU, 0.067s wall-clock]
+1384 effect conditions simplified
+0 implied preconditions added
+Detecting unreachable propositions...
+0 operators removed
+0 axioms removed
+52 propositions removed
+Detecting unreachable propositions: [0.030s CPU, 0.032s wall-clock]
+Reordering and filtering variables...
+136 of 143 variables necessary.
+28 of 47 mutex groups necessary.
+1946 of 1946 operators necessary.
+0 of 0 axiom rules necessary.
+Reordering and filtering variables: [0.020s CPU, 0.015s wall-clock]
+Translator variables: 136
+Translator derived variables: 0
+Translator facts: 339
+Translator goal facts: 43
+Translator mutex groups: 28
+Translator total mutex groups size: 86
+Translator operators: 1946
+Translator axioms: 0
+Translator task size: 15849
+Translator peak memory: 43128 KB
+Writing output... [0.020s CPU, 0.013s wall-clock]
+Done! [0.290s CPU, 0.284s wall-clock]
+translate exit code: 0
+
+INFO     Running search (release).
+INFO     search stdin: output.sas
+INFO     search time limit: 599s
+INFO     search memory limit: 3584 MB
+INFO     search command line string: /usr/local/downward-projects/downward/experiments/assign3/data/assign3-anytime_exp/code-1fb14623350588fb782db39ad332c8a25eda53d6_e5e41175/builds/release/bin/downward --evaluator 'h=lmcut()' --search 'eager_anytime(alt(
+        [single(weight(h, 2, verbosity=normal)), type_based([h, g()], random_seed=1234)]), 
+        reopen_closed=true, f_eval=sum([h, g()]))' --internal-plan-file sas_plan < output.sas
+[t=0s, 10884 KB] reading input...
+[t=0.00797263s, 11588 KB] done reading input!
+[t=0.0119571s, 12244 KB] Initializing landmark cut heuristic...
+[t=0.0131065s, 12244 KB] Building successor generator...done!
+[t=0.0138857s, 12508 KB] peak memory difference for successor generator creation: 264 KB
+[t=0.013957s, 12508 KB] time for successor generation creation: 0s
+[t=0.0139815s, 12508 KB] Variables: 136
+[t=0.0140096s, 12508 KB] FactPairs: 339
+[t=0.0140323s, 12508 KB] Bytes per state: 24
+[t=0.0140553s, 12508 KB] Conducting best first anytime search with reopening closed nodes, (real) bound = 2147483647
+[t=0.0141148s, 12508 KB] New best heuristic value for lmcut(): 510
+[t=0.0151306s, 12508 KB] g=0, 1 evaluated, 0 expanded
+[t=0.0151582s, 12508 KB] Initial heuristic value for lmcut(): 510
+[t=0.0151862s, 12508 KB] Start Timestep: 1682007818014 millisecond(s).
+[t=0.0157796s, 12508 KB] New best heuristic value for lmcut(): 480
+[t=0.0180144s, 12508 KB] g=30, 4 evaluated, 1 expanded
+[t=0.0757436s, 12508 KB] New best heuristic value for lmcut(): 435
+[t=0.0759391s, 12508 KB] g=75, 66 evaluated, 3 expanded
+[t=0.151703s, 12508 KB] New best heuristic value for lmcut(): 425
+[t=0.155738s, 12508 KB] g=85, 155 evaluated, 5 expanded
+[t=0.163654s, 12508 KB] New best heuristic value for lmcut(): 415
+[t=0.164435s, 12508 KB] g=95, 165 evaluated, 5 expanded
+[t=0.215601s, 12508 KB] New best heuristic value for lmcut(): 405
+[t=0.218007s, 12508 KB] g=105, 225 evaluated, 7 expanded
+[t=0.287554s, 12508 KB] New best heuristic value for lmcut(): 395
+[t=0.291493s, 12508 KB] g=115, 311 evaluated, 9 expanded
+[t=0.363511s, 12508 KB] New best heuristic value for lmcut(): 385
+[t=0.363754s, 12508 KB] g=145, 398 evaluated, 11 expanded
+[t=0.423407s, 12508 KB] New best heuristic value for lmcut(): 375
+[t=0.424882s, 12508 KB] g=175, 469 evaluated, 13 expanded
+[t=0.491334s, 12508 KB] New best heuristic value for lmcut(): 365
+[t=0.491587s, 12508 KB] g=205, 550 evaluated, 15 expanded
+[t=0.515275s, 12508 KB] New best heuristic value for lmcut(): 330
+[t=0.516428s, 12508 KB] g=220, 584 evaluated, 15 expanded
+[t=0.559224s, 12508 KB] New best heuristic value for lmcut(): 320
+[t=0.559804s, 12508 KB] g=250, 639 evaluated, 17 expanded
+[t=0.63116s, 12508 KB] New best heuristic value for lmcut(): 310
+[t=0.631473s, 12508 KB] g=280, 735 evaluated, 19 expanded
+[t=0.6551s, 12508 KB] New best heuristic value for lmcut(): 275
+[t=0.656832s, 12508 KB] g=295, 773 evaluated, 19 expanded
+[t=0.70696s, 12508 KB] New best heuristic value for lmcut(): 265
+[t=0.70738s, 12508 KB] g=325, 843 evaluated, 21 expanded
+[t=0.782901s, 12508 KB] New best heuristic value for lmcut(): 255
+[t=0.786285s, 12508 KB] g=355, 953 evaluated, 23 expanded
+[t=0.860129s, 12508 KB] New best heuristic value for lmcut(): 245
+[t=0.86155s, 12508 KB] g=385, 1073 evaluated, 25 expanded
+[t=0.894225s, 12508 KB] New best heuristic value for lmcut(): 235
+[t=0.895778s, 12508 KB] g=375, 1134 evaluated, 25 expanded
+[t=0.938157s, 12508 KB] New best heuristic value for lmcut(): 225
+[t=0.941461s, 12508 KB] g=405, 1199 evaluated, 27 expanded
+[t=1.01407s, 12508 KB] New best heuristic value for lmcut(): 205
+[t=1.01553s, 12508 KB] g=435, 1311 evaluated, 29 expanded
+[t=1.08602s, 12508 KB] New best heuristic value for lmcut(): 195
+[t=1.08799s, 12508 KB] g=465, 1436 evaluated, 31 expanded
+[t=1.10196s, 12508 KB] New best heuristic value for lmcut(): 175
+[t=1.10452s, 12508 KB] g=465, 1476 evaluated, 31 expanded
+[t=1.15393s, 12660 KB] New best heuristic value for lmcut(): 165
+[t=1.15693s, 12660 KB] g=495, 1567 evaluated, 33 expanded
+[t=1.17789s, 12660 KB] New best heuristic value for lmcut(): 160
+[t=1.18109s, 12660 KB] g=480, 1629 evaluated, 33 expanded
+[t=1.21782s, 12660 KB] New best heuristic value for lmcut(): 150
+[t=1.21955s, 12660 KB] g=510, 1686 evaluated, 35 expanded
+[t=1.27777s, 12660 KB] New best heuristic value for lmcut(): 140
+[t=1.28102s, 12660 KB] g=540, 1795 evaluated, 37 expanded
+[t=1.3295s, 12660 KB] New best heuristic value for lmcut(): 130
+[t=1.33242s, 12660 KB] g=550, 1930 evaluated, 39 expanded
+[t=1.34145s, 12660 KB] New best heuristic value for lmcut(): 120
+[t=1.3417s, 12660 KB] g=560, 1964 evaluated, 39 expanded
+[t=1.3814s, 12660 KB] New best heuristic value for lmcut(): 110
+[t=1.38372s, 12660 KB] g=570, 2083 evaluated, 41 expanded
+[t=1.38935s, 12660 KB] New best heuristic value for lmcut(): 90
+[t=1.39206s, 12660 KB] g=590, 2117 evaluated, 41 expanded
+[t=1.40132s, 12660 KB] New best heuristic value for lmcut(): 80
+[t=1.40371s, 12660 KB] g=600, 2167 evaluated, 42 expanded
+[t=1.41327s, 12660 KB] New best heuristic value for lmcut(): 75
+[t=1.4162s, 12660 KB] g=605, 2223 evaluated, 42 expanded
+[t=1.45315s, 12660 KB] New best heuristic value for lmcut(): 65
+[t=1.4567s, 12660 KB] g=615, 2294 evaluated, 44 expanded
+[t=1.5051s, 12660 KB] New best heuristic value for lmcut(): 55
+[t=1.50551s, 12660 KB] g=635, 2412 evaluated, 46 expanded
+[t=1.55706s, 12660 KB] New best heuristic value for lmcut(): 45
+[t=1.5573s, 12660 KB] g=655, 2536 evaluated, 48 expanded
+[t=1.601s, 12792 KB] New best heuristic value for lmcut(): 35
+[t=1.60345s, 12792 KB] g=665, 2637 evaluated, 50 expanded
+[t=1.64495s, 12792 KB] New best heuristic value for lmcut(): 25
+[t=1.64633s, 12792 KB] g=675, 2732 evaluated, 52 expanded
+[t=1.6809s, 12792 KB] New best heuristic value for lmcut(): 15
+[t=1.68468s, 12792 KB] g=685, 2830 evaluated, 54 expanded
+[t=1.89593s, 12792 KB] New best heuristic value for lmcut(): 5
+[t=1.89733s, 12792 KB] g=715, 3269 evaluated, 66 expanded
+[t=1.93186s, 12792 KB] New best heuristic value for lmcut(): 0
+[t=1.93366s, 12792 KB] g=725, 3336 evaluated, 68 expanded
+[t=1.95179s, 12928 KB] Solution found!
+do-plane p7 planer0 rough red colourfragments (30)
+do-grind p7 grinder0 smooth natural untreated untreated (45)
+do-plane p10 planer0 smooth green glazed (20)
+do-immersion-varnish p7 immersion-varnisher0 blue verysmooth (10)
+do-immersion-varnish p10 immersion-varnisher0 natural smooth (10)
+do-saw-large b0 p8 saw0 oak smooth s6 s4 s5 s3 (30)
+do-saw-large b0 p5 saw0 oak smooth s3 s1 s2 s0 (30)
+do-grind p5 grinder0 smooth natural untreated untreated (45)
+do-saw-large b0 p2 saw0 oak smooth s3 s1 s2 s0 (30)
+do-grind p2 grinder0 smooth natural untreated untreated (45)
+do-saw-large b0 p0 saw0 oak smooth s3 s1 s2 s0 (30)
+do-saw-large b0 p11 saw0 oak smooth s3 s1 s2 s0 (30)
+do-glaze p11 glazer0 white (20)
+do-saw-large b0 p3 saw0 oak smooth s3 s1 s2 s0 (30)
+do-saw-medium b0 p4 saw0 oak smooth s3 s2 s1 (30)
+do-grind p4 grinder0 smooth natural untreated untreated (30)
+do-glaze p4 glazer0 mauve (15)
+do-saw-small b0 p6 saw0 oak smooth s3 s2 (30)
+do-saw-medium b2 p1 saw0 pine rough s5 s4 s3 (30)
+do-plane p1 planer0 rough natural untreated (20)
+do-grind p1 grinder0 smooth natural untreated untreated (30)
+do-glaze p1 glazer0 black (15)
+do-immersion-varnish p8 immersion-varnisher0 red smooth (10)
+do-glaze p5 glazer0 red (20)
+do-glaze p2 glazer0 blue (20)
+do-immersion-varnish p0 immersion-varnisher0 blue smooth (10)
+do-immersion-varnish p3 immersion-varnisher0 blue smooth (10)
+do-glaze p6 glazer0 black (10)
+do-grind p9 grinder0 verysmooth mauve varnished colourfragments (15)
+do-grind p9 grinder0 verysmooth natural colourfragments untreated (15)
+do-spray-varnish p9 spray-varnisher0 white verysmooth (5)
+[t=1.95423s, 12928 KB] Plan length: 31 step(s).
+[t=1.95427s, 12928 KB] Plan cost: 720
+[t=1.9543s, 12928 KB] Solution: Incumbent solution found!
+[t=1.95432s, 12928 KB] Solution Timestep: 1682007819958 millisecond(s).
+[t=1.95435s, 12928 KB] Timestamp: 1682007819958 millisecond(s).
+[t=1.95437s, 12928 KB] Expanded 70 state(s).
+[t=1.95439s, 12928 KB] Reopened 0 state(s).
+[t=1.95441s, 12928 KB] Evaluated 3439 state(s).
+[t=1.95444s, 12928 KB] Evaluations: 4003
+[t=1.95446s, 12928 KB] Generated 4962 state(s).
+[t=1.95448s, 12928 KB] Dead ends: 0 state(s).
+[t=1.9545s, 12928 KB] Number of registered states: 4003
+[t=1.95453s, 12928 KB] Int hash set load factor: 4003/8192 = 0.488647
+[t=1.95455s, 12928 KB] Int hash set resizes: 13
+[t=3.61077s, 13152 KB] Solution found!
+do-plane p7 planer0 rough red colourfragments (30)
+do-grind p7 grinder0 smooth natural untreated untreated (45)
+do-plane p10 planer0 smooth green glazed (20)
+do-immersion-varnish p7 immersion-varnisher0 blue verysmooth (10)
+do-immersion-varnish p10 immersion-varnisher0 natural smooth (10)
+do-saw-large b0 p8 saw0 oak smooth s6 s4 s5 s3 (30)
+do-saw-large b0 p5 saw0 oak smooth s3 s1 s2 s0 (30)
+do-grind p5 grinder0 smooth natural untreated untreated (45)
+do-saw-large b0 p2 saw0 oak smooth s3 s1 s2 s0 (30)
+do-grind p2 grinder0 smooth natural untreated untreated (45)
+do-saw-large b0 p0 saw0 oak smooth s3 s1 s2 s0 (30)
+do-saw-large b0 p11 saw0 oak smooth s3 s1 s2 s0 (30)
+do-glaze p11 glazer0 white (20)
+do-saw-large b0 p3 saw0 oak smooth s3 s1 s2 s0 (30)
+do-saw-medium b0 p4 saw0 oak smooth s3 s2 s1 (30)
+do-grind p4 grinder0 smooth natural untreated untreated (30)
+do-glaze p4 glazer0 mauve (15)
+do-saw-small b0 p6 saw0 oak smooth s3 s2 (30)
+do-saw-medium b2 p1 saw0 pine rough s5 s4 s3 (30)
+do-plane p1 planer0 rough natural untreated (20)
+do-grind p1 grinder0 smooth natural untreated untreated (30)
+do-glaze p1 glazer0 black (15)
+do-immersion-varnish p8 immersion-varnisher0 red smooth (10)
+do-glaze p5 glazer0 red (20)
+do-glaze p2 glazer0 blue (20)
+do-immersion-varnish p0 immersion-varnisher0 blue smooth (10)
+do-immersion-varnish p3 immersion-varnisher0 blue smooth (10)
+do-glaze p6 glazer0 black (10)
+do-plane p9 planer0 verysmooth mauve varnished (10)
+do-grind p9 grinder0 smooth natural untreated untreated (15)
+do-spray-varnish p9 spray-varnisher0 white verysmooth (5)
+[t=3.61212s, 13152 KB] Plan length: 31 step(s).
+[t=3.61217s, 13152 KB] Plan cost: 715
+[t=3.61219s, 13152 KB] Solution: Incumbent solution found!
+[t=3.61221s, 13152 KB] Solution Timestep: 1682007821617 millisecond(s).
+[t=3.61224s, 13152 KB] Timestamp: 1682007821617 millisecond(s).
+[t=3.61226s, 13152 KB] Expanded 174 state(s).
+[t=3.61228s, 13152 KB] Reopened 2 state(s).
+[t=3.6123s, 13152 KB] Evaluated 4985 state(s).
+[t=3.61233s, 13152 KB] Evaluations: 8537
+[t=3.61235s, 13152 KB] Generated 10914 state(s).
+[t=3.61237s, 13152 KB] Dead ends: 0 state(s).
+[t=3.61239s, 13152 KB] Number of registered states: 8537
+[t=3.61242s, 13152 KB] Int hash set load factor: 8537/16384 = 0.521057
+[t=3.61244s, 13152 KB] Int hash set resizes: 14
+[t=8.399s, 13948 KB] Solution found!
+do-plane p7 planer0 rough red colourfragments (30)
+do-grind p7 grinder0 smooth natural untreated untreated (45)
+do-plane p10 planer0 smooth green glazed (20)
+do-immersion-varnish p7 immersion-varnisher0 blue verysmooth (10)
+do-immersion-varnish p10 immersion-varnisher0 natural smooth (10)
+do-saw-large b0 p8 saw0 oak smooth s6 s4 s5 s3 (30)
+do-saw-large b0 p5 saw0 oak smooth s3 s1 s2 s0 (30)
+do-grind p5 grinder0 smooth natural untreated untreated (45)
+do-saw-large b0 p2 saw0 oak smooth s3 s1 s2 s0 (30)
+do-grind p2 grinder0 smooth natural untreated untreated (45)
+do-saw-large b0 p0 saw0 oak smooth s3 s1 s2 s0 (30)
+do-saw-large b0 p11 saw0 oak smooth s3 s1 s2 s0 (30)
+do-glaze p11 glazer0 white (20)
+do-saw-large b0 p3 saw0 oak smooth s3 s1 s2 s0 (30)
+do-saw-medium b0 p4 saw0 oak smooth s3 s2 s1 (30)
+do-grind p4 grinder0 smooth natural untreated untreated (30)
+do-glaze p4 glazer0 mauve (15)
+do-saw-small b0 p6 saw0 oak smooth s3 s2 (30)
+do-saw-medium b2 p1 saw0 pine rough s5 s4 s3 (30)
+do-plane p1 planer0 rough natural untreated (20)
+do-grind p1 grinder0 smooth natural untreated untreated (30)
+do-glaze p1 glazer0 black (15)
+do-immersion-varnish p8 immersion-varnisher0 red smooth (10)
+do-grind p9 grinder0 verysmooth mauve varnished colourfragments (15)
+do-glaze p6 glazer0 mauve (10)
+do-immersion-varnish p3 immersion-varnisher0 blue smooth (10)
+do-grind p9 grinder0 verysmooth natural colourfragments untreated (15)
+do-glaze p5 glazer0 red (20)
+do-immersion-varnish p2 immersion-varnisher0 blue verysmooth (10)
+do-immersion-varnish p0 immersion-varnisher0 blue smooth (10)
+do-spray-varnish p9 spray-varnisher0 white verysmooth (5)
+[t=8.40144s, 13948 KB] Plan length: 31 step(s).
+[t=8.40148s, 13948 KB] Plan cost: 710
+[t=8.40151s, 13948 KB] Solution: Incumbent solution found!
+[t=8.40153s, 13948 KB] Solution Timestep: 1682007826414 millisecond(s).
+[t=8.40155s, 13948 KB] Timestamp: 1682007826414 millisecond(s).
+[t=8.40157s, 13948 KB] Expanded 448 state(s).
+[t=8.4016s, 13948 KB] Reopened 6 state(s).
+[t=8.40162s, 13948 KB] Evaluated 9150 state(s).
+[t=8.40164s, 13948 KB] Evaluations: 20501
+[t=8.40167s, 13948 KB] Generated 27481 state(s).
+[t=8.40169s, 13948 KB] Dead ends: 0 state(s).
+[t=8.40171s, 13948 KB] Number of registered states: 20501
+[t=8.40173s, 13948 KB] Int hash set load factor: 20501/32768 = 0.625641
+[t=8.40176s, 13948 KB] Int hash set resizes: 15
+[t=8.75841s, 14076 KB] Solution found!
+do-plane p7 planer0 rough red colourfragments (30)
+do-grind p7 grinder0 smooth natural untreated untreated (45)
+do-plane p10 planer0 smooth green glazed (20)
+do-immersion-varnish p7 immersion-varnisher0 blue verysmooth (10)
+do-immersion-varnish p10 immersion-varnisher0 natural smooth (10)
+do-saw-large b0 p8 saw0 oak smooth s6 s4 s5 s3 (30)
+do-saw-large b0 p5 saw0 oak smooth s3 s1 s2 s0 (30)
+do-grind p5 grinder0 smooth natural untreated untreated (45)
+do-saw-large b0 p2 saw0 oak smooth s3 s1 s2 s0 (30)
+do-grind p2 grinder0 smooth natural untreated untreated (45)
+do-saw-large b0 p0 saw0 oak smooth s3 s1 s2 s0 (30)
+do-saw-large b0 p11 saw0 oak smooth s3 s1 s2 s0 (30)
+do-glaze p11 glazer0 white (20)
+do-saw-large b0 p3 saw0 oak smooth s3 s1 s2 s0 (30)
+do-saw-medium b0 p4 saw0 oak smooth s3 s2 s1 (30)
+do-grind p4 grinder0 smooth natural untreated untreated (30)
+do-glaze p4 glazer0 mauve (15)
+do-saw-small b0 p6 saw0 oak smooth s3 s2 (30)
+do-saw-medium b2 p1 saw0 pine rough s5 s4 s3 (30)
+do-plane p1 planer0 rough natural untreated (20)
+do-grind p1 grinder0 smooth natural untreated untreated (30)
+do-glaze p1 glazer0 black (15)
+do-immersion-varnish p8 immersion-varnisher0 red smooth (10)
+do-grind p9 grinder0 verysmooth mauve varnished colourfragments (15)
+do-glaze p6 glazer0 mauve (10)
+do-immersion-varnish p3 immersion-varnisher0 blue smooth (10)
+do-grind p9 grinder0 verysmooth natural colourfragments untreated (15)
+do-immersion-varnish p5 immersion-varnisher0 red verysmooth (10)
+do-immersion-varnish p2 immersion-varnisher0 blue verysmooth (10)
+do-immersion-varnish p0 immersion-varnisher0 blue smooth (10)
+do-spray-varnish p9 spray-varnisher0 white verysmooth (5)
+[t=8.75919s, 14076 KB] Plan length: 31 step(s).
+[t=8.75924s, 14076 KB] Plan cost: 700
+[t=8.75926s, 14076 KB] Solution: Incumbent solution found!
+[t=8.75929s, 14076 KB] Solution Timestep: 1682007826772 millisecond(s).
+[t=8.75931s, 14076 KB] Timestamp: 1682007826772 millisecond(s).
+[t=8.75933s, 14076 KB] Expanded 473 state(s).
+[t=8.75936s, 14076 KB] Reopened 6 state(s).
+[t=8.75938s, 14076 KB] Evaluated 9540 state(s).
+[t=8.7594s, 14076 KB] Evaluations: 21677
+[t=8.75942s, 14076 KB] Generated 29003 state(s).
+[t=8.75945s, 14076 KB] Dead ends: 0 state(s).
+[t=8.75947s, 14076 KB] Number of registered states: 21677
+[t=8.75949s, 14076 KB] Int hash set load factor: 21677/32768 = 0.66153
+[t=8.75952s, 14076 KB] Int hash set resizes: 15
+[t=20.2038s, 15780 KB] Solution found!
+do-plane p7 planer0 rough red colourfragments (30)
+do-grind p7 grinder0 smooth natural untreated untreated (45)
+do-plane p10 planer0 smooth green glazed (20)
+do-immersion-varnish p7 immersion-varnisher0 blue verysmooth (10)
+do-immersion-varnish p10 immersion-varnisher0 natural smooth (10)
+do-saw-large b0 p8 saw0 oak smooth s6 s4 s5 s3 (30)
+do-saw-large b0 p5 saw0 oak smooth s3 s1 s2 s0 (30)
+do-grind p5 grinder0 smooth natural untreated untreated (45)
+do-saw-large b0 p2 saw0 oak smooth s3 s1 s2 s0 (30)
+do-grind p2 grinder0 smooth natural untreated untreated (45)
+do-saw-large b0 p0 saw0 oak smooth s3 s1 s2 s0 (30)
+do-saw-large b0 p11 saw0 oak smooth s3 s1 s2 s0 (30)
+do-glaze p11 glazer0 white (20)
+do-saw-large b0 p3 saw0 oak smooth s3 s1 s2 s0 (30)
+do-saw-medium b0 p4 saw0 oak smooth s3 s2 s1 (30)
+do-grind p4 grinder0 smooth natural untreated untreated (30)
+do-glaze p4 glazer0 mauve (15)
+do-saw-small b0 p6 saw0 oak smooth s3 s2 (30)
+do-saw-medium b2 p1 saw0 pine rough s5 s4 s3 (30)
+do-plane p1 planer0 rough natural untreated (20)
+do-grind p1 grinder0 smooth natural untreated untreated (30)
+do-glaze p1 glazer0 black (15)
+do-immersion-varnish p8 immersion-varnisher0 red smooth (10)
+do-immersion-varnish p5 immersion-varnisher0 red verysmooth (10)
+do-immersion-varnish p2 immersion-varnisher0 blue verysmooth (10)
+do-immersion-varnish p0 immersion-varnisher0 blue smooth (10)
+do-immersion-varnish p3 immersion-varnisher0 blue smooth (10)
+do-glaze p6 glazer0 black (10)
+do-plane p9 planer0 verysmooth mauve varnished (10)
+do-grind p9 grinder0 smooth natural untreated untreated (15)
+do-spray-varnish p9 spray-varnisher0 white verysmooth (5)
+[t=20.2044s, 15780 KB] Plan length: 31 step(s).
+[t=20.2044s, 15780 KB] Plan cost: 695
+[t=20.2044s, 15780 KB] Solution: Incumbent solution found!
+[t=20.2045s, 15780 KB] Solution Timestep: 1682007838307 millisecond(s).
+[t=20.2045s, 15780 KB] Timestamp: 1682007838307 millisecond(s).
+[t=20.2045s, 15780 KB] Expanded 1073 state(s).
+[t=20.2045s, 15780 KB] Reopened 14 state(s).
+[t=20.2046s, 15780 KB] Evaluated 19036 state(s).
+[t=20.2046s, 15780 KB] Evaluations: 49421
+[t=20.2046s, 15780 KB] Generated 66340 state(s).
+[t=20.2046s, 15780 KB] Dead ends: 0 state(s).
+[t=20.2047s, 15780 KB] Number of registered states: 49421
+[t=20.2047s, 15780 KB] Int hash set load factor: 49421/65536 = 0.754105
+[t=20.2047s, 15780 KB] Int hash set resizes: 16
+[t=310.758s, 57852 KB] Solution found!
+do-plane p7 planer0 rough red colourfragments (30)
+do-grind p7 grinder0 smooth natural untreated untreated (45)
+do-saw-medium b2 p1 saw0 pine rough s5 s4 s3 (30)
+do-saw-large b0 p5 saw0 oak smooth s6 s4 s5 s3 (30)
+do-grind p5 grinder0 smooth natural untreated untreated (45)
+load-highspeed-saw b0 highspeed-saw0 (30)
+do-saw-large b3 p0 saw0 walnut smooth s6 s4 s5 s3 (30)
+cut-board-medium b0 p4 highspeed-saw0 oak smooth s3 s2 s1 (10)
+do-immersion-varnish p0 immersion-varnisher0 white smooth (10)
+do-plane p1 planer0 rough natural untreated (20)
+do-grind p4 grinder0 smooth natural untreated untreated (30)
+do-immersion-varnish p5 immersion-varnisher0 red verysmooth (10)
+cut-board-large b0 p3 highspeed-saw0 oak smooth s3 s1 s2 s0 (10)
+cut-board-small b0 p6 highspeed-saw0 oak smooth s3 s2 (10)
+do-grind p1 grinder0 smooth natural untreated untreated (30)
+do-plane p10 planer0 smooth green glazed (20)
+do-glaze p4 glazer0 mauve (15)
+do-glaze p6 glazer0 mauve (10)
+do-immersion-varnish p7 immersion-varnisher0 red verysmooth (10)
+do-plane p9 planer0 verysmooth mauve varnished (10)
+cut-board-large b0 p2 highspeed-saw0 oak smooth s3 s1 s2 s0 (10)
+do-grind p2 grinder0 smooth natural untreated untreated (45)
+cut-board-large b0 p8 highspeed-saw0 oak smooth s3 s1 s2 s0 (10)
+do-grind p9 grinder0 smooth natural untreated untreated (15)
+do-glaze p1 glazer0 black (15)
+do-immersion-varnish p10 immersion-varnisher0 natural smooth (10)
+cut-board-large b0 p11 highspeed-saw0 oak smooth s3 s1 s2 s0 (10)
+do-glaze p11 glazer0 white (20)
+do-immersion-varnish p8 immersion-varnisher0 red smooth (10)
+do-glaze p2 glazer0 blue (20)
+do-immersion-varnish p3 immersion-varnisher0 blue smooth (10)
+do-spray-varnish p9 spray-varnisher0 white verysmooth (5)
+[t=310.759s, 57852 KB] Plan length: 32 step(s).
+[t=310.759s, 57852 KB] Plan cost: 615
+[t=310.759s, 57852 KB] Solution: Incumbent solution found!
+[t=310.759s, 57852 KB] Solution Timestep: 1682008130458 millisecond(s).
+[t=310.759s, 57852 KB] Timestamp: 1682008130458 millisecond(s).
+[t=310.759s, 57852 KB] Expanded 16616 state(s).
+[t=310.759s, 57852 KB] Reopened 134 state(s).
+[t=310.759s, 57852 KB] Evaluated 267060 state(s).
+[t=310.759s, 57852 KB] Evaluations: 786643
+[t=310.759s, 57852 KB] Generated 1108500 state(s).
+[t=310.759s, 57852 KB] Dead ends: 0 state(s).
+[t=310.759s, 57852 KB] Number of registered states: 786643
+[t=310.759s, 57852 KB] Int hash set load factor: 786643/1048576 = 0.750201
+[t=310.759s, 57852 KB] Int hash set resizes: 20
+[t=310.929s, 57852 KB] Solution found!
+do-plane p7 planer0 rough red colourfragments (30)
+do-grind p7 grinder0 smooth natural untreated untreated (45)
+do-saw-medium b2 p1 saw0 pine rough s5 s4 s3 (30)
+do-saw-large b0 p5 saw0 oak smooth s6 s4 s5 s3 (30)
+do-grind p5 grinder0 smooth natural untreated untreated (45)
+load-highspeed-saw b0 highspeed-saw0 (30)
+do-saw-large b3 p0 saw0 walnut smooth s6 s4 s5 s3 (30)
+cut-board-medium b0 p4 highspeed-saw0 oak smooth s3 s2 s1 (10)
+do-immersion-varnish p0 immersion-varnisher0 white smooth (10)
+do-plane p1 planer0 rough natural untreated (20)
+do-grind p4 grinder0 smooth natural untreated untreated (30)
+do-immersion-varnish p5 immersion-varnisher0 red verysmooth (10)
+cut-board-large b0 p3 highspeed-saw0 oak smooth s3 s1 s2 s0 (10)
+cut-board-small b0 p6 highspeed-saw0 oak smooth s3 s2 (10)
+do-grind p1 grinder0 smooth natural untreated untreated (30)
+do-plane p10 planer0 smooth green glazed (20)
+do-glaze p4 glazer0 mauve (15)
+do-glaze p6 glazer0 mauve (10)
+do-immersion-varnish p7 immersion-varnisher0 red verysmooth (10)
+do-plane p9 planer0 verysmooth mauve varnished (10)
+cut-board-large b0 p2 highspeed-saw0 oak smooth s3 s1 s2 s0 (10)
+do-grind p2 grinder0 smooth natural untreated untreated (45)
+cut-board-large b0 p8 highspeed-saw0 oak smooth s3 s1 s2 s0 (10)
+do-grind p9 grinder0 smooth natural untreated untreated (15)
+do-glaze p1 glazer0 black (15)
+do-immersion-varnish p10 immersion-varnisher0 natural smooth (10)
+cut-board-large b0 p11 highspeed-saw0 oak smooth s3 s1 s2 s0 (10)
+do-glaze p11 glazer0 white (20)
+do-immersion-varnish p8 immersion-varnisher0 red smooth (10)
+do-immersion-varnish p2 immersion-varnisher0 blue verysmooth (10)
+do-immersion-varnish p3 immersion-varnisher0 blue smooth (10)
+do-spray-varnish p9 spray-varnisher0 white verysmooth (5)
+[t=310.93s, 57852 KB] Plan length: 32 step(s).
+[t=310.93s, 57852 KB] Plan cost: 605
+[t=310.93s, 57852 KB] Solution: Incumbent solution found!
+[t=310.93s, 57852 KB] Solution Timestep: 1682008130631 millisecond(s).
+[t=310.93s, 57852 KB] Timestamp: 1682008130631 millisecond(s).
+[t=310.93s, 57852 KB] Expanded 16627 state(s).
+[t=310.93s, 57852 KB] Reopened 134 state(s).
+[t=310.93s, 57852 KB] Evaluated 267135 state(s).
+[t=310.93s, 57852 KB] Evaluations: 787096
+[t=310.93s, 57852 KB] Generated 1109064 state(s).
+[t=310.93s, 57852 KB] Dead ends: 0 state(s).
+[t=310.93s, 57852 KB] Number of registered states: 787096
+[t=310.93s, 57852 KB] Int hash set load factor: 787096/1048576 = 0.750633
+[t=310.93s, 57852 KB] Int hash set resizes: 20
+[t=439.469s, 80288 KB] Solution found!
+do-plane p7 planer0 rough red colourfragments (30)
+do-grind p7 grinder0 smooth natural untreated untreated (45)
+do-plane p10 planer0 smooth green glazed (20)
+do-saw-medium b2 p1 saw0 pine rough s5 s4 s3 (30)
+load-highspeed-saw b0 highspeed-saw0 (30)
+cut-board-large b0 p5 highspeed-saw0 oak smooth s6 s4 s5 s3 (10)
+do-plane p1 planer0 rough natural untreated (20)
+do-immersion-varnish p7 immersion-varnisher0 natural verysmooth (10)
+do-grind p1 grinder0 smooth natural untreated untreated (30)
+cut-board-small b0 p6 highspeed-saw0 oak smooth s6 s5 (10)
+do-grind p5 grinder0 smooth natural untreated untreated (45)
+do-glaze p1 glazer0 black (15)
+cut-board-large b0 p11 highspeed-saw0 oak smooth s3 s1 s2 s0 (10)
+cut-board-medium b0 p4 highspeed-saw0 oak smooth s3 s2 s1 (10)
+do-grind p4 grinder0 smooth natural untreated untreated (30)
+cut-board-large b0 p2 highspeed-saw0 oak smooth s3 s1 s2 s0 (10)
+do-grind p2 grinder0 smooth natural untreated untreated (45)
+do-glaze p6 glazer0 white (10)
+do-glaze p11 glazer0 white (20)
+do-glaze p4 glazer0 mauve (15)
+do-immersion-varnish p10 immersion-varnisher0 natural smooth (10)
+cut-board-large b0 p8 highspeed-saw0 oak smooth s5 s3 s4 s2 (10)
+cut-board-large b0 p0 highspeed-saw0 oak smooth s5 s3 s4 s2 (10)
+cut-board-large b0 p3 highspeed-saw0 oak smooth s5 s3 s4 s2 (10)
+do-immersion-varnish p8 immersion-varnisher0 red smooth (10)
+do-glaze p5 glazer0 red (20)
+do-glaze p2 glazer0 blue (20)
+do-immersion-varnish p0 immersion-varnisher0 blue smooth (10)
+do-immersion-varnish p3 immersion-varnisher0 blue smooth (10)
+do-grind p9 grinder0 verysmooth mauve varnished colourfragments (15)
+do-grind p9 grinder0 verysmooth natural colourfragments untreated (15)
+do-spray-varnish p9 spray-varnisher0 white verysmooth (5)
+[t=439.469s, 80288 KB] Plan length: 32 step(s).
+[t=439.469s, 80288 KB] Plan cost: 590
+[t=439.469s, 80288 KB] Solution: Incumbent solution found!
+[t=439.469s, 80288 KB] Solution Timestep: 1682008260088 millisecond(s).
+[t=439.469s, 80288 KB] Timestamp: 1682008260088 millisecond(s).
+[t=439.469s, 80288 KB] Expanded 23224 state(s).
+[t=439.47s, 80288 KB] Reopened 153 state(s).
+[t=439.47s, 80288 KB] Evaluated 296948 state(s).
+[t=439.47s, 80288 KB] Evaluations: 1111268
+[t=439.47s, 80288 KB] Generated 1578314 state(s).
+[t=439.47s, 80288 KB] Dead ends: 0 state(s).
+[t=439.47s, 80288 KB] Number of registered states: 1111268
+[t=439.47s, 80288 KB] Int hash set load factor: 1111268/2097152 = 0.529894
+[t=439.47s, 80288 KB] Int hash set resizes: 21
+[t=439.724s, 80288 KB] Solution found!
+do-plane p7 planer0 rough red colourfragments (30)
+do-grind p7 grinder0 smooth natural untreated untreated (45)
+do-plane p10 planer0 smooth green glazed (20)
+do-saw-medium b2 p1 saw0 pine rough s5 s4 s3 (30)
+load-highspeed-saw b0 highspeed-saw0 (30)
+cut-board-large b0 p5 highspeed-saw0 oak smooth s6 s4 s5 s3 (10)
+do-plane p1 planer0 rough natural untreated (20)
+do-immersion-varnish p7 immersion-varnisher0 natural verysmooth (10)
+do-grind p1 grinder0 smooth natural untreated untreated (30)
+cut-board-small b0 p6 highspeed-saw0 oak smooth s6 s5 (10)
+do-grind p5 grinder0 smooth natural untreated untreated (45)
+do-glaze p1 glazer0 black (15)
+cut-board-large b0 p11 highspeed-saw0 oak smooth s3 s1 s2 s0 (10)
+cut-board-medium b0 p4 highspeed-saw0 oak smooth s3 s2 s1 (10)
+do-grind p4 grinder0 smooth natural untreated untreated (30)
+cut-board-large b0 p2 highspeed-saw0 oak smooth s3 s1 s2 s0 (10)
+do-grind p2 grinder0 smooth natural untreated untreated (45)
+do-glaze p6 glazer0 white (10)
+do-glaze p11 glazer0 white (20)
+do-glaze p4 glazer0 mauve (15)
+do-immersion-varnish p10 immersion-varnisher0 natural smooth (10)
+cut-board-large b0 p8 highspeed-saw0 oak smooth s5 s3 s4 s2 (10)
+cut-board-large b0 p0 highspeed-saw0 oak smooth s5 s3 s4 s2 (10)
+cut-board-large b0 p3 highspeed-saw0 oak smooth s5 s3 s4 s2 (10)
+do-immersion-varnish p8 immersion-varnisher0 red smooth (10)
+do-glaze p5 glazer0 red (20)
+do-glaze p2 glazer0 blue (20)
+do-immersion-varnish p0 immersion-varnisher0 blue smooth (10)
+do-immersion-varnish p3 immersion-varnisher0 blue smooth (10)
+do-plane p9 planer0 verysmooth mauve varnished (10)
+do-grind p9 grinder0 smooth natural untreated untreated (15)
+do-spray-varnish p9 spray-varnisher0 white verysmooth (5)
+[t=439.725s, 80288 KB] Plan length: 32 step(s).
+[t=439.725s, 80288 KB] Plan cost: 585
+[t=439.725s, 80288 KB] Solution: Incumbent solution found!
+[t=439.725s, 80288 KB] Solution Timestep: 1682008260346 millisecond(s).
+[t=439.725s, 80288 KB] Timestamp: 1682008260346 millisecond(s).
+[t=439.725s, 80288 KB] Expanded 23236 state(s).
+[t=439.725s, 80288 KB] Reopened 155 state(s).
+[t=439.725s, 80288 KB] Evaluated 296955 state(s).
+[t=439.725s, 80288 KB] Evaluations: 1111837
+[t=439.725s, 80288 KB] Generated 1579094 state(s).
+[t=439.725s, 80288 KB] Dead ends: 0 state(s).
+[t=439.725s, 80288 KB] Number of registered states: 1111837
+[t=439.725s, 80288 KB] Int hash set load factor: 1111837/2097152 = 0.530165
+[t=439.725s, 80288 KB] Int hash set resizes: 21
+[t=440.529s, 80420 KB] Solution found!
+do-plane p7 planer0 rough red colourfragments (30)
+do-grind p7 grinder0 smooth natural untreated untreated (45)
+do-plane p10 planer0 smooth green glazed (20)
+do-saw-medium b2 p1 saw0 pine rough s5 s4 s3 (30)
+load-highspeed-saw b0 highspeed-saw0 (30)
+cut-board-large b0 p5 highspeed-saw0 oak smooth s6 s4 s5 s3 (10)
+do-plane p1 planer0 rough natural untreated (20)
+do-immersion-varnish p7 immersion-varnisher0 natural verysmooth (10)
+do-grind p1 grinder0 smooth natural untreated untreated (30)
+cut-board-small b0 p6 highspeed-saw0 oak smooth s6 s5 (10)
+do-grind p5 grinder0 smooth natural untreated untreated (45)
+do-glaze p1 glazer0 black (15)
+cut-board-large b0 p11 highspeed-saw0 oak smooth s3 s1 s2 s0 (10)
+cut-board-medium b0 p4 highspeed-saw0 oak smooth s3 s2 s1 (10)
+do-grind p4 grinder0 smooth natural untreated untreated (30)
+cut-board-large b0 p2 highspeed-saw0 oak smooth s3 s1 s2 s0 (10)
+do-grind p2 grinder0 smooth natural untreated untreated (45)
+do-glaze p6 glazer0 white (10)
+do-glaze p11 glazer0 white (20)
+do-glaze p4 glazer0 mauve (15)
+do-immersion-varnish p10 immersion-varnisher0 natural smooth (10)
+cut-board-large b0 p8 highspeed-saw0 oak smooth s5 s3 s4 s2 (10)
+cut-board-large b0 p0 highspeed-saw0 oak smooth s5 s3 s4 s2 (10)
+cut-board-large b0 p3 highspeed-saw0 oak smooth s5 s3 s4 s2 (10)
+do-immersion-varnish p8 immersion-varnisher0 red smooth (10)
+do-glaze p5 glazer0 red (20)
+do-immersion-varnish p2 immersion-varnisher0 blue verysmooth (10)
+do-immersion-varnish p0 immersion-varnisher0 blue smooth (10)
+do-immersion-varnish p3 immersion-varnisher0 blue smooth (10)
+do-grind p9 grinder0 verysmooth mauve varnished colourfragments (15)
+do-grind p9 grinder0 verysmooth natural colourfragments untreated (15)
+do-spray-varnish p9 spray-varnisher0 white verysmooth (5)
+[t=440.53s, 80420 KB] Plan length: 32 step(s).
+[t=440.53s, 80420 KB] Plan cost: 580
+[t=440.53s, 80420 KB] Solution: Incumbent solution found!
+[t=440.53s, 80420 KB] Solution Timestep: 1682008261157 millisecond(s).
+[t=440.53s, 80420 KB] Timestamp: 1682008261157 millisecond(s).
+[t=440.53s, 80420 KB] Expanded 23287 state(s).
+[t=440.53s, 80420 KB] Reopened 155 state(s).
+[t=440.53s, 80420 KB] Evaluated 297110 state(s).
+[t=440.53s, 80420 KB] Evaluations: 1113984
+[t=440.53s, 80420 KB] Generated 1581940 state(s).
+[t=440.53s, 80420 KB] Dead ends: 0 state(s).
+[t=440.53s, 80420 KB] Number of registered states: 1113984
+[t=440.53s, 80420 KB] Int hash set load factor: 1113984/2097152 = 0.531189
+[t=440.53s, 80420 KB] Int hash set resizes: 21
+[t=440.607s, 80420 KB] Solution found!
+do-plane p7 planer0 rough red colourfragments (30)
+do-grind p7 grinder0 smooth natural untreated untreated (45)
+do-plane p10 planer0 smooth green glazed (20)
+do-saw-medium b2 p1 saw0 pine rough s5 s4 s3 (30)
+load-highspeed-saw b0 highspeed-saw0 (30)
+cut-board-large b0 p5 highspeed-saw0 oak smooth s6 s4 s5 s3 (10)
+do-plane p1 planer0 rough natural untreated (20)
+do-immersion-varnish p7 immersion-varnisher0 natural verysmooth (10)
+do-grind p1 grinder0 smooth natural untreated untreated (30)
+cut-board-small b0 p6 highspeed-saw0 oak smooth s6 s5 (10)
+do-grind p5 grinder0 smooth natural untreated untreated (45)
+do-glaze p1 glazer0 black (15)
+cut-board-large b0 p11 highspeed-saw0 oak smooth s3 s1 s2 s0 (10)
+cut-board-medium b0 p4 highspeed-saw0 oak smooth s3 s2 s1 (10)
+do-grind p4 grinder0 smooth natural untreated untreated (30)
+cut-board-large b0 p2 highspeed-saw0 oak smooth s3 s1 s2 s0 (10)
+do-grind p2 grinder0 smooth natural untreated untreated (45)
+do-glaze p6 glazer0 white (10)
+do-glaze p11 glazer0 white (20)
+do-glaze p4 glazer0 mauve (15)
+do-immersion-varnish p10 immersion-varnisher0 natural smooth (10)
+cut-board-large b0 p8 highspeed-saw0 oak smooth s5 s3 s4 s2 (10)
+cut-board-large b0 p0 highspeed-saw0 oak smooth s5 s3 s4 s2 (10)
+cut-board-large b0 p3 highspeed-saw0 oak smooth s5 s3 s4 s2 (10)
+do-immersion-varnish p8 immersion-varnisher0 red smooth (10)
+do-glaze p5 glazer0 red (20)
+do-immersion-varnish p2 immersion-varnisher0 blue verysmooth (10)
+do-immersion-varnish p0 immersion-varnisher0 blue smooth (10)
+do-immersion-varnish p3 immersion-varnisher0 blue smooth (10)
+do-plane p9 planer0 verysmooth mauve varnished (10)
+do-grind p9 grinder0 smooth natural untreated untreated (15)
+do-spray-varnish p9 spray-varnisher0 white verysmooth (5)
+[t=440.608s, 80420 KB] Plan length: 32 step(s).
+[t=440.608s, 80420 KB] Plan cost: 575
+[t=440.608s, 80420 KB] Solution: Incumbent solution found!
+[t=440.608s, 80420 KB] Solution Timestep: 1682008261236 millisecond(s).
+[t=440.608s, 80420 KB] Timestamp: 1682008261236 millisecond(s).
+[t=440.608s, 80420 KB] Expanded 23293 state(s).
+[t=440.608s, 80420 KB] Reopened 157 state(s).
+[t=440.608s, 80420 KB] Evaluated 297135 state(s).
+[t=440.608s, 80420 KB] Evaluations: 1114191
+[t=440.608s, 80420 KB] Generated 1582244 state(s).
+[t=440.608s, 80420 KB] Dead ends: 0 state(s).
+[t=440.608s, 80420 KB] Number of registered states: 1114191
+[t=440.608s, 80420 KB] Int hash set load factor: 1114191/2097152 = 0.531288
+[t=440.608s, 80420 KB] Int hash set resizes: 21
+[t=442.974s, 80692 KB] Solution found!
+do-plane p7 planer0 rough red colourfragments (30)
+do-grind p7 grinder0 smooth natural untreated untreated (45)
+do-plane p10 planer0 smooth green glazed (20)
+do-saw-medium b2 p1 saw0 pine rough s5 s4 s3 (30)
+load-highspeed-saw b0 highspeed-saw0 (30)
+cut-board-large b0 p5 highspeed-saw0 oak smooth s6 s4 s5 s3 (10)
+do-plane p1 planer0 rough natural untreated (20)
+do-immersion-varnish p7 immersion-varnisher0 natural verysmooth (10)
+do-grind p1 grinder0 smooth natural untreated untreated (30)
+cut-board-small b0 p6 highspeed-saw0 oak smooth s6 s5 (10)
+do-grind p5 grinder0 smooth natural untreated untreated (45)
+do-glaze p1 glazer0 black (15)
+cut-board-large b0 p11 highspeed-saw0 oak smooth s3 s1 s2 s0 (10)
+cut-board-medium b0 p4 highspeed-saw0 oak smooth s3 s2 s1 (10)
+do-grind p4 grinder0 smooth natural untreated untreated (30)
+cut-board-large b0 p2 highspeed-saw0 oak smooth s3 s1 s2 s0 (10)
+do-grind p2 grinder0 smooth natural untreated untreated (45)
+do-glaze p6 glazer0 white (10)
+do-glaze p11 glazer0 white (20)
+do-glaze p4 glazer0 mauve (15)
+do-immersion-varnish p10 immersion-varnisher0 natural smooth (10)
+cut-board-large b0 p8 highspeed-saw0 oak smooth s5 s3 s4 s2 (10)
+cut-board-large b0 p0 highspeed-saw0 oak smooth s5 s3 s4 s2 (10)
+cut-board-large b0 p3 highspeed-saw0 oak smooth s5 s3 s4 s2 (10)
+do-immersion-varnish p8 immersion-varnisher0 red smooth (10)
+do-immersion-varnish p5 immersion-varnisher0 red verysmooth (10)
+do-immersion-varnish p2 immersion-varnisher0 blue verysmooth (10)
+do-immersion-varnish p0 immersion-varnisher0 blue smooth (10)
+do-immersion-varnish p3 immersion-varnisher0 blue smooth (10)
+do-grind p9 grinder0 verysmooth mauve varnished colourfragments (15)
+do-grind p9 grinder0 verysmooth natural colourfragments untreated (15)
+do-spray-varnish p9 spray-varnisher0 white verysmooth (5)
+[t=442.974s, 80692 KB] Plan length: 32 step(s).
+[t=442.974s, 80692 KB] Plan cost: 570
+[t=442.974s, 80692 KB] Solution: Incumbent solution found!
+[t=442.974s, 80692 KB] Solution Timestep: 1682008263624 millisecond(s).
+[t=442.974s, 80692 KB] Timestamp: 1682008263624 millisecond(s).
+[t=442.974s, 80692 KB] Expanded 23432 state(s).
+[t=442.974s, 80692 KB] Reopened 158 state(s).
+[t=442.974s, 80692 KB] Evaluated 297373 state(s).
+[t=442.975s, 80692 KB] Evaluations: 1120243
+[t=442.975s, 80692 KB] Generated 1590271 state(s).
+[t=442.975s, 80692 KB] Dead ends: 0 state(s).
+[t=442.975s, 80692 KB] Number of registered states: 1120243
+[t=442.975s, 80692 KB] Int hash set load factor: 1120243/2097152 = 0.534173
+[t=442.975s, 80692 KB] Int hash set resizes: 21
+[t=443.096s, 80692 KB] Solution found!
+do-plane p7 planer0 rough red colourfragments (30)
+do-grind p7 grinder0 smooth natural untreated untreated (45)
+do-plane p10 planer0 smooth green glazed (20)
+do-saw-medium b2 p1 saw0 pine rough s5 s4 s3 (30)
+load-highspeed-saw b0 highspeed-saw0 (30)
+cut-board-large b0 p5 highspeed-saw0 oak smooth s6 s4 s5 s3 (10)
+do-plane p1 planer0 rough natural untreated (20)
+do-immersion-varnish p7 immersion-varnisher0 natural verysmooth (10)
+do-grind p1 grinder0 smooth natural untreated untreated (30)
+cut-board-small b0 p6 highspeed-saw0 oak smooth s6 s5 (10)
+do-grind p5 grinder0 smooth natural untreated untreated (45)
+do-glaze p1 glazer0 black (15)
+cut-board-large b0 p11 highspeed-saw0 oak smooth s3 s1 s2 s0 (10)
+cut-board-medium b0 p4 highspeed-saw0 oak smooth s3 s2 s1 (10)
+do-grind p4 grinder0 smooth natural untreated untreated (30)
+cut-board-large b0 p2 highspeed-saw0 oak smooth s3 s1 s2 s0 (10)
+do-grind p2 grinder0 smooth natural untreated untreated (45)
+do-glaze p6 glazer0 white (10)
+do-glaze p11 glazer0 white (20)
+do-glaze p4 glazer0 mauve (15)
+do-immersion-varnish p10 immersion-varnisher0 natural smooth (10)
+cut-board-large b0 p8 highspeed-saw0 oak smooth s5 s3 s4 s2 (10)
+cut-board-large b0 p0 highspeed-saw0 oak smooth s5 s3 s4 s2 (10)
+cut-board-large b0 p3 highspeed-saw0 oak smooth s5 s3 s4 s2 (10)
+do-immersion-varnish p8 immersion-varnisher0 red smooth (10)
+do-immersion-varnish p5 immersion-varnisher0 red verysmooth (10)
+do-immersion-varnish p2 immersion-varnisher0 blue verysmooth (10)
+do-immersion-varnish p0 immersion-varnisher0 blue smooth (10)
+do-immersion-varnish p3 immersion-varnisher0 blue smooth (10)
+do-plane p9 planer0 verysmooth mauve varnished (10)
+do-grind p9 grinder0 smooth natural untreated untreated (15)
+do-spray-varnish p9 spray-varnisher0 white verysmooth (5)
+[t=443.097s, 80692 KB] Plan length: 32 step(s).
+[t=443.097s, 80692 KB] Plan cost: 565
+[t=443.097s, 80692 KB] Solution: Incumbent solution found!
+[t=443.097s, 80692 KB] Solution Timestep: 1682008263748 millisecond(s).
+[t=443.097s, 80692 KB] Timestamp: 1682008263748 millisecond(s).
+[t=443.097s, 80692 KB] Expanded 23439 state(s).
+[t=443.097s, 80692 KB] Reopened 160 state(s).
+[t=443.097s, 80692 KB] Evaluated 297374 state(s).
+[t=443.097s, 80692 KB] Evaluations: 1120501
+[t=443.097s, 80692 KB] Generated 1590632 state(s).
+[t=443.097s, 80692 KB] Dead ends: 0 state(s).
+[t=443.097s, 80692 KB] Number of registered states: 1120501
+[t=443.097s, 80692 KB] Int hash set load factor: 1120501/2097152 = 0.534297
+[t=443.097s, 80692 KB] Int hash set resizes: 21
+Peak memory: 98276 KB
+caught signal 24 -- exiting
+Time limit has been reached.
+Remove intermediate file output.sas
+search exit code: 23
+
+Driver aborting after search
+INFO     Planner time: 596.70s

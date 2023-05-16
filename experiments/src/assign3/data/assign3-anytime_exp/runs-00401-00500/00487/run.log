@@ -1,0 +1,246 @@
+INFO     planner time limit: 900s
+INFO     planner memory limit: 3584 MB
+
+INFO     Running translator.
+INFO     translator stdin: None
+INFO     translator time limit: 899s
+INFO     translator memory limit: 3584 MB
+INFO     translator command line string: /usr/local/downward-projects/downward/experiments/assign3/.venv/bin/python3 /usr/local/downward-projects/downward/experiments/assign3/data/assign3-anytime_exp/code-fe4f0f1bb525c059c1938ac01bab1b7bae200873_e5e41175/builds/release/bin/translate/translate.py domain.pddl problem.pddl --sas-file output.sas
+Parsing...
+Parsing: [0.010s CPU, 0.006s wall-clock]
+Normalizing task... [0.000s CPU, 0.001s wall-clock]
+Instantiating...
+Generating Datalog program... [0.000s CPU, 0.001s wall-clock]
+Normalizing Datalog program...
+Normalizing Datalog program: [0.020s CPU, 0.017s wall-clock]
+Preparing model... [0.000s CPU, 0.005s wall-clock]
+Generated 400 rules.
+Computing model... [0.490s CPU, 0.486s wall-clock]
+30399 relevant atoms
+31995 auxiliary atoms
+62394 final queue length
+160559 total queue pushes
+Completing instantiation... [1.980s CPU, 1.997s wall-clock]
+Instantiating: [2.510s CPU, 2.528s wall-clock]
+Computing fact groups...
+Finding invariants...
+41 initial candidates
+Finding invariants: [0.040s CPU, 0.045s wall-clock]
+Checking invariant weight... [0.000s CPU, 0.000s wall-clock]
+Instantiating groups... [0.000s CPU, 0.000s wall-clock]
+Collecting mutex groups... [0.000s CPU, 0.000s wall-clock]
+Choosing groups...
+371 uncovered facts
+Choosing groups: [0.000s CPU, 0.000s wall-clock]
+Building translation key... [0.000s CPU, 0.001s wall-clock]
+Computing fact groups: [0.040s CPU, 0.049s wall-clock]
+Building STRIPS to SAS dictionary... [0.000s CPU, 0.000s wall-clock]
+Building dictionary for full mutex groups... [0.000s CPU, 0.000s wall-clock]
+Building mutex information...
+Building mutex information: [0.000s CPU, 0.000s wall-clock]
+Translating task...
+Processing axioms...
+Simplifying axioms... [0.000s CPU, 0.000s wall-clock]
+Translator axioms removed by simplifying: 0
+Computing negative axioms... [0.000s CPU, 0.000s wall-clock]
+Processing axioms: [0.080s CPU, 0.077s wall-clock]
+Translating task: [2.180s CPU, 2.208s wall-clock]
+80827 effect conditions simplified
+0 implied preconditions added
+Detecting unreachable propositions...
+0 operators removed
+0 axioms removed
+2 propositions removed
+Detecting unreachable propositions: [1.670s CPU, 1.678s wall-clock]
+Reordering and filtering variables...
+373 of 373 variables necessary.
+1 of 3 mutex groups necessary.
+29843 of 29843 operators necessary.
+0 of 0 axiom rules necessary.
+Reordering and filtering variables: [0.500s CPU, 0.506s wall-clock]
+Translator variables: 373
+Translator derived variables: 0
+Translator facts: 749
+Translator goal facts: 4
+Translator mutex groups: 1
+Translator total mutex groups size: 2
+Translator operators: 29843
+Translator axioms: 0
+Translator task size: 360046
+Translator peak memory: 225904 KB
+Writing output... [0.280s CPU, 0.275s wall-clock]
+Done! [7.270s CPU, 7.337s wall-clock]
+translate exit code: 0
+
+INFO     Running search (release).
+INFO     search stdin: output.sas
+INFO     search time limit: 892s
+INFO     search memory limit: 3584 MB
+INFO     search command line string: /usr/local/downward-projects/downward/experiments/assign3/data/assign3-anytime_exp/code-fe4f0f1bb525c059c1938ac01bab1b7bae200873_e5e41175/builds/release/bin/downward --evaluator 'h=lmcut()' --search 'eager_anytime(epsilon_greedy(
+        sum([weight(h, 2, verbosity=normal), g()]), epsilon=0.2, random_seed=1234), 
+        reopen_closed=true, f_eval=sum([h, g()]))' --internal-plan-file sas_plan < output.sas
+[t=0.00105178s, 10884 KB] reading input...
+[t=0.165788s, 24368 KB] done reading input!
+[t=0.193092s, 34544 KB] Initializing landmark cut heuristic...
+[t=0.193544s, 34544 KB] Building successor generator...done!
+[t=0.213922s, 40056 KB] peak memory difference for successor generator creation: 5512 KB
+[t=0.21403s, 40056 KB] time for successor generation creation: 0.0192242s
+[t=0.214056s, 40056 KB] Variables: 373
+[t=0.214631s, 40056 KB] FactPairs: 749
+[t=0.214655s, 40056 KB] Bytes per state: 48
+[t=0.214678s, 40056 KB] Conducting best first anytime search with reopening closed nodes, (real) bound = 2147483647
+[t=0.232766s, 40056 KB] New best heuristic value for lmcut(): 20
+[t=0.233925s, 40056 KB] g=0, 1 evaluated, 0 expanded
+[t=0.233953s, 40056 KB] Initial heuristic value for lmcut(): 20
+[t=0.233981s, 40056 KB] Start Timestep: 1682554870137 millisecond(s).
+[t=0.320944s, 40056 KB] New best heuristic value for lmcut(): 19
+[t=0.321151s, 40056 KB] g=2, 6 evaluated, 2 expanded
+[t=0.35344s, 40056 KB] New best heuristic value for lmcut(): 18
+[t=0.353877s, 40056 KB] g=3, 8 evaluated, 3 expanded
+[t=0.383862s, 40056 KB] New best heuristic value for lmcut(): 17
+[t=0.384612s, 40056 KB] g=4, 10 evaluated, 4 expanded
+[t=0.397546s, 40056 KB] New best heuristic value for lmcut(): 14
+[t=0.398029s, 40056 KB] g=4, 11 evaluated, 4 expanded
+[t=26.8178s, 40056 KB] New best heuristic value for lmcut(): 13
+[t=26.8189s, 40056 KB] g=17, 1657 evaluated, 796 expanded
+[t=27.8028s, 40056 KB] New best heuristic value for lmcut(): 11
+[t=27.8034s, 40056 KB] g=22, 1724 evaluated, 829 expanded
+[t=40.2749s, 40056 KB] New best heuristic value for lmcut(): 10
+[t=40.2785s, 40056 KB] g=25, 2545 evaluated, 1197 expanded
+[t=40.3109s, 40056 KB] New best heuristic value for lmcut(): 9
+[t=40.3119s, 40056 KB] g=26, 2549 evaluated, 1198 expanded
+[t=40.3946s, 40056 KB] New best heuristic value for lmcut(): 8
+[t=40.3966s, 40056 KB] g=28, 2557 evaluated, 1201 expanded
+[t=40.5342s, 40056 KB] New best heuristic value for lmcut(): 7
+[t=40.5344s, 40056 KB] g=30, 2570 evaluated, 1205 expanded
+[t=40.9572s, 40056 KB] New best heuristic value for lmcut(): 6
+[t=40.9585s, 40056 KB] g=33, 2612 evaluated, 1223 expanded
+[t=41.8025s, 40056 KB] New best heuristic value for lmcut(): 5
+[t=41.8041s, 40056 KB] g=36, 2698 evaluated, 1266 expanded
+[t=41.8064s, 40056 KB] New best heuristic value for lmcut(): 4
+[t=41.808s, 40056 KB] g=37, 2699 evaluated, 1267 expanded
+[t=41.8143s, 40056 KB] New best heuristic value for lmcut(): 3
+[t=41.8148s, 40056 KB] g=38, 2701 evaluated, 1268 expanded
+[t=41.8239s, 40056 KB] New best heuristic value for lmcut(): 2
+[t=41.8244s, 40056 KB] g=39, 2704 evaluated, 1269 expanded
+[t=41.8781s, 40056 KB] New best heuristic value for lmcut(): 1
+[t=41.8788s, 40056 KB] g=40, 2710 evaluated, 1271 expanded
+[t=41.882s, 40056 KB] New best heuristic value for lmcut(): 0
+[t=41.8829s, 40056 KB] g=41, 2713 evaluated, 1272 expanded
+[t=41.9299s, 40056 KB] Solution found!
+unpark pr2 xrel0 yrel0 (1)
+base-right pr2 x0 x1 y0 (1)
+base-right pr2 x1 x2 y0 (1)
+base-down pr2 x2 y0 y1 (1)
+base-down pr2 x2 y1 y2 (1)
+base-down pr2 x2 y2 y3 (1)
+base-down pr2 x2 y3 y4 (1)
+base-down pr2 x2 y4 y5 (1)
+base-down pr2 x2 y5 y6 (1)
+park pr2 (1)
+get-left pr2 x2 y6 xrel0 x2 yrel0 y6 object2 x1 (1)
+unpark pr2 xrel0 yrel0 (1)
+base-up pr2 x2 y6 y5 (1)
+base-up pr2 x2 y5 y4 (1)
+base-up pr2 x2 y4 y3 (1)
+base-up pr2 x2 y3 y2 (1)
+base-up pr2 x2 y2 y1 (1)
+base-right pr2 x2 x3 y1 (1)
+base-right pr2 x3 x4 y1 (1)
+base-down pr2 x4 y1 y2 (1)
+base-right pr2 x4 x5 y2 (1)
+base-down pr2 x5 y2 y3 (1)
+park pr2 (1)
+gripper-left pr2 x5 y3 xrel0 xrel-1 x5 x4 yrel0 y3 (1)
+put-right pr2 x5 y3 xrel-1 x4 yrel0 y3 object2 x5 (1)
+finish-object object2 x5 y3 (1)
+get-right pr2 x5 y3 xrel-1 x4 yrel0 y3 object0 x5 (1)
+gripper-right pr2 x5 y3 xrel-1 xrel0 x4 x5 yrel0 y3 (1)
+put-left pr2 x5 y3 xrel0 x5 yrel0 y3 object0 x4 (1)
+finish-object object0 x4 y3 (1)
+unpark pr2 xrel0 yrel0 (1)
+base-down pr2 x5 y3 y4 (1)
+park pr2 (1)
+get-left pr2 x5 y4 xrel0 x5 yrel0 y4 object3 x4 (1)
+gripper-left pr2 x5 y4 xrel0 xrel-1 x5 x4 yrel0 y4 (1)
+put-right pr2 x5 y4 xrel-1 x4 yrel0 y4 object3 x5 (1)
+get-right pr2 x5 y4 xrel-1 x4 yrel0 y4 object1 x5 (1)
+gripper-right pr2 x5 y4 xrel-1 xrel0 x4 x5 yrel0 y4 (1)
+put-left pr2 x5 y4 xrel0 x5 yrel0 y4 object1 x4 (1)
+finish-object object1 x4 y4 (1)
+finish-object object3 x5 y4 (1)
+[t=41.9304s, 40056 KB] Plan length: 41 step(s).
+[t=41.931s, 40056 KB] Plan cost: 41
+[t=41.9311s, 40056 KB] Solution: Incumbent solution found!
+[t=41.9311s, 40056 KB] Solution Timestep: 1682554912373 millisecond(s).
+[t=41.9311s, 40056 KB] Timestamp: 1682554912373 millisecond(s).
+[t=41.9311s, 40056 KB] Expanded 1275 state(s).
+[t=41.9312s, 40056 KB] Reopened 0 state(s).
+[t=41.9312s, 40056 KB] Evaluated 2716 state(s).
+[t=41.9312s, 40056 KB] Evaluations: 2716
+[t=41.9312s, 40056 KB] Generated 4557 state(s).
+[t=41.9312s, 40056 KB] Dead ends: 0 state(s).
+[t=41.9313s, 40056 KB] Number of registered states: 2716
+[t=41.9313s, 40056 KB] Int hash set load factor: 2716/4096 = 0.663086
+[t=41.9313s, 40056 KB] Int hash set resizes: 12
+[t=53.0731s, 40056 KB] Solution found!
+unpark pr2 xrel0 yrel0 (1)
+base-right pr2 x0 x1 y0 (1)
+base-right pr2 x1 x2 y0 (1)
+base-down pr2 x2 y0 y1 (1)
+base-down pr2 x2 y1 y2 (1)
+base-down pr2 x2 y2 y3 (1)
+base-down pr2 x2 y3 y4 (1)
+base-down pr2 x2 y4 y5 (1)
+park pr2 (1)
+gripper-down pr2 x2 y5 xrel0 x2 yrel0 yrel1 y5 y6 (1)
+get-left pr2 x2 y5 xrel0 x2 yrel1 y6 object2 x1 (1)
+gripper-up pr2 x2 y5 xrel0 x2 yrel1 yrel0 y6 y5 (1)
+put-left pr2 x2 y5 xrel0 x2 yrel0 y5 object2 x1 (1)
+finish-object object2 x1 y5 (1)
+unpark pr2 xrel0 yrel0 (1)
+base-up pr2 x2 y5 y4 (1)
+base-up pr2 x2 y4 y3 (1)
+base-up pr2 x2 y3 y2 (1)
+base-up pr2 x2 y2 y1 (1)
+base-right pr2 x2 x3 y1 (1)
+base-right pr2 x3 x4 y1 (1)
+base-down pr2 x4 y1 y2 (1)
+base-down pr2 x4 y2 y3 (1)
+base-down pr2 x4 y3 y4 (1)
+park pr2 (1)
+get-right pr2 x4 y4 xrel0 x4 yrel0 y4 object1 x5 (1)
+gripper-up pr2 x4 y4 xrel0 x4 yrel0 yrel-1 y4 y3 (1)
+put-down pr2 x4 y4 xrel0 x4 yrel-1 y3 object1 y4 (1)
+finish-object object1 x4 y4 (1)
+get-right pr2 x4 y4 xrel0 x4 yrel-1 y3 object0 x5 (1)
+gripper-right pr2 x4 y4 xrel0 xrel1 x4 x5 yrel-1 y3 (1)
+put-left pr2 x4 y4 xrel1 x5 yrel-1 y3 object0 x4 (1)
+gripper-down pr2 x4 y4 xrel1 x5 yrel-1 yrel0 y3 y4 (1)
+get-left pr2 x4 y4 xrel1 x5 yrel0 y4 object3 x4 (1)
+gripper-left pr2 x4 y4 xrel1 xrel0 x5 x4 yrel0 y4 (1)
+put-right pr2 x4 y4 xrel0 x4 yrel0 y4 object3 x5 (1)
+finish-object object0 x4 y3 (1)
+finish-object object3 x5 y4 (1)
+[t=53.0738s, 40056 KB] Plan length: 38 step(s).
+[t=53.0744s, 40056 KB] Plan cost: 38
+[t=53.0744s, 40056 KB] Solution: Incumbent solution found!
+[t=53.0745s, 40056 KB] Solution Timestep: 1682554923601 millisecond(s).
+[t=53.0745s, 40056 KB] Timestamp: 1682554923601 millisecond(s).
+[t=53.0745s, 40056 KB] Expanded 1686 state(s).
+[t=53.0745s, 40056 KB] Reopened 0 state(s).
+[t=53.0746s, 40056 KB] Evaluated 3538 state(s).
+[t=53.0746s, 40056 KB] Evaluations: 3601
+[t=53.0746s, 40056 KB] Generated 6061 state(s).
+[t=53.0746s, 40056 KB] Dead ends: 0 state(s).
+[t=53.0747s, 40056 KB] Number of registered states: 3601
+[t=53.0747s, 40056 KB] Int hash set load factor: 3601/4096 = 0.87915
+[t=53.0747s, 40056 KB] Int hash set resizes: 12
+Peak memory: 43368 KB
+caught signal 24 -- exiting
+Time limit has been reached.
+Remove intermediate file output.sas
+search exit code: 23
+
+Driver aborting after search
+INFO     Planner time: 896.40s

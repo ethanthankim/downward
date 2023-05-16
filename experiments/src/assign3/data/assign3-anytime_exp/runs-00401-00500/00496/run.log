@@ -1,0 +1,123 @@
+INFO     planner time limit: 900s
+INFO     planner memory limit: 3584 MB
+
+INFO     Running translator.
+INFO     translator stdin: None
+INFO     translator time limit: 899s
+INFO     translator memory limit: 3584 MB
+INFO     translator command line string: /usr/local/downward-projects/downward/experiments/assign3/.venv/bin/python3 /usr/local/downward-projects/downward/experiments/assign3/data/assign3-anytime_exp/code-fe4f0f1bb525c059c1938ac01bab1b7bae200873_e5e41175/builds/release/bin/translate/translate.py domain.pddl problem.pddl --sas-file output.sas
+Parsing...
+Parsing: [0.000s CPU, 0.006s wall-clock]
+Normalizing task... [0.000s CPU, 0.000s wall-clock]
+Instantiating...
+Generating Datalog program... [0.000s CPU, 0.001s wall-clock]
+Normalizing Datalog program...
+Normalizing Datalog program: [0.020s CPU, 0.017s wall-clock]
+Preparing model... [0.000s CPU, 0.006s wall-clock]
+Generated 400 rules.
+Computing model... [0.710s CPU, 0.723s wall-clock]
+44075 relevant atoms
+39274 auxiliary atoms
+83349 final queue length
+231236 total queue pushes
+Completing instantiation... [3.060s CPU, 3.099s wall-clock]
+Instantiating: [3.830s CPU, 3.879s wall-clock]
+Computing fact groups...
+Finding invariants...
+41 initial candidates
+Finding invariants: [0.060s CPU, 0.061s wall-clock]
+Checking invariant weight... [0.000s CPU, 0.000s wall-clock]
+Instantiating groups... [0.000s CPU, 0.000s wall-clock]
+Collecting mutex groups... [0.000s CPU, 0.000s wall-clock]
+Choosing groups...
+447 uncovered facts
+Choosing groups: [0.000s CPU, 0.001s wall-clock]
+Building translation key... [0.000s CPU, 0.001s wall-clock]
+Computing fact groups: [0.060s CPU, 0.066s wall-clock]
+Building STRIPS to SAS dictionary... [0.000s CPU, 0.000s wall-clock]
+Building dictionary for full mutex groups... [0.010s CPU, 0.000s wall-clock]
+Building mutex information...
+Building mutex information: [0.000s CPU, 0.000s wall-clock]
+Translating task...
+Processing axioms...
+Simplifying axioms... [0.000s CPU, 0.000s wall-clock]
+Translator axioms removed by simplifying: 0
+Computing negative axioms... [0.000s CPU, 0.000s wall-clock]
+Processing axioms: [0.120s CPU, 0.124s wall-clock]
+Translating task: [3.380s CPU, 3.442s wall-clock]
+123365 effect conditions simplified
+0 implied preconditions added
+Detecting unreachable propositions...
+0 operators removed
+0 axioms removed
+2 propositions removed
+Detecting unreachable propositions: [2.550s CPU, 2.588s wall-clock]
+Reordering and filtering variables...
+449 of 449 variables necessary.
+1 of 3 mutex groups necessary.
+43432 of 43432 operators necessary.
+0 of 0 axiom rules necessary.
+Reordering and filtering variables: [0.780s CPU, 0.793s wall-clock]
+Translator variables: 449
+Translator derived variables: 0
+Translator facts: 901
+Translator goal facts: 4
+Translator mutex groups: 1
+Translator total mutex groups size: 2
+Translator operators: 43432
+Translator axioms: 0
+Translator task size: 534136
+Translator peak memory: 319792 KB
+Writing output... [0.400s CPU, 0.405s wall-clock]
+Done! [11.140s CPU, 11.308s wall-clock]
+translate exit code: 0
+
+INFO     Running search (release).
+INFO     search stdin: output.sas
+INFO     search time limit: 888s
+INFO     search memory limit: 3584 MB
+INFO     search command line string: /usr/local/downward-projects/downward/experiments/assign3/data/assign3-anytime_exp/code-fe4f0f1bb525c059c1938ac01bab1b7bae200873_e5e41175/builds/release/bin/downward --evaluator 'h=lmcut()' --search 'eager_anytime(epsilon_greedy(
+        sum([weight(h, 2, verbosity=normal), g()]), epsilon=0.2, random_seed=1234), 
+        reopen_closed=true, f_eval=sum([h, g()]))' --internal-plan-file sas_plan < output.sas
+[t=0.00210463s, 10884 KB] reading input...
+[t=0.263288s, 30928 KB] done reading input!
+[t=0.305232s, 46828 KB] Initializing landmark cut heuristic...
+[t=0.305693s, 46828 KB] Building successor generator...done!
+[t=0.337409s, 55172 KB] peak memory difference for successor generator creation: 8344 KB
+[t=0.337524s, 55172 KB] time for successor generation creation: 0.030724s
+[t=0.337557s, 55172 KB] Variables: 449
+[t=0.338451s, 55172 KB] FactPairs: 901
+[t=0.338476s, 55172 KB] Bytes per state: 60
+[t=0.338539s, 55172 KB] Conducting best first anytime search with reopening closed nodes, (real) bound = 2147483647
+[t=0.389024s, 55172 KB] New best heuristic value for lmcut(): 22
+[t=0.389701s, 55172 KB] g=0, 1 evaluated, 0 expanded
+[t=0.38973s, 55172 KB] Initial heuristic value for lmcut(): 22
+[t=0.389758s, 55172 KB] Start Timestep: 1682435099510 millisecond(s).
+[t=0.536803s, 55172 KB] New best heuristic value for lmcut(): 21
+[t=0.537303s, 55172 KB] g=1, 4 evaluated, 1 expanded
+[t=0.579873s, 55172 KB] New best heuristic value for lmcut(): 20
+[t=0.5802s, 55172 KB] g=2, 5 evaluated, 2 expanded
+[t=1.87635s, 55172 KB] New best heuristic value for lmcut(): 19
+[t=1.87646s, 55172 KB] g=6, 31 evaluated, 12 expanded
+[t=2.17424s, 55172 KB] New best heuristic value for lmcut(): 18
+[t=2.17536s, 55172 KB] g=7, 37 evaluated, 14 expanded
+[t=2.22354s, 55172 KB] New best heuristic value for lmcut(): 17
+[t=2.2239s, 55172 KB] g=8, 38 evaluated, 15 expanded
+[t=2.36433s, 55172 KB] New best heuristic value for lmcut(): 16
+[t=2.36485s, 55172 KB] g=8, 41 evaluated, 15 expanded
+[t=9.55386s, 55172 KB] New best heuristic value for lmcut(): 15
+[t=9.55411s, 55172 KB] g=12, 184 evaluated, 87 expanded, 3 reopened
+[t=249.532s, 55172 KB] New best heuristic value for lmcut(): 13
+[t=249.533s, 55172 KB] g=17, 5344 evaluated, 2352 expanded, 18 reopened
+[t=518.644s, 55172 KB] New best heuristic value for lmcut(): 12
+[t=518.645s, 55172 KB] g=23, 12391 evaluated, 5565 expanded, 32 reopened
+[t=518.772s, 55172 KB] New best heuristic value for lmcut(): 11
+[t=518.775s, 55172 KB] g=25, 12398 evaluated, 5567 expanded, 32 reopened
+Peak memory: 55172 KB
+caught signal 24 -- exiting
+Time limit has been reached.
+Remove intermediate file output.sas
+search exit code: 23
+
+Driver aborting after search
+INFO     Planner time: 897.40s

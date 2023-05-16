@@ -1,0 +1,521 @@
+INFO     planner time limit: 600s
+INFO     planner memory limit: 3584 MB
+
+INFO     Running translator.
+INFO     translator stdin: None
+INFO     translator time limit: 599s
+INFO     translator memory limit: 3584 MB
+INFO     translator command line string: /usr/local/downward-projects/downward/experiments/assign3/.venv/bin/python3 /usr/local/downward-projects/downward/experiments/assign3/data/assign3-anytime_exp/code-1fb14623350588fb782db39ad332c8a25eda53d6_e5e41175/builds/release/bin/translate/translate.py domain.pddl problem.pddl --sas-file output.sas
+Parsing...
+Parsing: [0.010s CPU, 0.004s wall-clock]
+Normalizing task... [0.000s CPU, 0.000s wall-clock]
+Instantiating...
+Generating Datalog program... [0.000s CPU, 0.001s wall-clock]
+Normalizing Datalog program...
+Normalizing Datalog program: [0.000s CPU, 0.003s wall-clock]
+Preparing model... [0.010s CPU, 0.003s wall-clock]
+Generated 212 rules.
+Computing model... [0.010s CPU, 0.013s wall-clock]
+1146 relevant atoms
+1316 auxiliary atoms
+2462 final queue length
+3332 total queue pushes
+Completing instantiation... [0.010s CPU, 0.013s wall-clock]
+Instantiating: [0.030s CPU, 0.034s wall-clock]
+Computing fact groups...
+Finding invariants...
+20 initial candidates
+Finding invariants: [0.000s CPU, 0.003s wall-clock]
+Checking invariant weight... [0.000s CPU, 0.000s wall-clock]
+Instantiating groups... [0.000s CPU, 0.001s wall-clock]
+Collecting mutex groups... [0.000s CPU, 0.000s wall-clock]
+Choosing groups...
+295 uncovered facts
+Choosing groups: [0.000s CPU, 0.000s wall-clock]
+Building translation key... [0.010s CPU, 0.001s wall-clock]
+Computing fact groups: [0.010s CPU, 0.008s wall-clock]
+Building STRIPS to SAS dictionary... [0.000s CPU, 0.000s wall-clock]
+Building dictionary for full mutex groups... [0.000s CPU, 0.000s wall-clock]
+Building mutex information...
+Building mutex information: [0.000s CPU, 0.000s wall-clock]
+Translating task...
+Processing axioms...
+Simplifying axioms... [0.000s CPU, 0.000s wall-clock]
+Translator axioms removed by simplifying: 0
+Computing negative axioms... [0.000s CPU, 0.000s wall-clock]
+Processing axioms: [0.000s CPU, 0.001s wall-clock]
+Translating task: [0.010s CPU, 0.014s wall-clock]
+321 effect conditions simplified
+0 implied preconditions added
+Detecting unreachable propositions...
+0 operators removed
+0 axioms removed
+12 propositions removed
+Detecting unreachable propositions: [0.010s CPU, 0.008s wall-clock]
+Reordering and filtering variables...
+104 of 304 variables necessary.
+0 of 10 mutex groups necessary.
+461 of 461 operators necessary.
+0 of 0 axiom rules necessary.
+Reordering and filtering variables: [0.000s CPU, 0.004s wall-clock]
+Translator variables: 104
+Translator derived variables: 0
+Translator facts: 368
+Translator goal facts: 60
+Translator mutex groups: 0
+Translator total mutex groups size: 0
+Translator operators: 461
+Translator axioms: 0
+Translator task size: 3370
+Translator peak memory: 34924 KB
+Writing output... [0.010s CPU, 0.003s wall-clock]
+Done! [0.080s CPU, 0.078s wall-clock]
+translate exit code: 0
+
+INFO     Running search (release).
+INFO     search stdin: output.sas
+INFO     search time limit: 599s
+INFO     search memory limit: 3584 MB
+INFO     search command line string: /usr/local/downward-projects/downward/experiments/assign3/data/assign3-anytime_exp/code-1fb14623350588fb782db39ad332c8a25eda53d6_e5e41175/builds/release/bin/downward --evaluator 'h=lmcut()' --search 'iterated([
+            lazy_wastar([h],w=5),
+            lazy_wastar([h],w=4),
+            lazy_wastar([h],w=3),
+            lazy_wastar([h],w=2),
+            astar(h)
+        ],continue_on_fail=true)' --internal-plan-file sas_plan < output.sas
+[t=0.00105206s, 10884 KB] reading input...
+[t=0.00313414s, 11008 KB] done reading input!
+[t=0.00627397s, 11404 KB] Initializing landmark cut heuristic...
+[t=0.00637376s, 11404 KB] Building successor generator...done!
+[t=0.00666112s, 11404 KB] peak memory difference for successor generator creation: 0 KB
+[t=0.00671093s, 11404 KB] time for successor generation creation: 8.5184e-05s
+[t=0.00673499s, 11404 KB] Variables: 104
+[t=0.00676083s, 11404 KB] FactPairs: 368
+[t=0.00678214s, 11404 KB] Bytes per state: 20
+[t=0.00680532s, 11404 KB] Start Timestep: 1681964049507 millisecond(s).
+[t=0.00688595s, 11404 KB] Building successor generator...done!
+[t=0.00697108s, 11404 KB] peak memory difference for successor generator creation: 0 KB
+[t=0.00701025s, 11404 KB] time for successor generation creation: 0s
+[t=0.00703349s, 11404 KB] Variables: 104
+[t=0.00705695s, 11404 KB] FactPairs: 368
+[t=0.00707935s, 11404 KB] Bytes per state: 20
+[t=0.00710063s, 11404 KB] Starting search: lazy_wastar([h],w=5)
+[t=0.00713437s, 11404 KB] Conducting lazy best first search, (real) bound = 2147483647
+[t=0.0071641s, 11404 KB] Start Timestep: 1681964049508 millisecond(s).
+[t=0.00718798s, 11404 KB] New best heuristic value for lmcut(): 2475327
+[t=0.00800387s, 11404 KB] g=0, 1 evaluated, 0 expanded
+[t=0.00802923s, 11404 KB] Initial heuristic value for lmcut(): 2475327
+[t=0.00920095s, 11404 KB] New best heuristic value for lmcut(): 2470326
+[t=0.00953693s, 11404 KB] g=8000, 3 evaluated, 2 expanded
+[t=0.0102304s, 11404 KB] New best heuristic value for lmcut(): 2467327
+[t=0.0102869s, 11404 KB] g=10999, 4 evaluated, 3 expanded
+[t=0.0103114s, 11404 KB] New best heuristic value for lmcut(): 2462326
+[t=0.0109814s, 11404 KB] g=18999, 5 evaluated, 4 expanded
+[t=0.0112348s, 11404 KB] New best heuristic value for lmcut(): 2449328
+[t=0.0116658s, 11404 KB] g=21998, 6 evaluated, 5 expanded
+[t=0.0227767s, 11404 KB] New best heuristic value for lmcut(): 2441328
+[t=0.0236066s, 11404 KB] g=32997, 25 evaluated, 24 expanded
+[t=0.0238013s, 11404 KB] New best heuristic value for lmcut(): 2431329
+[t=0.0242175s, 11404 KB] g=40997, 26 evaluated, 25 expanded
+[t=0.0242428s, 11404 KB] New best heuristic value for lmcut(): 2425328
+[t=0.0247951s, 11404 KB] g=43996, 27 evaluated, 26 expanded
+[t=0.0248245s, 11404 KB] New best heuristic value for lmcut(): 2415329
+[t=0.0253126s, 11404 KB] g=51996, 28 evaluated, 27 expanded
+[t=0.0253359s, 11404 KB] New best heuristic value for lmcut(): 2397333
+[t=0.0258276s, 11404 KB] g=54995, 29 evaluated, 28 expanded
+[t=0.0260513s, 11404 KB] New best heuristic value for lmcut(): 2397330
+[t=0.0266924s, 11404 KB] g=62995, 31 evaluated, 30 expanded
+[t=0.0268495s, 11404 KB] New best heuristic value for lmcut(): 2392332
+[t=0.0271657s, 11404 KB] g=62995, 32 evaluated, 31 expanded
+[t=0.0271903s, 11404 KB] New best heuristic value for lmcut(): 2381333
+[t=0.0276295s, 11404 KB] g=65994, 33 evaluated, 32 expanded
+[t=0.0278613s, 11404 KB] New best heuristic value for lmcut(): 2380330
+[t=0.0284075s, 11404 KB] g=73994, 35 evaluated, 34 expanded
+[t=0.0284331s, 11404 KB] New best heuristic value for lmcut(): 2373333
+[t=0.028827s, 11404 KB] g=73994, 36 evaluated, 35 expanded
+[t=0.0288729s, 11404 KB] New best heuristic value for lmcut(): 2360335
+[t=0.0292403s, 11404 KB] g=76993, 37 evaluated, 36 expanded
+[t=0.0292646s, 11404 KB] New best heuristic value for lmcut(): 2359332
+[t=0.029917s, 11404 KB] g=84993, 39 evaluated, 38 expanded
+[t=0.0299418s, 11404 KB] New best heuristic value for lmcut(): 2352335
+[t=0.0306198s, 11404 KB] g=84993, 41 evaluated, 40 expanded
+[t=0.0308983s, 11404 KB] New best heuristic value for lmcut(): 2143292
+[t=0.0310247s, 11404 KB] g=309033, 42 evaluated, 41 expanded
+[t=0.0310487s, 11404 KB] New best heuristic value for lmcut(): 1905251
+[t=0.0316688s, 11404 KB] g=317033, 44 evaluated, 43 expanded
+[t=0.0340127s, 11404 KB] New best heuristic value for lmcut(): 1895252
+[t=0.0342905s, 11404 KB] g=325033, 53 evaluated, 52 expanded
+[t=0.034316s, 11404 KB] New best heuristic value for lmcut(): 1882254
+[t=0.0346298s, 11404 KB] g=328032, 54 evaluated, 53 expanded
+[t=0.0350185s, 11404 KB] New best heuristic value for lmcut(): 1874254
+[t=0.0357475s, 11404 KB] g=336032, 60 evaluated, 57 expanded
+[t=0.035773s, 11404 KB] New best heuristic value for lmcut(): 1864255
+[t=0.0360684s, 11404 KB] g=346031, 61 evaluated, 58 expanded
+[t=0.0360936s, 11404 KB] New best heuristic value for lmcut(): 1856255
+[t=0.0363945s, 11404 KB] g=354031, 63 evaluated, 59 expanded
+[t=0.0370554s, 11404 KB] New best heuristic value for lmcut(): 1840255
+[t=0.0374514s, 11404 KB] g=362031, 69 evaluated, 63 expanded
+[t=0.0390831s, 11404 KB] New best heuristic value for lmcut(): 1832255
+[t=0.0400925s, 11404 KB] g=370031, 83 evaluated, 73 expanded
+[t=0.0401222s, 11404 KB] New best heuristic value for lmcut(): 1626214
+[t=0.040409s, 11404 KB] g=594071, 85 evaluated, 74 expanded
+[t=0.0411425s, 11404 KB] New best heuristic value for lmcut(): 1618214
+[t=0.0411862s, 11404 KB] g=602071, 90 evaluated, 77 expanded
+[t=0.0412118s, 11404 KB] New best heuristic value for lmcut(): 1608215
+[t=0.0414841s, 11404 KB] g=612070, 91 evaluated, 78 expanded
+[t=0.0415083s, 11404 KB] New best heuristic value for lmcut(): 1600215
+[t=0.041759s, 11404 KB] g=620070, 92 evaluated, 79 expanded
+[t=0.0417832s, 11404 KB] New best heuristic value for lmcut(): 1384175
+[t=0.0420369s, 11404 KB] g=844110, 94 evaluated, 80 expanded
+[t=0.0421166s, 11404 KB] New best heuristic value for lmcut(): 1380173
+[t=0.0424914s, 11404 KB] g=852110, 96 evaluated, 82 expanded
+[t=0.0425157s, 11404 KB] New best heuristic value for lmcut(): 1370174
+[t=0.0431576s, 11404 KB] g=860110, 101 evaluated, 85 expanded
+[t=0.0431821s, 11404 KB] New best heuristic value for lmcut(): 1156133
+[t=0.0434442s, 11404 KB] g=1084150, 103 evaluated, 86 expanded
+[t=0.0434681s, 11404 KB] New best heuristic value for lmcut(): 1154134
+[t=0.0437077s, 11404 KB] g=1308190, 105 evaluated, 87 expanded
+[t=0.0437316s, 11404 KB] New best heuristic value for lmcut(): 1148133
+[t=0.0441613s, 11404 KB] g=1092150, 108 evaluated, 89 expanded
+[t=0.0441853s, 11404 KB] New best heuristic value for lmcut(): 1138134
+[t=0.0444124s, 11404 KB] g=1102149, 109 evaluated, 90 expanded
+[t=0.0444378s, 11404 KB] New best heuristic value for lmcut(): 1130134
+[t=0.0446567s, 11404 KB] g=1110149, 110 evaluated, 91 expanded
+[t=0.0451371s, 11404 KB] New best heuristic value for lmcut(): 1120135
+[t=0.0452638s, 11404 KB] g=1118149, 115 evaluated, 94 expanded
+[t=0.0461681s, 11404 KB] New best heuristic value for lmcut(): 1112135
+[t=0.0462407s, 11404 KB] g=1126149, 124 evaluated, 99 expanded
+[t=0.0471987s, 11404 KB] New best heuristic value for lmcut(): 1104135
+[t=0.0478961s, 11404 KB] g=1144148, 137 evaluated, 108 expanded
+[t=0.0482271s, 11404 KB] New best heuristic value for lmcut(): 880095
+[t=0.0485391s, 11404 KB] g=1368188, 146 evaluated, 111 expanded
+[t=0.0492575s, 11404 KB] New best heuristic value for lmcut(): 878095
+[t=0.0497654s, 11404 KB] g=1370188, 158 evaluated, 118 expanded
+[t=0.0502863s, 11404 KB] New best heuristic value for lmcut(): 870095
+[t=0.0509866s, 11404 KB] g=1378188, 173 evaluated, 125 expanded
+[t=0.0513157s, 11404 KB] New best heuristic value for lmcut(): 862095
+[t=0.0516779s, 11404 KB] g=1386188, 182 evaluated, 129 expanded
+[t=0.0533986s, 11404 KB] New best heuristic value for lmcut(): 646055
+[t=0.0539981s, 11404 KB] g=1834268, 222 evaluated, 143 expanded
+[t=0.0540238s, 11404 KB] New best heuristic value for lmcut(): 404016
+[t=0.0541947s, 11404 KB] g=2058308, 225 evaluated, 144 expanded
+[t=0.0544072s, 11404 KB] New best heuristic value for lmcut(): 311001
+[t=0.0548488s, 11404 KB] g=2171321, 232 evaluated, 149 expanded
+[t=0.054873s, 11404 KB] New best heuristic value for lmcut(): 303001
+[t=0.0550222s, 11404 KB] g=2179321, 234 evaluated, 150 expanded
+[t=0.055046s, 11536 KB] New best heuristic value for lmcut(): 291003
+[t=0.0551893s, 11536 KB] g=2189320, 235 evaluated, 151 expanded
+[t=0.0552125s, 11536 KB] New best heuristic value for lmcut(): 283003
+[t=0.0553369s, 11536 KB] g=2197320, 236 evaluated, 152 expanded
+[t=0.055381s, 11536 KB] New best heuristic value for lmcut(): 277002
+[t=0.055502s, 11536 KB] g=2205320, 238 evaluated, 153 expanded
+[t=0.0555248s, 11536 KB] New best heuristic value for lmcut(): 265004
+[t=0.055641s, 11536 KB] g=2215319, 239 evaluated, 154 expanded
+[t=0.0556643s, 11536 KB] New best heuristic value for lmcut(): 257004
+[t=0.0557764s, 11536 KB] g=2223319, 240 evaluated, 155 expanded
+[t=0.055799s, 11536 KB] New best heuristic value for lmcut(): 255004
+[t=0.0560937s, 11536 KB] g=2225319, 244 evaluated, 158 expanded
+[t=0.0561175s, 11536 KB] New best heuristic value for lmcut(): 253004
+[t=0.0562337s, 11536 KB] g=2227319, 246 evaluated, 159 expanded
+[t=0.0563357s, 11536 KB] New best heuristic value for lmcut(): 245004
+[t=0.0563662s, 11536 KB] g=2245318, 247 evaluated, 160 expanded
+[t=0.0563894s, 11536 KB] New best heuristic value for lmcut(): 242005
+[t=0.0565697s, 11536 KB] g=2248317, 250 evaluated, 162 expanded
+[t=0.0565927s, 11536 KB] New best heuristic value for lmcut(): 232006
+[t=0.0566871s, 11536 KB] g=2258316, 251 evaluated, 163 expanded
+[t=0.0567362s, 11536 KB] New best heuristic value for lmcut(): 229007
+[t=0.0568068s, 11536 KB] g=2261315, 252 evaluated, 164 expanded
+[t=0.0568303s, 11536 KB] New best heuristic value for lmcut(): 221007
+[t=0.0569137s, 11536 KB] g=2269315, 253 evaluated, 165 expanded
+[t=0.056937s, 11536 KB] New best heuristic value for lmcut(): 213007
+[t=0.0570245s, 11536 KB] g=2277315, 255 evaluated, 166 expanded
+[t=0.0570464s, 11536 KB] New best heuristic value for lmcut(): 195008
+[t=0.0571192s, 11536 KB] g=2287314, 256 evaluated, 167 expanded
+[t=0.057256s, 11536 KB] New best heuristic value for lmcut(): 193008
+[t=0.0573585s, 11536 KB] g=2289314, 261 evaluated, 170 expanded
+[t=0.0573824s, 11536 KB] New best heuristic value for lmcut(): 79995
+[t=0.0575583s, 11536 KB] g=2402327, 266 evaluated, 173 expanded
+[t=0.0575825s, 11536 KB] New best heuristic value for lmcut(): 77995
+[t=0.0577389s, 11536 KB] g=2404327, 271 evaluated, 176 expanded
+[t=0.0577618s, 11536 KB] New best heuristic value for lmcut(): 75995
+[t=0.0578726s, 11536 KB] g=2406327, 275 evaluated, 178 expanded
+[t=0.0578956s, 11536 KB] New best heuristic value for lmcut(): 57996
+[t=0.0579533s, 11536 KB] g=2424326, 276 evaluated, 179 expanded
+[t=0.0579764s, 11536 KB] New best heuristic value for lmcut(): 54997
+[t=0.0581104s, 11536 KB] g=2427325, 281 evaluated, 182 expanded
+[t=0.0581335s, 11536 KB] New best heuristic value for lmcut(): 44998
+[t=0.0581876s, 11536 KB] g=2437324, 282 evaluated, 183 expanded
+[t=0.0582111s, 11536 KB] New best heuristic value for lmcut(): 41999
+[t=0.0582584s, 11536 KB] g=2440323, 283 evaluated, 184 expanded
+[t=0.058281s, 11536 KB] New best heuristic value for lmcut(): 33999
+[t=0.0583851s, 11536 KB] g=2456323, 289 evaluated, 187 expanded
+[t=0.058407s, 11536 KB] New best heuristic value for lmcut(): 25999
+[t=0.0584539s, 11536 KB] g=2464323, 291 evaluated, 188 expanded
+[t=0.0584761s, 11536 KB] New best heuristic value for lmcut(): 16000
+[t=0.0585149s, 11536 KB] g=2474322, 292 evaluated, 189 expanded
+[t=0.0585376s, 11536 KB] New best heuristic value for lmcut(): 8000
+[t=0.0585808s, 11536 KB] g=2482322, 293 evaluated, 190 expanded
+[t=0.0586036s, 11536 KB] Solution found!
+[t=0.058638s, 11536 KB] Actual search time: 0.05145s
+initialize  (0)
+colorfeeder-feed-letter sheet1 (8000)
+down-movebottom-letter sheet1 (2999)
+colorfeeder-feed-letter sheet2 (8000)
+down-movebottom-letter sheet2 (2999)
+colorfeeder-feed-letter sheet3 (8000)
+down-movebottom-letter sheet3 (2999)
+colorfeeder-feed-letter sheet4 (8000)
+down-movebottom-letter sheet4 (2999)
+colorfeeder-feed-letter sheet5 (8000)
+down-movebottom-letter sheet5 (2999)
+colorfeeder-feed-letter sheet8 (8000)
+down-movebottom-letter sheet8 (2999)
+colorfeeder-feed-letter sheet9 (8000)
+down-movebottom-letter sheet9 (2999)
+colorcontainer-toime-letter sheet1 (8000)
+colorprinter-simplex-letter sheet1 front image-1 (224040)
+colorfeeder-feed-letter sheet7 (8000)
+colorcontainer-toime-letter sheet8 (8000)
+down-movebottom-letter sheet7 (2999)
+colorcontainer-fromime-letter sheet1 (8000)
+up-moveup-letter sheet1 (9999)
+finisher1-stack-letter sheet1 dummy-sheet (8000)
+colorcontainer-toime-letter sheet2 (8000)
+blackfeeder-feed-letter sheet6 (8000)
+colorprinter-simplex-letter sheet2 front image-2 (224040)
+colorcontainer-fromime-letter sheet2 (8000)
+up-moveup-letter sheet2 (9999)
+finisher1-stack-letter sheet2 sheet1 (8000)
+colorprinter-simplex-letter sheet8 front image-8 (224040)
+colorcontainer-toime-letter sheet3 (8000)
+colorcontainer-toime-letter sheet4 (8000)
+colorprinter-simplex-letter sheet3 front image-3 (224040)
+colorcontainer-fromime-letter sheet3 (8000)
+up-moveup-letter sheet3 (9999)
+finisher1-stack-letter sheet3 sheet2 (8000)
+colorcontainer-toime-letter sheet5 (8000)
+colorcontainer-fromime-letter sheet8 (8000)
+colorcontainer-toime-letter sheet7 (8000)
+up-moveup-letter sheet8 (9999)
+colorprinter-simplex-letter sheet7 front image-7 (224040)
+blackcontainer-toime-letter sheet6 (2000)
+blackfeeder-feed-letter sheet10 (8000)
+colorcontainer-toime-letter sheet9 (8000)
+colorprinter-simplex-letter sheet4 front image-4 (224040)
+colorprinter-simplex-letter sheet5 front image-5 (224040)
+colorprinter-simplex-letter sheet9 front image-9 (224040)
+blackprinter-simplex-letter sheet6 front image-6 (113013)
+colorcontainer-fromime-letter sheet4 (8000)
+up-moveup-letter sheet4 (9999)
+finisher1-stack-letter sheet4 sheet3 (8000)
+colorcontainer-fromime-letter sheet5 (8000)
+up-moveup-letter sheet5 (9999)
+finisher1-stack-letter sheet5 sheet4 (8000)
+blackcontainer-fromime-letter sheet6 (2000)
+endcap-move-letter sheet6 (2000)
+htmoverblack-move-letter sheet6 (17999)
+down-movetop-letter sheet6 (2999)
+htmovercolor-move-letter sheet6 (9999)
+up-movetop-letter sheet6 (2999)
+finisher1-stack-letter sheet6 sheet5 (8000)
+colorcontainer-fromime-letter sheet7 (8000)
+up-moveup-letter sheet7 (9999)
+blackcontainer-toime-letter sheet10 (2000)
+blackprinter-simplex-letter sheet10 front image-10 (113013)
+blackcontainer-fromime-letter sheet10 (2000)
+endcap-move-letter sheet10 (2000)
+htmoverblack-move-letter sheet10 (17999)
+down-movetop-letter sheet10 (2999)
+htmovercolor-move-letter sheet10 (9999)
+up-movetop-letter sheet10 (2999)
+finisher1-stack-letter sheet7 sheet6 (8000)
+finisher1-stack-letter sheet8 sheet7 (8000)
+colorcontainer-fromime-letter sheet9 (8000)
+up-moveup-letter sheet9 (9999)
+finisher1-stack-letter sheet9 sheet8 (8000)
+finisher1-stack-letter sheet10 sheet9 (8000)
+[t=0.0591979s, 11536 KB] Plan length: 77 step(s).
+[t=0.0592374s, 11536 KB] Plan cost: 2490322
+[t=0.0592604s, 11536 KB] Solution Timestep: 1681964049562 millisecond(s).
+[t=0.0592842s, 11536 KB] Timestamp: 1681964049562 millisecond(s).
+[t=0.0593074s, 11536 KB] Expanded 191 state(s).
+[t=0.05933s, 11536 KB] Reopened 0 state(s).
+[t=0.0593556s, 11536 KB] Evaluated 294 state(s).
+[t=0.0593784s, 11536 KB] Evaluations: 294
+[t=0.0593995s, 11536 KB] Generated 3296 state(s).
+[t=0.0594215s, 11536 KB] Dead ends: 102 state(s).
+[t=0.0594434s, 11536 KB] Number of registered states: 294
+[t=0.0594659s, 11536 KB] Int hash set load factor: 294/512 = 0.574219
+[t=0.0594921s, 11536 KB] Int hash set resizes: 9
+[t=0.0595135s, 11536 KB] Best solution cost so far: 2490322
+[t=0.0595361s, 11536 KB] Solution found - keep searching
+[t=0.0595581s, 11536 KB] Building successor generator...done!
+[t=0.0596795s, 11536 KB] peak memory difference for successor generator creation: 0 KB
+[t=0.0597165s, 11536 KB] time for successor generation creation: 0s
+[t=0.0597397s, 11536 KB] Variables: 104
+[t=0.0597646s, 11536 KB] FactPairs: 368
+[t=0.059787s, 11536 KB] Bytes per state: 20
+[t=0.0598096s, 11536 KB] Starting search: lazy_wastar([h],w=4)
+[t=0.0598423s, 11536 KB] Conducting lazy best first search, (real) bound = 2490322
+[t=0.0598644s, 11536 KB] Start Timestep: 1681964049563 millisecond(s).
+[t=0.0605982s, 11536 KB] New best heuristic value for lmcut(): 2475327
+[t=0.0607253s, 11536 KB] g=0, 1 evaluated, 0 expanded
+[t=0.0607503s, 11536 KB] Initial heuristic value for lmcut(): 2475327
+[t=0.061365s, 11536 KB] New best heuristic value for lmcut(): 2470326
+[t=0.0622518s, 11536 KB] g=8000, 3 evaluated, 2 expanded
+[t=0.0623945s, 11536 KB] New best heuristic value for lmcut(): 2467327
+[t=0.063004s, 11536 KB] g=10999, 4 evaluated, 3 expanded
+[t=0.0634091s, 11536 KB] New best heuristic value for lmcut(): 2462326
+[t=0.0637143s, 11536 KB] g=18999, 5 evaluated, 4 expanded
+[t=0.0637393s, 11536 KB] New best heuristic value for lmcut(): 2449328
+[t=0.064395s, 11536 KB] g=21998, 6 evaluated, 5 expanded
+[t=0.0759768s, 11536 KB] New best heuristic value for lmcut(): 2441328
+[t=0.076326s, 11536 KB] g=32997, 25 evaluated, 24 expanded
+[t=0.0763535s, 11536 KB] New best heuristic value for lmcut(): 2431329
+[t=0.0769286s, 11536 KB] g=40997, 26 evaluated, 25 expanded
+[t=0.0769827s, 11536 KB] New best heuristic value for lmcut(): 2425328
+[t=0.0775118s, 11536 KB] g=43996, 27 evaluated, 26 expanded
+[t=0.0775366s, 11536 KB] New best heuristic value for lmcut(): 2415329
+[t=0.0780269s, 11536 KB] g=51996, 28 evaluated, 27 expanded
+[t=0.0780514s, 11536 KB] New best heuristic value for lmcut(): 2397333
+[t=0.0785413s, 11536 KB] g=54995, 29 evaluated, 28 expanded
+[t=0.0791433s, 11536 KB] New best heuristic value for lmcut(): 2397330
+[t=0.0794129s, 11536 KB] g=62995, 31 evaluated, 30 expanded
+[t=0.0794376s, 11536 KB] New best heuristic value for lmcut(): 2392332
+[t=0.0798763s, 11536 KB] g=62995, 32 evaluated, 31 expanded
+[t=0.0800382s, 11536 KB] New best heuristic value for lmcut(): 2381333
+[t=0.0803471s, 11536 KB] g=65994, 33 evaluated, 32 expanded
+[t=0.0810695s, 11536 KB] New best heuristic value for lmcut(): 2380330
+[t=0.0811244s, 11536 KB] g=73994, 35 evaluated, 34 expanded
+[t=0.0811487s, 11536 KB] New best heuristic value for lmcut(): 2373333
+[t=0.0815446s, 11536 KB] g=73994, 36 evaluated, 35 expanded
+[t=0.0815688s, 11536 KB] New best heuristic value for lmcut(): 2360335
+[t=0.0819523s, 11536 KB] g=76993, 37 evaluated, 36 expanded
+[t=0.0820624s, 11536 KB] New best heuristic value for lmcut(): 2359332
+[t=0.0826236s, 11536 KB] g=84993, 39 evaluated, 38 expanded
+[t=0.0830937s, 11536 KB] New best heuristic value for lmcut(): 2352335
+[t=0.083343s, 11536 KB] g=84993, 41 evaluated, 40 expanded
+[t=0.0833677s, 11536 KB] New best heuristic value for lmcut(): 2143292
+[t=0.0837405s, 11536 KB] g=309033, 42 evaluated, 41 expanded
+[t=0.0841047s, 11536 KB] New best heuristic value for lmcut(): 1905251
+[t=0.0843837s, 11536 KB] g=317033, 44 evaluated, 43 expanded
+[t=0.0868895s, 11536 KB] New best heuristic value for lmcut(): 1895252
+[t=0.0870228s, 11536 KB] g=325033, 53 evaluated, 52 expanded
+[t=0.0872124s, 11536 KB] New best heuristic value for lmcut(): 1882254
+[t=0.0873649s, 11536 KB] g=328032, 54 evaluated, 53 expanded
+[t=0.0882438s, 11536 KB] New best heuristic value for lmcut(): 1874254
+[t=0.088489s, 11536 KB] g=336032, 60 evaluated, 57 expanded
+[t=0.0885146s, 11536 KB] New best heuristic value for lmcut(): 1864255
+[t=0.0888047s, 11536 KB] g=346031, 61 evaluated, 58 expanded
+[t=0.0888286s, 11536 KB] New best heuristic value for lmcut(): 1856255
+[t=0.0891345s, 11536 KB] g=354031, 63 evaluated, 59 expanded
+[t=0.0892027s, 11536 KB] New best heuristic value for lmcut(): 1840255
+[t=0.0901949s, 11536 KB] g=362031, 69 evaluated, 63 expanded
+[t=0.0923315s, 11536 KB] New best heuristic value for lmcut(): 1832255
+[t=0.0928402s, 11536 KB] g=370031, 83 evaluated, 73 expanded
+[t=0.0928666s, 11536 KB] New best heuristic value for lmcut(): 1626214
+[t=0.0931559s, 11536 KB] g=594071, 85 evaluated, 74 expanded
+[t=0.0933412s, 11536 KB] New best heuristic value for lmcut(): 1618214
+[t=0.0939293s, 11536 KB] g=602071, 90 evaluated, 77 expanded
+[t=0.0939543s, 11536 KB] New best heuristic value for lmcut(): 1608215
+[t=0.0942106s, 11536 KB] g=612070, 91 evaluated, 78 expanded
+[t=0.0943534s, 11536 KB] New best heuristic value for lmcut(): 1600215
+[t=0.0944922s, 11536 KB] g=620070, 92 evaluated, 79 expanded
+[t=0.0945687s, 11536 KB] New best heuristic value for lmcut(): 1384175
+[t=0.0947824s, 11536 KB] g=844110, 94 evaluated, 80 expanded
+[t=0.0948067s, 11536 KB] New best heuristic value for lmcut(): 1380173
+[t=0.0952331s, 11536 KB] g=852110, 96 evaluated, 82 expanded
+[t=0.0953471s, 11536 KB] New best heuristic value for lmcut(): 1370174
+[t=0.0959074s, 11536 KB] g=860110, 101 evaluated, 85 expanded
+[t=0.0959324s, 11536 KB] New best heuristic value for lmcut(): 1156133
+[t=0.096195s, 11536 KB] g=1084150, 103 evaluated, 86 expanded
+[t=0.096359s, 11536 KB] New best heuristic value for lmcut(): 1154134
+[t=0.0964669s, 11536 KB] g=1308190, 105 evaluated, 87 expanded
+[t=0.0964912s, 11536 KB] New best heuristic value for lmcut(): 1148133
+[t=0.0969091s, 11536 KB] g=1092150, 108 evaluated, 89 expanded
+[t=0.0969344s, 11536 KB] New best heuristic value for lmcut(): 1138134
+[t=0.0971659s, 11536 KB] g=1102149, 109 evaluated, 90 expanded
+[t=0.097325s, 11536 KB] New best heuristic value for lmcut(): 1130134
+[t=0.0974185s, 11536 KB] g=1110149, 110 evaluated, 91 expanded
+[t=0.0974428s, 11536 KB] New best heuristic value for lmcut(): 1120135
+[t=0.0980175s, 11536 KB] g=1118149, 115 evaluated, 94 expanded
+[t=0.0983386s, 11536 KB] New best heuristic value for lmcut(): 1112135
+[t=0.099005s, 11536 KB] g=1126149, 124 evaluated, 99 expanded
+[t=0.100419s, 11536 KB] New best heuristic value for lmcut(): 1104135
+[t=0.100663s, 11536 KB] g=1144148, 137 evaluated, 108 expanded
+[t=0.10069s, 11536 KB] New best heuristic value for lmcut(): 880095
+[t=0.101299s, 11536 KB] g=1368188, 146 evaluated, 111 expanded
+[t=0.10248s, 11536 KB] New best heuristic value for lmcut(): 878095
+[t=0.102544s, 11536 KB] g=1370188, 158 evaluated, 118 expanded
+[t=0.103509s, 11536 KB] New best heuristic value for lmcut(): 870095
+[t=0.10376s, 11536 KB] g=1378188, 173 evaluated, 125 expanded
+[t=0.103784s, 11536 KB] New best heuristic value for lmcut(): 862095
+[t=0.104448s, 11536 KB] g=1386188, 182 evaluated, 129 expanded
+[t=0.106621s, 11536 KB] New best heuristic value for lmcut(): 646055
+[t=0.106775s, 11536 KB] g=1834268, 222 evaluated, 143 expanded
+[t=0.106801s, 11536 KB] New best heuristic value for lmcut(): 404016
+[t=0.106972s, 11536 KB] g=2058308, 225 evaluated, 144 expanded
+[t=0.106996s, 11536 KB] New best heuristic value for lmcut(): 311001
+[t=0.107607s, 11536 KB] g=2171321, 232 evaluated, 149 expanded
+[t=0.107638s, 11536 KB] New best heuristic value for lmcut(): 303001
+[t=0.107792s, 11536 KB] g=2179321, 234 evaluated, 150 expanded
+[t=0.107816s, 11536 KB] New best heuristic value for lmcut(): 291003
+[t=0.107946s, 11536 KB] g=2189320, 235 evaluated, 151 expanded
+[t=0.107969s, 11536 KB] New best heuristic value for lmcut(): 283003
+[t=0.108093s, 11536 KB] g=2197320, 236 evaluated, 152 expanded
+[t=0.108116s, 11536 KB] New best heuristic value for lmcut(): 277002
+[t=0.108249s, 11536 KB] g=2205320, 238 evaluated, 153 expanded
+[t=0.108272s, 11536 KB] New best heuristic value for lmcut(): 265004
+[t=0.108387s, 11536 KB] g=2215319, 239 evaluated, 154 expanded
+[t=0.10841s, 11536 KB] New best heuristic value for lmcut(): 257004
+[t=0.108521s, 11536 KB] g=2223319, 240 evaluated, 155 expanded
+[t=0.108557s, 11536 KB] New best heuristic value for lmcut(): 255004
+[t=0.108844s, 11536 KB] g=2225319, 244 evaluated, 158 expanded
+[t=0.108867s, 11536 KB] New best heuristic value for lmcut(): 253004
+[t=0.108981s, 11536 KB] g=2227319, 246 evaluated, 159 expanded
+[t=0.109004s, 11536 KB] New best heuristic value for lmcut(): 245004
+[t=0.109105s, 11536 KB] g=2245318, 247 evaluated, 160 expanded
+[t=0.109128s, 11536 KB] New best heuristic value for lmcut(): 242005
+[t=0.109314s, 11536 KB] g=2248317, 250 evaluated, 162 expanded
+[t=0.109337s, 11536 KB] New best heuristic value for lmcut(): 232006
+[t=0.10943s, 11536 KB] g=2258316, 251 evaluated, 163 expanded
+[t=0.109517s, 11536 KB] New best heuristic value for lmcut(): 229007
+[t=0.109551s, 11536 KB] g=2261315, 252 evaluated, 164 expanded
+[t=0.109574s, 11536 KB] New best heuristic value for lmcut(): 221007
+[t=0.109657s, 11536 KB] g=2269315, 253 evaluated, 165 expanded
+[t=0.109679s, 11536 KB] New best heuristic value for lmcut(): 213007
+[t=0.109765s, 11536 KB] g=2277315, 255 evaluated, 166 expanded
+[t=0.109814s, 11536 KB] New best heuristic value for lmcut(): 195008
+[t=0.109875s, 11536 KB] g=2287314, 256 evaluated, 167 expanded
+[t=0.109898s, 11536 KB] New best heuristic value for lmcut(): 193008
+[t=0.110098s, 11536 KB] g=2289314, 261 evaluated, 170 expanded
+[t=0.110121s, 11536 KB] New best heuristic value for lmcut(): 79995
+[t=0.110292s, 11536 KB] g=2402327, 266 evaluated, 173 expanded
+[t=0.110315s, 11536 KB] New best heuristic value for lmcut(): 77995
+[t=0.11048s, 11536 KB] g=2404327, 271 evaluated, 176 expanded
+[t=0.110504s, 11536 KB] New best heuristic value for lmcut(): 75995
+[t=0.110618s, 11536 KB] g=2406327, 275 evaluated, 178 expanded
+[t=0.11064s, 11536 KB] New best heuristic value for lmcut(): 57996
+[t=0.1107s, 11536 KB] g=2424326, 276 evaluated, 179 expanded
+[t=0.110722s, 11536 KB] New best heuristic value for lmcut(): 54997
+[t=0.110852s, 11536 KB] g=2427325, 281 evaluated, 182 expanded
+[t=0.110874s, 11536 KB] New best heuristic value for lmcut(): 44998
+[t=0.110924s, 11536 KB] g=2437324, 282 evaluated, 183 expanded
+[t=0.110947s, 11536 KB] New best heuristic value for lmcut(): 41999
+[t=0.110995s, 11536 KB] g=2440323, 283 evaluated, 184 expanded
+[t=0.111017s, 11536 KB] New best heuristic value for lmcut(): 33999
+[t=0.111121s, 11536 KB] g=2456323, 289 evaluated, 187 expanded
+[t=0.111144s, 11536 KB] New best heuristic value for lmcut(): 25999
+[t=0.11119s, 11536 KB] g=2464323, 291 evaluated, 188 expanded
+[t=0.111216s, 11536 KB] New best heuristic value for lmcut(): 16000
+[t=0.111255s, 11536 KB] g=2474322, 292 evaluated, 189 expanded
+[t=0.111278s, 11536 KB] New best heuristic value for lmcut(): 8000
+[t=0.111315s, 11536 KB] g=2482322, 293 evaluated, 190 expanded
+Peak memory: 1157664 KB
+caught signal 24 -- exiting
+Time limit has been reached.
+Remove intermediate file output.sas
+search exit code: 23
+
+Driver aborting after search
+INFO     Planner time: 597.04s

@@ -1,0 +1,1 @@
+../../../../../../../../benchmarks-test/openstacks/p06.pddl

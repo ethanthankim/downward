@@ -1,0 +1,203 @@
+INFO     planner time limit: 900s
+INFO     planner memory limit: 3584 MB
+
+INFO     Running translator.
+INFO     translator stdin: None
+INFO     translator time limit: 899s
+INFO     translator memory limit: 3584 MB
+INFO     translator command line string: /usr/local/downward-projects/downward/experiments/assign3/.venv/bin/python3 /usr/local/downward-projects/downward/experiments/assign3/data/assign3-anytime_exp/code-fe4f0f1bb525c059c1938ac01bab1b7bae200873_e5e41175/builds/release/bin/translate/translate.py domain.pddl problem.pddl --sas-file output.sas
+Parsing...
+Parsing: [0.000s CPU, 0.002s wall-clock]
+Normalizing task... [0.000s CPU, 0.000s wall-clock]
+Instantiating...
+Generating Datalog program... [0.000s CPU, 0.001s wall-clock]
+Normalizing Datalog program...
+Normalizing Datalog program: [0.000s CPU, 0.001s wall-clock]
+Preparing model... [0.010s CPU, 0.001s wall-clock]
+Generated 25 rules.
+Computing model... [0.000s CPU, 0.007s wall-clock]
+461 relevant atoms
+611 auxiliary atoms
+1072 final queue length
+1647 total queue pushes
+Completing instantiation... [0.010s CPU, 0.007s wall-clock]
+Instantiating: [0.020s CPU, 0.016s wall-clock]
+Computing fact groups...
+Finding invariants...
+7 initial candidates
+Finding invariants: [0.010s CPU, 0.002s wall-clock]
+Checking invariant weight... [0.000s CPU, 0.000s wall-clock]
+Instantiating groups... [0.000s CPU, 0.000s wall-clock]
+Collecting mutex groups... [0.000s CPU, 0.000s wall-clock]
+Choosing groups...
+0 uncovered facts
+Choosing groups: [0.000s CPU, 0.000s wall-clock]
+Building translation key... [0.000s CPU, 0.000s wall-clock]
+Computing fact groups: [0.010s CPU, 0.003s wall-clock]
+Building STRIPS to SAS dictionary... [0.000s CPU, 0.000s wall-clock]
+Building dictionary for full mutex groups... [0.000s CPU, 0.000s wall-clock]
+Building mutex information...
+Building mutex information: [0.000s CPU, 0.000s wall-clock]
+Translating task...
+Processing axioms...
+Simplifying axioms... [0.000s CPU, 0.000s wall-clock]
+Translator axioms removed by simplifying: 0
+Computing negative axioms... [0.000s CPU, 0.000s wall-clock]
+Processing axioms: [0.000s CPU, 0.000s wall-clock]
+Translating task: [0.000s CPU, 0.006s wall-clock]
+0 effect conditions simplified
+0 implied preconditions added
+Detecting unreachable propositions...
+0 operators removed
+0 axioms removed
+34 propositions removed
+Detecting unreachable propositions: [0.010s CPU, 0.003s wall-clock]
+Reordering and filtering variables...
+34 of 34 variables necessary.
+0 of 34 mutex groups necessary.
+185 of 185 operators necessary.
+0 of 0 axiom rules necessary.
+Reordering and filtering variables: [0.000s CPU, 0.002s wall-clock]
+Translator variables: 34
+Translator derived variables: 0
+Translator facts: 100
+Translator goal facts: 33
+Translator mutex groups: 0
+Translator total mutex groups size: 0
+Translator operators: 185
+Translator axioms: 0
+Translator task size: 1634
+Translator peak memory: 33020 KB
+Writing output... [0.000s CPU, 0.001s wall-clock]
+Done! [0.040s CPU, 0.035s wall-clock]
+translate exit code: 0
+
+INFO     Running search (release).
+INFO     search stdin: output.sas
+INFO     search time limit: 899s
+INFO     search memory limit: 3584 MB
+INFO     search command line string: /usr/local/downward-projects/downward/experiments/assign3/data/assign3-anytime_exp/code-fe4f0f1bb525c059c1938ac01bab1b7bae200873_e5e41175/builds/release/bin/downward --evaluator 'h=lmcut()' --search 'eager_anytime(epsilon_greedy(
+        sum([weight(h, 2, verbosity=normal), g()]), epsilon=0.2, random_seed=1234), 
+        reopen_closed=true, f_eval=sum([h, g()]))' --internal-plan-file sas_plan < output.sas
+[t=0s, 10884 KB] reading input...
+[t=0.00185597s, 10884 KB] done reading input!
+[t=0.00393919s, 11272 KB] Initializing landmark cut heuristic...
+[t=0.00465334s, 11272 KB] Building successor generator...done!
+[t=0.00486305s, 11272 KB] peak memory difference for successor generator creation: 0 KB
+[t=0.0049103s, 11272 KB] time for successor generation creation: 0s
+[t=0.00493537s, 11272 KB] Variables: 34
+[t=0.00496251s, 11272 KB] FactPairs: 100
+[t=0.0049858s, 11272 KB] Bytes per state: 8
+[t=0.00500955s, 11272 KB] Conducting best first anytime search with reopening closed nodes, (real) bound = 2147483647
+[t=0.00505846s, 11272 KB] New best heuristic value for lmcut(): 2
+[t=0.00512239s, 11272 KB] g=0, 1 evaluated, 0 expanded
+[t=0.0051466s, 11272 KB] Initial heuristic value for lmcut(): 2
+[t=0.00517805s, 11272 KB] Start Timestep: 1682567404204 millisecond(s).
+[t=0.00521728s, 11272 KB] New best heuristic value for lmcut(): 1
+[t=0.0065874s, 11272 KB] g=2, 59 evaluated, 13 expanded
+[t=0.571435s, 12584 KB] New best heuristic value for lmcut(): 0
+[t=0.573779s, 12584 KB] g=7, 28143 evaluated, 13364 expanded, 211 reopened
+[t=2.14563s, 16100 KB] Solution found!
+jump-new-move pos-2-1 pos-2-2 pos-2-3 (1)
+jump-continue-move pos-2-3 pos-1-3 pos-0-3 (0)
+end-move pos-0-3 (0)
+jump-new-move pos-0-2 pos-1-2 pos-2-2 (1)
+end-move pos-2-2 (0)
+jump-new-move pos-2-4 pos-3-4 pos-4-4 (1)
+end-move pos-4-4 (0)
+jump-new-move pos-5-4 pos-4-4 pos-3-4 (1)
+end-move pos-3-4 (0)
+jump-new-move pos-5-2 pos-4-2 pos-3-2 (1)
+jump-continue-move pos-3-2 pos-2-2 pos-1-2 (0)
+end-move pos-1-2 (0)
+jump-new-move pos-4-6 pos-4-5 pos-4-4 (1)
+jump-continue-move pos-4-4 pos-3-4 pos-2-4 (0)
+jump-continue-move pos-2-4 pos-1-4 pos-0-4 (0)
+jump-continue-move pos-0-4 pos-0-3 pos-0-2 (0)
+jump-continue-move pos-0-2 pos-1-2 pos-2-2 (0)
+end-move pos-2-2 (0)
+jump-new-move pos-4-1 pos-3-1 pos-2-1 (1)
+jump-continue-move pos-2-1 pos-2-2 pos-2-3 (0)
+jump-continue-move pos-2-3 pos-3-3 pos-4-3 (0)
+end-move pos-4-3 (0)
+jump-new-move pos-5-3 pos-4-3 pos-3-3 (1)
+[t=2.14879s, 16100 KB] Plan length: 23 step(s).
+[t=2.14883s, 16100 KB] Plan cost: 8
+[t=2.14886s, 16100 KB] Solution: Incumbent solution found!
+[t=2.14888s, 16100 KB] Solution Timestep: 1682567406350 millisecond(s).
+[t=2.14891s, 16100 KB] Timestamp: 1682567406351 millisecond(s).
+[t=2.14893s, 16100 KB] Expanded 54308 state(s).
+[t=2.14895s, 16100 KB] Reopened 1483 state(s).
+[t=2.14898s, 16100 KB] Evaluated 102483 state(s).
+[t=2.149s, 16100 KB] Evaluations: 111982
+[t=2.14902s, 16100 KB] Generated 152192 state(s).
+[t=2.14905s, 16100 KB] Dead ends: 0 state(s).
+[t=2.14907s, 16100 KB] Number of registered states: 111982
+[t=2.14909s, 16100 KB] Int hash set load factor: 111982/131072 = 0.854355
+[t=2.14912s, 16100 KB] Int hash set resizes: 17
+[t=3.83425s, 19440 KB] Optimal Solution: found
+[t=3.83552s, 19440 KB] Actual search time: 3.83031s
+jump-new-move pos-2-1 pos-2-2 pos-2-3 (1)
+jump-continue-move pos-2-3 pos-1-3 pos-0-3 (0)
+end-move pos-0-3 (0)
+jump-new-move pos-0-2 pos-1-2 pos-2-2 (1)
+end-move pos-2-2 (0)
+jump-new-move pos-2-4 pos-3-4 pos-4-4 (1)
+end-move pos-4-4 (0)
+jump-new-move pos-5-4 pos-4-4 pos-3-4 (1)
+end-move pos-3-4 (0)
+jump-new-move pos-5-2 pos-4-2 pos-3-2 (1)
+jump-continue-move pos-3-2 pos-2-2 pos-1-2 (0)
+end-move pos-1-2 (0)
+jump-new-move pos-4-6 pos-4-5 pos-4-4 (1)
+jump-continue-move pos-4-4 pos-3-4 pos-2-4 (0)
+jump-continue-move pos-2-4 pos-1-4 pos-0-4 (0)
+jump-continue-move pos-0-4 pos-0-3 pos-0-2 (0)
+jump-continue-move pos-0-2 pos-1-2 pos-2-2 (0)
+end-move pos-2-2 (0)
+jump-new-move pos-4-1 pos-3-1 pos-2-1 (1)
+jump-continue-move pos-2-1 pos-2-2 pos-2-3 (0)
+jump-continue-move pos-2-3 pos-3-3 pos-4-3 (0)
+end-move pos-4-3 (0)
+jump-new-move pos-5-3 pos-4-3 pos-3-3 (1)
+[t=3.83556s, 19440 KB] Plan length: 23 step(s).
+[t=3.83556s, 19440 KB] Plan cost: 8
+[t=3.83556s, 19440 KB] Timestamp: 1682567408041 millisecond(s).
+[t=3.83556s, 19440 KB] Expanded 113390 state(s).
+[t=3.83556s, 19440 KB] Reopened 3036 state(s).
+[t=3.83556s, 19440 KB] Evaluated 110354 state(s).
+[t=3.83556s, 19440 KB] Evaluations: 194792
+[t=3.83556s, 19440 KB] Generated 287010 state(s).
+[t=3.83556s, 19440 KB] Dead ends: 0 state(s).
+[t=3.83556s, 19440 KB] Number of registered states: 194792
+[t=3.83556s, 19440 KB] Int hash set load factor: 194792/262144 = 0.743073
+[t=3.83556s, 19440 KB] Int hash set resizes: 18
+[t=3.83556s, 19440 KB] Search time: 3.83055s
+[t=3.83556s, 19440 KB] Total time: 3.83556s
+Solution found.
+Peak memory: 19440 KB
+Remove intermediate file output.sas
+search exit code: 0
+
+INFO     Running validate.
+INFO     validate stdin: None
+INFO     validate time limit: None
+INFO     validate memory limit: None
+INFO     validate command line string: validate domain.pddl problem.pddl sas_plan sas_plan.1
+Checking plan: sas_plan
+Plan executed successfully - checking goal
+Plan valid
+Final value: 8 
+Checking plan: sas_plan.1
+Plan executed successfully - checking goal
+Plan valid
+Final value: 8 
+
+Successful plans:
+Value: 8
+ sas_plan 8 
+sas_plan.1 8 
+
+validate exit code: 0
+
+INFO     Planner time: 3.96s

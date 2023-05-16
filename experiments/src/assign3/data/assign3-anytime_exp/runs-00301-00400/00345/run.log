@@ -1,0 +1,409 @@
+INFO     planner time limit: 900s
+INFO     planner memory limit: 3584 MB
+
+INFO     Running translator.
+INFO     translator stdin: None
+INFO     translator time limit: 899s
+INFO     translator memory limit: 3584 MB
+INFO     translator command line string: /usr/local/downward-projects/downward/experiments/assign3/.venv/bin/python3 /usr/local/downward-projects/downward/experiments/assign3/data/assign3-anytime_exp/code-fe4f0f1bb525c059c1938ac01bab1b7bae200873_e5e41175/builds/release/bin/translate/translate.py domain.pddl problem.pddl --sas-file output.sas
+Parsing...
+Parsing: [0.130s CPU, 0.141s wall-clock]
+Normalizing task... [0.010s CPU, 0.008s wall-clock]
+Instantiating...
+Generating Datalog program... [0.040s CPU, 0.045s wall-clock]
+Normalizing Datalog program...
+Normalizing Datalog program: [0.010s CPU, 0.001s wall-clock]
+Preparing model... [0.220s CPU, 0.227s wall-clock]
+Generated 23 rules.
+Computing model... [0.620s CPU, 0.623s wall-clock]
+33381 relevant atoms
+60724 auxiliary atoms
+94105 final queue length
+106716 total queue pushes
+Completing instantiation... [0.320s CPU, 0.323s wall-clock]
+Instantiating: [1.260s CPU, 1.265s wall-clock]
+Computing fact groups...
+Finding invariants...
+9 initial candidates
+Finding invariants: [0.010s CPU, 0.007s wall-clock]
+Checking invariant weight... [0.010s CPU, 0.012s wall-clock]
+Instantiating groups... [0.000s CPU, 0.004s wall-clock]
+Collecting mutex groups... [0.000s CPU, 0.000s wall-clock]
+Choosing groups...
+0 uncovered facts
+Choosing groups: [0.000s CPU, 0.001s wall-clock]
+Building translation key... [0.000s CPU, 0.000s wall-clock]
+Computing fact groups: [0.020s CPU, 0.026s wall-clock]
+Building STRIPS to SAS dictionary... [0.000s CPU, 0.000s wall-clock]
+Building dictionary for full mutex groups... [0.000s CPU, 0.000s wall-clock]
+Building mutex information...
+Building mutex information: [0.000s CPU, 0.000s wall-clock]
+Translating task...
+Processing axioms...
+Simplifying axioms... [0.000s CPU, 0.000s wall-clock]
+Translator axioms removed by simplifying: 0
+Computing negative axioms... [0.000s CPU, 0.000s wall-clock]
+Processing axioms: [0.020s CPU, 0.011s wall-clock]
+Translating task: [0.220s CPU, 0.216s wall-clock]
+0 effect conditions simplified
+0 implied preconditions added
+Detecting unreachable propositions...
+0 operators removed
+0 axioms removed
+12 propositions removed
+Detecting unreachable propositions: [0.190s CPU, 0.191s wall-clock]
+Reordering and filtering variables...
+12 of 12 variables necessary.
+0 of 12 mutex groups necessary.
+6572 of 6572 operators necessary.
+0 of 0 axiom rules necessary.
+Reordering and filtering variables: [0.020s CPU, 0.021s wall-clock]
+Translator variables: 12
+Translator derived variables: 0
+Translator facts: 345
+Translator goal facts: 10
+Translator mutex groups: 0
+Translator total mutex groups size: 0
+Translator operators: 6572
+Translator axioms: 0
+Translator task size: 33027
+Translator peak memory: 82428 KB
+Writing output... [0.030s CPU, 0.029s wall-clock]
+Done! [1.890s CPU, 1.914s wall-clock]
+translate exit code: 0
+
+INFO     Running search (release).
+INFO     search stdin: output.sas
+INFO     search time limit: 897s
+INFO     search memory limit: 3584 MB
+INFO     search command line string: /usr/local/downward-projects/downward/experiments/assign3/data/assign3-anytime_exp/code-fe4f0f1bb525c059c1938ac01bab1b7bae200873_e5e41175/builds/release/bin/downward --evaluator 'h=lmcut()' --search 'eager_anytime(epsilon_greedy(
+        sum([weight(h, 2, verbosity=normal), g()]), epsilon=0.2, random_seed=1234), 
+        reopen_closed=true, f_eval=sum([h, g()]))' --internal-plan-file sas_plan < output.sas
+[t=0.0021031s, 10884 KB] reading input...
+[t=0.0198721s, 12684 KB] done reading input!
+[t=0.0250734s, 14128 KB] Initializing landmark cut heuristic...
+[t=0.0260617s, 14128 KB] Building successor generator...done!
+[t=0.0279381s, 14844 KB] peak memory difference for successor generator creation: 716 KB
+[t=0.0280258s, 14844 KB] time for successor generation creation: 0.00110853s
+[t=0.0280784s, 14844 KB] Variables: 12
+[t=0.0281459s, 14844 KB] FactPairs: 345
+[t=0.0281711s, 14844 KB] Bytes per state: 8
+[t=0.0281951s, 14844 KB] Conducting best first anytime search with reopening closed nodes, (real) bound = 2147483647
+[t=0.030137s, 14844 KB] New best heuristic value for lmcut(): 26
+[t=0.0304558s, 14844 KB] g=0, 1 evaluated, 0 expanded
+[t=0.0304837s, 14844 KB] Initial heuristic value for lmcut(): 26
+[t=0.0305112s, 14844 KB] Start Timestep: 1682544064686 millisecond(s).
+[t=0.04057s, 14844 KB] New best heuristic value for lmcut(): 24
+[t=0.0413636s, 14844 KB] g=2, 7 evaluated, 2 expanded
+[t=0.059389s, 14844 KB] New best heuristic value for lmcut(): 23
+[t=0.0601491s, 14844 KB] g=3, 18 evaluated, 4 expanded
+[t=0.0929322s, 14844 KB] New best heuristic value for lmcut(): 22
+[t=0.0940073s, 14844 KB] g=5, 39 evaluated, 8 expanded
+[t=0.171695s, 14844 KB] New best heuristic value for lmcut(): 21
+[t=0.171963s, 14844 KB] g=8, 92 evaluated, 20 expanded
+[t=0.201064s, 14844 KB] New best heuristic value for lmcut(): 20
+[t=0.201427s, 14844 KB] g=9, 114 evaluated, 24 expanded
+[t=0.222977s, 14844 KB] New best heuristic value for lmcut(): 19
+[t=0.22369s, 14844 KB] g=10, 132 evaluated, 27 expanded
+[t=0.244989s, 14844 KB] New best heuristic value for lmcut(): 18
+[t=0.245432s, 14844 KB] g=11, 150 evaluated, 29 expanded
+[t=0.272246s, 14844 KB] New best heuristic value for lmcut(): 17
+[t=0.272671s, 14844 KB] g=12, 174 evaluated, 33 expanded
+[t=0.287391s, 14844 KB] New best heuristic value for lmcut(): 16
+[t=0.287745s, 14844 KB] g=14, 189 evaluated, 35 expanded
+[t=0.344612s, 14844 KB] New best heuristic value for lmcut(): 15
+[t=0.34509s, 14844 KB] g=17, 252 evaluated, 44 expanded
+[t=0.357128s, 14844 KB] New best heuristic value for lmcut(): 14
+[t=0.357343s, 14844 KB] g=19, 270 evaluated, 47 expanded
+[t=0.362274s, 14844 KB] New best heuristic value for lmcut(): 13
+[t=0.363052s, 14844 KB] g=20, 276 evaluated, 49 expanded
+[t=0.537843s, 14844 KB] New best heuristic value for lmcut(): 12
+[t=0.538113s, 14844 KB] g=23, 499 evaluated, 88 expanded
+[t=0.540171s, 14844 KB] New best heuristic value for lmcut(): 11
+[t=0.54062s, 14844 KB] g=24, 505 evaluated, 89 expanded
+[t=0.54297s, 14844 KB] New best heuristic value for lmcut(): 10
+[t=0.543938s, 14844 KB] g=25, 515 evaluated, 90 expanded
+[t=0.550271s, 14844 KB] New best heuristic value for lmcut(): 9
+[t=0.550522s, 14844 KB] g=26, 526 evaluated, 92 expanded
+[t=1.36278s, 14844 KB] New best heuristic value for lmcut(): 8
+[t=1.3636s, 14844 KB] g=32, 1953 evaluated, 388 expanded, 2 reopened
+[t=4.25109s, 14844 KB] New best heuristic value for lmcut(): 7
+[t=4.2522s, 14844 KB] g=31, 7142 evaluated, 1489 expanded, 15 reopened
+[t=5.15825s, 15052 KB] New best heuristic value for lmcut(): 6
+[t=5.15879s, 15052 KB] g=31, 9614 evaluated, 2059 expanded, 19 reopened
+[t=5.15924s, 15052 KB] New best heuristic value for lmcut(): 5
+[t=5.16001s, 15052 KB] g=32, 9622 evaluated, 2060 expanded, 19 reopened
+[t=5.16023s, 15052 KB] New best heuristic value for lmcut(): 4
+[t=5.16052s, 15052 KB] g=33, 9627 evaluated, 2061 expanded, 19 reopened
+[t=13.9546s, 16404 KB] New best heuristic value for lmcut(): 3
+[t=13.9549s, 16404 KB] g=36, 31755 evaluated, 7360 expanded, 164 reopened
+[t=13.9549s, 16404 KB] New best heuristic value for lmcut(): 2
+[t=13.955s, 16404 KB] g=37, 31758 evaluated, 7361 expanded, 164 reopened
+[t=13.9551s, 16404 KB] New best heuristic value for lmcut(): 1
+[t=13.9551s, 16404 KB] g=38, 31759 evaluated, 7362 expanded, 164 reopened
+[t=13.9555s, 16404 KB] New best heuristic value for lmcut(): 0
+[t=13.9559s, 16404 KB] g=39, 31762 evaluated, 7364 expanded, 164 reopened
+[t=13.9565s, 16404 KB] Solution found!
+drive t0 l9 l3 level215 level10 level225 (1)
+load p8 t0 l3 (1)
+load p0 t0 l3 (1)
+drive t0 l3 l7 level204 level11 level215 (1)
+unload p0 t0 l7 (1)
+drive t0 l7 l4 level188 level16 level204 (1)
+load p9 t0 l4 (1)
+load p4 t0 l4 (1)
+load p3 t0 l4 (1)
+load p1 t0 l4 (1)
+drive t0 l4 l7 level172 level16 level188 (1)
+drive t0 l7 l1 level154 level18 level172 (1)
+unload p8 t0 l1 (1)
+drive t0 l1 l0 level147 level7 level154 (1)
+drive t0 l0 l3 level145 level2 level147 (1)
+unload p4 t0 l3 (1)
+drive t0 l3 l9 level135 level10 level145 (1)
+unload p9 t0 l9 (1)
+drive t0 l9 l3 level125 level10 level135 (1)
+drive t0 l3 l0 level123 level2 level125 (1)
+load p5 t0 l0 (1)
+drive t0 l0 l3 level121 level2 level123 (1)
+drive t0 l3 l7 level110 level11 level121 (1)
+unload p5 t0 l7 (1)
+unload p3 t0 l7 (1)
+drive t0 l7 l3 level99 level11 level110 (1)
+drive t0 l3 l2 level78 level21 level99 (1)
+load p2 t0 l2 (1)
+drive t0 l2 l8 level58 level20 level78 (1)
+load p7 t0 l8 (1)
+load p6 t0 l8 (1)
+drive t0 l8 l2 level38 level20 level58 (1)
+drive t0 l2 l6 level26 level12 level38 (1)
+unload p6 t0 l6 (1)
+drive t0 l6 l5 level4 level22 level26 (1)
+unload p2 t0 l5 (1)
+unload p1 t0 l5 (1)
+drive t0 l5 l4 level1 level3 level4 (1)
+unload p7 t0 l4 (1)
+[t=13.9572s, 16404 KB] Plan length: 39 step(s).
+[t=13.9574s, 16404 KB] Plan cost: 39
+[t=13.9574s, 16404 KB] Solution: Incumbent solution found!
+[t=13.9574s, 16404 KB] Solution Timestep: 1682544078767 millisecond(s).
+[t=13.9574s, 16404 KB] Timestamp: 1682544078767 millisecond(s).
+[t=13.9574s, 16404 KB] Expanded 7366 state(s).
+[t=13.9575s, 16404 KB] Reopened 164 state(s).
+[t=13.9575s, 16404 KB] Evaluated 31766 state(s).
+[t=13.9575s, 16404 KB] Evaluations: 34560
+[t=13.9575s, 16404 KB] Generated 45905 state(s).
+[t=13.9576s, 16404 KB] Dead ends: 0 state(s).
+[t=13.9576s, 16404 KB] Number of registered states: 34560
+[t=13.9576s, 16404 KB] Int hash set load factor: 34560/65536 = 0.527344
+[t=13.9576s, 16404 KB] Int hash set resizes: 16
+[t=14.1269s, 16404 KB] Solution found!
+drive t0 l9 l3 level215 level10 level225 (1)
+load p8 t0 l3 (1)
+load p0 t0 l3 (1)
+drive t0 l3 l7 level204 level11 level215 (1)
+unload p0 t0 l7 (1)
+drive t0 l7 l4 level188 level16 level204 (1)
+load p9 t0 l4 (1)
+load p4 t0 l4 (1)
+load p3 t0 l4 (1)
+load p1 t0 l4 (1)
+drive t0 l4 l7 level172 level16 level188 (1)
+drive t0 l7 l1 level154 level18 level172 (1)
+unload p8 t0 l1 (1)
+drive t0 l1 l0 level147 level7 level154 (1)
+drive t0 l0 l3 level145 level2 level147 (1)
+unload p4 t0 l3 (1)
+drive t0 l3 l9 level135 level10 level145 (1)
+unload p9 t0 l9 (1)
+drive t0 l9 l3 level125 level10 level135 (1)
+drive t0 l3 l0 level123 level2 level125 (1)
+load p5 t0 l0 (1)
+drive t0 l0 l2 level110 level13 level123 (1)
+load p2 t0 l2 (1)
+drive t0 l2 l8 level90 level20 level110 (1)
+load p7 t0 l8 (1)
+load p6 t0 l8 (1)
+drive t0 l8 l2 level70 level20 level90 (1)
+drive t0 l2 l6 level58 level12 level70 (1)
+unload p6 t0 l6 (1)
+drive t0 l6 l5 level36 level22 level58 (1)
+unload p2 t0 l5 (1)
+unload p1 t0 l5 (1)
+drive t0 l5 l4 level33 level3 level36 (1)
+unload p7 t0 l4 (1)
+drive t0 l4 l7 level17 level16 level33 (1)
+unload p5 t0 l7 (1)
+unload p3 t0 l7 (1)
+[t=14.1275s, 16404 KB] Plan length: 37 step(s).
+[t=14.1277s, 16404 KB] Plan cost: 37
+[t=14.1277s, 16404 KB] Solution: Incumbent solution found!
+[t=14.1277s, 16404 KB] Solution Timestep: 1682544078940 millisecond(s).
+[t=14.1277s, 16404 KB] Timestamp: 1682544078940 millisecond(s).
+[t=14.1278s, 16404 KB] Expanded 7471 state(s).
+[t=14.1278s, 16404 KB] Reopened 167 state(s).
+[t=14.1278s, 16404 KB] Evaluated 31900 state(s).
+[t=14.1278s, 16404 KB] Evaluations: 35117
+[t=14.1279s, 16404 KB] Generated 46614 state(s).
+[t=14.1279s, 16404 KB] Dead ends: 0 state(s).
+[t=14.1279s, 16404 KB] Number of registered states: 35117
+[t=14.1279s, 16404 KB] Int hash set load factor: 35117/65536 = 0.535843
+[t=14.128s, 16404 KB] Int hash set resizes: 16
+[t=60.288s, 21036 KB] Solution found!
+drive t0 l9 l3 level215 level10 level225 (1)
+load p8 t0 l3 (1)
+load p0 t0 l3 (1)
+drive t0 l3 l7 level204 level11 level215 (1)
+unload p0 t0 l7 (1)
+drive t0 l7 l4 level188 level16 level204 (1)
+load p9 t0 l4 (1)
+load p4 t0 l4 (1)
+load p3 t0 l4 (1)
+load p1 t0 l4 (1)
+drive t0 l4 l7 level172 level16 level188 (1)
+unload p3 t0 l7 (1)
+drive t0 l7 l3 level161 level11 level172 (1)
+drive t0 l3 l9 level151 level10 level161 (1)
+unload p9 t0 l9 (1)
+drive t0 l9 l3 level141 level10 level151 (1)
+unload p4 t0 l3 (1)
+drive t0 l3 l0 level139 level2 level141 (1)
+load p5 t0 l0 (1)
+drive t0 l0 l2 level126 level13 level139 (1)
+load p2 t0 l2 (1)
+drive t0 l2 l8 level106 level20 level126 (1)
+load p7 t0 l8 (1)
+load p6 t0 l8 (1)
+drive t0 l8 l2 level86 level20 level106 (1)
+drive t0 l2 l6 level74 level12 level86 (1)
+unload p6 t0 l6 (1)
+drive t0 l6 l1 level68 level6 level74 (1)
+unload p8 t0 l1 (1)
+drive t0 l1 l7 level50 level18 level68 (1)
+unload p5 t0 l7 (1)
+drive t0 l7 l4 level34 level16 level50 (1)
+unload p7 t0 l4 (1)
+drive t0 l4 l5 level31 level3 level34 (1)
+unload p2 t0 l5 (1)
+unload p1 t0 l5 (1)
+[t=60.289s, 21036 KB] Plan length: 36 step(s).
+[t=60.289s, 21036 KB] Plan cost: 36
+[t=60.289s, 21036 KB] Solution: Incumbent solution found!
+[t=60.289s, 21036 KB] Solution Timestep: 1682544125681 millisecond(s).
+[t=60.289s, 21036 KB] Timestamp: 1682544125681 millisecond(s).
+[t=60.289s, 21036 KB] Expanded 28729 state(s).
+[t=60.289s, 21036 KB] Reopened 1083 state(s).
+[t=60.289s, 21036 KB] Evaluated 57953 state(s).
+[t=60.289s, 21036 KB] Evaluations: 126196
+[t=60.289s, 21036 KB] Generated 179729 state(s).
+[t=60.289s, 21036 KB] Dead ends: 0 state(s).
+[t=60.289s, 21036 KB] Number of registered states: 126196
+[t=60.289s, 21036 KB] Int hash set load factor: 126196/262144 = 0.4814
+[t=60.289s, 21036 KB] Int hash set resizes: 18
+[t=82.8413s, 21516 KB] Solution found!
+drive t0 l9 l3 level215 level10 level225 (1)
+load p8 t0 l3 (1)
+load p0 t0 l3 (1)
+drive t0 l3 l7 level204 level11 level215 (1)
+unload p0 t0 l7 (1)
+drive t0 l7 l4 level188 level16 level204 (1)
+load p9 t0 l4 (1)
+load p3 t0 l4 (1)
+load p1 t0 l4 (1)
+drive t0 l4 l7 level172 level16 level188 (1)
+unload p3 t0 l7 (1)
+drive t0 l7 l1 level154 level18 level172 (1)
+unload p8 t0 l1 (1)
+drive t0 l1 l0 level147 level7 level154 (1)
+load p5 t0 l0 (1)
+drive t0 l0 l2 level134 level13 level147 (1)
+load p2 t0 l2 (1)
+drive t0 l2 l8 level114 level20 level134 (1)
+load p7 t0 l8 (1)
+load p6 t0 l8 (1)
+drive t0 l8 l2 level94 level20 level114 (1)
+drive t0 l2 l6 level82 level12 level94 (1)
+unload p6 t0 l6 (1)
+drive t0 l6 l5 level60 level22 level82 (1)
+unload p2 t0 l5 (1)
+unload p1 t0 l5 (1)
+drive t0 l5 l4 level57 level3 level60 (1)
+unload p7 t0 l4 (1)
+load p4 t0 l4 (1)
+drive t0 l4 l7 level41 level16 level57 (1)
+unload p5 t0 l7 (1)
+drive t0 l7 l3 level30 level11 level41 (1)
+unload p4 t0 l3 (1)
+drive t0 l3 l9 level20 level10 level30 (1)
+unload p9 t0 l9 (1)
+[t=82.8413s, 21516 KB] Plan length: 35 step(s).
+[t=82.8413s, 21516 KB] Plan cost: 35
+[t=82.8413s, 21516 KB] Solution: Incumbent solution found!
+[t=82.8413s, 21516 KB] Solution Timestep: 1682544148414 millisecond(s).
+[t=82.8413s, 21516 KB] Timestamp: 1682544148414 millisecond(s).
+[t=82.8413s, 21516 KB] Expanded 38785 state(s).
+[t=82.8413s, 21516 KB] Reopened 1586 state(s).
+[t=82.8413s, 21516 KB] Evaluated 64655 state(s).
+[t=82.8413s, 21516 KB] Evaluations: 168704
+[t=82.8413s, 21516 KB] Generated 245656 state(s).
+[t=82.8413s, 21516 KB] Dead ends: 0 state(s).
+[t=82.8413s, 21516 KB] Number of registered states: 168704
+[t=82.8413s, 21516 KB] Int hash set load factor: 168704/262144 = 0.643555
+[t=82.8413s, 21516 KB] Int hash set resizes: 18
+[t=100.755s, 22220 KB] Solution found!
+drive t0 l9 l3 level215 level10 level225 (1)
+load p8 t0 l3 (1)
+load p0 t0 l3 (1)
+drive t0 l3 l2 level194 level21 level215 (1)
+load p2 t0 l2 (1)
+drive t0 l2 l8 level174 level20 level194 (1)
+load p7 t0 l8 (1)
+load p6 t0 l8 (1)
+drive t0 l8 l2 level154 level20 level174 (1)
+drive t0 l2 l0 level141 level13 level154 (1)
+load p5 t0 l0 (1)
+drive t0 l0 l1 level134 level7 level141 (1)
+unload p8 t0 l1 (1)
+drive t0 l1 l6 level128 level6 level134 (1)
+unload p6 t0 l6 (1)
+drive t0 l6 l5 level106 level22 level128 (1)
+unload p2 t0 l5 (1)
+drive t0 l5 l4 level103 level3 level106 (1)
+load p9 t0 l4 (1)
+unload p7 t0 l4 (1)
+load p4 t0 l4 (1)
+load p3 t0 l4 (1)
+load p1 t0 l4 (1)
+drive t0 l4 l5 level100 level3 level103 (1)
+unload p1 t0 l5 (1)
+drive t0 l5 l3 level88 level12 level100 (1)
+unload p4 t0 l3 (1)
+drive t0 l3 l7 level77 level11 level88 (1)
+unload p5 t0 l7 (1)
+unload p3 t0 l7 (1)
+unload p0 t0 l7 (1)
+drive t0 l7 l3 level66 level11 level77 (1)
+drive t0 l3 l9 level56 level10 level66 (1)
+unload p9 t0 l9 (1)
+[t=100.759s, 22220 KB] Plan length: 34 step(s).
+[t=100.759s, 22220 KB] Plan cost: 34
+[t=100.759s, 22220 KB] Solution: Incumbent solution found!
+[t=100.759s, 22220 KB] Solution Timestep: 1682544166371 millisecond(s).
+[t=100.759s, 22220 KB] Timestamp: 1682544166371 millisecond(s).
+[t=100.759s, 22220 KB] Expanded 45186 state(s).
+[t=100.759s, 22220 KB] Reopened 1897 state(s).
+[t=100.759s, 22220 KB] Evaluated 67801 state(s).
+[t=100.759s, 22220 KB] Evaluations: 196718
+[t=100.759s, 22220 KB] Generated 287992 state(s).
+[t=100.759s, 22220 KB] Dead ends: 0 state(s).
+[t=100.759s, 22220 KB] Number of registered states: 196718
+[t=100.759s, 22220 KB] Int hash set load factor: 196718/262144 = 0.75042
+[t=100.759s, 22220 KB] Int hash set resizes: 18
+Peak memory: 63292 KB
+caught signal 24 -- exiting
+Time limit has been reached.
+Remove intermediate file output.sas
+search exit code: 23
+
+Driver aborting after search
+INFO     Planner time: 893.97s

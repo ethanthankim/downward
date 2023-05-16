@@ -1,0 +1,533 @@
+INFO     planner time limit: 600s
+INFO     planner memory limit: 3584 MB
+
+INFO     Running translator.
+INFO     translator stdin: None
+INFO     translator time limit: 599s
+INFO     translator memory limit: 3584 MB
+INFO     translator command line string: /usr/local/downward-projects/downward/experiments/assign3/.venv/bin/python3 /usr/local/downward-projects/downward/experiments/assign3/data/assign3-anytime_exp/code-1fb14623350588fb782db39ad332c8a25eda53d6_e5e41175/builds/release/bin/translate/translate.py domain.pddl problem.pddl --sas-file output.sas
+Parsing...
+Parsing: [0.000s CPU, 0.002s wall-clock]
+Normalizing task... [0.000s CPU, 0.000s wall-clock]
+Instantiating...
+Generating Datalog program... [0.000s CPU, 0.001s wall-clock]
+Normalizing Datalog program...
+Normalizing Datalog program: [0.010s CPU, 0.001s wall-clock]
+Preparing model... [0.000s CPU, 0.001s wall-clock]
+Generated 25 rules.
+Computing model... [0.000s CPU, 0.007s wall-clock]
+461 relevant atoms
+611 auxiliary atoms
+1072 final queue length
+1647 total queue pushes
+Completing instantiation... [0.010s CPU, 0.007s wall-clock]
+Instantiating: [0.020s CPU, 0.017s wall-clock]
+Computing fact groups...
+Finding invariants...
+7 initial candidates
+Finding invariants: [0.000s CPU, 0.003s wall-clock]
+Checking invariant weight... [0.000s CPU, 0.000s wall-clock]
+Instantiating groups... [0.000s CPU, 0.000s wall-clock]
+Collecting mutex groups... [0.000s CPU, 0.000s wall-clock]
+Choosing groups...
+0 uncovered facts
+Choosing groups: [0.000s CPU, 0.000s wall-clock]
+Building translation key... [0.000s CPU, 0.000s wall-clock]
+Computing fact groups: [0.000s CPU, 0.004s wall-clock]
+Building STRIPS to SAS dictionary... [0.000s CPU, 0.000s wall-clock]
+Building dictionary for full mutex groups... [0.000s CPU, 0.000s wall-clock]
+Building mutex information...
+Building mutex information: [0.000s CPU, 0.000s wall-clock]
+Translating task...
+Processing axioms...
+Simplifying axioms... [0.000s CPU, 0.000s wall-clock]
+Translator axioms removed by simplifying: 0
+Computing negative axioms... [0.000s CPU, 0.000s wall-clock]
+Processing axioms: [0.000s CPU, 0.001s wall-clock]
+Translating task: [0.010s CPU, 0.006s wall-clock]
+0 effect conditions simplified
+0 implied preconditions added
+Detecting unreachable propositions...
+0 operators removed
+0 axioms removed
+34 propositions removed
+Detecting unreachable propositions: [0.000s CPU, 0.004s wall-clock]
+Reordering and filtering variables...
+34 of 34 variables necessary.
+0 of 34 mutex groups necessary.
+185 of 185 operators necessary.
+0 of 0 axiom rules necessary.
+Reordering and filtering variables: [0.010s CPU, 0.002s wall-clock]
+Translator variables: 34
+Translator derived variables: 0
+Translator facts: 100
+Translator goal facts: 33
+Translator mutex groups: 0
+Translator total mutex groups size: 0
+Translator operators: 185
+Translator axioms: 0
+Translator task size: 1634
+Translator peak memory: 33012 KB
+Writing output... [0.000s CPU, 0.001s wall-clock]
+Done! [0.040s CPU, 0.037s wall-clock]
+translate exit code: 0
+
+INFO     Running search (release).
+INFO     search stdin: output.sas
+INFO     search time limit: 599s
+INFO     search memory limit: 3584 MB
+INFO     search command line string: /usr/local/downward-projects/downward/experiments/assign3/data/assign3-anytime_exp/code-1fb14623350588fb782db39ad332c8a25eda53d6_e5e41175/builds/release/bin/downward --evaluator 'h=lmcut()' --search 'eager_anytime(alt(
+        [single(weight(h, 2, verbosity=normal)), type_based([h, g()], random_seed=1234)]), 
+        reopen_closed=true, f_eval=sum([h, g()]))' --internal-plan-file sas_plan < output.sas
+[t=0.00105076s, 10884 KB] reading input...
+[t=0.00207666s, 10884 KB] done reading input!
+[t=0.00416728s, 11272 KB] Initializing landmark cut heuristic...
+[t=0.00430343s, 11272 KB] Building successor generator...done!
+[t=0.00450652s, 11272 KB] peak memory difference for successor generator creation: 0 KB
+[t=0.00455201s, 11272 KB] time for successor generation creation: 0s
+[t=0.00457757s, 11272 KB] Variables: 34
+[t=0.00460454s, 11272 KB] FactPairs: 100
+[t=0.00462743s, 11272 KB] Bytes per state: 8
+[t=0.00465074s, 11272 KB] Conducting best first anytime search with reopening closed nodes, (real) bound = 2147483647
+[t=0.00470509s, 11272 KB] New best heuristic value for lmcut(): 3
+[t=0.00478602s, 11272 KB] g=0, 1 evaluated, 0 expanded
+[t=0.0048103s, 11272 KB] Initial heuristic value for lmcut(): 3
+[t=0.00484206s, 11272 KB] Start Timestep: 1681951214421 millisecond(s).
+[t=0.00488563s, 11272 KB] New best heuristic value for lmcut(): 2
+[t=0.00503332s, 11272 KB] g=1, 5 evaluated, 1 expanded
+[t=0.00664445s, 11272 KB] New best heuristic value for lmcut(): 1
+[t=0.00693865s, 11272 KB] g=3, 76 evaluated, 21 expanded
+[t=1.11448s, 13400 KB] New best heuristic value for lmcut(): 0
+[t=1.11493s, 13400 KB] g=24, 48098 evaluated, 17604 expanded, 347 reopened
+[t=1.11497s, 13400 KB] Solution found!
+jump-new-move pos-4-4 pos-4-3 pos-4-2 (1)
+end-move pos-4-2 (0)
+jump-new-move pos-4-6 pos-4-5 pos-4-4 (1)
+end-move pos-4-4 (0)
+jump-new-move pos-4-1 pos-4-2 pos-4-3 (1)
+jump-continue-move pos-4-3 pos-4-4 pos-4-5 (0)
+end-move pos-4-5 (0)
+jump-new-move pos-2-1 pos-3-1 pos-4-1 (1)
+end-move pos-4-1 (0)
+jump-new-move pos-3-3 pos-3-2 pos-3-1 (1)
+end-move pos-3-1 (0)
+jump-new-move pos-6-2 pos-5-2 pos-4-2 (1)
+end-move pos-4-2 (0)
+jump-new-move pos-1-3 pos-2-3 pos-3-3 (1)
+end-move pos-3-3 (0)
+jump-new-move pos-2-5 pos-2-4 pos-2-3 (1)
+end-move pos-2-3 (0)
+jump-new-move pos-2-6 pos-3-6 pos-4-6 (1)
+end-move pos-4-6 (0)
+jump-new-move pos-0-4 pos-0-3 pos-0-2 (1)
+end-move pos-0-2 (0)
+jump-new-move pos-3-4 pos-3-3 pos-3-2 (1)
+end-move pos-3-2 (0)
+jump-new-move pos-5-4 pos-5-3 pos-5-2 (1)
+end-move pos-5-2 (0)
+jump-new-move pos-4-2 pos-3-2 pos-2-2 (1)
+end-move pos-2-2 (0)
+jump-new-move pos-6-4 pos-6-3 pos-6-2 (1)
+end-move pos-6-2 (0)
+jump-new-move pos-2-3 pos-2-2 pos-2-1 (1)
+end-move pos-2-1 (0)
+jump-new-move pos-4-6 pos-4-5 pos-4-4 (1)
+end-move pos-4-4 (0)
+jump-new-move pos-0-2 pos-1-2 pos-2-2 (1)
+end-move pos-2-2 (0)
+jump-new-move pos-6-2 pos-5-2 pos-4-2 (1)
+end-move pos-4-2 (0)
+jump-new-move pos-2-1 pos-2-2 pos-2-3 (1)
+end-move pos-2-3 (0)
+jump-new-move pos-4-1 pos-4-2 pos-4-3 (1)
+end-move pos-4-3 (0)
+jump-new-move pos-3-0 pos-3-1 pos-3-2 (1)
+end-move pos-3-2 (0)
+jump-new-move pos-4-4 pos-4-3 pos-4-2 (1)
+jump-continue-move pos-4-2 pos-3-2 pos-2-2 (0)
+jump-continue-move pos-2-2 pos-2-3 pos-2-4 (0)
+end-move pos-2-4 (0)
+jump-new-move pos-1-4 pos-2-4 pos-3-4 (1)
+end-move pos-3-4 (0)
+jump-new-move pos-3-5 pos-3-4 pos-3-3 (1)
+[t=1.11539s, 13400 KB] Plan length: 50 step(s).
+[t=1.11542s, 13400 KB] Plan cost: 24
+[t=1.11545s, 13400 KB] Solution: Incumbent solution found!
+[t=1.11547s, 13400 KB] Solution Timestep: 1681951215549 millisecond(s).
+[t=1.1155s, 13400 KB] Timestamp: 1681951215549 millisecond(s).
+[t=1.11552s, 13400 KB] Expanded 17605 state(s).
+[t=1.11554s, 13400 KB] Reopened 347 state(s).
+[t=1.11556s, 13400 KB] Evaluated 48098 state(s).
+[t=1.11559s, 13400 KB] Evaluations: 49797
+[t=1.11561s, 13400 KB] Generated 55963 state(s).
+[t=1.11563s, 13400 KB] Dead ends: 0 state(s).
+[t=1.11566s, 13400 KB] Number of registered states: 49797
+[t=1.11568s, 13400 KB] Int hash set load factor: 49797/65536 = 0.759842
+[t=1.1157s, 13400 KB] Int hash set resizes: 16
+[t=3.35689s, 18604 KB] Solution found!
+jump-new-move pos-4-4 pos-4-3 pos-4-2 (1)
+end-move pos-4-2 (0)
+jump-new-move pos-4-6 pos-4-5 pos-4-4 (1)
+end-move pos-4-4 (0)
+jump-new-move pos-4-1 pos-4-2 pos-4-3 (1)
+jump-continue-move pos-4-3 pos-4-4 pos-4-5 (0)
+end-move pos-4-5 (0)
+jump-new-move pos-2-1 pos-3-1 pos-4-1 (1)
+end-move pos-4-1 (0)
+jump-new-move pos-3-3 pos-3-2 pos-3-1 (1)
+end-move pos-3-1 (0)
+jump-new-move pos-6-2 pos-5-2 pos-4-2 (1)
+end-move pos-4-2 (0)
+jump-new-move pos-1-3 pos-2-3 pos-3-3 (1)
+end-move pos-3-3 (0)
+jump-new-move pos-2-5 pos-2-4 pos-2-3 (1)
+end-move pos-2-3 (0)
+jump-new-move pos-2-6 pos-3-6 pos-4-6 (1)
+end-move pos-4-6 (0)
+jump-new-move pos-0-4 pos-0-3 pos-0-2 (1)
+end-move pos-0-2 (0)
+jump-new-move pos-3-4 pos-3-3 pos-3-2 (1)
+end-move pos-3-2 (0)
+jump-new-move pos-5-4 pos-5-3 pos-5-2 (1)
+end-move pos-5-2 (0)
+jump-new-move pos-4-2 pos-3-2 pos-2-2 (1)
+end-move pos-2-2 (0)
+jump-new-move pos-3-0 pos-3-1 pos-3-2 (1)
+end-move pos-3-2 (0)
+jump-new-move pos-6-4 pos-6-3 pos-6-2 (1)
+end-move pos-6-2 (0)
+jump-new-move pos-2-2 pos-3-2 pos-4-2 (1)
+end-move pos-4-2 (0)
+jump-new-move pos-4-1 pos-4-2 pos-4-3 (1)
+end-move pos-4-3 (0)
+jump-new-move pos-4-6 pos-4-5 pos-4-4 (1)
+end-move pos-4-4 (0)
+jump-new-move pos-0-2 pos-1-2 pos-2-2 (1)
+jump-continue-move pos-2-2 pos-2-3 pos-2-4 (0)
+end-move pos-2-4 (0)
+jump-new-move pos-1-4 pos-2-4 pos-3-4 (1)
+jump-continue-move pos-3-4 pos-4-4 pos-5-4 (0)
+end-move pos-5-4 (0)
+jump-new-move pos-6-2 pos-5-2 pos-4-2 (1)
+jump-continue-move pos-4-2 pos-4-3 pos-4-4 (0)
+end-move pos-4-4 (0)
+jump-new-move pos-5-4 pos-4-4 pos-3-4 (1)
+end-move pos-3-4 (0)
+jump-new-move pos-3-5 pos-3-4 pos-3-3 (1)
+[t=3.35831s, 18604 KB] Plan length: 49 step(s).
+[t=3.35837s, 18604 KB] Plan cost: 23
+[t=3.3584s, 18604 KB] Solution: Incumbent solution found!
+[t=3.35844s, 18604 KB] Solution Timestep: 1681951217826 millisecond(s).
+[t=3.35846s, 18604 KB] Timestamp: 1681951217826 millisecond(s).
+[t=3.35849s, 18604 KB] Expanded 56089 state(s).
+[t=3.35851s, 18604 KB] Reopened 2497 state(s).
+[t=3.35853s, 18604 KB] Evaluated 144471 state(s).
+[t=3.35856s, 18604 KB] Evaluations: 150536
+[t=3.35858s, 18604 KB] Generated 174998 state(s).
+[t=3.3586s, 18604 KB] Dead ends: 0 state(s).
+[t=3.35862s, 18604 KB] Number of registered states: 150536
+[t=3.35865s, 18604 KB] Int hash set load factor: 150536/262144 = 0.574249
+[t=3.35867s, 18604 KB] Int hash set resizes: 18
+[t=6.83707s, 26232 KB] Solution found!
+jump-new-move pos-4-4 pos-4-3 pos-4-2 (1)
+end-move pos-4-2 (0)
+jump-new-move pos-4-6 pos-4-5 pos-4-4 (1)
+end-move pos-4-4 (0)
+jump-new-move pos-4-1 pos-4-2 pos-4-3 (1)
+jump-continue-move pos-4-3 pos-4-4 pos-4-5 (0)
+end-move pos-4-5 (0)
+jump-new-move pos-2-1 pos-3-1 pos-4-1 (1)
+end-move pos-4-1 (0)
+jump-new-move pos-3-3 pos-3-2 pos-3-1 (1)
+end-move pos-3-1 (0)
+jump-new-move pos-6-2 pos-5-2 pos-4-2 (1)
+end-move pos-4-2 (0)
+jump-new-move pos-1-3 pos-2-3 pos-3-3 (1)
+end-move pos-3-3 (0)
+jump-new-move pos-2-5 pos-2-4 pos-2-3 (1)
+end-move pos-2-3 (0)
+jump-new-move pos-2-6 pos-3-6 pos-4-6 (1)
+end-move pos-4-6 (0)
+jump-new-move pos-0-4 pos-0-3 pos-0-2 (1)
+end-move pos-0-2 (0)
+jump-new-move pos-3-4 pos-3-3 pos-3-2 (1)
+end-move pos-3-2 (0)
+jump-new-move pos-5-4 pos-5-3 pos-5-2 (1)
+end-move pos-5-2 (0)
+jump-new-move pos-4-2 pos-3-2 pos-2-2 (1)
+end-move pos-2-2 (0)
+jump-new-move pos-3-0 pos-3-1 pos-3-2 (1)
+end-move pos-3-2 (0)
+jump-new-move pos-6-4 pos-6-3 pos-6-2 (1)
+jump-continue-move pos-6-2 pos-5-2 pos-4-2 (0)
+end-move pos-4-2 (0)
+jump-new-move pos-2-3 pos-2-2 pos-2-1 (1)
+end-move pos-2-1 (0)
+jump-new-move pos-0-2 pos-1-2 pos-2-2 (1)
+end-move pos-2-2 (0)
+jump-new-move pos-2-1 pos-2-2 pos-2-3 (1)
+end-move pos-2-3 (0)
+jump-new-move pos-4-1 pos-4-2 pos-4-3 (1)
+end-move pos-4-3 (0)
+jump-new-move pos-4-6 pos-4-5 pos-4-4 (1)
+jump-continue-move pos-4-4 pos-4-3 pos-4-2 (0)
+jump-continue-move pos-4-2 pos-3-2 pos-2-2 (0)
+jump-continue-move pos-2-2 pos-2-3 pos-2-4 (0)
+end-move pos-2-4 (0)
+jump-new-move pos-1-4 pos-2-4 pos-3-4 (1)
+end-move pos-3-4 (0)
+jump-new-move pos-3-5 pos-3-4 pos-3-3 (1)
+[t=6.83851s, 26232 KB] Plan length: 48 step(s).
+[t=6.83856s, 26232 KB] Plan cost: 22
+[t=6.83858s, 26232 KB] Solution: Incumbent solution found!
+[t=6.83861s, 26232 KB] Solution Timestep: 1681951221357 millisecond(s).
+[t=6.83863s, 26232 KB] Timestamp: 1681951221357 millisecond(s).
+[t=6.83866s, 26232 KB] Expanded 117828 state(s).
+[t=6.83868s, 26232 KB] Reopened 6939 state(s).
+[t=6.83871s, 26232 KB] Evaluated 291487 state(s).
+[t=6.83873s, 26232 KB] Evaluations: 304710
+[t=6.83875s, 26232 KB] Generated 362103 state(s).
+[t=6.83877s, 26232 KB] Dead ends: 0 state(s).
+[t=6.8388s, 26232 KB] Number of registered states: 304710
+[t=6.83882s, 26232 KB] Int hash set load factor: 304710/524288 = 0.581188
+[t=6.83885s, 26232 KB] Int hash set resizes: 19
+[t=12.9858s, 39896 KB] Solution found!
+jump-new-move pos-4-4 pos-4-3 pos-4-2 (1)
+end-move pos-4-2 (0)
+jump-new-move pos-4-6 pos-4-5 pos-4-4 (1)
+end-move pos-4-4 (0)
+jump-new-move pos-4-1 pos-4-2 pos-4-3 (1)
+jump-continue-move pos-4-3 pos-4-4 pos-4-5 (0)
+end-move pos-4-5 (0)
+jump-new-move pos-2-1 pos-3-1 pos-4-1 (1)
+end-move pos-4-1 (0)
+jump-new-move pos-3-3 pos-3-2 pos-3-1 (1)
+end-move pos-3-1 (0)
+jump-new-move pos-6-2 pos-5-2 pos-4-2 (1)
+end-move pos-4-2 (0)
+jump-new-move pos-1-3 pos-2-3 pos-3-3 (1)
+end-move pos-3-3 (0)
+jump-new-move pos-4-1 pos-4-2 pos-4-3 (1)
+end-move pos-4-3 (0)
+jump-new-move pos-3-4 pos-3-3 pos-3-2 (1)
+end-move pos-3-2 (0)
+jump-new-move pos-0-4 pos-0-3 pos-0-2 (1)
+jump-continue-move pos-0-2 pos-1-2 pos-2-2 (0)
+end-move pos-2-2 (0)
+jump-new-move pos-2-5 pos-2-4 pos-2-3 (1)
+end-move pos-2-3 (0)
+jump-new-move pos-2-6 pos-3-6 pos-4-6 (1)
+end-move pos-4-6 (0)
+jump-new-move pos-5-4 pos-5-3 pos-5-2 (1)
+end-move pos-5-2 (0)
+jump-new-move pos-2-3 pos-2-2 pos-2-1 (1)
+end-move pos-2-1 (0)
+jump-new-move pos-6-4 pos-6-3 pos-6-2 (1)
+jump-continue-move pos-6-2 pos-5-2 pos-4-2 (0)
+jump-continue-move pos-4-2 pos-3-2 pos-2-2 (0)
+end-move pos-2-2 (0)
+jump-new-move pos-3-0 pos-3-1 pos-3-2 (1)
+end-move pos-3-2 (0)
+jump-new-move pos-2-1 pos-2-2 pos-2-3 (1)
+end-move pos-2-3 (0)
+jump-new-move pos-4-6 pos-4-5 pos-4-4 (1)
+jump-continue-move pos-4-4 pos-4-3 pos-4-2 (0)
+jump-continue-move pos-4-2 pos-3-2 pos-2-2 (0)
+jump-continue-move pos-2-2 pos-2-3 pos-2-4 (0)
+end-move pos-2-4 (0)
+jump-new-move pos-1-4 pos-2-4 pos-3-4 (1)
+end-move pos-3-4 (0)
+jump-new-move pos-3-5 pos-3-4 pos-3-3 (1)
+[t=12.9865s, 39896 KB] Plan length: 46 step(s).
+[t=12.9866s, 39896 KB] Plan cost: 20
+[t=12.9866s, 39896 KB] Solution: Incumbent solution found!
+[t=12.9866s, 39896 KB] Solution Timestep: 1681951227597 millisecond(s).
+[t=12.9866s, 39896 KB] Timestamp: 1681951227597 millisecond(s).
+[t=12.9867s, 39896 KB] Expanded 228438 state(s).
+[t=12.9867s, 39896 KB] Reopened 16653 state(s).
+[t=12.9867s, 39896 KB] Evaluated 549507 state(s).
+[t=12.9867s, 39896 KB] Evaluations: 575678
+[t=12.9867s, 39896 KB] Generated 697767 state(s).
+[t=12.9868s, 39896 KB] Dead ends: 0 state(s).
+[t=12.9868s, 39896 KB] Number of registered states: 575678
+[t=12.9868s, 39896 KB] Int hash set load factor: 575678/1048576 = 0.549009
+[t=12.9868s, 39896 KB] Int hash set resizes: 20
+[t=40.7338s, 121364 KB] Solution found!
+jump-new-move pos-4-4 pos-4-3 pos-4-2 (1)
+end-move pos-4-2 (0)
+jump-new-move pos-4-6 pos-4-5 pos-4-4 (1)
+end-move pos-4-4 (0)
+jump-new-move pos-4-1 pos-4-2 pos-4-3 (1)
+jump-continue-move pos-4-3 pos-4-4 pos-4-5 (0)
+end-move pos-4-5 (0)
+jump-new-move pos-2-1 pos-3-1 pos-4-1 (1)
+end-move pos-4-1 (0)
+jump-new-move pos-3-3 pos-3-2 pos-3-1 (1)
+end-move pos-3-1 (0)
+jump-new-move pos-6-4 pos-5-4 pos-4-4 (1)
+end-move pos-4-4 (0)
+jump-new-move pos-6-2 pos-5-2 pos-4-2 (1)
+end-move pos-4-2 (0)
+jump-new-move pos-1-3 pos-2-3 pos-3-3 (1)
+end-move pos-3-3 (0)
+jump-new-move pos-4-1 pos-3-1 pos-2-1 (1)
+end-move pos-2-1 (0)
+jump-new-move pos-3-4 pos-4-4 pos-5-4 (1)
+end-move pos-5-4 (0)
+jump-new-move pos-2-6 pos-3-6 pos-4-6 (1)
+jump-continue-move pos-4-6 pos-4-5 pos-4-4 (0)
+end-move pos-4-4 (0)
+jump-new-move pos-6-3 pos-5-3 pos-4-3 (1)
+jump-continue-move pos-4-3 pos-4-2 pos-4-1 (0)
+end-move pos-4-1 (0)
+jump-new-move pos-1-4 pos-2-4 pos-3-4 (1)
+end-move pos-3-4 (0)
+jump-new-move pos-2-5 pos-3-5 pos-4-5 (1)
+jump-continue-move pos-4-5 pos-4-4 pos-4-3 (0)
+end-move pos-4-3 (0)
+jump-new-move pos-0-4 pos-0-3 pos-0-2 (1)
+jump-continue-move pos-0-2 pos-1-2 pos-2-2 (0)
+jump-continue-move pos-2-2 pos-2-1 pos-2-0 (0)
+jump-continue-move pos-2-0 pos-3-0 pos-4-0 (0)
+jump-continue-move pos-4-0 pos-4-1 pos-4-2 (0)
+jump-continue-move pos-4-2 pos-4-3 pos-4-4 (0)
+end-move pos-4-4 (0)
+jump-new-move pos-3-3 pos-3-4 pos-3-5 (1)
+end-move pos-3-5 (0)
+jump-new-move pos-5-4 pos-4-4 pos-3-4 (1)
+end-move pos-3-4 (0)
+jump-new-move pos-3-5 pos-3-4 pos-3-3 (1)
+[t=40.7348s, 121364 KB] Plan length: 44 step(s).
+[t=40.7348s, 121364 KB] Plan cost: 18
+[t=40.7348s, 121364 KB] Solution: Incumbent solution found!
+[t=40.7349s, 121364 KB] Solution Timestep: 1681951255748 millisecond(s).
+[t=40.7349s, 121364 KB] Timestamp: 1681951255749 millisecond(s).
+[t=40.7349s, 121364 KB] Expanded 731727 state(s).
+[t=40.7349s, 121364 KB] Reopened 64672 state(s).
+[t=40.735s, 121364 KB] Evaluated 1685402 state(s).
+[t=40.735s, 121364 KB] Evaluations: 1774099
+[t=40.735s, 121364 KB] Generated 2216154 state(s).
+[t=40.735s, 121364 KB] Dead ends: 0 state(s).
+[t=40.7351s, 121364 KB] Number of registered states: 1774099
+[t=40.7351s, 121364 KB] Int hash set load factor: 1774099/4194304 = 0.422978
+[t=40.7351s, 121364 KB] Int hash set resizes: 22
+[t=151.468s, 306752 KB] Solution found!
+jump-new-move pos-4-4 pos-4-3 pos-4-2 (1)
+end-move pos-4-2 (0)
+jump-new-move pos-4-6 pos-4-5 pos-4-4 (1)
+end-move pos-4-4 (0)
+jump-new-move pos-4-1 pos-4-2 pos-4-3 (1)
+jump-continue-move pos-4-3 pos-4-4 pos-4-5 (0)
+end-move pos-4-5 (0)
+jump-new-move pos-2-1 pos-3-1 pos-4-1 (1)
+end-move pos-4-1 (0)
+jump-new-move pos-2-4 pos-2-3 pos-2-2 (1)
+end-move pos-2-2 (0)
+jump-new-move pos-6-4 pos-5-4 pos-4-4 (1)
+jump-continue-move pos-4-4 pos-3-4 pos-2-4 (0)
+end-move pos-2-4 (0)
+jump-new-move pos-2-6 pos-3-6 pos-4-6 (1)
+end-move pos-4-6 (0)
+jump-new-move pos-2-5 pos-2-4 pos-2-3 (1)
+jump-continue-move pos-2-3 pos-2-2 pos-2-1 (0)
+end-move pos-2-1 (0)
+jump-new-move pos-0-4 pos-0-3 pos-0-2 (1)
+jump-continue-move pos-0-2 pos-1-2 pos-2-2 (0)
+jump-continue-move pos-2-2 pos-2-1 pos-2-0 (0)
+jump-continue-move pos-2-0 pos-3-0 pos-4-0 (0)
+jump-continue-move pos-4-0 pos-4-1 pos-4-2 (0)
+jump-continue-move pos-4-2 pos-3-2 pos-2-2 (0)
+end-move pos-2-2 (0)
+jump-new-move pos-1-4 pos-1-3 pos-1-2 (1)
+jump-continue-move pos-1-2 pos-2-2 pos-3-2 (0)
+end-move pos-3-2 (0)
+jump-new-move pos-6-3 pos-5-3 pos-4-3 (1)
+end-move pos-4-3 (0)
+jump-new-move pos-3-2 pos-3-3 pos-3-4 (1)
+end-move pos-3-4 (0)
+jump-new-move pos-6-2 pos-5-2 pos-4-2 (1)
+jump-continue-move pos-4-2 pos-4-3 pos-4-4 (0)
+end-move pos-4-4 (0)
+jump-new-move pos-3-4 pos-4-4 pos-5-4 (1)
+end-move pos-5-4 (0)
+jump-new-move pos-4-6 pos-4-5 pos-4-4 (1)
+end-move pos-4-4 (0)
+jump-new-move pos-5-4 pos-4-4 pos-3-4 (1)
+end-move pos-3-4 (0)
+jump-new-move pos-3-5 pos-3-4 pos-3-3 (1)
+[t=151.469s, 306752 KB] Plan length: 43 step(s).
+[t=151.469s, 306752 KB] Plan cost: 17
+[t=151.469s, 306752 KB] Solution: Incumbent solution found!
+[t=151.469s, 306752 KB] Solution Timestep: 1681951368094 millisecond(s).
+[t=151.469s, 306752 KB] Timestamp: 1681951368094 millisecond(s).
+[t=151.469s, 306752 KB] Expanded 2867769 state(s).
+[t=151.469s, 306752 KB] Reopened 334468 state(s).
+[t=151.469s, 306752 KB] Evaluated 6095570 state(s).
+[t=151.469s, 306752 KB] Evaluations: 6500902
+[t=151.469s, 306752 KB] Generated 8603559 state(s).
+[t=151.469s, 306752 KB] Dead ends: 0 state(s).
+[t=151.469s, 306752 KB] Number of registered states: 6500902
+[t=151.469s, 306752 KB] Int hash set load factor: 6500902/8388608 = 0.774968
+[t=151.469s, 306752 KB] Int hash set resizes: 23
+[t=388.903s, 867908 KB] Solution found!
+jump-new-move pos-4-4 pos-4-3 pos-4-2 (1)
+end-move pos-4-2 (0)
+jump-new-move pos-4-6 pos-4-5 pos-4-4 (1)
+end-move pos-4-4 (0)
+jump-new-move pos-4-1 pos-4-2 pos-4-3 (1)
+jump-continue-move pos-4-3 pos-4-4 pos-4-5 (0)
+end-move pos-4-5 (0)
+jump-new-move pos-2-4 pos-2-3 pos-2-2 (1)
+jump-continue-move pos-2-2 pos-2-1 pos-2-0 (0)
+end-move pos-2-0 (0)
+jump-new-move pos-6-4 pos-5-4 pos-4-4 (1)
+jump-continue-move pos-4-4 pos-3-4 pos-2-4 (0)
+end-move pos-2-4 (0)
+jump-new-move pos-6-2 pos-5-2 pos-4-2 (1)
+end-move pos-4-2 (0)
+jump-new-move pos-0-4 pos-0-3 pos-0-2 (1)
+jump-continue-move pos-0-2 pos-1-2 pos-2-2 (0)
+end-move pos-2-2 (0)
+jump-new-move pos-2-5 pos-2-4 pos-2-3 (1)
+jump-continue-move pos-2-3 pos-2-2 pos-2-1 (0)
+jump-continue-move pos-2-1 pos-3-1 pos-4-1 (0)
+jump-continue-move pos-4-1 pos-4-2 pos-4-3 (0)
+end-move pos-4-3 (0)
+jump-new-move pos-2-6 pos-3-6 pos-4-6 (1)
+jump-continue-move pos-4-6 pos-4-5 pos-4-4 (0)
+jump-continue-move pos-4-4 pos-4-3 pos-4-2 (0)
+end-move pos-4-2 (0)
+jump-new-move pos-6-3 pos-5-3 pos-4-3 (1)
+jump-continue-move pos-4-3 pos-4-2 pos-4-1 (0)
+end-move pos-4-1 (0)
+jump-new-move pos-2-0 pos-3-0 pos-4-0 (1)
+jump-continue-move pos-4-0 pos-4-1 pos-4-2 (0)
+jump-continue-move pos-4-2 pos-3-2 pos-2-2 (0)
+end-move pos-2-2 (0)
+jump-new-move pos-1-4 pos-1-3 pos-1-2 (1)
+jump-continue-move pos-1-2 pos-2-2 pos-3-2 (0)
+jump-continue-move pos-3-2 pos-3-3 pos-3-4 (0)
+end-move pos-3-4 (0)
+jump-new-move pos-3-5 pos-3-4 pos-3-3 (1)
+[t=388.905s, 867908 KB] Plan length: 39 step(s).
+[t=388.905s, 867908 KB] Plan cost: 13
+[t=388.905s, 867908 KB] Solution: Incumbent solution found!
+[t=388.905s, 867908 KB] Solution Timestep: 1681951608000 millisecond(s).
+[t=388.905s, 867908 KB] Timestamp: 1681951608000 millisecond(s).
+[t=388.905s, 867908 KB] Expanded 7845964 state(s).
+[t=388.905s, 867908 KB] Reopened 1227017 state(s).
+[t=388.905s, 867908 KB] Evaluated 15189139 state(s).
+[t=388.905s, 867908 KB] Evaluations: 16553123
+[t=388.905s, 867908 KB] Generated 23332427 state(s).
+[t=388.905s, 867908 KB] Dead ends: 0 state(s).
+[t=388.905s, 867908 KB] Number of registered states: 16553123
+[t=388.905s, 867908 KB] Int hash set load factor: 16553123/33554432 = 0.493322
+[t=388.905s, 867908 KB] Int hash set resizes: 25
+Peak memory: 1140000 KB
+caught signal 24 -- exiting
+Time limit has been reached.
+Remove intermediate file output.sas
+search exit code: 23
+
+Driver aborting after search
+INFO     Planner time: 595.73s

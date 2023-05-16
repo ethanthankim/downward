@@ -1,0 +1,200 @@
+INFO     planner time limit: 600s
+INFO     planner memory limit: 3584 MB
+
+INFO     Running translator.
+INFO     translator stdin: None
+INFO     translator time limit: 599s
+INFO     translator memory limit: 3584 MB
+INFO     translator command line string: /usr/local/downward-projects/downward/experiments/assign3/.venv/bin/python3 /usr/local/downward-projects/downward/experiments/assign3/data/assign3-anytime_exp/code-1fb14623350588fb782db39ad332c8a25eda53d6_e5e41175/builds/release/bin/translate/translate.py domain.pddl problem.pddl --sas-file output.sas
+Parsing...
+Parsing: [0.000s CPU, 0.004s wall-clock]
+Normalizing task... [0.000s CPU, 0.000s wall-clock]
+Instantiating...
+Generating Datalog program... [0.000s CPU, 0.001s wall-clock]
+Normalizing Datalog program...
+Normalizing Datalog program: [0.010s CPU, 0.006s wall-clock]
+Preparing model... [0.000s CPU, 0.003s wall-clock]
+Generated 198 rules.
+Computing model... [0.010s CPU, 0.005s wall-clock]
+294 relevant atoms
+484 auxiliary atoms
+778 final queue length
+1222 total queue pushes
+Completing instantiation... [0.000s CPU, 0.005s wall-clock]
+Instantiating: [0.020s CPU, 0.019s wall-clock]
+Computing fact groups...
+Finding invariants...
+24 initial candidates
+Finding invariants: [0.010s CPU, 0.009s wall-clock]
+Checking invariant weight... [0.000s CPU, 0.000s wall-clock]
+Instantiating groups... [0.000s CPU, 0.000s wall-clock]
+Collecting mutex groups... [0.000s CPU, 0.000s wall-clock]
+Choosing groups...
+16 uncovered facts
+Choosing groups: [0.000s CPU, 0.000s wall-clock]
+Building translation key... [0.000s CPU, 0.000s wall-clock]
+Computing fact groups: [0.010s CPU, 0.010s wall-clock]
+Building STRIPS to SAS dictionary... [0.000s CPU, 0.000s wall-clock]
+Building dictionary for full mutex groups... [0.000s CPU, 0.000s wall-clock]
+Building mutex information...
+Building mutex information: [0.000s CPU, 0.000s wall-clock]
+Translating task...
+Processing axioms...
+Simplifying axioms... [0.000s CPU, 0.000s wall-clock]
+Translator axioms removed by simplifying: 0
+Computing negative axioms... [0.000s CPU, 0.000s wall-clock]
+Processing axioms: [0.000s CPU, 0.000s wall-clock]
+Translating task: [0.000s CPU, 0.005s wall-clock]
+108 effect conditions simplified
+0 implied preconditions added
+Detecting unreachable propositions...
+0 operators removed
+0 axioms removed
+20 propositions removed
+Detecting unreachable propositions: [0.010s CPU, 0.002s wall-clock]
+Reordering and filtering variables...
+15 of 15 variables necessary.
+0 of 6 mutex groups necessary.
+153 of 153 operators necessary.
+0 of 0 axiom rules necessary.
+Reordering and filtering variables: [0.000s CPU, 0.001s wall-clock]
+Translator variables: 15
+Translator derived variables: 0
+Translator facts: 36
+Translator goal facts: 5
+Translator mutex groups: 0
+Translator total mutex groups size: 0
+Translator operators: 153
+Translator axioms: 0
+Translator task size: 1064
+Translator peak memory: 32880 KB
+Writing output... [0.000s CPU, 0.001s wall-clock]
+Done! [0.040s CPU, 0.044s wall-clock]
+translate exit code: 0
+
+INFO     Running search (release).
+INFO     search stdin: output.sas
+INFO     search time limit: 599s
+INFO     search memory limit: 3584 MB
+INFO     search command line string: /usr/local/downward-projects/downward/experiments/assign3/data/assign3-anytime_exp/code-1fb14623350588fb782db39ad332c8a25eda53d6_e5e41175/builds/release/bin/downward --evaluator 'h=lmcut()' --search 'eager_anytime(alt(
+        [single(weight(h, 2, verbosity=normal)), type_based([h, g()], random_seed=1234)]), 
+        reopen_closed=true, f_eval=sum([h, g()]))' --internal-plan-file sas_plan < output.sas
+[t=0s, 10884 KB] reading input...
+[t=0.00220237s, 10884 KB] done reading input!
+[t=0.00396307s, 11272 KB] Initializing landmark cut heuristic...
+[t=0.00469534s, 11272 KB] Building successor generator...done!
+[t=0.0048548s, 11272 KB] peak memory difference for successor generator creation: 0 KB
+[t=0.00489881s, 11272 KB] time for successor generation creation: 0s
+[t=0.00492332s, 11272 KB] Variables: 15
+[t=0.0049485s, 11272 KB] FactPairs: 36
+[t=0.00497049s, 11272 KB] Bytes per state: 4
+[t=0.00499234s, 11272 KB] Conducting best first anytime search with reopening closed nodes, (real) bound = 2147483647
+[t=0.00504296s, 11272 KB] New best heuristic value for lmcut(): 50
+[t=0.00510392s, 11272 KB] g=0, 1 evaluated, 0 expanded
+[t=0.00512766s, 11272 KB] Initial heuristic value for lmcut(): 50
+[t=0.00515596s, 11272 KB] Start Timestep: 1681965252664 millisecond(s).
+[t=0.0051951s, 11272 KB] New best heuristic value for lmcut(): 40
+[t=0.00524633s, 11272 KB] g=15, 2 evaluated, 1 expanded
+[t=0.00526838s, 11272 KB] New best heuristic value for lmcut(): 30
+[t=0.00544711s, 11272 KB] g=25, 10 evaluated, 2 expanded
+[t=0.00547176s, 11272 KB] New best heuristic value for lmcut(): 20
+[t=0.00566596s, 11272 KB] g=35, 21 evaluated, 4 expanded
+[t=0.00569065s, 11272 KB] New best heuristic value for lmcut(): 10
+[t=0.00585686s, 11272 KB] g=45, 31 evaluated, 6 expanded
+[t=0.00588136s, 11272 KB] New best heuristic value for lmcut(): 0
+[t=0.0060338s, 11272 KB] g=55, 42 evaluated, 8 expanded
+[t=0.00605732s, 11272 KB] Solution found!
+do-grind p2 grinder0 verysmooth mauve colourfragments untreated (15)
+do-glaze p2 glazer0 natural (10)
+do-plane p1 planer0 smooth natural colourfragments (10)
+do-glaze p1 glazer0 natural (10)
+do-plane p0 planer0 verysmooth blue colourfragments (10)
+[t=0.00623857s, 11272 KB] Plan length: 5 step(s).
+[t=0.00627247s, 11272 KB] Plan cost: 55
+[t=0.00629596s, 11272 KB] Solution: Incumbent solution found!
+[t=0.00632372s, 11272 KB] Solution Timestep: 1681965252666 millisecond(s).
+[t=0.00634741s, 11272 KB] Timestamp: 1681965252666 millisecond(s).
+[t=0.00637132s, 11272 KB] Expanded 10 state(s).
+[t=0.00639448s, 11272 KB] Reopened 0 state(s).
+[t=0.00641629s, 11272 KB] Evaluated 48 state(s).
+[t=0.006438s, 11272 KB] Evaluations: 48
+[t=0.00645988s, 11272 KB] Generated 60 state(s).
+[t=0.0064819s, 11272 KB] Dead ends: 0 state(s).
+[t=0.00650408s, 11272 KB] Number of registered states: 48
+[t=0.0065267s, 11272 KB] Int hash set load factor: 48/64 = 0.75
+[t=0.00655134s, 11272 KB] Int hash set resizes: 6
+[t=0.00754685s, 11272 KB] Solution found!
+do-plane p2 planer0 verysmooth mauve colourfragments (10)
+do-glaze p2 glazer0 natural (10)
+do-plane p1 planer0 smooth natural colourfragments (10)
+do-glaze p1 glazer0 natural (10)
+do-plane p0 planer0 verysmooth blue colourfragments (10)
+[t=0.00815188s, 11272 KB] Plan length: 5 step(s).
+[t=0.00818793s, 11272 KB] Plan cost: 50
+[t=0.00821253s, 11272 KB] Solution: Incumbent solution found!
+[t=0.00823646s, 11272 KB] Solution Timestep: 1681965252668 millisecond(s).
+[t=0.00826049s, 11272 KB] Timestamp: 1681965252668 millisecond(s).
+[t=0.00828333s, 11272 KB] Expanded 42 state(s).
+[t=0.00830586s, 11272 KB] Reopened 1 state(s).
+[t=0.00832741s, 11272 KB] Evaluated 55 state(s).
+[t=0.00834956s, 11272 KB] Evaluations: 163
+[t=0.00837165s, 11272 KB] Generated 314 state(s).
+[t=0.00839416s, 11272 KB] Dead ends: 0 state(s).
+[t=0.00841673s, 11272 KB] Number of registered states: 163
+[t=0.00843916s, 11272 KB] Int hash set load factor: 163/256 = 0.636719
+[t=0.00846279s, 11272 KB] Int hash set resizes: 8
+[t=0.0084842s, 11272 KB] Optimal Solution: found
+[t=0.00917347s, 11272 KB] Actual search time: 0.00397837s
+do-plane p2 planer0 verysmooth mauve colourfragments (10)
+do-glaze p2 glazer0 natural (10)
+do-plane p1 planer0 smooth natural colourfragments (10)
+do-glaze p1 glazer0 natural (10)
+do-plane p0 planer0 verysmooth blue colourfragments (10)
+[t=0.00920208s, 11272 KB] Plan length: 5 step(s).
+[t=0.00920208s, 11272 KB] Plan cost: 50
+[t=0.00920208s, 11272 KB] Timestamp: 1681965252669 millisecond(s).
+[t=0.00920208s, 11272 KB] Expanded 56 state(s).
+[t=0.00920208s, 11272 KB] Reopened 1 state(s).
+[t=0.00920208s, 11272 KB] Evaluated 55 state(s).
+[t=0.00920208s, 11272 KB] Evaluations: 212
+[t=0.00920208s, 11272 KB] Generated 444 state(s).
+[t=0.00920208s, 11272 KB] Dead ends: 0 state(s).
+[t=0.00920208s, 11272 KB] Number of registered states: 212
+[t=0.00920208s, 11272 KB] Int hash set load factor: 212/256 = 0.828125
+[t=0.00920208s, 11272 KB] Int hash set resizes: 8
+[t=0.00920208s, 11272 KB] Search time: 0.00420975s
+[t=0.00920208s, 11272 KB] Total time: 0.00920208s
+Solution found.
+Peak memory: 11272 KB
+Remove intermediate file output.sas
+search exit code: 0
+
+INFO     Running validate.
+INFO     validate stdin: None
+INFO     validate time limit: None
+INFO     validate memory limit: None
+INFO     validate command line string: validate domain.pddl problem.pddl sas_plan sas_plan.1 sas_plan.2
+Checking plan: sas_plan
+Plan executed successfully - checking goal
+Plan valid
+Final value: 50 
+Checking plan: sas_plan.1
+Plan executed successfully - checking goal
+Plan valid
+Final value: 55 
+Checking plan: sas_plan.2
+Plan executed successfully - checking goal
+Plan valid
+Final value: 50 
+
+Successful plans:
+Value: 50
+ sas_plan 50 
+sas_plan.2 50 
+
+Value: 55
+ sas_plan.1 55 
+
+validate exit code: 0
+
+INFO     Planner time: 0.14s

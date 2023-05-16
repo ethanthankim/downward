@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>assign3-anytime_exp</title>
+<meta name="generator" content="https://txt2tags.org">
+<style>
+blockquote{margin: 1em 2em; border-left: 2px solid #999;
+  font-style: oblique; padding-left: 1em;}
+blockquote:first-letter{margin: .2em .1em .1em 0; font-size: 160%; font-weight: bold;}
+blockquote:first-line{font-weight: bold;}
+body{font-family: sans-serif;}
+hr{background-color:#000;border:0;color:#000;}
+hr.heavy{height:2px;}
+hr.light{height:1px;}
+img{border:0;display:block;}
+img.right{margin:0 0 0 auto;}
+img.center{border:0;margin:0 auto;}
+table{border-collapse: collapse;}
+table th,table td{padding: 3px 7px 2px 7px;}
+table th{background-color: lightgrey;}
+table.center{margin-left:auto; margin-right:auto;}
+.center{text-align:center;}
+.right{text-align:right;}
+.left{text-align:left;}
+.tableborder,.tableborder td,.tableborder th{border:1px solid #000;}
+.underline{text-decoration:underline;}
+</style>
+<style type="text/css">
+    body {
+        font-family: Ubuntu, Helvetica, Arial, sans-serif;
+    }
+    table {
+        border-collapse: collapse;
+    }
+    table th {
+        text-align: left;
+        padding-top: 5px;
+        padding-bottom: 4px;
+        background-color: #aaa;
+        color: #ffffff;
+    }
+</style>
+<script type="text/javascript">
+function toggle_element(element) {
+    if (element.style.display == "none") {
+        element.style.display = "";
+    } else {
+        element.style.display = "none";
+    }
+}
+
+function find_next(element, classname) {
+    element = element.nextSibling;
+    while(element.nodeName != classname)
+        element = element.nextSibling;
+    return element;
+}
+
+function toggle_table(toggle_button) {
+    var table = find_next(toggle_button, "TABLE");
+    toggle_element(table);
+    if (toggle_button.innerHTML == "Show table") {
+        toggle_button.innerHTML = "Hide table";
+    } else {
+        toggle_button.innerHTML = "Show table";
+    }
+}
+
+function show_table(section) {
+    heading = section.children[0];
+    var toggle_button = find_next(heading, "BUTTON");
+    var table = find_next(toggle_button, "TABLE");
+    table.style.display = "";
+    toggle_button.innerHTML = "Hide table";
+}
+
+function show_main_tables() {
+    var names = ["unexplained-errors", "info", "summary"];
+    for (var i = 0; i < names.length; i++) {
+        var section = document.getElementById(names[i]);
+        try {
+            show_table(section);
+        } catch (e) {
+            console.log("No table found for " + names[i]);
+        }
+    }
+
+    // If there is only one table, show it and hide the button.
+    var buttons = document.getElementsByTagName('button');
+    var tables = document.getElementsByTagName('table');
+    if (buttons.length == 1 && tables.length == 1) {
+        tables[0].style.display = "";
+        buttons[0].style.display = "none";
+    }
+}
+
+document.addEventListener("DOMContentLoaded", show_main_tables);
+</script>
+</head>
+<body>
+<header>
+<hgroup>
+<h1>assign3-anytime_exp</h1>
+<h3>2023-04-18</h3>
+</hgroup>
+</header>
+
+
+<div class="body">
+
+<ul>
+<li><strong><a href="#info" onclick="show_table(document.getElementById('info'));">Info</a></strong>
+</li>
+<li><strong><a href="#summary" onclick="show_table(document.getElementById('summary'));">Summary</a></strong>
+</li>
+<li><strong>[change_index:first #change_index:first]</strong>
+  <ul>
+  <li>[blocks #change_index:first-blocks]
+  </li>
+  </ul>
+</li>
+<li><strong><a href="#cost" onclick="show_table(document.getElementById('cost'));">cost</a></strong>
+  <ul>
+  <li><a href="#cost-blocks" onclick="show_table(document.getElementById('cost-blocks'));">blocks</a>
+  </li>
+  </ul>
+</li>
+<li><strong><a href="#coverage" onclick="show_table(document.getElementById('coverage'));">coverage</a></strong>
+  <ul>
+  <li><a href="#coverage-blocks" onclick="show_table(document.getElementById('coverage-blocks'));">blocks</a>
+  </li>
+  </ul>
+</li>
+<li><strong>[coverage:optimal #coverage:optimal]</strong>
+  <ul>
+  <li>[blocks #coverage:optimal-blocks]
+  </li>
+  </ul>
+</li>
+<li><strong><a href="#expansions" onclick="show_table(document.getElementById('expansions'));">expansions</a></strong>
+  <ul>
+  <li><a href="#expansions-blocks" onclick="show_table(document.getElementById('expansions-blocks'));">blocks</a>
+  </li>
+  </ul>
+</li>
+<li><strong>[expansions:optimal #expansions:optimal]</strong>
+  <ul>
+  <li>[blocks #expansions:optimal-blocks]
+  </li>
+  </ul>
+</li>
+<li><strong>[planner_time:optimal #planner_time:optimal]</strong>
+  <ul>
+  <li>[blocks #planner_time:optimal-blocks]
+  </li>
+  </ul>
+</li>
+<li><strong>[time:steps:avg #time:steps:avg]</strong>
+  <ul>
+  <li>[blocks #time:steps:avg-blocks]
+  </li>
+  </ul>
+</li>
+<li><strong>[time:steps:optimal:avg #time:steps:optimal:avg]</strong>
+  <ul>
+  <li>[blocks #time:steps:optimal:avg-blocks]
+  </li>
+  </ul>
+</li>
+</ul>
+
+<section~A~>
+<h1></h1>
+<section id="info">
+<h2>info</h2>
+
+<button type="button" class="toggle-table" onclick="toggle_table(this)">Show table</button><p></p>
+
+<table class="tableborder" style="display:none">
+<tr>
+<th>algorithm</th>
+<th>local_<wbr>revision</th>
+<th>global_<wbr>revision</th>
+<th>driver_<wbr>options</th>
+<th>component_<wbr>options</th>
+</tr>
+<tr>
+<td>dawson-masters-AWA*</td>
+<td>dawson-masters</td>
+<td>67ec7e23ae54ba9fbe4811c609f97e6be26f409d</td>
+<td>['--validate', '--overall-time-limit', '30m', '--overall-memory-limit', '3584M', '--overall-time-limit', '10m']</td>
+<td>['--evaluator', 'h=lmcut()', '--search', 'eager_anytime(single(sum([weight(h, 2, verbosity=normal), g()])), \n        reopen_closed=true, f_eval=sum([h, g()]))']</td>
+</tr>
+<tr>
+<td>dawson-masters-e-AWA*</td>
+<td>dawson-masters</td>
+<td>67ec7e23ae54ba9fbe4811c609f97e6be26f409d</td>
+<td>['--validate', '--overall-time-limit', '30m', '--overall-memory-limit', '3584M', '--overall-time-limit', '10m']</td>
+<td>['--evaluator', 'h=lmcut()', '--search', 'eager_anytime(epsilon_greedy(\n        sum([weight(h, 2, verbosity=normal), g()]), epsilon=0.5, random_seed=1234), \n        reopen_closed=true, f_eval=sum([h, g()]))']</td>
+</tr>
+<tr>
+<td>dawson-masters-RWA*</td>
+<td>dawson-masters</td>
+<td>67ec7e23ae54ba9fbe4811c609f97e6be26f409d</td>
+<td>['--validate', '--overall-time-limit', '30m', '--overall-memory-limit', '3584M', '--overall-time-limit', '10m']</td>
+<td>['--evaluator', 'h=lmcut()', '--search', 'iterated([\n            lazy_wastar([h],w=5),\n            lazy_wastar([h],w=4),\n            lazy_wastar([h],w=3),\n            lazy_wastar([h],w=2),\n            astar(h)\n        ],continue_on_fail=true)']</td>
+</tr>
+<tr>
+<td>dawson-masters-Type-AWA*</td>
+<td>dawson-masters</td>
+<td>67ec7e23ae54ba9fbe4811c609f97e6be26f409d</td>
+<td>['--validate', '--overall-time-limit', '30m', '--overall-memory-limit', '3584M', '--overall-time-limit', '10m']</td>
+<td>['--evaluator', 'h=lmcut()', '--search', 'eager_anytime(alt(\n        [single(weight(h, 2, verbosity=normal)), type_based([h, g()], random_seed=1234)]), \n        reopen_closed=true, f_eval=sum([h, g()]))']</td>
+</tr>
+</table>
+
+<p>
+Used nodes: {dawson-Latitude-5490}
+</p>
+
+</section>
+<section id="summary">
+<h2>summary</h2>
+
+<button type="button" class="toggle-table" onclick="toggle_table(this)">Show table</button><p></p>
+
+<table class="tableborder" style="display:none">
+<tr>
+<th>Summary</th>
+<th>dawson-masters-AWA*</th>
+<th>dawson-masters-e-AWA*</th>
+<th>dawson-masters-RWA*</th>
+<th>dawson-masters-Type-AWA*</th>
+</tr>
+<tr>
+<td>[change_index:first - Arithmetic mean #change_index:first]</td>
+<td class="right"><span style="color:rgb(0,63,178)">0.36</span></td>
+<td class="right"><span style="color:rgb(0,0,178)">0.41</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">0.13</span></td>
+<td class="right"><span style="color:rgb(0,178,178)">0.27</span></td>
+</tr>
+<tr>
+<td><a href="#cost" onclick="show_table(document.getElementById('cost'));">cost - Arithmetic mean</a></td>
+<td class="right"><span style="color:rgb(127,127,127)">31.00</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">31.00</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">31.00</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">31.00</span></td>
+</tr>
+<tr>
+<td><a href="#coverage" onclick="show_table(document.getElementById('coverage'));">coverage - Sum</a></td>
+<td class="right"><span style="color:rgb(127,127,127)">4</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">4</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">4</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">4</span></td>
+</tr>
+<tr>
+<td>[coverage:optimal - Finite sum #coverage:optimal]</td>
+<td class="right"><span style="color:rgb(127,127,127)">4</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">4</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">4</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">4</span></td>
+</tr>
+<tr>
+<td><a href="#expansions" onclick="show_table(document.getElementById('expansions'));">expansions - Geometric mean</a></td>
+<td class="right"><span style="color:rgb(0,178,65)">34791.60</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">25097.51</span></td>
+<td class="right"><span style="color:rgb(0,0,178)">77577.98</span></td>
+<td class="right"><span style="color:rgb(0,116,178)">60407.84</span></td>
+</tr>
+<tr>
+<td>[expansions:optimal - Geometric mean #expansions:optimal]</td>
+<td class="right"><span style="color:rgb(0,178,65)">34791.60</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">25097.51</span></td>
+<td class="right"><span style="color:rgb(0,0,178)">77577.98</span></td>
+<td class="right"><span style="color:rgb(0,116,178)">60407.84</span></td>
+</tr>
+<tr>
+<td>[planner_time:optimal - Geometric mean #planner_time:optimal]</td>
+<td class="right"><span style="color:rgb(0,178,76)">9.79</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">8.55</span></td>
+<td class="right"><span style="color:rgb(0,178,177)">11.45</span></td>
+<td class="right"><span style="color:rgb(0,0,178)">14.37</span></td>
+</tr>
+<tr>
+<td>[time:steps:avg - Arithmetic mean #time:steps:avg]</td>
+<td class="right"><span style="color:rgb(0,0,178)">7716.91</span></td>
+<td class="right"><span style="color:rgb(0,128,178)">6480.55</span></td>
+<td class="right"><span style="color:rgb(0,178,38)">4660.17</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">4294.74</span></td>
+</tr>
+<tr>
+<td>[time:steps:optimal:avg - Arithmetic mean #time:steps:optimal:avg]</td>
+<td class="right"><span style="color:rgb(0,0,178)">7716.91</span></td>
+<td class="right"><span style="color:rgb(0,128,178)">6480.55</span></td>
+<td class="right"><span style="color:rgb(0,178,38)">4660.17</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">4294.74</span></td>
+</tr>
+</table>
+
+<p>
+== change_index:first ==[change_index:first]
+</p>
+
+<button type="button" class="toggle-table" onclick="toggle_table(this)">Show table</button><p></p>
+
+<table class="tableborder" style="display:none">
+<tr>
+<th>change_<wbr>index:first</th>
+<th>dawson-masters-AWA*</th>
+<th>dawson-masters-e-AWA*</th>
+<th>dawson-masters-RWA*</th>
+<th>dawson-masters-Type-AWA*</th>
+</tr>
+<tr>
+<td>[blocks #change_index:first-blocks] (4)</td>
+<td class="right"><span style="color:rgb(0,63,178)">0.36</span></td>
+<td class="right"><span style="color:rgb(0,0,178)">0.41</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">0.13</span></td>
+<td class="right"><span style="color:rgb(0,178,178)">0.27</span></td>
+</tr>
+<tr>
+<td><strong>Arithmetic mean (4)</strong></td>
+<td class="right"><span style="color:rgb(0,63,178)">0.36</span></td>
+<td class="right"><span style="color:rgb(0,0,178)">0.41</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">0.13</span></td>
+<td class="right"><span style="color:rgb(0,178,178)">0.27</span></td>
+</tr>
+</table>
+
+<p>
+Only tasks where all algorithms have a value for "change_index:first" are considered. Each table entry gives the arithmetic mean of "change_index:first" for that domain. The bottom row reports the arithmetic mean across all domains.
+</p>
+<p>
+=== blocks ===[change_index:first-blocks]
+</p>
+
+<button type="button" class="toggle-table" onclick="toggle_table(this)">Show table</button><p></p>
+
+<table class="tableborder" style="display:none">
+<tr>
+<th>change_<wbr>index:first</th>
+<th>dawson-masters-AWA*</th>
+<th>dawson-masters-e-AWA*</th>
+<th>dawson-masters-RWA*</th>
+<th>dawson-masters-Type-AWA*</th>
+</tr>
+<tr>
+<td>probBLOCKS-9-0.pddl</td>
+<td class="right"><span style="color:rgb(0,0,178)">0.64</span></td>
+<td class="right"><span style="color:rgb(0,51,178)">0.56</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">0.08</span></td>
+<td class="right"><span style="color:rgb(0,178,44)">0.15</span></td>
+</tr>
+<tr>
+<td>probBLOCKS-9-1.pddl</td>
+<td class="right"><span style="color:rgb(0,0,178)">0.68</span></td>
+<td class="right"><span style="color:rgb(0,11,178)">0.66</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">0.06</span></td>
+<td class="right"><span style="color:rgb(0,178,23)">0.10</span></td>
+</tr>
+<tr>
+<td>probBLOCKS-10-0.pddl</td>
+<td class="right"><span style="color:rgb(0,178,4)">0.03</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">0.02</span></td>
+<td class="right"><span style="color:rgb(0,178,123)">0.27</span></td>
+<td class="right"><span style="color:rgb(0,0,178)">0.74</span></td>
+</tr>
+<tr>
+<td>probBLOCKS-10-1.pddl</td>
+<td class="right"><span style="color:rgb(0,178,0)">0.08</span></td>
+<td class="right"><span style="color:rgb(0,0,178)">0.42</span></td>
+<td class="right"><span style="color:rgb(0,178,20)">0.10</span></td>
+<td class="right"><span style="color:rgb(0,178,31)">0.11</span></td>
+</tr>
+</table>
+
+</section>
+<section id="cost">
+<h2>cost</h2>
+
+<button type="button" class="toggle-table" onclick="toggle_table(this)">Show table</button><p></p>
+
+<table class="tableborder" style="display:none">
+<tr>
+<th>cost</th>
+<th>dawson-masters-AWA*</th>
+<th>dawson-masters-e-AWA*</th>
+<th>dawson-masters-RWA*</th>
+<th>dawson-masters-Type-AWA*</th>
+</tr>
+<tr>
+<td><a href="#cost-blocks" onclick="show_table(document.getElementById('cost-blocks'));">blocks</a> (4)</td>
+<td class="right"><span style="color:rgb(127,127,127)">31.00</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">31.00</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">31.00</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">31.00</span></td>
+</tr>
+<tr>
+<td><strong>Arithmetic mean (4)</strong></td>
+<td class="right"><span style="color:rgb(127,127,127)">31.00</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">31.00</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">31.00</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">31.00</span></td>
+</tr>
+</table>
+
+<p>
+Only tasks where all algorithms have a value for "cost" are considered. Each table entry gives the arithmetic mean of "cost" for that domain. The bottom row reports the arithmetic mean across all domains.
+</p>
+
+<section id="cost-blocks">
+<h3>blocks</h3>
+
+<button type="button" class="toggle-table" onclick="toggle_table(this)">Show table</button><p></p>
+
+<table class="tableborder" style="display:none">
+<tr>
+<th>cost</th>
+<th>dawson-masters-AWA*</th>
+<th>dawson-masters-e-AWA*</th>
+<th>dawson-masters-RWA*</th>
+<th>dawson-masters-Type-AWA*</th>
+</tr>
+<tr>
+<td>probBLOCKS-9-0.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">30.00</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">30.00</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">30.00</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">30.00</span></td>
+</tr>
+<tr>
+<td>probBLOCKS-9-1.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">28.00</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">28.00</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">28.00</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">28.00</span></td>
+</tr>
+<tr>
+<td>probBLOCKS-10-0.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">34.00</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">34.00</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">34.00</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">34.00</span></td>
+</tr>
+<tr>
+<td>probBLOCKS-10-1.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">32.00</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">32.00</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">32.00</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">32.00</span></td>
+</tr>
+</table>
+
+</section>
+</section>
+<section id="coverage">
+<h2>coverage</h2>
+
+<button type="button" class="toggle-table" onclick="toggle_table(this)">Show table</button><p></p>
+
+<table class="tableborder" style="display:none">
+<tr>
+<th>coverage</th>
+<th>dawson-masters-AWA*</th>
+<th>dawson-masters-e-AWA*</th>
+<th>dawson-masters-RWA*</th>
+<th>dawson-masters-Type-AWA*</th>
+</tr>
+<tr>
+<td><a href="#coverage-blocks" onclick="show_table(document.getElementById('coverage-blocks'));">blocks</a> (4)</td>
+<td class="right"><span style="color:rgb(127,127,127)">4</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">4</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">4</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">4</span></td>
+</tr>
+<tr>
+<td><strong>Sum (4)</strong></td>
+<td class="right"><span style="color:rgb(127,127,127)">4</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">4</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">4</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">4</span></td>
+</tr>
+</table>
+
+<p>
+The bottom row reports the sum across all domains.
+</p>
+
+<section id="coverage-blocks">
+<h3>blocks</h3>
+
+<button type="button" class="toggle-table" onclick="toggle_table(this)">Show table</button><p></p>
+
+<table class="tableborder" style="display:none">
+<tr>
+<th>coverage</th>
+<th>dawson-masters-AWA*</th>
+<th>dawson-masters-e-AWA*</th>
+<th>dawson-masters-RWA*</th>
+<th>dawson-masters-Type-AWA*</th>
+</tr>
+<tr>
+<td>probBLOCKS-9-0.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+</tr>
+<tr>
+<td>probBLOCKS-9-1.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+</tr>
+<tr>
+<td>probBLOCKS-10-0.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+</tr>
+<tr>
+<td>probBLOCKS-10-1.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+</tr>
+</table>
+
+<p>
+== coverage:optimal ==[coverage:optimal]
+</p>
+
+<button type="button" class="toggle-table" onclick="toggle_table(this)">Show table</button><p></p>
+
+<table class="tableborder" style="display:none">
+<tr>
+<th>coverage:optimal</th>
+<th>dawson-masters-AWA*</th>
+<th>dawson-masters-e-AWA*</th>
+<th>dawson-masters-RWA*</th>
+<th>dawson-masters-Type-AWA*</th>
+</tr>
+<tr>
+<td>[blocks #coverage:optimal-blocks] (4)</td>
+<td class="right"><span style="color:rgb(127,127,127)">4</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">4</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">4</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">4</span></td>
+</tr>
+<tr>
+<td><strong>Finite sum (4)</strong></td>
+<td class="right"><span style="color:rgb(127,127,127)">4</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">4</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">4</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">4</span></td>
+</tr>
+</table>
+
+<p>
+The bottom row reports the finite sum across all domains.
+</p>
+<p>
+=== blocks ===[coverage:optimal-blocks]
+</p>
+
+<button type="button" class="toggle-table" onclick="toggle_table(this)">Show table</button><p></p>
+
+<table class="tableborder" style="display:none">
+<tr>
+<th>coverage:optimal</th>
+<th>dawson-masters-AWA*</th>
+<th>dawson-masters-e-AWA*</th>
+<th>dawson-masters-RWA*</th>
+<th>dawson-masters-Type-AWA*</th>
+</tr>
+<tr>
+<td>probBLOCKS-9-0.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+</tr>
+<tr>
+<td>probBLOCKS-9-1.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+</tr>
+<tr>
+<td>probBLOCKS-10-0.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+</tr>
+<tr>
+<td>probBLOCKS-10-1.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+</tr>
+</table>
+
+</section>
+</section>
+<section id="expansions">
+<h2>expansions</h2>
+
+<button type="button" class="toggle-table" onclick="toggle_table(this)">Show table</button><p></p>
+
+<table class="tableborder" style="display:none">
+<tr>
+<th>expansions</th>
+<th>dawson-masters-AWA*</th>
+<th>dawson-masters-e-AWA*</th>
+<th>dawson-masters-RWA*</th>
+<th>dawson-masters-Type-AWA*</th>
+</tr>
+<tr>
+<td><a href="#expansions-blocks" onclick="show_table(document.getElementById('expansions-blocks'));">blocks</a> (4)</td>
+<td class="right"><span style="color:rgb(0,178,65)">34791.60</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">25097.51</span></td>
+<td class="right"><span style="color:rgb(0,0,178)">77577.98</span></td>
+<td class="right"><span style="color:rgb(0,116,178)">60407.84</span></td>
+</tr>
+<tr>
+<td><strong>Geometric mean (4)</strong></td>
+<td class="right"><span style="color:rgb(0,178,65)">34791.60</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">25097.51</span></td>
+<td class="right"><span style="color:rgb(0,0,178)">77577.98</span></td>
+<td class="right"><span style="color:rgb(0,116,178)">60407.84</span></td>
+</tr>
+</table>
+
+<p>
+Only tasks where all algorithms have a value for "expansions" are considered. Each table entry gives the geometric mean of "expansions" for that domain. The bottom row reports the geometric mean across all domains.
+</p>
+
+<section id="expansions-blocks">
+<h3>blocks</h3>
+
+<button type="button" class="toggle-table" onclick="toggle_table(this)">Show table</button><p></p>
+
+<table class="tableborder" style="display:none">
+<tr>
+<th>expansions</th>
+<th>dawson-masters-AWA*</th>
+<th>dawson-masters-e-AWA*</th>
+<th>dawson-masters-RWA*</th>
+<th>dawson-masters-Type-AWA*</th>
+</tr>
+<tr>
+<td>probBLOCKS-9-0.pddl</td>
+<td class="right"><span style="color:rgb(0,178,100)">48919</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">34000</span></td>
+<td class="right"><span style="color:rgb(0,0,178)">86860</span></td>
+<td class="right"><span style="color:rgb(0,178,73)">44956</span></td>
+</tr>
+<tr>
+<td>probBLOCKS-9-1.pddl</td>
+<td class="right"><span style="color:rgb(0,178,6)">1035</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">723</span></td>
+<td class="right"><span style="color:rgb(0,0,178)">17137</span></td>
+<td class="right"><span style="color:rgb(0,178,163)">8249</span></td>
+</tr>
+<tr>
+<td>probBLOCKS-10-0.pddl</td>
+<td class="right"><span style="color:rgb(0,0,178)">566793</span></td>
+<td class="right"><span style="color:rgb(0,178,54)">319884</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">275771</span></td>
+<td class="right"><span style="color:rgb(0,178,140)">389997</span></td>
+</tr>
+<tr>
+<td>probBLOCKS-10-1.pddl</td>
+<td class="right"><span style="color:rgb(0,178,5)">51057</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">50456</span></td>
+<td class="right"><span style="color:rgb(0,32,178)">88237</span></td>
+<td class="right"><span style="color:rgb(0,0,178)">92071</span></td>
+</tr>
+</table>
+
+<p>
+== expansions:optimal ==[expansions:optimal]
+</p>
+
+<button type="button" class="toggle-table" onclick="toggle_table(this)">Show table</button><p></p>
+
+<table class="tableborder" style="display:none">
+<tr>
+<th>expansions:optimal</th>
+<th>dawson-masters-AWA*</th>
+<th>dawson-masters-e-AWA*</th>
+<th>dawson-masters-RWA*</th>
+<th>dawson-masters-Type-AWA*</th>
+</tr>
+<tr>
+<td>[blocks #expansions:optimal-blocks] (4)</td>
+<td class="right"><span style="color:rgb(0,178,65)">34791.60</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">25097.51</span></td>
+<td class="right"><span style="color:rgb(0,0,178)">77577.98</span></td>
+<td class="right"><span style="color:rgb(0,116,178)">60407.84</span></td>
+</tr>
+<tr>
+<td><strong>Geometric mean (4)</strong></td>
+<td class="right"><span style="color:rgb(0,178,65)">34791.60</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">25097.51</span></td>
+<td class="right"><span style="color:rgb(0,0,178)">77577.98</span></td>
+<td class="right"><span style="color:rgb(0,116,178)">60407.84</span></td>
+</tr>
+</table>
+
+<p>
+Only tasks where all algorithms have a value for "expansions:optimal" are considered. Each table entry gives the geometric mean of "expansions:optimal" for that domain. The bottom row reports the geometric mean across all domains.
+</p>
+<p>
+=== blocks ===[expansions:optimal-blocks]
+</p>
+
+<button type="button" class="toggle-table" onclick="toggle_table(this)">Show table</button><p></p>
+
+<table class="tableborder" style="display:none">
+<tr>
+<th>expansions:optimal</th>
+<th>dawson-masters-AWA*</th>
+<th>dawson-masters-e-AWA*</th>
+<th>dawson-masters-RWA*</th>
+<th>dawson-masters-Type-AWA*</th>
+</tr>
+<tr>
+<td>probBLOCKS-9-0.pddl</td>
+<td class="right"><span style="color:rgb(0,178,100)">48919</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">34000</span></td>
+<td class="right"><span style="color:rgb(0,0,178)">86860</span></td>
+<td class="right"><span style="color:rgb(0,178,73)">44956</span></td>
+</tr>
+<tr>
+<td>probBLOCKS-9-1.pddl</td>
+<td class="right"><span style="color:rgb(0,178,6)">1035</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">723</span></td>
+<td class="right"><span style="color:rgb(0,0,178)">17137</span></td>
+<td class="right"><span style="color:rgb(0,178,163)">8249</span></td>
+</tr>
+<tr>
+<td>probBLOCKS-10-0.pddl</td>
+<td class="right"><span style="color:rgb(0,0,178)">566793</span></td>
+<td class="right"><span style="color:rgb(0,178,54)">319884</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">275771</span></td>
+<td class="right"><span style="color:rgb(0,178,140)">389997</span></td>
+</tr>
+<tr>
+<td>probBLOCKS-10-1.pddl</td>
+<td class="right"><span style="color:rgb(0,178,5)">51057</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">50456</span></td>
+<td class="right"><span style="color:rgb(0,32,178)">88237</span></td>
+<td class="right"><span style="color:rgb(0,0,178)">92071</span></td>
+</tr>
+</table>
+
+<p>
+== planner_time:optimal ==[planner_time:optimal]
+</p>
+
+<button type="button" class="toggle-table" onclick="toggle_table(this)">Show table</button><p></p>
+
+<table class="tableborder" style="display:none">
+<tr>
+<th>planner_<wbr>time:optimal</th>
+<th>dawson-masters-AWA*</th>
+<th>dawson-masters-e-AWA*</th>
+<th>dawson-masters-RWA*</th>
+<th>dawson-masters-Type-AWA*</th>
+</tr>
+<tr>
+<td>[blocks #planner_time:optimal-blocks] (4)</td>
+<td class="right"><span style="color:rgb(0,178,76)">9.79</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">8.55</span></td>
+<td class="right"><span style="color:rgb(0,178,177)">11.45</span></td>
+<td class="right"><span style="color:rgb(0,0,178)">14.37</span></td>
+</tr>
+<tr>
+<td><strong>Geometric mean (4)</strong></td>
+<td class="right"><span style="color:rgb(0,178,76)">9.79</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">8.55</span></td>
+<td class="right"><span style="color:rgb(0,178,177)">11.45</span></td>
+<td class="right"><span style="color:rgb(0,0,178)">14.37</span></td>
+</tr>
+</table>
+
+<p>
+Only tasks where all algorithms have a value for "planner_time:optimal" are considered. Each table entry gives the geometric mean of "planner_time:optimal" for that domain. The bottom row reports the geometric mean across all domains.
+</p>
+<p>
+=== blocks ===[planner_time:optimal-blocks]
+</p>
+
+<button type="button" class="toggle-table" onclick="toggle_table(this)">Show table</button><p></p>
+
+<table class="tableborder" style="display:none">
+<tr>
+<th>planner_<wbr>time:optimal</th>
+<th>dawson-masters-AWA*</th>
+<th>dawson-masters-e-AWA*</th>
+<th>dawson-masters-RWA*</th>
+<th>dawson-masters-Type-AWA*</th>
+</tr>
+<tr>
+<td>probBLOCKS-9-0.pddl</td>
+<td class="right"><span style="color:rgb(0,0,178)">11.17</span></td>
+<td class="right"><span style="color:rgb(0,178,89)">9.32</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">8.70</span></td>
+<td class="right"><span style="color:rgb(0,178,138)">9.66</span></td>
+</tr>
+<tr>
+<td>probBLOCKS-9-1.pddl</td>
+<td class="right"><span style="color:rgb(0,178,5)">0.42</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">0.40</span></td>
+<td class="right"><span style="color:rgb(0,77,178)">1.51</span></td>
+<td class="right"><span style="color:rgb(0,0,178)">1.82</span></td>
+</tr>
+<tr>
+<td>probBLOCKS-10-0.pddl</td>
+<td class="right"><span style="color:rgb(0,0,178)">116.30</span></td>
+<td class="right"><span style="color:rgb(0,178,92)">86.47</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">76.01</span></td>
+<td class="right"><span style="color:rgb(0,178,136)">91.45</span></td>
+</tr>
+<tr>
+<td>probBLOCKS-10-1.pddl</td>
+<td class="right"><span style="color:rgb(0,178,9)">16.82</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">16.56</span></td>
+<td class="right"><span style="color:rgb(0,178,24)">17.23</span></td>
+<td class="right"><span style="color:rgb(0,0,178)">26.52</span></td>
+</tr>
+</table>
+
+<p>
+== time:steps:avg ==[time:steps:avg]
+</p>
+
+<button type="button" class="toggle-table" onclick="toggle_table(this)">Show table</button><p></p>
+
+<table class="tableborder" style="display:none">
+<tr>
+<th>time:steps:avg</th>
+<th>dawson-masters-AWA*</th>
+<th>dawson-masters-e-AWA*</th>
+<th>dawson-masters-RWA*</th>
+<th>dawson-masters-Type-AWA*</th>
+</tr>
+<tr>
+<td>[blocks #time:steps:avg-blocks] (4)</td>
+<td class="right"><span style="color:rgb(0,0,178)">7716.91</span></td>
+<td class="right"><span style="color:rgb(0,128,178)">6480.55</span></td>
+<td class="right"><span style="color:rgb(0,178,38)">4660.17</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">4294.74</span></td>
+</tr>
+<tr>
+<td><strong>Arithmetic mean (4)</strong></td>
+<td class="right"><span style="color:rgb(0,0,178)">7716.91</span></td>
+<td class="right"><span style="color:rgb(0,128,178)">6480.55</span></td>
+<td class="right"><span style="color:rgb(0,178,38)">4660.17</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">4294.74</span></td>
+</tr>
+</table>
+
+<p>
+Only tasks where all algorithms have a value for "time:steps:avg" are considered. Each table entry gives the arithmetic mean of "time:steps:avg" for that domain. The bottom row reports the arithmetic mean across all domains.
+</p>
+<p>
+=== blocks ===[time:steps:avg-blocks]
+</p>
+
+<button type="button" class="toggle-table" onclick="toggle_table(this)">Show table</button><p></p>
+
+<table class="tableborder" style="display:none">
+<tr>
+<th>time:steps:avg</th>
+<th>dawson-masters-AWA*</th>
+<th>dawson-masters-e-AWA*</th>
+<th>dawson-masters-RWA*</th>
+<th>dawson-masters-Type-AWA*</th>
+</tr>
+<tr>
+<td>probBLOCKS-9-0.pddl</td>
+<td class="right"><span style="color:rgb(0,109,178)">2462.80</span></td>
+<td class="right"><span style="color:rgb(0,0,178)">2829.00</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">1633.50</span></td>
+<td class="right"><span style="color:rgb(0,178,16)">1687.43</span></td>
+</tr>
+<tr>
+<td>probBLOCKS-9-1.pddl</td>
+<td class="right"><span style="color:rgb(0,178,13)">49.80</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">42.25</span></td>
+<td class="right"><span style="color:rgb(0,0,178)">237.00</span></td>
+<td class="right"><span style="color:rgb(0,60,178)">204.11</span></td>
+</tr>
+<tr>
+<td>probBLOCKS-10-0.pddl</td>
+<td class="right"><span style="color:rgb(0,0,178)">23659.80</span></td>
+<td class="right"><span style="color:rgb(0,161,178)">18346.20</span></td>
+<td class="right"><span style="color:rgb(0,178,50)">13595.00</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">11939.88</span></td>
+</tr>
+<tr>
+<td>probBLOCKS-10-1.pddl</td>
+<td class="right"><span style="color:rgb(0,2,178)">4695.25</span></td>
+<td class="right"><span style="color:rgb(0,0,178)">4704.75</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">3175.17</span></td>
+<td class="right"><span style="color:rgb(0,178,40)">3347.56</span></td>
+</tr>
+</table>
+
+<p>
+== time:steps:optimal:avg ==[time:steps:optimal:avg]
+</p>
+
+<button type="button" class="toggle-table" onclick="toggle_table(this)">Show table</button><p></p>
+
+<table class="tableborder" style="display:none">
+<tr>
+<th>time:steps:optimal:avg</th>
+<th>dawson-masters-AWA*</th>
+<th>dawson-masters-e-AWA*</th>
+<th>dawson-masters-RWA*</th>
+<th>dawson-masters-Type-AWA*</th>
+</tr>
+<tr>
+<td>[blocks #time:steps:optimal:avg-blocks] (4)</td>
+<td class="right"><span style="color:rgb(0,0,178)">7716.91</span></td>
+<td class="right"><span style="color:rgb(0,128,178)">6480.55</span></td>
+<td class="right"><span style="color:rgb(0,178,38)">4660.17</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">4294.74</span></td>
+</tr>
+<tr>
+<td><strong>Arithmetic mean (4)</strong></td>
+<td class="right"><span style="color:rgb(0,0,178)">7716.91</span></td>
+<td class="right"><span style="color:rgb(0,128,178)">6480.55</span></td>
+<td class="right"><span style="color:rgb(0,178,38)">4660.17</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">4294.74</span></td>
+</tr>
+</table>
+
+<p>
+Only tasks where all algorithms have a value for "time:steps:optimal:avg" are considered. Each table entry gives the arithmetic mean of "time:steps:optimal:avg" for that domain. The bottom row reports the arithmetic mean across all domains.
+</p>
+<p>
+=== blocks ===[time:steps:optimal:avg-blocks]
+</p>
+
+<button type="button" class="toggle-table" onclick="toggle_table(this)">Show table</button><p></p>
+
+<table class="tableborder" style="display:none">
+<tr>
+<th>time:steps:optimal:avg</th>
+<th>dawson-masters-AWA*</th>
+<th>dawson-masters-e-AWA*</th>
+<th>dawson-masters-RWA*</th>
+<th>dawson-masters-Type-AWA*</th>
+</tr>
+<tr>
+<td>probBLOCKS-9-0.pddl</td>
+<td class="right"><span style="color:rgb(0,109,178)">2462.80</span></td>
+<td class="right"><span style="color:rgb(0,0,178)">2829.00</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">1633.50</span></td>
+<td class="right"><span style="color:rgb(0,178,16)">1687.43</span></td>
+</tr>
+<tr>
+<td>probBLOCKS-9-1.pddl</td>
+<td class="right"><span style="color:rgb(0,178,13)">49.80</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">42.25</span></td>
+<td class="right"><span style="color:rgb(0,0,178)">237.00</span></td>
+<td class="right"><span style="color:rgb(0,60,178)">204.11</span></td>
+</tr>
+<tr>
+<td>probBLOCKS-10-0.pddl</td>
+<td class="right"><span style="color:rgb(0,0,178)">23659.80</span></td>
+<td class="right"><span style="color:rgb(0,161,178)">18346.20</span></td>
+<td class="right"><span style="color:rgb(0,178,50)">13595.00</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">11939.88</span></td>
+</tr>
+<tr>
+<td>probBLOCKS-10-1.pddl</td>
+<td class="right"><span style="color:rgb(0,2,178)">4695.25</span></td>
+<td class="right"><span style="color:rgb(0,0,178)">4704.75</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">3175.17</span></td>
+<td class="right"><span style="color:rgb(0,178,40)">3347.56</span></td>
+</tr>
+</table>
+
+</section>
+</section>
+</section>
+</div>
+</body></html>

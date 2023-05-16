@@ -1,0 +1,989 @@
+INFO     planner time limit: 900s
+INFO     planner memory limit: 3584 MB
+
+INFO     Running translator.
+INFO     translator stdin: None
+INFO     translator time limit: 899s
+INFO     translator memory limit: 3584 MB
+INFO     translator command line string: /usr/local/downward-projects/downward/experiments/assign3/.venv/bin/python3 /usr/local/downward-projects/downward/experiments/assign3/data/assign3-anytime_exp/code-fe4f0f1bb525c059c1938ac01bab1b7bae200873_e5e41175/builds/release/bin/translate/translate.py domain.pddl problem.pddl --sas-file output.sas
+Parsing...
+Parsing: [0.000s CPU, 0.006s wall-clock]
+Normalizing task... [0.000s CPU, 0.000s wall-clock]
+Instantiating...
+Generating Datalog program... [0.000s CPU, 0.001s wall-clock]
+Normalizing Datalog program...
+Normalizing Datalog program: [0.010s CPU, 0.006s wall-clock]
+Preparing model... [0.000s CPU, 0.004s wall-clock]
+Generated 350 rules.
+Computing model... [0.030s CPU, 0.029s wall-clock]
+2370 relevant atoms
+2806 auxiliary atoms
+5176 final queue length
+8728 total queue pushes
+Completing instantiation... [0.050s CPU, 0.044s wall-clock]
+Instantiating: [0.090s CPU, 0.086s wall-clock]
+Computing fact groups...
+Finding invariants...
+20 initial candidates
+Finding invariants: [0.000s CPU, 0.006s wall-clock]
+Checking invariant weight... [0.000s CPU, 0.000s wall-clock]
+Instantiating groups... [0.010s CPU, 0.001s wall-clock]
+Collecting mutex groups... [0.000s CPU, 0.000s wall-clock]
+Choosing groups...
+412 uncovered facts
+Choosing groups: [0.000s CPU, 0.007s wall-clock]
+Building translation key... [0.000s CPU, 0.001s wall-clock]
+Computing fact groups: [0.020s CPU, 0.020s wall-clock]
+Building STRIPS to SAS dictionary... [0.000s CPU, 0.000s wall-clock]
+Building dictionary for full mutex groups... [0.000s CPU, 0.000s wall-clock]
+Building mutex information...
+Building mutex information: [0.000s CPU, 0.000s wall-clock]
+Translating task...
+Processing axioms...
+Simplifying axioms... [0.000s CPU, 0.000s wall-clock]
+Translator axioms removed by simplifying: 0
+Computing negative axioms... [0.000s CPU, 0.000s wall-clock]
+Processing axioms: [0.000s CPU, 0.002s wall-clock]
+Translating task: [0.040s CPU, 0.046s wall-clock]
+1201 effect conditions simplified
+0 implied preconditions added
+Detecting unreachable propositions...
+0 operators removed
+0 axioms removed
+14 propositions removed
+Detecting unreachable propositions: [0.030s CPU, 0.023s wall-clock]
+Reordering and filtering variables...
+124 of 423 variables necessary.
+0 of 12 mutex groups necessary.
+1453 of 1453 operators necessary.
+0 of 0 axiom rules necessary.
+Reordering and filtering variables: [0.010s CPU, 0.010s wall-clock]
+Translator variables: 124
+Translator derived variables: 0
+Translator facts: 476
+Translator goal facts: 72
+Translator mutex groups: 0
+Translator total mutex groups size: 0
+Translator operators: 1453
+Translator axioms: 0
+Translator task size: 10186
+Translator peak memory: 39972 KB
+Writing output... [0.010s CPU, 0.008s wall-clock]
+Done! [0.200s CPU, 0.204s wall-clock]
+translate exit code: 0
+
+INFO     Running search (release).
+INFO     search stdin: output.sas
+INFO     search time limit: 899s
+INFO     search memory limit: 3584 MB
+INFO     search command line string: /usr/local/downward-projects/downward/experiments/assign3/data/assign3-anytime_exp/code-fe4f0f1bb525c059c1938ac01bab1b7bae200873_e5e41175/builds/release/bin/downward --evaluator 'h=lmcut()' --search 'eager_anytime(alt(
+        [single(weight(h, 2, verbosity=normal)), type_based([h, g()], random_seed=1234)]), 
+        reopen_closed=true, f_eval=sum([h, g()]))' --internal-plan-file sas_plan < output.sas
+[t=0.00105073s, 10884 KB] reading input...
+[t=0.00627955s, 11280 KB] done reading input!
+[t=0.00941577s, 12024 KB] Initializing landmark cut heuristic...
+[t=0.00969329s, 12024 KB] Building successor generator...done!
+[t=0.0102307s, 12024 KB] peak memory difference for successor generator creation: 0 KB
+[t=0.0102929s, 12024 KB] time for successor generation creation: 0.000282031s
+[t=0.0103185s, 12024 KB] Variables: 124
+[t=0.0103463s, 12024 KB] FactPairs: 476
+[t=0.0103691s, 12024 KB] Bytes per state: 24
+[t=0.0103922s, 12024 KB] Conducting best first anytime search with reopening closed nodes, (real) bound = 2147483647
+[t=0.01139s, 12024 KB] New best heuristic value for lmcut(): 2578705
+[t=0.0122987s, 12024 KB] g=0, 1 evaluated, 0 expanded
+[t=0.0123261s, 12024 KB] Initial heuristic value for lmcut(): 2578705
+[t=0.0123538s, 12024 KB] Start Timestep: 1682487640809 millisecond(s).
+[t=0.0155425s, 12024 KB] New best heuristic value for lmcut(): 2578205
+[t=0.0160467s, 12024 KB] g=899, 3 evaluated, 2 expanded
+[t=0.0365349s, 12024 KB] New best heuristic value for lmcut(): 2575117
+[t=0.0374416s, 12024 KB] g=3588, 15 evaluated, 3 expanded
+[t=0.0638348s, 12024 KB] New best heuristic value for lmcut(): 2574617
+[t=0.0639859s, 12024 KB] g=4487, 30 evaluated, 4 expanded
+[t=0.108567s, 12024 KB] New best heuristic value for lmcut(): 2571529
+[t=0.109698s, 12024 KB] g=7176, 56 evaluated, 6 expanded
+[t=0.156825s, 12024 KB] New best heuristic value for lmcut(): 2560639
+[t=0.157292s, 12024 KB] g=18066, 83 evaluated, 8 expanded
+[t=0.209334s, 12024 KB] New best heuristic value for lmcut(): 2560139
+[t=0.209611s, 12024 KB] g=18965, 113 evaluated, 10 expanded
+[t=0.256591s, 12024 KB] New best heuristic value for lmcut(): 2557051
+[t=0.257418s, 12024 KB] g=21654, 140 evaluated, 12 expanded
+[t=0.303809s, 12024 KB] New best heuristic value for lmcut(): 2546161
+[t=0.304085s, 12024 KB] g=32544, 167 evaluated, 14 expanded
+[t=0.323712s, 12024 KB] New best heuristic value for lmcut(): 2455382
+[t=0.324528s, 12024 KB] g=140142, 179 evaluated, 15 expanded
+[t=0.347844s, 12024 KB] New best heuristic value for lmcut(): 2427673
+[t=0.348602s, 12024 KB] g=167851, 193 evaluated, 16 expanded
+[t=0.376187s, 12024 KB] New best heuristic value for lmcut(): 2424585
+[t=0.37706s, 12024 KB] g=170939, 210 evaluated, 17 expanded
+[t=0.398221s, 12024 KB] New best heuristic value for lmcut(): 2413378
+[t=0.398461s, 12024 KB] g=182146, 223 evaluated, 18 expanded
+[t=0.445449s, 12024 KB] New best heuristic value for lmcut(): 2410127
+[t=0.445993s, 12024 KB] g=185397, 252 evaluated, 20 expanded
+[t=0.450654s, 12024 KB] New best heuristic value for lmcut(): 2402488
+[t=0.4511s, 12024 KB] g=193036, 255 evaluated, 20 expanded
+[t=0.493555s, 12024 KB] New best heuristic value for lmcut(): 2399237
+[t=0.493752s, 12024 KB] g=196287, 280 evaluated, 22 expanded
+[t=0.547117s, 12024 KB] New best heuristic value for lmcut(): 2396149
+[t=0.547235s, 12024 KB] g=199375, 312 evaluated, 24 expanded
+[t=0.593275s, 12148 KB] New best heuristic value for lmcut(): 2395649
+[t=0.593386s, 12148 KB] g=200274, 341 evaluated, 26 expanded
+[t=0.613192s, 12148 KB] New best heuristic value for lmcut(): 2392561
+[t=0.613306s, 12148 KB] g=202963, 354 evaluated, 27 expanded
+[t=0.654145s, 12148 KB] New best heuristic value for lmcut(): 2381671
+[t=0.654773s, 12148 KB] g=213853, 380 evaluated, 29 expanded
+[t=0.704545s, 12148 KB] New best heuristic value for lmcut(): 2381171
+[t=0.704972s, 12148 KB] g=214752, 412 evaluated, 31 expanded
+[t=0.746118s, 12148 KB] New best heuristic value for lmcut(): 2378083
+[t=0.746236s, 12148 KB] g=217441, 439 evaluated, 33 expanded
+[t=0.770641s, 12148 KB] New best heuristic value for lmcut(): 2377583
+[t=0.771493s, 12148 KB] g=218340, 456 evaluated, 34 expanded
+[t=0.814751s, 12148 KB] New best heuristic value for lmcut(): 2374495
+[t=0.814849s, 12148 KB] g=221029, 484 evaluated, 36 expanded
+[t=0.85987s, 12148 KB] New best heuristic value for lmcut(): 2373995
+[t=0.860556s, 12148 KB] g=221928, 515 evaluated, 38 expanded
+[t=0.904966s, 12148 KB] New best heuristic value for lmcut(): 2370907
+[t=0.906073s, 12148 KB] g=224617, 545 evaluated, 40 expanded
+[t=0.951144s, 12148 KB] New best heuristic value for lmcut(): 2360017
+[t=0.951974s, 12148 KB] g=235507, 577 evaluated, 42 expanded
+[t=0.997269s, 12148 KB] New best heuristic value for lmcut(): 2359517
+[t=0.998178s, 12148 KB] g=236406, 607 evaluated, 44 expanded
+[t=1.03933s, 12148 KB] New best heuristic value for lmcut(): 2356429
+[t=1.03978s, 12148 KB] g=239095, 636 evaluated, 46 expanded
+[t=1.09085s, 12148 KB] New best heuristic value for lmcut(): 2355929
+[t=1.09145s, 12148 KB] g=239994, 670 evaluated, 48 expanded
+[t=1.1346s, 12280 KB] New best heuristic value for lmcut(): 2352841
+[t=1.1352s, 12280 KB] g=242683, 701 evaluated, 50 expanded
+[t=1.18493s, 12280 KB] New best heuristic value for lmcut(): 2341951
+[t=1.18567s, 12280 KB] g=253573, 735 evaluated, 52 expanded
+[t=1.20271s, 12280 KB] New best heuristic value for lmcut(): 2252172
+[t=1.20324s, 12280 KB] g=360171, 748 evaluated, 53 expanded
+[t=1.22159s, 12280 KB] New best heuristic value for lmcut(): 2224463
+[t=1.2221s, 12280 KB] g=387880, 762 evaluated, 54 expanded
+[t=1.2625s, 12280 KB] New best heuristic value for lmcut(): 2213256
+[t=1.26293s, 12280 KB] g=399087, 788 evaluated, 56 expanded
+[t=1.30238s, 12280 KB] New best heuristic value for lmcut(): 2210005
+[t=1.30307s, 12280 KB] g=402338, 815 evaluated, 58 expanded
+[t=1.317s, 12280 KB] New best heuristic value for lmcut(): 2202366
+[t=1.31753s, 12280 KB] g=409977, 826 evaluated, 58 expanded
+[t=1.34219s, 12280 KB] New best heuristic value for lmcut(): 2199115
+[t=1.34314s, 12280 KB] g=413228, 845 evaluated, 60 expanded
+[t=1.39988s, 12280 KB] New best heuristic value for lmcut(): 2198615
+[t=1.40038s, 12280 KB] g=414127, 886 evaluated, 62 expanded
+[t=1.43659s, 12280 KB] New best heuristic value for lmcut(): 2195527
+[t=1.43687s, 12280 KB] g=416816, 914 evaluated, 64 expanded
+[t=1.48171s, 12280 KB] New best heuristic value for lmcut(): 2195027
+[t=1.48261s, 12280 KB] g=417715, 947 evaluated, 66 expanded
+[t=1.52556s, 12280 KB] New best heuristic value for lmcut(): 2191939
+[t=1.52636s, 12280 KB] g=420404, 977 evaluated, 68 expanded
+[t=1.5696s, 12420 KB] New best heuristic value for lmcut(): 2181049
+[t=1.56992s, 12420 KB] g=431294, 1013 evaluated, 70 expanded
+[t=1.60951s, 12420 KB] New best heuristic value for lmcut(): 2180549
+[t=1.61055s, 12420 KB] g=432193, 1044 evaluated, 72 expanded
+[t=1.65573s, 12420 KB] New best heuristic value for lmcut(): 2177461
+[t=1.65684s, 12420 KB] g=434882, 1076 evaluated, 74 expanded
+[t=1.69984s, 12420 KB] New best heuristic value for lmcut(): 2176961
+[t=1.70045s, 12420 KB] g=435781, 1110 evaluated, 76 expanded
+[t=1.71451s, 12420 KB] New best heuristic value for lmcut(): 2073204
+[t=1.7154s, 12420 KB] g=555958, 1123 evaluated, 77 expanded
+[t=1.72604s, 12420 KB] New best heuristic value for lmcut(): 2045495
+[t=1.72661s, 12420 KB] g=583667, 1133 evaluated, 78 expanded
+[t=1.76383s, 12420 KB] New best heuristic value for lmcut(): 2034288
+[t=1.76472s, 12420 KB] g=594874, 1160 evaluated, 80 expanded
+[t=1.80058s, 12420 KB] New best heuristic value for lmcut(): 2031037
+[t=1.80161s, 12420 KB] g=598125, 1186 evaluated, 82 expanded
+[t=1.81523s, 12420 KB] New best heuristic value for lmcut(): 2023398
+[t=1.81571s, 12420 KB] g=605764, 1199 evaluated, 82 expanded
+[t=1.83831s, 12420 KB] New best heuristic value for lmcut(): 2020147
+[t=1.83871s, 12420 KB] g=609015, 1214 evaluated, 84 expanded
+[t=1.88765s, 12420 KB] New best heuristic value for lmcut(): 2019647
+[t=1.8884s, 12420 KB] g=609914, 1258 evaluated, 86 expanded
+[t=1.92333s, 12420 KB] New best heuristic value for lmcut(): 2016559
+[t=1.92377s, 12420 KB] g=612603, 1288 evaluated, 88 expanded
+[t=1.95796s, 12420 KB] New best heuristic value for lmcut(): 2016059
+[t=1.95833s, 12420 KB] g=613502, 1319 evaluated, 90 expanded
+[t=1.99046s, 12552 KB] New best heuristic value for lmcut(): 2012971
+[t=1.99139s, 12552 KB] g=616191, 1352 evaluated, 92 expanded
+[t=2.02821s, 12552 KB] New best heuristic value for lmcut(): 2012471
+[t=2.02865s, 12552 KB] g=617090, 1383 evaluated, 94 expanded
+[t=2.06076s, 12552 KB] New best heuristic value for lmcut(): 2009383
+[t=2.06184s, 12552 KB] g=619779, 1412 evaluated, 96 expanded
+[t=2.18465s, 12552 KB] New best heuristic value for lmcut(): 1890648
+[t=2.18568s, 12552 KB] g=755333, 1520 evaluated, 103 expanded
+[t=2.19194s, 12552 KB] New best heuristic value for lmcut(): 1862939
+[t=2.19289s, 12552 KB] g=783042, 1529 evaluated, 104 expanded
+[t=2.22131s, 12552 KB] New best heuristic value for lmcut(): 1851732
+[t=2.22147s, 12552 KB] g=794249, 1558 evaluated, 106 expanded
+[t=2.2528s, 12552 KB] New best heuristic value for lmcut(): 1848481
+[t=2.25385s, 12552 KB] g=797500, 1588 evaluated, 108 expanded
+[t=2.33471s, 12684 KB] New best heuristic value for lmcut(): 1729746
+[t=2.33544s, 12684 KB] g=933054, 1671 evaluated, 112 expanded
+[t=2.36301s, 12684 KB] New best heuristic value for lmcut(): 1702037
+[t=2.36374s, 12684 KB] g=960763, 1696 evaluated, 114 expanded
+[t=2.38605s, 12684 KB] New best heuristic value for lmcut(): 1690830
+[t=2.38672s, 12684 KB] g=971970, 1725 evaluated, 116 expanded
+[t=2.41439s, 12684 KB] New best heuristic value for lmcut(): 1687579
+[t=2.41486s, 12684 KB] g=975221, 1750 evaluated, 118 expanded
+[t=2.4856s, 12684 KB] New best heuristic value for lmcut(): 1568844
+[t=2.48616s, 12684 KB] g=1110775, 1820 evaluated, 122 expanded
+[t=2.51603s, 12684 KB] New best heuristic value for lmcut(): 1541135
+[t=2.51634s, 12684 KB] g=1138484, 1844 evaluated, 124 expanded
+[t=2.54366s, 12684 KB] New best heuristic value for lmcut(): 1529928
+[t=2.54424s, 12684 KB] g=1149691, 1873 evaluated, 126 expanded
+[t=2.57269s, 12684 KB] New best heuristic value for lmcut(): 1526677
+[t=2.57331s, 12684 KB] g=1152942, 1894 evaluated, 128 expanded
+[t=2.63067s, 12824 KB] New best heuristic value for lmcut(): 1407942
+[t=2.63115s, 12824 KB] g=1288496, 1957 evaluated, 132 expanded
+[t=2.65442s, 12824 KB] New best heuristic value for lmcut(): 1380233
+[t=2.6548s, 12824 KB] g=1316205, 1978 evaluated, 134 expanded
+[t=2.65955s, 12824 KB] New best heuristic value for lmcut(): 1369026
+[t=2.66057s, 12824 KB] g=1327412, 1990 evaluated, 135 expanded
+[t=2.67422s, 12824 KB] New best heuristic value for lmcut(): 1365775
+[t=2.67473s, 12824 KB] g=1330663, 2009 evaluated, 137 expanded
+[t=2.72361s, 12824 KB] New best heuristic value for lmcut(): 1247040
+[t=2.72443s, 12824 KB] g=1466217, 2071 evaluated, 141 expanded
+[t=2.7498s, 12824 KB] New best heuristic value for lmcut(): 1219331
+[t=2.75054s, 12824 KB] g=1493926, 2093 evaluated, 143 expanded
+[t=2.7811s, 12824 KB] New best heuristic value for lmcut(): 1208124
+[t=2.78134s, 12824 KB] g=1505133, 2119 evaluated, 145 expanded
+[t=2.7886s, 12824 KB] New best heuristic value for lmcut(): 1204873
+[t=2.78869s, 12824 KB] g=1508384, 2133 evaluated, 147 expanded
+[t=3.45466s, 13092 KB] New best heuristic value for lmcut(): 1196504
+[t=3.45483s, 13092 KB] g=1624425, 2808 evaluated, 212 expanded
+[t=3.4609s, 13092 KB] New best heuristic value for lmcut(): 1185297
+[t=3.46118s, 13092 KB] g=1635632, 2821 evaluated, 213 expanded
+[t=3.47769s, 13092 KB] New best heuristic value for lmcut(): 1182046
+[t=3.47845s, 13092 KB] g=1638883, 2839 evaluated, 215 expanded
+[t=3.52805s, 13092 KB] New best heuristic value for lmcut(): 1063311
+[t=3.52889s, 13092 KB] g=1774437, 2894 evaluated, 219 expanded
+[t=3.55323s, 13092 KB] New best heuristic value for lmcut(): 1035602
+[t=3.55389s, 13092 KB] g=1802146, 2915 evaluated, 221 expanded
+[t=3.55945s, 13228 KB] New best heuristic value for lmcut(): 1024395
+[t=3.55988s, 13228 KB] g=1813353, 2930 evaluated, 223 expanded
+[t=3.57939s, 13228 KB] New best heuristic value for lmcut(): 1021144
+[t=3.57992s, 13228 KB] g=1816604, 2947 evaluated, 225 expanded
+[t=3.62661s, 13228 KB] New best heuristic value for lmcut(): 1017914
+[t=3.62774s, 13228 KB] g=1831041, 2989 evaluated, 229 expanded
+[t=3.64861s, 13228 KB] New best heuristic value for lmcut(): 1007045
+[t=3.64942s, 13228 KB] g=1841910, 3011 evaluated, 231 expanded
+[t=3.67271s, 13228 KB] New best heuristic value for lmcut(): 1003914
+[t=3.67285s, 13228 KB] g=1845041, 3035 evaluated, 233 expanded
+[t=3.69309s, 13228 KB] New best heuristic value for lmcut(): 993024
+[t=3.69319s, 13228 KB] g=1855931, 3059 evaluated, 235 expanded
+[t=4.69771s, 13652 KB] New best heuristic value for lmcut(): 859555
+[t=4.69797s, 13652 KB] g=2096439, 4129 evaluated, 345 expanded
+[t=4.70019s, 13652 KB] New best heuristic value for lmcut(): 780636
+[t=4.70057s, 13652 KB] g=2175358, 4137 evaluated, 346 expanded
+[t=4.70076s, 13652 KB] New best heuristic value for lmcut(): 777385
+[t=4.70184s, 13652 KB] g=2178609, 4141 evaluated, 347 expanded
+[t=4.72386s, 13652 KB] New best heuristic value for lmcut(): 774155
+[t=4.72439s, 13652 KB] g=2193046, 4176 evaluated, 351 expanded
+[t=4.74578s, 13652 KB] New best heuristic value for lmcut(): 763286
+[t=4.74618s, 13652 KB] g=2203915, 4197 evaluated, 353 expanded
+[t=4.77203s, 13652 KB] New best heuristic value for lmcut(): 760155
+[t=4.77245s, 13652 KB] g=2207046, 4220 evaluated, 355 expanded
+[t=4.79616s, 13652 KB] New best heuristic value for lmcut(): 749265
+[t=4.79689s, 13652 KB] g=2217936, 4243 evaluated, 357 expanded
+[t=6.01275s, 14248 KB] New best heuristic value for lmcut(): 603352
+[t=6.01341s, 14248 KB] g=2491914, 5549 evaluated, 506 expanded
+[t=6.01374s, 14248 KB] New best heuristic value for lmcut(): 524433
+[t=6.0144s, 14248 KB] g=2570833, 5553 evaluated, 507 expanded
+[t=6.03894s, 14248 KB] New best heuristic value for lmcut(): 516396
+[t=6.03998s, 14248 KB] g=2578870, 5577 evaluated, 509 expanded
+[t=6.04098s, 14248 KB] New best heuristic value for lmcut(): 513543
+[t=6.0411s, 14248 KB] g=2581723, 5582 evaluated, 509 expanded
+[t=6.06512s, 14248 KB] New best heuristic value for lmcut(): 505506
+[t=6.06572s, 14248 KB] g=2589760, 5597 evaluated, 511 expanded
+[t=7.93269s, 15068 KB] New best heuristic value for lmcut(): 368807
+[t=7.93293s, 15068 KB] g=2844705, 7532 evaluated, 776 expanded, 1 reopened
+[t=7.93296s, 15068 KB] New best heuristic value for lmcut(): 357938
+[t=7.93319s, 15068 KB] g=2855574, 7533 evaluated, 777 expanded, 1 reopened
+[t=7.93322s, 15068 KB] New best heuristic value for lmcut(): 289888
+[t=7.93341s, 15068 KB] g=2923624, 7534 evaluated, 777 expanded, 1 reopened
+[t=7.93468s, 15068 KB] New best heuristic value for lmcut(): 279019
+[t=7.93563s, 15068 KB] g=2934493, 7541 evaluated, 779 expanded, 1 reopened
+[t=7.95883s, 15200 KB] New best heuristic value for lmcut(): 275768
+[t=7.95905s, 15200 KB] g=2937744, 7558 evaluated, 781 expanded, 1 reopened
+[t=7.96028s, 15200 KB] New best heuristic value for lmcut(): 272637
+[t=7.96068s, 15200 KB] g=2940875, 7565 evaluated, 783 expanded, 1 reopened
+[t=7.98186s, 15200 KB] New best heuristic value for lmcut(): 261747
+[t=7.98283s, 15200 KB] g=2951765, 7585 evaluated, 785 expanded, 1 reopened
+[t=8.48209s, 15332 KB] New best heuristic value for lmcut(): 100158
+[t=8.48231s, 15332 KB] g=3181066, 8082 evaluated, 858 expanded, 1 reopened
+[t=8.49464s, 15332 KB] New best heuristic value for lmcut(): 21239
+[t=8.49477s, 15332 KB] g=3259985, 8098 evaluated, 860 expanded, 1 reopened
+[t=8.5198s, 15332 KB] New best heuristic value for lmcut(): 17988
+[t=8.52003s, 15332 KB] g=3263236, 8118 evaluated, 862 expanded, 1 reopened
+[t=8.52081s, 15464 KB] New best heuristic value for lmcut(): 16489
+[t=8.52139s, 15464 KB] g=3264735, 8124 evaluated, 864 expanded, 1 reopened
+[t=8.54912s, 15464 KB] New best heuristic value for lmcut(): 14990
+[t=8.55005s, 15464 KB] g=3266234, 8143 evaluated, 866 expanded, 1 reopened
+[t=8.57115s, 15464 KB] New best heuristic value for lmcut(): 13491
+[t=8.57135s, 15464 KB] g=3267733, 8159 evaluated, 868 expanded, 1 reopened
+[t=8.58266s, 15464 KB] New best heuristic value for lmcut(): 11992
+[t=8.58279s, 15464 KB] g=3269232, 8176 evaluated, 870 expanded, 1 reopened
+[t=8.59208s, 15464 KB] New best heuristic value for lmcut(): 10493
+[t=8.5931s, 15464 KB] g=3270731, 8191 evaluated, 872 expanded, 1 reopened
+[t=8.612s, 15464 KB] New best heuristic value for lmcut(): 8994
+[t=8.61254s, 15464 KB] g=3272230, 8208 evaluated, 874 expanded, 1 reopened
+[t=8.62248s, 15464 KB] New best heuristic value for lmcut(): 7495
+[t=8.62258s, 15464 KB] g=3273729, 8222 evaluated, 876 expanded, 1 reopened
+[t=8.64241s, 15464 KB] New best heuristic value for lmcut(): 5996
+[t=8.64259s, 15464 KB] g=3275228, 8238 evaluated, 878 expanded, 1 reopened
+[t=8.65497s, 15464 KB] New best heuristic value for lmcut(): 4497
+[t=8.65601s, 15464 KB] g=3276727, 8252 evaluated, 880 expanded, 1 reopened
+[t=8.67595s, 15464 KB] New best heuristic value for lmcut(): 2998
+[t=8.6765s, 15464 KB] g=3278226, 8268 evaluated, 882 expanded, 1 reopened
+[t=8.69378s, 15464 KB] New best heuristic value for lmcut(): 1499
+[t=8.69434s, 15464 KB] g=3279725, 8283 evaluated, 884 expanded, 1 reopened
+[t=8.71476s, 15464 KB] New best heuristic value for lmcut(): 0
+[t=8.71581s, 15464 KB] g=3281224, 8296 evaluated, 886 expanded, 1 reopened
+[t=8.7389s, 15464 KB] Solution found!
+initialize  (0)
+fe1-feedmsi-letter sheet10 (500)
+im1-movelower-letter sheet10 (3088)
+fe1-feedmsi-letter sheet1 (500)
+fe1-feedmsi-letter sheet3 (500)
+lc1-divert-letter sheet10 back front (11805)
+lbe-simplex-letter sheet10 front image-10 (123749)
+im1-movelower-letter sheet1 (3088)
+lc1-merge-letter sheet10 (27709)
+lc2-fmove-letter sheet10 (11207)
+lc1-fmove-letter sheet1 (10890)
+om-lowerout-letter sheet10 (3251)
+im1-movelower-letter sheet3 (3088)
+fe1-feedmsi-letter sheet2 (500)
+im1-movelower-letter sheet2 (3088)
+lc1-fmove-letter sheet2 (10890)
+fe1-feedmsi-letter sheet4 (500)
+im1-movelower-letter sheet4 (3088)
+fe1-feedmsi-letter sheet5 (500)
+im1-movelower-letter sheet5 (3088)
+fe1-feedmsi-letter sheet6 (500)
+im1-movelower-letter sheet6 (3088)
+lc1-divert-letter sheet5 back front (11805)
+lbe-simplex-letter sheet5 front image-5 (123749)
+lc1-merge-letter sheet5 (27709)
+lc2-fmove-letter sheet5 (11207)
+lc1-fmove-letter sheet6 (10890)
+om-lowerout-letter sheet5 (3251)
+fe1-feedmsi-letter sheet7 (500)
+im1-movelower-letter sheet7 (3088)
+fe1-feedmsi-letter sheet8 (500)
+im1-movelower-letter sheet8 (3088)
+lc1-divert-letter sheet3 back front (11805)
+lbe-simplex-letter sheet3 front image-3 (123749)
+lc1-merge-letter sheet3 (27709)
+lc2-fmove-letter sheet3 (11207)
+lc1-fmove-letter sheet8 (10890)
+om-lowerout-letter sheet3 (3251)
+fe1-feedmsi-letter sheet9 (500)
+im1-movelower-letter sheet9 (3088)
+fe1-feedmsi-letter sheet11 (500)
+im1-movelower-letter sheet11 (3088)
+fe1-feedmsi-letter sheet12 (500)
+im1-movelower-letter sheet12 (3088)
+lc1-divert-letter sheet4 back front (11805)
+lbe-simplex-letter sheet4 front image-4 (123749)
+lc1-merge-letter sheet4 (27709)
+lc2-fmove-letter sheet4 (11207)
+om-lowerout-letter sheet4 (3251)
+lc1-divert-letter sheet7 back front (11805)
+lbe-simplex-letter sheet7 front image-7 (123749)
+lc1-merge-letter sheet7 (27709)
+lc2-fmove-letter sheet7 (11207)
+om-lowerout-letter sheet7 (3251)
+lc1-divert-letter sheet9 back front (11805)
+lbe-simplex-letter sheet9 front image-9 (123749)
+lc1-merge-letter sheet9 (27709)
+lc2-fmove-letter sheet9 (11207)
+om-lowerout-letter sheet9 (3251)
+lc1-divert-letter sheet11 back front (11805)
+lbe-simplex-letter sheet11 front image-11 (123749)
+lc1-merge-letter sheet11 (27709)
+lc2-divert-letter sheet8 back front (17452)
+lre-simplex-letter sheet8 front image-8 (211849)
+lc2-mergeinvert-letter sheet8 (78919)
+lc2-fmove-letter sheet11 (11207)
+om-lowerout-letter sheet11 (3251)
+lc1-divert-letter sheet12 back front (11805)
+lbe-simplex-letter sheet12 front image-12 (123749)
+lc1-merge-letter sheet12 (27709)
+lc2-fmove-letter sheet12 (11207)
+om-lowerout-letter sheet12 (3251)
+om-lowerreturn-letter sheet8 (3568)
+rh2-returnmove-letter sheet8 (10869)
+rh1-returnmove-letter sheet8 (10869)
+im1-looplower-letter sheet8 (3131)
+lc1-fmove-letter sheet8 (10890)
+lc2-fmove-letter sheet6 (11207)
+lc2-divert-letter sheet2 back front (17452)
+lre-simplex-letter sheet2 front image-2 (211849)
+lc2-mergeinvert-letter sheet2 (78919)
+om-lowerout-letter sheet2 (3251)
+om-lowerreturn-letter sheet6 (3568)
+rh2-returnmove-letter sheet6 (10869)
+rh1-returnmove-letter sheet6 (10869)
+im1-loopupper-letter sheet6 (8164)
+uc1-fmove-letter sheet6 (10890)
+lc2-fmove-letter sheet1 (11207)
+om-lowerreturn-letter sheet1 (3568)
+rh2-returnmove-letter sheet1 (10869)
+rh1-returnmove-letter sheet1 (10869)
+im1-looplower-letter sheet1 (3131)
+uc2-divert-letter sheet6 back front (17452)
+ure-simplex-letter sheet6 front image-6 (211849)
+uc2-mergeinvert-letter sheet6 (78919)
+lc1-fmove-letter sheet1 (10890)
+om-upperout-letter sheet6 (8037)
+lc2-fmove-letter sheet1 (11207)
+om-lowerreturn-letter sheet1 (3568)
+rh2-returnmove-letter sheet1 (10869)
+lc2-divert-letter sheet8 front back (17452)
+lre-simplex-letter sheet8 back image-8b (211849)
+lc2-merge-letter sheet8 back front (78919)
+rh1-returnmove-letter sheet1 (10869)
+om-lowerout-letter sheet8 (3251)
+im1-looplower-letter sheet1 (3131)
+lc1-fmove-letter sheet1 (10890)
+lc2-divert-letter sheet1 back front (17452)
+lre-simplex-letter sheet1 front image-1 (211849)
+lc2-mergeinvert-letter sheet1 (78919)
+om-lowerout-letter sheet1 (3251)
+sys-stack-letter sheet1 dummy-sheet (1499)
+sys-stack-letter sheet2 sheet1 (1499)
+sys-stack-letter sheet3 sheet2 (1499)
+sys-stack-letter sheet4 sheet3 (1499)
+sys-stack-letter sheet5 sheet4 (1499)
+sys-stack-letter sheet6 sheet5 (1499)
+sys-stack-letter sheet7 sheet6 (1499)
+sys-stack-letter sheet8 sheet7 (1499)
+sys-stack-letter sheet9 sheet8 (1499)
+sys-stack-letter sheet10 sheet9 (1499)
+sys-stack-letter sheet11 sheet10 (1499)
+sys-stack-letter sheet12 sheet11 (1499)
+[t=8.74091s, 15464 KB] Plan length: 123 step(s).
+[t=8.74096s, 15464 KB] Plan cost: 3281224
+[t=8.74099s, 15464 KB] Solution: Incumbent solution found!
+[t=8.74102s, 15464 KB] Solution Timestep: 1682487649621 millisecond(s).
+[t=8.74104s, 15464 KB] Timestamp: 1682487649621 millisecond(s).
+[t=8.74106s, 15464 KB] Expanded 888 state(s).
+[t=8.74109s, 15464 KB] Reopened 1 state(s).
+[t=8.74111s, 15464 KB] Evaluated 8311 state(s).
+[t=8.74113s, 15464 KB] Evaluations: 9058
+[t=8.74116s, 15464 KB] Generated 14692 state(s).
+[t=8.74118s, 15464 KB] Dead ends: 0 state(s).
+[t=8.7412s, 15464 KB] Number of registered states: 9058
+[t=8.74123s, 15464 KB] Int hash set load factor: 9058/16384 = 0.552856
+[t=8.74125s, 15464 KB] Int hash set resizes: 14
+[t=20.6256s, 21052 KB] Solution found!
+initialize  (0)
+fe1-feedmsi-letter sheet10 (500)
+im1-movelower-letter sheet10 (3088)
+fe1-feedmsi-letter sheet1 (500)
+fe1-feedmsi-letter sheet3 (500)
+lc1-divert-letter sheet10 back front (11805)
+lbe-simplex-letter sheet10 front image-10 (123749)
+im1-movelower-letter sheet1 (3088)
+lc1-merge-letter sheet10 (27709)
+lc2-fmove-letter sheet10 (11207)
+lc1-fmove-letter sheet1 (10890)
+om-lowerout-letter sheet10 (3251)
+im1-movelower-letter sheet3 (3088)
+fe1-feedmsi-letter sheet2 (500)
+im1-movelower-letter sheet2 (3088)
+lc1-fmove-letter sheet2 (10890)
+fe1-feedmsi-letter sheet4 (500)
+im1-movelower-letter sheet4 (3088)
+fe1-feedmsi-letter sheet5 (500)
+im1-movelower-letter sheet5 (3088)
+fe1-feedmsi-letter sheet6 (500)
+im1-movelower-letter sheet6 (3088)
+lc1-divert-letter sheet5 back front (11805)
+lbe-simplex-letter sheet5 front image-5 (123749)
+lc1-merge-letter sheet5 (27709)
+lc2-fmove-letter sheet5 (11207)
+lc1-fmove-letter sheet6 (10890)
+om-lowerout-letter sheet5 (3251)
+fe1-feedmsi-letter sheet7 (500)
+im1-movelower-letter sheet7 (3088)
+fe1-feedmsi-letter sheet8 (500)
+im1-movelower-letter sheet8 (3088)
+lc1-divert-letter sheet3 back front (11805)
+lbe-simplex-letter sheet3 front image-3 (123749)
+lc1-merge-letter sheet3 (27709)
+lc2-fmove-letter sheet3 (11207)
+lc1-fmove-letter sheet8 (10890)
+om-lowerout-letter sheet3 (3251)
+fe1-feedmsi-letter sheet9 (500)
+im1-movelower-letter sheet9 (3088)
+fe1-feedmsi-letter sheet11 (500)
+im1-movelower-letter sheet11 (3088)
+fe1-feedmsi-letter sheet12 (500)
+im1-movelower-letter sheet12 (3088)
+lc1-divert-letter sheet4 back front (11805)
+lbe-simplex-letter sheet4 front image-4 (123749)
+lc1-merge-letter sheet4 (27709)
+lc2-fmove-letter sheet4 (11207)
+om-lowerout-letter sheet4 (3251)
+lc1-divert-letter sheet7 back front (11805)
+lbe-simplex-letter sheet7 front image-7 (123749)
+lc1-merge-letter sheet7 (27709)
+lc2-fmove-letter sheet7 (11207)
+om-lowerout-letter sheet7 (3251)
+lc1-divert-letter sheet9 back front (11805)
+lbe-simplex-letter sheet9 front image-9 (123749)
+lc1-merge-letter sheet9 (27709)
+lc2-fmove-letter sheet9 (11207)
+om-lowerout-letter sheet9 (3251)
+lc1-divert-letter sheet11 back front (11805)
+lbe-simplex-letter sheet11 front image-11 (123749)
+lc1-merge-letter sheet11 (27709)
+lc2-divert-letter sheet8 back front (17452)
+lre-simplex-letter sheet8 front image-8 (211849)
+lc2-mergeinvert-letter sheet8 (78919)
+lc2-fmove-letter sheet11 (11207)
+om-lowerout-letter sheet11 (3251)
+lc1-divert-letter sheet12 back front (11805)
+lbe-simplex-letter sheet12 front image-12 (123749)
+lc1-merge-letter sheet12 (27709)
+lc2-fmove-letter sheet12 (11207)
+om-lowerout-letter sheet12 (3251)
+om-lowerreturn-letter sheet8 (3568)
+rh2-returnmove-letter sheet8 (10869)
+rh1-returnmove-letter sheet8 (10869)
+im1-looplower-letter sheet8 (3131)
+lc1-fmove-letter sheet8 (10890)
+lc2-fmove-letter sheet6 (11207)
+lc2-divert-letter sheet2 back front (17452)
+lre-simplex-letter sheet2 front image-2 (211849)
+lc2-mergeinvert-letter sheet2 (78919)
+om-lowerout-letter sheet2 (3251)
+om-lowerreturn-letter sheet6 (3568)
+rh2-returnmove-letter sheet6 (10869)
+rh1-returnmove-letter sheet6 (10869)
+im1-loopupper-letter sheet6 (8164)
+uc1-fmove-letter sheet6 (10890)
+lc2-fmove-letter sheet1 (11207)
+om-lowerreturn-letter sheet1 (3568)
+rh2-returnmove-letter sheet1 (10869)
+rh1-returnmove-letter sheet1 (10869)
+im1-looplower-letter sheet1 (3131)
+uc2-divert-letter sheet6 back front (17452)
+ure-simplex-letter sheet6 front image-6 (211849)
+uc2-mergeinvert-letter sheet6 (78919)
+om-upperout-letter sheet6 (8037)
+lc2-divert-letter sheet8 front back (17452)
+lre-simplex-letter sheet8 back image-8b (211849)
+lc2-merge-letter sheet8 back front (78919)
+lc1-fmove-letter sheet1 (10890)
+om-lowerout-letter sheet8 (3251)
+lc2-divert-letter sheet1 back front (17452)
+lre-simplex-letter sheet1 front image-1 (211849)
+lc2-mergeinvert-letter sheet1 (78919)
+om-lowerout-letter sheet1 (3251)
+sys-stack-letter sheet1 dummy-sheet (1499)
+sys-stack-letter sheet2 sheet1 (1499)
+sys-stack-letter sheet3 sheet2 (1499)
+sys-stack-letter sheet4 sheet3 (1499)
+sys-stack-letter sheet5 sheet4 (1499)
+sys-stack-letter sheet6 sheet5 (1499)
+sys-stack-letter sheet7 sheet6 (1499)
+sys-stack-letter sheet8 sheet7 (1499)
+sys-stack-letter sheet9 sheet8 (1499)
+sys-stack-letter sheet10 sheet9 (1499)
+sys-stack-letter sheet11 sheet10 (1499)
+sys-stack-letter sheet12 sheet11 (1499)
+[t=20.6268s, 21052 KB] Plan length: 117 step(s).
+[t=20.6269s, 21052 KB] Plan cost: 3230690
+[t=20.6269s, 21052 KB] Solution: Incumbent solution found!
+[t=20.627s, 21052 KB] Solution Timestep: 1682487661613 millisecond(s).
+[t=20.627s, 21052 KB] Timestamp: 1682487661613 millisecond(s).
+[t=20.627s, 21052 KB] Expanded 2435 state(s).
+[t=20.627s, 21052 KB] Reopened 90 state(s).
+[t=20.6271s, 21052 KB] Evaluated 18366 state(s).
+[t=20.6271s, 21052 KB] Evaluations: 21984
+[t=20.6271s, 21052 KB] Generated 39246 state(s).
+[t=20.6271s, 21052 KB] Dead ends: 0 state(s).
+[t=20.6272s, 21052 KB] Number of registered states: 21984
+[t=20.6272s, 21052 KB] Int hash set load factor: 21984/32768 = 0.670898
+[t=20.6272s, 21052 KB] Int hash set resizes: 15
+[t=35.1469s, 26660 KB] Solution found!
+initialize  (0)
+fe1-feedmsi-letter sheet10 (500)
+im1-movelower-letter sheet10 (3088)
+fe1-feedmsi-letter sheet1 (500)
+fe1-feedmsi-letter sheet3 (500)
+lc1-divert-letter sheet10 back front (11805)
+lbe-simplex-letter sheet10 front image-10 (123749)
+im1-movelower-letter sheet1 (3088)
+lc1-merge-letter sheet10 (27709)
+lc2-fmove-letter sheet10 (11207)
+lc1-fmove-letter sheet1 (10890)
+om-lowerout-letter sheet10 (3251)
+im1-movelower-letter sheet3 (3088)
+fe1-feedmsi-letter sheet2 (500)
+im1-movelower-letter sheet2 (3088)
+lc1-fmove-letter sheet2 (10890)
+fe1-feedmsi-letter sheet4 (500)
+im1-movelower-letter sheet4 (3088)
+fe1-feedmsi-letter sheet5 (500)
+im1-movelower-letter sheet5 (3088)
+fe1-feedmsi-letter sheet6 (500)
+im1-movelower-letter sheet6 (3088)
+lc1-divert-letter sheet5 back front (11805)
+lbe-simplex-letter sheet5 front image-5 (123749)
+lc1-merge-letter sheet5 (27709)
+lc2-fmove-letter sheet5 (11207)
+lc1-fmove-letter sheet6 (10890)
+om-lowerout-letter sheet5 (3251)
+fe1-feedmsi-letter sheet7 (500)
+im1-movelower-letter sheet7 (3088)
+fe1-feedmsi-letter sheet8 (500)
+im1-movelower-letter sheet8 (3088)
+lc1-divert-letter sheet3 back front (11805)
+lbe-simplex-letter sheet3 front image-3 (123749)
+lc1-merge-letter sheet3 (27709)
+lc2-fmove-letter sheet3 (11207)
+lc1-fmove-letter sheet8 (10890)
+om-lowerout-letter sheet3 (3251)
+fe1-feedmsi-letter sheet9 (500)
+im1-movelower-letter sheet9 (3088)
+fe1-feedmsi-letter sheet11 (500)
+im1-movelower-letter sheet11 (3088)
+fe1-feedmsi-letter sheet12 (500)
+im1-movelower-letter sheet12 (3088)
+lc1-divert-letter sheet4 back front (11805)
+lbe-simplex-letter sheet4 front image-4 (123749)
+lc1-merge-letter sheet4 (27709)
+lc2-fmove-letter sheet4 (11207)
+om-lowerout-letter sheet4 (3251)
+lc1-divert-letter sheet7 back front (11805)
+lbe-simplex-letter sheet7 front image-7 (123749)
+lc1-merge-letter sheet7 (27709)
+lc2-fmove-letter sheet7 (11207)
+om-lowerout-letter sheet7 (3251)
+lc1-divert-letter sheet9 back front (11805)
+lbe-simplex-letter sheet9 front image-9 (123749)
+lc1-merge-letter sheet9 (27709)
+lc2-fmove-letter sheet9 (11207)
+om-lowerout-letter sheet9 (3251)
+lc1-divert-letter sheet11 back front (11805)
+lbe-simplex-letter sheet11 front image-11 (123749)
+lc1-merge-letter sheet11 (27709)
+lc2-divert-letter sheet8 back front (17452)
+lre-simplex-letter sheet8 front image-8 (211849)
+lc2-mergeinvert-letter sheet8 (78919)
+lc2-fmove-letter sheet11 (11207)
+om-lowerout-letter sheet11 (3251)
+lc1-divert-letter sheet12 back front (11805)
+lbe-simplex-letter sheet12 front image-12 (123749)
+lc1-merge-letter sheet12 (27709)
+lc2-fmove-letter sheet12 (11207)
+om-lowerout-letter sheet12 (3251)
+om-lowerreturn-letter sheet8 (3568)
+rh2-returnmove-letter sheet8 (10869)
+rh1-returnmove-letter sheet8 (10869)
+im1-looplower-letter sheet8 (3131)
+lc1-fmove-letter sheet8 (10890)
+lc2-fmove-letter sheet6 (11207)
+lc2-divert-letter sheet2 back front (17452)
+lre-simplex-letter sheet2 front image-2 (211849)
+lc2-mergeinvert-letter sheet2 (78919)
+om-lowerout-letter sheet2 (3251)
+om-lowerreturn-letter sheet6 (3568)
+rh2-returnmove-letter sheet6 (10869)
+rh1-returnmove-letter sheet6 (10869)
+im1-loopupper-letter sheet6 (8164)
+uc1-fmove-letter sheet6 (10890)
+uc2-divert-letter sheet6 back front (17452)
+ure-simplex-letter sheet6 front image-6 (211849)
+lc2-divert-letter sheet1 back front (17452)
+lre-simplex-letter sheet1 front image-1 (211849)
+uc2-mergeinvert-letter sheet6 (78919)
+lc2-mergeinvert-letter sheet1 (78919)
+om-upperout-letter sheet6 (8037)
+om-lowerout-letter sheet1 (3251)
+sys-stack-letter sheet1 dummy-sheet (1499)
+sys-stack-letter sheet2 sheet1 (1499)
+sys-stack-letter sheet3 sheet2 (1499)
+sys-stack-letter sheet4 sheet3 (1499)
+sys-stack-letter sheet5 sheet4 (1499)
+sys-stack-letter sheet6 sheet5 (1499)
+sys-stack-letter sheet7 sheet6 (1499)
+lc2-divert-letter sheet8 front back (17452)
+lre-simplex-letter sheet8 back image-8b (211849)
+lc2-merge-letter sheet8 back front (78919)
+om-lowerout-letter sheet8 (3251)
+sys-stack-letter sheet8 sheet7 (1499)
+sys-stack-letter sheet9 sheet8 (1499)
+sys-stack-letter sheet10 sheet9 (1499)
+sys-stack-letter sheet11 sheet10 (1499)
+sys-stack-letter sheet12 sheet11 (1499)
+[t=35.1484s, 26660 KB] Plan length: 111 step(s).
+[t=35.1485s, 26660 KB] Plan cost: 3180156
+[t=35.1485s, 26660 KB] Solution: Incumbent solution found!
+[t=35.1485s, 26660 KB] Solution Timestep: 1682487676252 millisecond(s).
+[t=35.1485s, 26660 KB] Timestamp: 1682487676252 millisecond(s).
+[t=35.1486s, 26660 KB] Expanded 4293 state(s).
+[t=35.1486s, 26660 KB] Reopened 573 state(s).
+[t=35.1486s, 26660 KB] Evaluated 30289 state(s).
+[t=35.1486s, 26660 KB] Evaluations: 37686
+[t=35.1487s, 26660 KB] Generated 73005 state(s).
+[t=35.1487s, 26660 KB] Dead ends: 0 state(s).
+[t=35.1487s, 26660 KB] Number of registered states: 37686
+[t=35.1487s, 26660 KB] Int hash set load factor: 37686/65536 = 0.575043
+[t=35.1488s, 26660 KB] Int hash set resizes: 16
+[t=46.2883s, 31920 KB] Solution found!
+initialize  (0)
+fe1-feedmsi-letter sheet10 (500)
+im1-movelower-letter sheet10 (3088)
+fe1-feedmsi-letter sheet1 (500)
+fe1-feedmsi-letter sheet3 (500)
+lc1-divert-letter sheet10 back front (11805)
+lbe-simplex-letter sheet10 front image-10 (123749)
+im1-movelower-letter sheet1 (3088)
+lc1-merge-letter sheet10 (27709)
+lc2-fmove-letter sheet10 (11207)
+lc1-fmove-letter sheet1 (10890)
+om-lowerout-letter sheet10 (3251)
+im1-movelower-letter sheet3 (3088)
+fe1-feedmsi-letter sheet2 (500)
+im1-movelower-letter sheet2 (3088)
+lc1-fmove-letter sheet2 (10890)
+fe1-feedmsi-letter sheet4 (500)
+im1-movelower-letter sheet4 (3088)
+fe1-feedmsi-letter sheet5 (500)
+im1-movelower-letter sheet5 (3088)
+fe1-feedmsi-letter sheet6 (500)
+im1-movelower-letter sheet6 (3088)
+lc1-divert-letter sheet5 back front (11805)
+lbe-simplex-letter sheet5 front image-5 (123749)
+lc1-merge-letter sheet5 (27709)
+lc2-fmove-letter sheet5 (11207)
+lc1-fmove-letter sheet6 (10890)
+om-lowerout-letter sheet5 (3251)
+fe1-feedmsi-letter sheet7 (500)
+im1-movelower-letter sheet7 (3088)
+fe1-feedmsi-letter sheet8 (500)
+im1-movelower-letter sheet8 (3088)
+lc1-divert-letter sheet3 back front (11805)
+lbe-simplex-letter sheet3 front image-3 (123749)
+lc1-merge-letter sheet3 (27709)
+lc2-fmove-letter sheet3 (11207)
+lc1-fmove-letter sheet8 (10890)
+om-lowerout-letter sheet3 (3251)
+fe1-feedmsi-letter sheet9 (500)
+im1-movelower-letter sheet9 (3088)
+fe1-feedmsi-letter sheet11 (500)
+im1-movelower-letter sheet11 (3088)
+fe1-feedmsi-letter sheet12 (500)
+im1-movelower-letter sheet12 (3088)
+lc1-divert-letter sheet4 back front (11805)
+lbe-simplex-letter sheet4 front image-4 (123749)
+lc1-merge-letter sheet4 (27709)
+lc2-fmove-letter sheet4 (11207)
+om-lowerout-letter sheet4 (3251)
+lc1-divert-letter sheet7 back front (11805)
+lbe-simplex-letter sheet7 front image-7 (123749)
+lc1-merge-letter sheet7 (27709)
+lc2-fmove-letter sheet7 (11207)
+om-lowerout-letter sheet7 (3251)
+lc1-divert-letter sheet9 back front (11805)
+lbe-simplex-letter sheet9 front image-9 (123749)
+lc1-merge-letter sheet9 (27709)
+lc2-fmove-letter sheet9 (11207)
+om-lowerout-letter sheet9 (3251)
+lc1-divert-letter sheet11 back front (11805)
+lbe-simplex-letter sheet11 front image-11 (123749)
+lc1-merge-letter sheet11 (27709)
+lc2-divert-letter sheet8 back front (17452)
+lre-simplex-letter sheet8 front image-8 (211849)
+lc2-mergeinvert-letter sheet8 (78919)
+lc2-fmove-letter sheet11 (11207)
+om-lowerout-letter sheet11 (3251)
+lc1-divert-letter sheet12 back front (11805)
+lbe-simplex-letter sheet12 front image-12 (123749)
+lc1-merge-letter sheet12 (27709)
+lc2-fmove-letter sheet12 (11207)
+om-lowerout-letter sheet12 (3251)
+om-lowerreturn-letter sheet8 (3568)
+rh2-returnmove-letter sheet8 (10869)
+rh1-returnmove-letter sheet8 (10869)
+im1-looplower-letter sheet8 (3131)
+lc1-fmove-letter sheet8 (10890)
+lc2-fmove-letter sheet6 (11207)
+lc2-divert-letter sheet2 back front (17452)
+lre-simplex-letter sheet2 front image-2 (211849)
+lc2-divert-letter sheet8 front back (17452)
+lre-simplex-letter sheet8 back image-8b (211849)
+lc2-mergeinvert-letter sheet2 (78919)
+lc2-merge-letter sheet8 back front (78919)
+om-lowerout-letter sheet2 (3251)
+om-lowerout-letter sheet8 (3251)
+om-lowerreturn-letter sheet6 (3568)
+rh2-returnmove-letter sheet6 (10869)
+rh1-returnmove-letter sheet6 (10869)
+im1-looplower-letter sheet6 (3131)
+lc1-fmove-letter sheet6 (10890)
+lc2-divert-letter sheet1 back front (17452)
+lre-simplex-letter sheet1 front image-1 (211849)
+lc2-mergeinvert-letter sheet1 (78919)
+om-lowerout-letter sheet1 (3251)
+sys-stack-letter sheet1 dummy-sheet (1499)
+sys-stack-letter sheet2 sheet1 (1499)
+sys-stack-letter sheet3 sheet2 (1499)
+sys-stack-letter sheet4 sheet3 (1499)
+sys-stack-letter sheet5 sheet4 (1499)
+lc2-divert-letter sheet6 back front (17452)
+lre-simplex-letter sheet6 front image-6 (211849)
+lc2-mergeinvert-letter sheet6 (78919)
+om-lowerout-letter sheet6 (3251)
+sys-stack-letter sheet6 sheet5 (1499)
+sys-stack-letter sheet7 sheet6 (1499)
+sys-stack-letter sheet8 sheet7 (1499)
+sys-stack-letter sheet9 sheet8 (1499)
+sys-stack-letter sheet10 sheet9 (1499)
+sys-stack-letter sheet11 sheet10 (1499)
+sys-stack-letter sheet12 sheet11 (1499)
+[t=46.2899s, 31920 KB] Plan length: 111 step(s).
+[t=46.2899s, 31920 KB] Plan cost: 3170337
+[t=46.29s, 31920 KB] Solution: Incumbent solution found!
+[t=46.29s, 31920 KB] Solution Timestep: 1682487687481 millisecond(s).
+[t=46.29s, 31920 KB] Timestamp: 1682487687481 millisecond(s).
+[t=46.29s, 31920 KB] Expanded 5758 state(s).
+[t=46.2901s, 31920 KB] Reopened 868 state(s).
+[t=46.2901s, 31920 KB] Evaluated 39955 state(s).
+[t=46.2901s, 31920 KB] Evaluations: 50210
+[t=46.2901s, 31920 KB] Generated 98580 state(s).
+[t=46.2902s, 31920 KB] Dead ends: 0 state(s).
+[t=46.2902s, 31920 KB] Number of registered states: 50210
+[t=46.2902s, 31920 KB] Int hash set load factor: 50210/65536 = 0.766144
+[t=46.2902s, 31920 KB] Int hash set resizes: 16
+[t=320.152s, 155700 KB] Solution found!
+initialize  (0)
+fe1-feedmsi-letter sheet10 (500)
+im1-movelower-letter sheet10 (3088)
+fe1-feedmsi-letter sheet1 (500)
+fe1-feedmsi-letter sheet3 (500)
+lc1-divert-letter sheet10 back front (11805)
+lbe-simplex-letter sheet10 front image-10 (123749)
+im1-movelower-letter sheet1 (3088)
+lc1-merge-letter sheet10 (27709)
+lc2-fmove-letter sheet10 (11207)
+lc1-fmove-letter sheet1 (10890)
+om-lowerout-letter sheet10 (3251)
+im1-movelower-letter sheet3 (3088)
+fe1-feedmsi-letter sheet2 (500)
+im1-movelower-letter sheet2 (3088)
+lc1-fmove-letter sheet2 (10890)
+fe1-feedmsi-letter sheet4 (500)
+im1-movelower-letter sheet4 (3088)
+fe1-feedmsi-letter sheet5 (500)
+im1-movelower-letter sheet5 (3088)
+fe1-feedmsi-letter sheet6 (500)
+im1-movelower-letter sheet6 (3088)
+lc1-divert-letter sheet5 back front (11805)
+lbe-simplex-letter sheet5 front image-5 (123749)
+lc1-merge-letter sheet5 (27709)
+lc2-fmove-letter sheet5 (11207)
+lc1-fmove-letter sheet6 (10890)
+om-lowerout-letter sheet5 (3251)
+fe1-feedmsi-letter sheet7 (500)
+im1-movelower-letter sheet7 (3088)
+fe1-feedmsi-letter sheet8 (500)
+im1-movelower-letter sheet8 (3088)
+lc1-divert-letter sheet3 back front (11805)
+lbe-simplex-letter sheet3 front image-3 (123749)
+lc1-merge-letter sheet3 (27709)
+lc2-fmove-letter sheet3 (11207)
+lc1-fmove-letter sheet8 (10890)
+om-lowerout-letter sheet3 (3251)
+fe1-feedmsi-letter sheet9 (500)
+im1-movelower-letter sheet9 (3088)
+fe1-feedmsi-letter sheet11 (500)
+im1-movelower-letter sheet11 (3088)
+fe1-feedmsi-letter sheet12 (500)
+im1-movelower-letter sheet12 (3088)
+lc1-divert-letter sheet4 back front (11805)
+lbe-simplex-letter sheet4 front image-4 (123749)
+lc1-merge-letter sheet4 (27709)
+lc2-fmove-letter sheet4 (11207)
+om-lowerout-letter sheet4 (3251)
+lc1-divert-letter sheet7 back front (11805)
+lbe-simplex-letter sheet7 front image-7 (123749)
+lc1-merge-letter sheet7 (27709)
+lc2-fmove-letter sheet7 (11207)
+om-lowerout-letter sheet7 (3251)
+lc1-divert-letter sheet9 back front (11805)
+lbe-simplex-letter sheet9 front image-9 (123749)
+lc1-merge-letter sheet9 (27709)
+lc2-fmove-letter sheet9 (11207)
+om-lowerout-letter sheet9 (3251)
+lc1-divert-letter sheet11 back front (11805)
+lbe-simplex-letter sheet11 front image-11 (123749)
+lc1-merge-letter sheet11 (27709)
+lc2-divert-letter sheet8 back front (17452)
+lre-simplex-letter sheet8 front image-8 (211849)
+lc2-mergeinvert-letter sheet8 (78919)
+lc2-fmove-letter sheet11 (11207)
+om-lowerout-letter sheet11 (3251)
+lc1-divert-letter sheet12 back front (11805)
+lbe-simplex-letter sheet12 front image-12 (123749)
+lc1-merge-letter sheet12 (27709)
+lc2-fmove-letter sheet12 (11207)
+lc2-divert-letter sheet6 back front (17452)
+lre-simplex-letter sheet6 front image-6 (211849)
+lc2-divert-letter sheet1 back front (17452)
+lc2-mergeinvert-letter sheet6 (78919)
+lre-simplex-letter sheet1 front image-1 (211849)
+lc2-mergeinvert-letter sheet1 (78919)
+om-lowerout-letter sheet1 (3251)
+om-lowerout-letter sheet6 (3251)
+om-lowerout-letter sheet12 (3251)
+sys-stack-letter sheet1 dummy-sheet (1499)
+om-lowerreturn-letter sheet8 (3568)
+rh2-returnmove-letter sheet8 (10869)
+rh1-returnmove-letter sheet8 (10869)
+im1-looplower-letter sheet8 (3131)
+lc1-fmove-letter sheet8 (10890)
+lc2-divert-letter sheet2 back front (17452)
+lre-simplex-letter sheet2 front image-2 (211849)
+lc2-mergeinvert-letter sheet2 (78919)
+om-lowerout-letter sheet2 (3251)
+sys-stack-letter sheet2 sheet1 (1499)
+sys-stack-letter sheet3 sheet2 (1499)
+sys-stack-letter sheet4 sheet3 (1499)
+sys-stack-letter sheet5 sheet4 (1499)
+sys-stack-letter sheet6 sheet5 (1499)
+sys-stack-letter sheet7 sheet6 (1499)
+lc2-divert-letter sheet8 front back (17452)
+lre-simplex-letter sheet8 back image-8b (211849)
+lc2-merge-letter sheet8 back front (78919)
+om-lowerout-letter sheet8 (3251)
+sys-stack-letter sheet8 sheet7 (1499)
+sys-stack-letter sheet9 sheet8 (1499)
+sys-stack-letter sheet10 sheet9 (1499)
+sys-stack-letter sheet11 sheet10 (1499)
+sys-stack-letter sheet12 sheet11 (1499)
+[t=320.154s, 155700 KB] Plan length: 105 step(s).
+[t=320.154s, 155700 KB] Plan cost: 3119803
+[t=320.154s, 155700 KB] Solution: Incumbent solution found!
+[t=320.154s, 155700 KB] Solution Timestep: 1682487963965 millisecond(s).
+[t=320.154s, 155700 KB] Timestamp: 1682487963965 millisecond(s).
+[t=320.154s, 155700 KB] Expanded 38462 state(s).
+[t=320.154s, 155700 KB] Reopened 2509 state(s).
+[t=320.154s, 155700 KB] Evaluated 265926 state(s).
+[t=320.154s, 155700 KB] Evaluations: 368799
+[t=320.154s, 155700 KB] Generated 746653 state(s).
+[t=320.154s, 155700 KB] Dead ends: 0 state(s).
+[t=320.154s, 155700 KB] Number of registered states: 368799
+[t=320.154s, 155700 KB] Int hash set load factor: 368799/524288 = 0.703428
+[t=320.154s, 155700 KB] Int hash set resizes: 19
+Peak memory: 362872 KB
+caught signal 24 -- exiting
+Time limit has been reached.
+Remove intermediate file output.sas
+search exit code: 23
+
+Driver aborting after search
+INFO     Planner time: 894.59s

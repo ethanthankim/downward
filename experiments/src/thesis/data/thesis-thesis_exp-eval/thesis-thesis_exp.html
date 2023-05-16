@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>thesis-thesis_exp</title>
+<meta name="generator" content="https://txt2tags.org">
+<style>
+blockquote{margin: 1em 2em; border-left: 2px solid #999;
+  font-style: oblique; padding-left: 1em;}
+blockquote:first-letter{margin: .2em .1em .1em 0; font-size: 160%; font-weight: bold;}
+blockquote:first-line{font-weight: bold;}
+body{font-family: sans-serif;}
+hr{background-color:#000;border:0;color:#000;}
+hr.heavy{height:2px;}
+hr.light{height:1px;}
+img{border:0;display:block;}
+img.right{margin:0 0 0 auto;}
+img.center{border:0;margin:0 auto;}
+table{border-collapse: collapse;}
+table th,table td{padding: 3px 7px 2px 7px;}
+table th{background-color: lightgrey;}
+table.center{margin-left:auto; margin-right:auto;}
+.center{text-align:center;}
+.right{text-align:right;}
+.left{text-align:left;}
+.tableborder,.tableborder td,.tableborder th{border:1px solid #000;}
+.underline{text-decoration:underline;}
+</style>
+<style type="text/css">
+    body {
+        font-family: Ubuntu, Helvetica, Arial, sans-serif;
+    }
+    table {
+        border-collapse: collapse;
+    }
+    table th {
+        text-align: left;
+        padding-top: 5px;
+        padding-bottom: 4px;
+        background-color: #aaa;
+        color: #ffffff;
+    }
+</style>
+<script type="text/javascript">
+function toggle_element(element) {
+    if (element.style.display == "none") {
+        element.style.display = "";
+    } else {
+        element.style.display = "none";
+    }
+}
+
+function find_next(element, classname) {
+    element = element.nextSibling;
+    while(element.nodeName != classname)
+        element = element.nextSibling;
+    return element;
+}
+
+function toggle_table(toggle_button) {
+    var table = find_next(toggle_button, "TABLE");
+    toggle_element(table);
+    if (toggle_button.innerHTML == "Show table") {
+        toggle_button.innerHTML = "Hide table";
+    } else {
+        toggle_button.innerHTML = "Show table";
+    }
+}
+
+function show_table(section) {
+    heading = section.children[0];
+    var toggle_button = find_next(heading, "BUTTON");
+    var table = find_next(toggle_button, "TABLE");
+    table.style.display = "";
+    toggle_button.innerHTML = "Hide table";
+}
+
+function show_main_tables() {
+    var names = ["unexplained-errors", "info", "summary"];
+    for (var i = 0; i < names.length; i++) {
+        var section = document.getElementById(names[i]);
+        try {
+            show_table(section);
+        } catch (e) {
+            console.log("No table found for " + names[i]);
+        }
+    }
+
+    // If there is only one table, show it and hide the button.
+    var buttons = document.getElementsByTagName('button');
+    var tables = document.getElementsByTagName('table');
+    if (buttons.length == 1 && tables.length == 1) {
+        tables[0].style.display = "";
+        buttons[0].style.display = "none";
+    }
+}
+
+document.addEventListener("DOMContentLoaded", show_main_tables);
+</script>
+</head>
+<body>
+<header>
+<hgroup>
+<h1>thesis-thesis_exp</h1>
+<h3>2023-05-16</h3>
+</hgroup>
+</header>
+
+
+<div class="body">
+
+<ul>
+<li><strong><a href="#info" onclick="show_table(document.getElementById('info'));">Info</a></strong>
+</li>
+<li><strong><a href="#summary" onclick="show_table(document.getElementById('summary'));">Summary</a></strong>
+</li>
+<li><strong><a href="#coverage" onclick="show_table(document.getElementById('coverage'));">coverage</a></strong>
+  <ul>
+  <li><a href="#coverage-blocks" onclick="show_table(document.getElementById('coverage-blocks'));">blocks</a> <a href="#coverage-openstacks" onclick="show_table(document.getElementById('coverage-openstacks'));">openstacks</a>
+  </li>
+  </ul>
+</li>
+<li><strong><a href="#error" onclick="show_table(document.getElementById('error'));">error</a></strong>
+  <ul>
+  <li><a href="#error-error-success" onclick="show_table(document.getElementById('error-error-success'));">error-success</a> <a href="#error-blocks" onclick="show_table(document.getElementById('error-blocks'));">blocks</a> <a href="#error-openstacks" onclick="show_table(document.getElementById('error-openstacks'));">openstacks</a>
+  </li>
+  </ul>
+</li>
+<li><strong><a href="#expansions" onclick="show_table(document.getElementById('expansions'));">expansions</a></strong>
+  <ul>
+  <li><a href="#expansions-blocks" onclick="show_table(document.getElementById('expansions-blocks'));">blocks</a> <a href="#expansions-openstacks" onclick="show_table(document.getElementById('expansions-openstacks'));">openstacks</a>
+  </li>
+  </ul>
+</li>
+<li><strong><a href="#memory" onclick="show_table(document.getElementById('memory'));">memory</a></strong>
+  <ul>
+  <li><a href="#memory-blocks" onclick="show_table(document.getElementById('memory-blocks'));">blocks</a> <a href="#memory-openstacks" onclick="show_table(document.getElementById('memory-openstacks'));">openstacks</a>
+  </li>
+  </ul>
+</li>
+<li><strong><a href="#total_time" onclick="show_table(document.getElementById('total_time'));">total_time</a></strong>
+  <ul>
+  <li><a href="#total_time-blocks" onclick="show_table(document.getElementById('total_time-blocks'));">blocks</a> <a href="#total_time-openstacks" onclick="show_table(document.getElementById('total_time-openstacks'));">openstacks</a>
+  </li>
+  </ul>
+</li>
+</ul>
+
+<section~A~>
+<h1></h1>
+<section id="info">
+<h2>info</h2>
+
+<button type="button" class="toggle-table" onclick="toggle_table(this)">Show table</button><p></p>
+
+<table class="tableborder" style="display:none">
+<tr>
+<th>algorithm</th>
+<th>local_<wbr>revision</th>
+<th>global_<wbr>revision</th>
+<th>driver_<wbr>options</th>
+<th>component_<wbr>options</th>
+</tr>
+<tr>
+<td>dawson-masters-epsilon-0.2</td>
+<td>dawson-masters</td>
+<td>bf3dad4371173355f5659edb6834f0e051d2f764</td>
+<td>['--validate', '--overall-time-limit', '30m', '--overall-memory-limit', '3584M', '--overall-time-limit', '5m']</td>
+<td>['--evaluator', 'h=ff()', '--search', 'eager(epsilon_greedy(h, epsilon=0.2))']</td>
+</tr>
+<tr>
+<td>dawson-masters-gbfs</td>
+<td>dawson-masters</td>
+<td>bf3dad4371173355f5659edb6834f0e051d2f764</td>
+<td>['--validate', '--overall-time-limit', '30m', '--overall-memory-limit', '3584M', '--overall-time-limit', '5m']</td>
+<td>['--evaluator', 'h=ff()', '--search', 'eager(single(h))']</td>
+</tr>
+<tr>
+<td>dawson-masters-type</td>
+<td>dawson-masters</td>
+<td>bf3dad4371173355f5659edb6834f0e051d2f764</td>
+<td>['--validate', '--overall-time-limit', '30m', '--overall-memory-limit', '3584M', '--overall-time-limit', '5m']</td>
+<td>['--evaluator', 'h=ff()', '--search', 'eager(alt([type_based([h, g()], random_seed=-1), single(h)]))']</td>
+</tr>
+</table>
+
+<p>
+Used nodes: {dawson-Latitude-5490}
+</p>
+
+</section>
+<section id="summary">
+<h2>summary</h2>
+
+<button type="button" class="toggle-table" onclick="toggle_table(this)">Show table</button><p></p>
+
+<table class="tableborder" style="display:none">
+<tr>
+<th>Summary</th>
+<th>dawson-masters-epsilon-0.2</th>
+<th>dawson-masters-gbfs</th>
+<th>dawson-masters-type</th>
+</tr>
+<tr>
+<td><a href="#coverage" onclick="show_table(document.getElementById('coverage'));">coverage - Sum</a></td>
+<td class="right"><span style="color:rgb(127,127,127)">7</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">7</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">7</span></td>
+</tr>
+<tr>
+<td><a href="#error-error-success" onclick="show_table(document.getElementById('error-error-success'));">error-success - Sum</a></td>
+<td class="right"><span style="color:rgb(127,127,127)">7</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">7</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">7</span></td>
+</tr>
+<tr>
+<td><a href="#expansions" onclick="show_table(document.getElementById('expansions'));">expansions - Geometric mean</a></td>
+<td class="right"><span style="color:rgb(0,178,139)">42.68</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">39.24</span></td>
+<td class="right"><span style="color:rgb(0,0,178)">48.03</span></td>
+</tr>
+<tr>
+<td><a href="#memory" onclick="show_table(document.getElementById('memory'));">memory - Sum</a></td>
+<td class="right"><span style="color:rgb(0,178,103)">79480</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">79364</span></td>
+<td class="right"><span style="color:rgb(0,0,178)">79764</span></td>
+</tr>
+<tr>
+<td><a href="#total_time" onclick="show_table(document.getElementById('total_time'));">total_time - Geometric mean</a></td>
+<td class="right"><span style="color:rgb(127,127,127)">0.01</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">0.01</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">0.01</span></td>
+</tr>
+</table>
+
+</section>
+<section id="coverage">
+<h2>coverage</h2>
+
+<button type="button" class="toggle-table" onclick="toggle_table(this)">Show table</button><p></p>
+
+<table class="tableborder" style="display:none">
+<tr>
+<th>coverage</th>
+<th>dawson-masters-epsilon-0.2</th>
+<th>dawson-masters-gbfs</th>
+<th>dawson-masters-type</th>
+</tr>
+<tr>
+<td><a href="#coverage-blocks" onclick="show_table(document.getElementById('coverage-blocks'));">blocks</a> (4)</td>
+<td class="right"><span style="color:rgb(127,127,127)">4</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">4</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">4</span></td>
+</tr>
+<tr>
+<td><a href="#coverage-openstacks" onclick="show_table(document.getElementById('coverage-openstacks'));">openstacks</a> (3)</td>
+<td class="right"><span style="color:rgb(127,127,127)">3</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">3</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">3</span></td>
+</tr>
+<tr>
+<td><strong>Sum (7)</strong></td>
+<td class="right"><span style="color:rgb(127,127,127)">7</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">7</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">7</span></td>
+</tr>
+</table>
+
+<p>
+The bottom row reports the sum across all domains.
+</p>
+
+<section id="coverage-blocks">
+<h3>blocks</h3>
+
+<button type="button" class="toggle-table" onclick="toggle_table(this)">Show table</button><p></p>
+
+<table class="tableborder" style="display:none">
+<tr>
+<th>coverage</th>
+<th>dawson-masters-epsilon-0.2</th>
+<th>dawson-masters-gbfs</th>
+<th>dawson-masters-type</th>
+</tr>
+<tr>
+<td>probBLOCKS-4-2.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+</tr>
+<tr>
+<td>probBLOCKS-6-1.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+</tr>
+<tr>
+<td>probBLOCKS-7-2.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+</tr>
+<tr>
+<td>probBLOCKS-8-2.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+</tr>
+</table>
+
+</section>
+<section id="coverage-openstacks">
+<h3>openstacks</h3>
+
+<button type="button" class="toggle-table" onclick="toggle_table(this)">Show table</button><p></p>
+
+<table class="tableborder" style="display:none">
+<tr>
+<th>coverage</th>
+<th>dawson-masters-epsilon-0.2</th>
+<th>dawson-masters-gbfs</th>
+<th>dawson-masters-type</th>
+</tr>
+<tr>
+<td>p02.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+</tr>
+<tr>
+<td>p04.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+</tr>
+<tr>
+<td>p06.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+</tr>
+</table>
+
+</section>
+</section>
+<section id="error">
+<h2>error</h2>
+
+<section id="error-error-success">
+<h3>error-success</h3>
+
+<button type="button" class="toggle-table" onclick="toggle_table(this)">Show table</button><p></p>
+
+<table class="tableborder" style="display:none">
+<tr>
+<th>error-success</th>
+<th>dawson-masters-epsilon-0.2</th>
+<th>dawson-masters-gbfs</th>
+<th>dawson-masters-type</th>
+</tr>
+<tr>
+<td><a href="#error-blocks" onclick="show_table(document.getElementById('error-blocks'));">blocks</a></td>
+<td class="right"><span style="color:rgb(127,127,127)">4</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">4</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">4</span></td>
+</tr>
+<tr>
+<td><a href="#error-openstacks" onclick="show_table(document.getElementById('error-openstacks'));">openstacks</a></td>
+<td class="right"><span style="color:rgb(127,127,127)">3</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">3</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">3</span></td>
+</tr>
+<tr>
+<td><strong>Sum</strong></td>
+<td class="right"><span style="color:rgb(127,127,127)">7</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">7</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">7</span></td>
+</tr>
+</table>
+
+</section>
+<section id="error-blocks">
+<h3>blocks</h3>
+
+<button type="button" class="toggle-table" onclick="toggle_table(this)">Show table</button><p></p>
+
+<table class="tableborder" style="display:none">
+<tr>
+<th>error</th>
+<th>dawson-masters-epsilon-0.2</th>
+<th>dawson-masters-gbfs</th>
+<th>dawson-masters-type</th>
+</tr>
+<tr>
+<td>probBLOCKS-4-2.pddl</td>
+<td>success</td>
+<td>success</td>
+<td>success</td>
+</tr>
+<tr>
+<td>probBLOCKS-6-1.pddl</td>
+<td>success</td>
+<td>success</td>
+<td>success</td>
+</tr>
+<tr>
+<td>probBLOCKS-7-2.pddl</td>
+<td>success</td>
+<td>success</td>
+<td>success</td>
+</tr>
+<tr>
+<td>probBLOCKS-8-2.pddl</td>
+<td>success</td>
+<td>success</td>
+<td>success</td>
+</tr>
+</table>
+
+</section>
+<section id="error-openstacks">
+<h3>openstacks</h3>
+
+<button type="button" class="toggle-table" onclick="toggle_table(this)">Show table</button><p></p>
+
+<table class="tableborder" style="display:none">
+<tr>
+<th>error</th>
+<th>dawson-masters-epsilon-0.2</th>
+<th>dawson-masters-gbfs</th>
+<th>dawson-masters-type</th>
+</tr>
+<tr>
+<td>p02.pddl</td>
+<td>success</td>
+<td>success</td>
+<td>success</td>
+</tr>
+<tr>
+<td>p04.pddl</td>
+<td>success</td>
+<td>success</td>
+<td>success</td>
+</tr>
+<tr>
+<td>p06.pddl</td>
+<td>success</td>
+<td>success</td>
+<td>success</td>
+</tr>
+</table>
+
+</section>
+</section>
+<section id="expansions">
+<h2>expansions</h2>
+
+<button type="button" class="toggle-table" onclick="toggle_table(this)">Show table</button><p></p>
+
+<table class="tableborder" style="display:none">
+<tr>
+<th>expansions</th>
+<th>dawson-masters-epsilon-0.2</th>
+<th>dawson-masters-gbfs</th>
+<th>dawson-masters-type</th>
+</tr>
+<tr>
+<td><a href="#expansions-blocks" onclick="show_table(document.getElementById('expansions-blocks'));">blocks</a> (4)</td>
+<td class="right"><span style="color:rgb(0,178,114)">35.00</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">32.00</span></td>
+<td class="right"><span style="color:rgb(0,0,178)">41.38</span></td>
+</tr>
+<tr>
+<td><a href="#expansions-openstacks" onclick="show_table(document.getElementById('expansions-openstacks'));">openstacks</a> (3)</td>
+<td class="right"><span style="color:rgb(0,173,178)">52.04</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">48.11</span></td>
+<td class="right"><span style="color:rgb(0,0,178)">55.74</span></td>
+</tr>
+<tr>
+<td><strong>Geometric mean (7)</strong></td>
+<td class="right"><span style="color:rgb(0,178,139)">42.68</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">39.24</span></td>
+<td class="right"><span style="color:rgb(0,0,178)">48.03</span></td>
+</tr>
+</table>
+
+<p>
+Only tasks where all algorithms have a value for "expansions" are considered. Each table entry gives the geometric mean of "expansions" for that domain. The bottom row reports the geometric mean across all domains.
+</p>
+
+<section id="expansions-blocks">
+<h3>blocks</h3>
+
+<button type="button" class="toggle-table" onclick="toggle_table(this)">Show table</button><p></p>
+
+<table class="tableborder" style="display:none">
+<tr>
+<th>expansions</th>
+<th>dawson-masters-epsilon-0.2</th>
+<th>dawson-masters-gbfs</th>
+<th>dawson-masters-type</th>
+</tr>
+<tr>
+<td>probBLOCKS-4-2.pddl</td>
+<td class="right"><span style="color:rgb(0,178,0)">10</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">10</span></td>
+<td class="right"><span style="color:rgb(0,0,178)">14</span></td>
+</tr>
+<tr>
+<td>probBLOCKS-6-1.pddl</td>
+<td class="right"><span style="color:rgb(0,178,39)">14</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">13</span></td>
+<td class="right"><span style="color:rgb(0,0,178)">22</span></td>
+</tr>
+<tr>
+<td>probBLOCKS-7-2.pddl</td>
+<td class="right"><span style="color:rgb(0,178,110)">160</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">139</span></td>
+<td class="right"><span style="color:rgb(0,0,178)">207</span></td>
+</tr>
+<tr>
+<td>probBLOCKS-8-2.pddl</td>
+<td class="right"><span style="color:rgb(0,0,178)">67</span></td>
+<td class="right"><span style="color:rgb(0,153,178)">58</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">46</span></td>
+</tr>
+</table>
+
+</section>
+<section id="expansions-openstacks">
+<h3>openstacks</h3>
+
+<button type="button" class="toggle-table" onclick="toggle_table(this)">Show table</button><p></p>
+
+<table class="tableborder" style="display:none">
+<tr>
+<th>expansions</th>
+<th>dawson-masters-epsilon-0.2</th>
+<th>dawson-masters-gbfs</th>
+<th>dawson-masters-type</th>
+</tr>
+<tr>
+<td>p02.pddl</td>
+<td class="right"><span style="color:rgb(0,178,101)">36</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">34</span></td>
+<td class="right"><span style="color:rgb(0,0,178)">41</span></td>
+</tr>
+<tr>
+<td>p04.pddl</td>
+<td class="right"><span style="color:rgb(0,178,89)">38</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">36</span></td>
+<td class="right"><span style="color:rgb(0,0,178)">44</span></td>
+</tr>
+<tr>
+<td>p06.pddl</td>
+<td class="right"><span style="color:rgb(0,0,178)">103</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">91</span></td>
+<td class="right"><span style="color:rgb(0,178,148)">96</span></td>
+</tr>
+</table>
+
+</section>
+</section>
+<section id="memory">
+<h2>memory</h2>
+
+<button type="button" class="toggle-table" onclick="toggle_table(this)">Show table</button><p></p>
+
+<table class="tableborder" style="display:none">
+<tr>
+<th>memory</th>
+<th>dawson-masters-epsilon-0.2</th>
+<th>dawson-masters-gbfs</th>
+<th>dawson-masters-type</th>
+</tr>
+<tr>
+<td><a href="#memory-blocks" onclick="show_table(document.getElementById('memory-blocks'));">blocks</a> (4)</td>
+<td class="right"><span style="color:rgb(0,23,178)">45436</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">45320</span></td>
+<td class="right"><span style="color:rgb(0,0,178)">45444</span></td>
+</tr>
+<tr>
+<td><a href="#memory-openstacks" onclick="show_table(document.getElementById('memory-openstacks'));">openstacks</a> (3)</td>
+<td class="right"><span style="color:rgb(0,178,0)">34044</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">34044</span></td>
+<td class="right"><span style="color:rgb(0,0,178)">34320</span></td>
+</tr>
+<tr>
+<td><strong>Sum (7)</strong></td>
+<td class="right"><span style="color:rgb(0,178,103)">79480</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">79364</span></td>
+<td class="right"><span style="color:rgb(0,0,178)">79764</span></td>
+</tr>
+</table>
+
+<p>
+Only tasks where all algorithms have a value for "memory" are considered. Each table entry gives the sum of "memory" for that domain. The bottom row reports the sum across all domains.
+</p>
+
+<section id="memory-blocks">
+<h3>blocks</h3>
+
+<button type="button" class="toggle-table" onclick="toggle_table(this)">Show table</button><p></p>
+
+<table class="tableborder" style="display:none">
+<tr>
+<th>memory</th>
+<th>dawson-masters-epsilon-0.2</th>
+<th>dawson-masters-gbfs</th>
+<th>dawson-masters-type</th>
+</tr>
+<tr>
+<td>probBLOCKS-4-2.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">11260</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">11260</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">11260</span></td>
+</tr>
+<tr>
+<td>probBLOCKS-6-1.pddl</td>
+<td class="right"><span style="color:rgb(0,10,178)">11392</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">11260</span></td>
+<td class="right"><span style="color:rgb(0,0,178)">11396</span></td>
+</tr>
+<tr>
+<td>probBLOCKS-7-2.pddl</td>
+<td class="right"><span style="color:rgb(0,178,0)">11392</span></td>
+<td class="right"><span style="color:rgb(0,0,178)">11396</span></td>
+<td class="right"><span style="color:rgb(0,0,178)">11396</span></td>
+</tr>
+<tr>
+<td>probBLOCKS-8-2.pddl</td>
+<td class="right"><span style="color:rgb(0,178,0)">11392</span></td>
+<td class="right"><span style="color:rgb(0,0,178)">11404</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">11392</span></td>
+</tr>
+</table>
+
+</section>
+<section id="memory-openstacks">
+<h3>openstacks</h3>
+
+<button type="button" class="toggle-table" onclick="toggle_table(this)">Show table</button><p></p>
+
+<table class="tableborder" style="display:none">
+<tr>
+<th>memory</th>
+<th>dawson-masters-epsilon-0.2</th>
+<th>dawson-masters-gbfs</th>
+<th>dawson-masters-type</th>
+</tr>
+<tr>
+<td>p02.pddl</td>
+<td class="right"><span style="color:rgb(0,178,0)">11260</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">11260</span></td>
+<td class="right"><span style="color:rgb(0,0,178)">11396</span></td>
+</tr>
+<tr>
+<td>p04.pddl</td>
+<td class="right"><span style="color:rgb(0,178,0)">11260</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">11260</span></td>
+<td class="right"><span style="color:rgb(0,0,178)">11396</span></td>
+</tr>
+<tr>
+<td>p06.pddl</td>
+<td class="right"><span style="color:rgb(0,178,0)">11524</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">11524</span></td>
+<td class="right"><span style="color:rgb(0,0,178)">11528</span></td>
+</tr>
+</table>
+
+</section>
+</section>
+<section id="total_time">
+<h2>total_time</h2>
+
+<button type="button" class="toggle-table" onclick="toggle_table(this)">Show table</button><p></p>
+
+<table class="tableborder" style="display:none">
+<tr>
+<th>total_<wbr>time</th>
+<th>dawson-masters-epsilon-0.2</th>
+<th>dawson-masters-gbfs</th>
+<th>dawson-masters-type</th>
+</tr>
+<tr>
+<td><a href="#total_time-blocks" onclick="show_table(document.getElementById('total_time-blocks'));">blocks</a> (4)</td>
+<td class="right"><span style="color:rgb(127,127,127)">0.01</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">0.01</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">0.01</span></td>
+</tr>
+<tr>
+<td><a href="#total_time-openstacks" onclick="show_table(document.getElementById('total_time-openstacks'));">openstacks</a> (3)</td>
+<td class="right"><span style="color:rgb(127,127,127)">0.02</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">0.02</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">0.02</span></td>
+</tr>
+<tr>
+<td><strong>Geometric mean (7)</strong></td>
+<td class="right"><span style="color:rgb(127,127,127)">0.01</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">0.01</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">0.01</span></td>
+</tr>
+</table>
+
+<p>
+Only tasks where all algorithms have a value for "total_time" are considered. Each table entry gives the geometric mean of "total_time" for that domain. The bottom row reports the geometric mean across all domains.
+</p>
+
+<section id="total_time-blocks">
+<h3>blocks</h3>
+
+<button type="button" class="toggle-table" onclick="toggle_table(this)">Show table</button><p></p>
+
+<table class="tableborder" style="display:none">
+<tr>
+<th>total_<wbr>time</th>
+<th>dawson-masters-epsilon-0.2</th>
+<th>dawson-masters-gbfs</th>
+<th>dawson-masters-type</th>
+</tr>
+<tr>
+<td>probBLOCKS-4-2.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">0.01</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">0.01</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">0.01</span></td>
+</tr>
+<tr>
+<td>probBLOCKS-6-1.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">0.01</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">0.01</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">0.01</span></td>
+</tr>
+<tr>
+<td>probBLOCKS-7-2.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">0.01</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">0.01</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">0.01</span></td>
+</tr>
+<tr>
+<td>probBLOCKS-8-2.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">0.01</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">0.01</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">0.01</span></td>
+</tr>
+</table>
+
+</section>
+<section id="total_time-openstacks">
+<h3>openstacks</h3>
+
+<button type="button" class="toggle-table" onclick="toggle_table(this)">Show table</button><p></p>
+
+<table class="tableborder" style="display:none">
+<tr>
+<th>total_<wbr>time</th>
+<th>dawson-masters-epsilon-0.2</th>
+<th>dawson-masters-gbfs</th>
+<th>dawson-masters-type</th>
+</tr>
+<tr>
+<td>p02.pddl</td>
+<td class="right"><span style="color:rgb(0,0,178)">0.02</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">0.01</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">0.01</span></td>
+</tr>
+<tr>
+<td>p04.pddl</td>
+<td class="right"><span style="color:rgb(0,178,0)">0.01</span></td>
+<td class="right"><span style="color:rgb(0,0,178)">0.02</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">0.01</span></td>
+</tr>
+<tr>
+<td>p06.pddl</td>
+<td class="right"><span style="color:rgb(127,127,127)">0.03</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">0.03</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">0.03</span></td>
+</tr>
+</table>
+
+</section>
+</section>
+</section>
+</div>
+</body></html>

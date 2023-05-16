@@ -1,0 +1,183 @@
+INFO     planner time limit: 600s
+INFO     planner memory limit: 3584 MB
+
+INFO     Running translator.
+INFO     translator stdin: None
+INFO     translator time limit: 599s
+INFO     translator memory limit: 3584 MB
+INFO     translator command line string: /usr/local/downward-projects/downward/experiments/assign3/.venv/bin/python3 /usr/local/downward-projects/downward/experiments/assign3/data/assign3-anytime_exp/code-1fb14623350588fb782db39ad332c8a25eda53d6_e5e41175/builds/release/bin/translate/translate.py domain.pddl problem.pddl --sas-file output.sas
+Parsing...
+Parsing: [0.000s CPU, 0.004s wall-clock]
+Normalizing task... [0.000s CPU, 0.000s wall-clock]
+Instantiating...
+Generating Datalog program... [0.000s CPU, 0.001s wall-clock]
+Normalizing Datalog program...
+Normalizing Datalog program: [0.010s CPU, 0.006s wall-clock]
+Preparing model... [0.000s CPU, 0.003s wall-clock]
+Generated 198 rules.
+Computing model... [0.010s CPU, 0.005s wall-clock]
+297 relevant atoms
+559 auxiliary atoms
+856 final queue length
+1220 total queue pushes
+Completing instantiation... [0.000s CPU, 0.005s wall-clock]
+Instantiating: [0.020s CPU, 0.020s wall-clock]
+Computing fact groups...
+Finding invariants...
+24 initial candidates
+Finding invariants: [0.010s CPU, 0.009s wall-clock]
+Checking invariant weight... [0.000s CPU, 0.000s wall-clock]
+Instantiating groups... [0.000s CPU, 0.000s wall-clock]
+Collecting mutex groups... [0.000s CPU, 0.000s wall-clock]
+Choosing groups...
+17 uncovered facts
+Choosing groups: [0.000s CPU, 0.000s wall-clock]
+Building translation key... [0.000s CPU, 0.000s wall-clock]
+Computing fact groups: [0.010s CPU, 0.010s wall-clock]
+Building STRIPS to SAS dictionary... [0.000s CPU, 0.000s wall-clock]
+Building dictionary for full mutex groups... [0.000s CPU, 0.000s wall-clock]
+Building mutex information...
+Building mutex information: [0.000s CPU, 0.000s wall-clock]
+Translating task...
+Processing axioms...
+Simplifying axioms... [0.000s CPU, 0.000s wall-clock]
+Translator axioms removed by simplifying: 0
+Computing negative axioms... [0.000s CPU, 0.000s wall-clock]
+Processing axioms: [0.000s CPU, 0.000s wall-clock]
+Translating task: [0.010s CPU, 0.004s wall-clock]
+68 effect conditions simplified
+0 implied preconditions added
+Detecting unreachable propositions...
+0 operators removed
+0 axioms removed
+20 propositions removed
+Detecting unreachable propositions: [0.000s CPU, 0.002s wall-clock]
+Reordering and filtering variables...
+16 of 17 variables necessary.
+4 of 10 mutex groups necessary.
+132 of 132 operators necessary.
+0 of 0 axiom rules necessary.
+Reordering and filtering variables: [0.000s CPU, 0.001s wall-clock]
+Translator variables: 16
+Translator derived variables: 0
+Translator facts: 41
+Translator goal facts: 7
+Translator mutex groups: 4
+Translator total mutex groups size: 10
+Translator operators: 132
+Translator axioms: 0
+Translator task size: 936
+Translator peak memory: 32624 KB
+Writing output... [0.000s CPU, 0.001s wall-clock]
+Done! [0.040s CPU, 0.043s wall-clock]
+translate exit code: 0
+
+INFO     Running search (release).
+INFO     search stdin: output.sas
+INFO     search time limit: 599s
+INFO     search memory limit: 3584 MB
+INFO     search command line string: /usr/local/downward-projects/downward/experiments/assign3/data/assign3-anytime_exp/code-1fb14623350588fb782db39ad332c8a25eda53d6_e5e41175/builds/release/bin/downward --evaluator 'h=lmcut()' --search 'eager_anytime(epsilon_greedy(
+        sum([weight(h, 2, verbosity=normal), g()]), epsilon=0.5, random_seed=1234), 
+        reopen_closed=true, f_eval=sum([h, g()]))' --internal-plan-file sas_plan < output.sas
+[t=0.00105276s, 10884 KB] reading input...
+[t=0.00218125s, 10884 KB] done reading input!
+[t=0.00417193s, 11284 KB] Initializing landmark cut heuristic...
+[t=0.00467955s, 11284 KB] Building successor generator...done!
+[t=0.00484704s, 11284 KB] peak memory difference for successor generator creation: 0 KB
+[t=0.00489142s, 11284 KB] time for successor generation creation: 0s
+[t=0.00491547s, 11284 KB] Variables: 16
+[t=0.00494104s, 11284 KB] FactPairs: 41
+[t=0.00496387s, 11284 KB] Bytes per state: 4
+[t=0.00498757s, 11284 KB] Conducting best first anytime search with reopening closed nodes, (real) bound = 2147483647
+[t=0.00503331s, 11284 KB] New best heuristic value for lmcut(): 110
+[t=0.0051063s, 11284 KB] g=0, 1 evaluated, 0 expanded
+[t=0.00513059s, 11284 KB] Initial heuristic value for lmcut(): 110
+[t=0.00515922s, 11284 KB] Start Timestep: 1682006307250 millisecond(s).
+[t=0.00520132s, 11284 KB] New best heuristic value for lmcut(): 80
+[t=0.00528391s, 11284 KB] g=30, 3 evaluated, 1 expanded
+[t=0.00530831s, 11284 KB] New best heuristic value for lmcut(): 70
+[t=0.00553253s, 11284 KB] g=40, 14 evaluated, 3 expanded
+[t=0.00555717s, 11284 KB] New best heuristic value for lmcut(): 60
+[t=0.00566043s, 11284 KB] g=60, 19 evaluated, 3 expanded
+[t=0.00568452s, 11284 KB] New best heuristic value for lmcut(): 50
+[t=0.00572211s, 11284 KB] g=60, 20 evaluated, 3 expanded
+[t=0.00574581s, 11284 KB] New best heuristic value for lmcut(): 40
+[t=0.00579853s, 11284 KB] g=70, 22 evaluated, 4 expanded
+[t=0.0058307s, 11284 KB] New best heuristic value for lmcut(): 30
+[t=0.00593424s, 11284 KB] g=80, 29 evaluated, 4 expanded
+[t=0.00600341s, 11284 KB] New best heuristic value for lmcut(): 20
+[t=0.00612313s, 11284 KB] g=90, 39 evaluated, 6 expanded
+[t=0.00614691s, 11284 KB] New best heuristic value for lmcut(): 10
+[t=0.00630751s, 11284 KB] g=105, 52 evaluated, 7 expanded
+[t=0.00633202s, 11284 KB] New best heuristic value for lmcut(): 0
+[t=0.00646659s, 11284 KB] g=110, 66 evaluated, 8 expanded
+[t=0.00649014s, 11284 KB] Solution found!
+do-plane p2 planer0 verysmooth natural varnished (30)
+do-saw-medium b0 p1 saw0 pine rough s3 s2 s1 (30)
+do-plane p1 planer0 rough natural untreated (20)
+do-immersion-varnish p2 immersion-varnisher0 red smooth (10)
+do-plane p0 planer0 smooth red varnished (10)
+do-immersion-varnish p1 immersion-varnisher0 natural smooth (10)
+[t=0.0066293s, 11284 KB] Plan length: 6 step(s).
+[t=0.00666227s, 11284 KB] Plan cost: 110
+[t=0.00668535s, 11284 KB] Solution: Incumbent solution found!
+[t=0.00670811s, 11284 KB] Solution Timestep: 1682006307252 millisecond(s).
+[t=0.00673025s, 11284 KB] Timestamp: 1682006307252 millisecond(s).
+[t=0.00675335s, 11284 KB] Expanded 9 state(s).
+[t=0.00677606s, 11284 KB] Reopened 0 state(s).
+[t=0.00679925s, 11284 KB] Evaluated 70 state(s).
+[t=0.00682251s, 11284 KB] Evaluations: 70
+[t=0.0068459s, 11284 KB] Generated 90 state(s).
+[t=0.00687593s, 11284 KB] Dead ends: 0 state(s).
+[t=0.00689916s, 11284 KB] Number of registered states: 70
+[t=0.00692171s, 11284 KB] Int hash set load factor: 70/128 = 0.546875
+[t=0.00694529s, 11284 KB] Int hash set resizes: 7
+[t=0.0095069s, 11284 KB] Optimal Solution: found
+[t=0.00970791s, 11284 KB] Actual search time: 0.00450659s
+do-plane p2 planer0 verysmooth natural varnished (30)
+do-saw-medium b0 p1 saw0 pine rough s3 s2 s1 (30)
+do-plane p1 planer0 rough natural untreated (20)
+do-immersion-varnish p2 immersion-varnisher0 red smooth (10)
+do-plane p0 planer0 smooth red varnished (10)
+do-immersion-varnish p1 immersion-varnisher0 natural smooth (10)
+[t=0.00973674s, 11284 KB] Plan length: 6 step(s).
+[t=0.00973674s, 11284 KB] Plan cost: 110
+[t=0.00973674s, 11284 KB] Timestamp: 1682006307255 millisecond(s).
+[t=0.00973674s, 11284 KB] Expanded 70 state(s).
+[t=0.00973674s, 11284 KB] Reopened 0 state(s).
+[t=0.00973674s, 11284 KB] Evaluated 70 state(s).
+[t=0.00973674s, 11284 KB] Evaluations: 303
+[t=0.00973674s, 11284 KB] Generated 783 state(s).
+[t=0.00973674s, 11284 KB] Dead ends: 0 state(s).
+[t=0.00973674s, 11284 KB] Number of registered states: 303
+[t=0.00973674s, 11284 KB] Int hash set load factor: 303/512 = 0.591797
+[t=0.00973674s, 11284 KB] Int hash set resizes: 9
+[t=0.00973674s, 11284 KB] Search time: 0.00474917s
+[t=0.00973674s, 11284 KB] Total time: 0.00973674s
+Solution found.
+Peak memory: 11284 KB
+Remove intermediate file output.sas
+search exit code: 0
+
+INFO     Running validate.
+INFO     validate stdin: None
+INFO     validate time limit: None
+INFO     validate memory limit: None
+INFO     validate command line string: validate domain.pddl problem.pddl sas_plan sas_plan.1
+Checking plan: sas_plan
+Plan executed successfully - checking goal
+Plan valid
+Final value: 110 
+Checking plan: sas_plan.1
+Plan executed successfully - checking goal
+Plan valid
+Final value: 110 
+
+Successful plans:
+Value: 110
+ sas_plan 110 
+sas_plan.1 110 
+
+validate exit code: 0
+
+INFO     Planner time: 0.14s

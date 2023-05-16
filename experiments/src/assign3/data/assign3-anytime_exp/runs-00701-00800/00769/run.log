@@ -1,0 +1,503 @@
+INFO     planner time limit: 900s
+INFO     planner memory limit: 3584 MB
+
+INFO     Running translator.
+INFO     translator stdin: None
+INFO     translator time limit: 899s
+INFO     translator memory limit: 3584 MB
+INFO     translator command line string: /usr/local/downward-projects/downward/experiments/assign3/.venv/bin/python3 /usr/local/downward-projects/downward/experiments/assign3/data/assign3-anytime_exp/code-fe4f0f1bb525c059c1938ac01bab1b7bae200873_e5e41175/builds/release/bin/translate/translate.py domain.pddl problem.pddl --sas-file output.sas
+Parsing...
+Parsing: [0.000s CPU, 0.006s wall-clock]
+Normalizing task... [0.000s CPU, 0.000s wall-clock]
+Instantiating...
+Generating Datalog program... [0.010s CPU, 0.001s wall-clock]
+Normalizing Datalog program...
+Normalizing Datalog program: [0.020s CPU, 0.019s wall-clock]
+Preparing model... [0.010s CPU, 0.005s wall-clock]
+Generated 400 rules.
+Computing model... [0.690s CPU, 0.707s wall-clock]
+45765 relevant atoms
+39820 auxiliary atoms
+85585 final queue length
+236866 total queue pushes
+Completing instantiation... [3.300s CPU, 3.301s wall-clock]
+Instantiating: [4.060s CPU, 4.065s wall-clock]
+Computing fact groups...
+Finding invariants...
+41 initial candidates
+Finding invariants: [0.060s CPU, 0.065s wall-clock]
+Checking invariant weight... [0.000s CPU, 0.000s wall-clock]
+Instantiating groups... [0.000s CPU, 0.000s wall-clock]
+Collecting mutex groups... [0.000s CPU, 0.000s wall-clock]
+Choosing groups...
+471 uncovered facts
+Choosing groups: [0.000s CPU, 0.000s wall-clock]
+Building translation key... [0.000s CPU, 0.001s wall-clock]
+Computing fact groups: [0.070s CPU, 0.069s wall-clock]
+Building STRIPS to SAS dictionary... [0.000s CPU, 0.000s wall-clock]
+Building dictionary for full mutex groups... [0.000s CPU, 0.000s wall-clock]
+Building mutex information...
+Building mutex information: [0.000s CPU, 0.000s wall-clock]
+Translating task...
+Processing axioms...
+Simplifying axioms... [0.000s CPU, 0.000s wall-clock]
+Translator axioms removed by simplifying: 0
+Computing negative axioms... [0.000s CPU, 0.000s wall-clock]
+Processing axioms: [0.120s CPU, 0.118s wall-clock]
+Translating task: [3.380s CPU, 3.390s wall-clock]
+125021 effect conditions simplified
+0 implied preconditions added
+Detecting unreachable propositions...
+0 operators removed
+0 axioms removed
+2 propositions removed
+Detecting unreachable propositions: [1.850s CPU, 1.848s wall-clock]
+Reordering and filtering variables...
+473 of 473 variables necessary.
+1 of 3 mutex groups necessary.
+45090 of 45090 operators necessary.
+0 of 0 axiom rules necessary.
+Reordering and filtering variables: [0.770s CPU, 0.776s wall-clock]
+Translator variables: 473
+Translator derived variables: 0
+Translator facts: 949
+Translator goal facts: 4
+Translator mutex groups: 1
+Translator total mutex groups size: 2
+Translator operators: 45090
+Translator axioms: 0
+Translator task size: 549948
+Translator peak memory: 328404 KB
+Writing output... [0.400s CPU, 0.401s wall-clock]
+Done! [10.660s CPU, 10.684s wall-clock]
+translate exit code: 0
+
+INFO     Running search (release).
+INFO     search stdin: output.sas
+INFO     search time limit: 889s
+INFO     search memory limit: 3584 MB
+INFO     search command line string: /usr/local/downward-projects/downward/experiments/assign3/data/assign3-anytime_exp/code-fe4f0f1bb525c059c1938ac01bab1b7bae200873_e5e41175/builds/release/bin/downward --evaluator 'h=lmcut()' --search 'eager_anytime(alt(
+        [single(weight(h, 2, verbosity=normal)), type_based([h, g()], random_seed=1234)]), 
+        reopen_closed=true, f_eval=sum([h, g()]))' --internal-plan-file sas_plan < output.sas
+[t=0.00265172s, 10884 KB] reading input...
+[t=0.250532s, 31472 KB] done reading input!
+[t=0.290088s, 47840 KB] Initializing landmark cut heuristic...
+[t=0.293331s, 47840 KB] Building successor generator...done!
+[t=0.323948s, 56400 KB] peak memory difference for successor generator creation: 8560 KB
+[t=0.324063s, 56400 KB] time for successor generation creation: 0.0284884s
+[t=0.324089s, 56400 KB] Variables: 473
+[t=0.324978s, 56400 KB] FactPairs: 949
+[t=0.325002s, 56400 KB] Bytes per state: 60
+[t=0.325026s, 56400 KB] Conducting best first anytime search with reopening closed nodes, (real) bound = 2147483647
+[t=0.353747s, 56400 KB] New best heuristic value for lmcut(): 21
+[t=0.356107s, 56400 KB] g=0, 1 evaluated, 0 expanded
+[t=0.356136s, 56400 KB] Initial heuristic value for lmcut(): 21
+[t=0.356167s, 56400 KB] Start Timestep: 1682448153929 millisecond(s).
+[t=0.441624s, 56400 KB] New best heuristic value for lmcut(): 20
+[t=0.442588s, 56400 KB] g=1, 4 evaluated, 1 expanded
+[t=0.521504s, 56400 KB] New best heuristic value for lmcut(): 19
+[t=0.523815s, 56400 KB] g=2, 7 evaluated, 2 expanded
+[t=0.649406s, 56400 KB] New best heuristic value for lmcut(): 18
+[t=0.65328s, 56400 KB] g=3, 12 evaluated, 4 expanded
+[t=0.673325s, 56400 KB] New best heuristic value for lmcut(): 17
+[t=0.677425s, 56400 KB] g=3, 13 evaluated, 4 expanded
+[t=0.773237s, 56400 KB] New best heuristic value for lmcut(): 16
+[t=0.774176s, 56400 KB] g=4, 17 evaluated, 6 expanded
+[t=0.984962s, 56400 KB] New best heuristic value for lmcut(): 15
+[t=0.988479s, 56400 KB] g=5, 26 evaluated, 8 expanded
+[t=2.9593s, 56400 KB] New best heuristic value for lmcut(): 14
+[t=2.96175s, 56400 KB] g=10, 108 evaluated, 44 expanded
+[t=3.85674s, 56400 KB] New best heuristic value for lmcut(): 13
+[t=3.85768s, 56400 KB] g=12, 145 evaluated, 57 expanded
+[t=3.95656s, 56400 KB] New best heuristic value for lmcut(): 12
+[t=3.96053s, 56400 KB] g=14, 150 evaluated, 59 expanded
+[t=7.79432s, 56400 KB] New best heuristic value for lmcut(): 11
+[t=7.79732s, 56400 KB] g=26, 315 evaluated, 129 expanded
+[t=7.8502s, 56400 KB] New best heuristic value for lmcut(): 10
+[t=7.85179s, 56400 KB] g=27, 318 evaluated, 130 expanded
+[t=11.0253s, 56400 KB] New best heuristic value for lmcut(): 9
+[t=11.0258s, 56400 KB] g=33, 473 evaluated, 200 expanded
+[t=11.0766s, 56400 KB] New best heuristic value for lmcut(): 8
+[t=11.0797s, 56400 KB] g=34, 476 evaluated, 202 expanded
+[t=11.2324s, 56400 KB] New best heuristic value for lmcut(): 7
+[t=11.2361s, 56400 KB] g=36, 485 evaluated, 206 expanded
+[t=11.3602s, 56400 KB] New best heuristic value for lmcut(): 6
+[t=11.364s, 56400 KB] g=38, 493 evaluated, 209 expanded
+[t=11.6839s, 56400 KB] New best heuristic value for lmcut(): 5
+[t=11.6857s, 56400 KB] g=42, 516 evaluated, 219 expanded
+[t=11.7678s, 56400 KB] New best heuristic value for lmcut(): 4
+[t=11.7709s, 56400 KB] g=43, 523 evaluated, 221 expanded
+[t=11.9714s, 56400 KB] New best heuristic value for lmcut(): 3
+[t=11.9725s, 56400 KB] g=45, 533 evaluated, 225 expanded
+[t=12.0114s, 56400 KB] New best heuristic value for lmcut(): 2
+[t=12.0144s, 56400 KB] g=46, 537 evaluated, 227 expanded
+[t=12.0433s, 56400 KB] New best heuristic value for lmcut(): 1
+[t=12.0464s, 56400 KB] g=47, 543 evaluated, 229 expanded
+[t=12.1232s, 56400 KB] New best heuristic value for lmcut(): 0
+[t=12.1263s, 56400 KB] g=48, 549 evaluated, 231 expanded
+[t=12.1751s, 56400 KB] Solution found!
+unpark pr2 xrel0 yrel0 (1)
+base-right pr2 x0 x1 y0 (1)
+base-down pr2 x1 y0 y1 (1)
+base-down pr2 x1 y1 y2 (1)
+finish-object object3 x5 y3 (1)
+base-right pr2 x1 x2 y2 (1)
+base-down pr2 x2 y2 y3 (1)
+base-down pr2 x2 y3 y4 (1)
+base-down pr2 x2 y4 y5 (1)
+base-right pr2 x2 x3 y5 (1)
+base-right pr2 x3 x4 y5 (1)
+base-right pr2 x4 x5 y5 (1)
+base-right pr2 x5 x6 y5 (1)
+park pr2 (1)
+gripper-left pr2 x6 y5 xrel0 xrel-1 x6 x5 yrel0 y5 (1)
+gripper-right pr2 x6 y5 xrel-1 xrel0 x5 x6 yrel0 y5 (1)
+unpark pr2 xrel0 yrel0 (1)
+base-down pr2 x6 y5 y6 (1)
+park pr2 (1)
+gripper-down pr2 x6 y6 xrel0 x6 yrel0 yrel1 y6 y7 (1)
+get-left pr2 x6 y6 xrel0 x6 yrel1 y7 object1 x5 (1)
+put-right pr2 x6 y6 xrel0 x6 yrel1 y7 object1 x7 (1)
+gripper-up pr2 x6 y6 xrel0 x6 yrel1 yrel0 y7 y6 (1)
+finish-object object1 x7 y7 (1)
+unpark pr2 xrel0 yrel0 (1)
+base-up pr2 x6 y6 y5 (1)
+base-right pr2 x6 x7 y5 (1)
+base-up pr2 x7 y5 y4 (1)
+base-up pr2 x7 y4 y3 (1)
+base-up pr2 x7 y3 y2 (1)
+base-up pr2 x7 y2 y1 (1)
+base-up pr2 x7 y1 y0 (1)
+base-left pr2 x7 x6 y0 (1)
+base-left pr2 x6 x5 y0 (1)
+base-left pr2 x5 x4 y0 (1)
+base-down pr2 x4 y0 y1 (1)
+park pr2 (1)
+gripper-down pr2 x4 y1 xrel0 x4 yrel0 yrel1 y1 y2 (1)
+get-right pr2 x4 y1 xrel0 x4 yrel1 y2 object0 x5 (1)
+gripper-up pr2 x4 y1 xrel0 x4 yrel1 yrel0 y2 y1 (1)
+put-down pr2 x4 y1 xrel0 x4 yrel0 y1 object0 y2 (1)
+unpark pr2 xrel0 yrel0 (1)
+finish-object object0 x4 y2 (1)
+base-down pr2 x4 y1 y2 (1)
+park pr2 (1)
+get-down pr2 x4 y2 xrel0 x4 yrel0 y2 object2 y3 (1)
+put-right pr2 x4 y2 xrel0 x4 yrel0 y2 object2 x5 (1)
+finish-object object2 x5 y2 (1)
+[t=12.1776s, 56400 KB] Plan length: 48 step(s).
+[t=12.1785s, 56400 KB] Plan cost: 48
+[t=12.1785s, 56400 KB] Solution: Incumbent solution found!
+[t=12.1786s, 56400 KB] Solution Timestep: 1682448165767 millisecond(s).
+[t=12.1786s, 56400 KB] Timestamp: 1682448165767 millisecond(s).
+[t=12.1786s, 56400 KB] Expanded 233 state(s).
+[t=12.1786s, 56400 KB] Reopened 0 state(s).
+[t=12.1787s, 56400 KB] Evaluated 551 state(s).
+[t=12.1787s, 56400 KB] Evaluations: 551
+[t=12.1787s, 56400 KB] Generated 861 state(s).
+[t=12.1787s, 56400 KB] Dead ends: 0 state(s).
+[t=12.1788s, 56400 KB] Number of registered states: 551
+[t=12.1788s, 56400 KB] Int hash set load factor: 551/1024 = 0.538086
+[t=12.1788s, 56400 KB] Int hash set resizes: 10
+[t=14.685s, 56400 KB] Solution found!
+unpark pr2 xrel0 yrel0 (1)
+base-right pr2 x0 x1 y0 (1)
+base-down pr2 x1 y0 y1 (1)
+base-down pr2 x1 y1 y2 (1)
+finish-object object3 x5 y3 (1)
+base-right pr2 x1 x2 y2 (1)
+base-down pr2 x2 y2 y3 (1)
+base-down pr2 x2 y3 y4 (1)
+base-down pr2 x2 y4 y5 (1)
+base-right pr2 x2 x3 y5 (1)
+base-right pr2 x3 x4 y5 (1)
+base-right pr2 x4 x5 y5 (1)
+base-right pr2 x5 x6 y5 (1)
+park pr2 (1)
+gripper-left pr2 x6 y5 xrel0 xrel-1 x6 x5 yrel0 y5 (1)
+gripper-right pr2 x6 y5 xrel-1 xrel0 x5 x6 yrel0 y5 (1)
+unpark pr2 xrel0 yrel0 (1)
+base-down pr2 x6 y5 y6 (1)
+park pr2 (1)
+gripper-down pr2 x6 y6 xrel0 x6 yrel0 yrel1 y6 y7 (1)
+get-left pr2 x6 y6 xrel0 x6 yrel1 y7 object1 x5 (1)
+put-right pr2 x6 y6 xrel0 x6 yrel1 y7 object1 x7 (1)
+gripper-up pr2 x6 y6 xrel0 x6 yrel1 yrel0 y7 y6 (1)
+finish-object object1 x7 y7 (1)
+unpark pr2 xrel0 yrel0 (1)
+base-up pr2 x6 y6 y5 (1)
+base-right pr2 x6 x7 y5 (1)
+base-up pr2 x7 y5 y4 (1)
+base-up pr2 x7 y4 y3 (1)
+base-up pr2 x7 y3 y2 (1)
+base-up pr2 x7 y2 y1 (1)
+base-up pr2 x7 y1 y0 (1)
+base-left pr2 x7 x6 y0 (1)
+base-left pr2 x6 x5 y0 (1)
+base-left pr2 x5 x4 y0 (1)
+base-down pr2 x4 y0 y1 (1)
+base-down pr2 x4 y1 y2 (1)
+base-right pr2 x4 x5 y2 (1)
+park pr2 (1)
+gripper-left pr2 x5 y2 xrel0 xrel-1 x5 x4 yrel0 y2 (1)
+get-down pr2 x5 y2 xrel-1 x4 yrel0 y2 object2 y3 (1)
+put-right pr2 x5 y2 xrel-1 x4 yrel0 y2 object2 x5 (1)
+get-right pr2 x5 y2 xrel-1 x4 yrel0 y2 object0 x5 (1)
+gripper-up pr2 x5 y2 xrel-1 x4 yrel0 yrel-1 y2 y1 (1)
+put-down pr2 x5 y2 xrel-1 x4 yrel-1 y1 object0 y2 (1)
+finish-object object0 x4 y2 (1)
+finish-object object2 x5 y2 (1)
+[t=14.6893s, 56400 KB] Plan length: 47 step(s).
+[t=14.6902s, 56400 KB] Plan cost: 47
+[t=14.6903s, 56400 KB] Solution: Incumbent solution found!
+[t=14.6903s, 56400 KB] Solution Timestep: 1682448168286 millisecond(s).
+[t=14.6903s, 56400 KB] Timestamp: 1682448168286 millisecond(s).
+[t=14.6903s, 56400 KB] Expanded 317 state(s).
+[t=14.6904s, 56400 KB] Reopened 0 state(s).
+[t=14.6904s, 56400 KB] Evaluated 645 state(s).
+[t=14.6904s, 56400 KB] Evaluations: 727
+[t=14.6904s, 56400 KB] Generated 1155 state(s).
+[t=14.6905s, 56400 KB] Dead ends: 0 state(s).
+[t=14.6905s, 56400 KB] Number of registered states: 727
+[t=14.6905s, 56400 KB] Int hash set load factor: 727/1024 = 0.709961
+[t=14.6905s, 56400 KB] Int hash set resizes: 10
+[t=15.2386s, 56400 KB] Solution found!
+unpark pr2 xrel0 yrel0 (1)
+base-right pr2 x0 x1 y0 (1)
+base-down pr2 x1 y0 y1 (1)
+base-down pr2 x1 y1 y2 (1)
+finish-object object3 x5 y3 (1)
+base-right pr2 x1 x2 y2 (1)
+base-down pr2 x2 y2 y3 (1)
+base-down pr2 x2 y3 y4 (1)
+base-down pr2 x2 y4 y5 (1)
+base-right pr2 x2 x3 y5 (1)
+base-right pr2 x3 x4 y5 (1)
+base-right pr2 x4 x5 y5 (1)
+base-right pr2 x5 x6 y5 (1)
+park pr2 (1)
+gripper-left pr2 x6 y5 xrel0 xrel-1 x6 x5 yrel0 y5 (1)
+gripper-right pr2 x6 y5 xrel-1 xrel0 x5 x6 yrel0 y5 (1)
+unpark pr2 xrel0 yrel0 (1)
+base-down pr2 x6 y5 y6 (1)
+park pr2 (1)
+gripper-down pr2 x6 y6 xrel0 x6 yrel0 yrel1 y6 y7 (1)
+get-left pr2 x6 y6 xrel0 x6 yrel1 y7 object1 x5 (1)
+put-right pr2 x6 y6 xrel0 x6 yrel1 y7 object1 x7 (1)
+gripper-up pr2 x6 y6 xrel0 x6 yrel1 yrel0 y7 y6 (1)
+finish-object object1 x7 y7 (1)
+unpark pr2 xrel0 yrel0 (1)
+base-up pr2 x6 y6 y5 (1)
+base-right pr2 x6 x7 y5 (1)
+base-up pr2 x7 y5 y4 (1)
+base-up pr2 x7 y4 y3 (1)
+base-up pr2 x7 y3 y2 (1)
+base-up pr2 x7 y2 y1 (1)
+base-up pr2 x7 y1 y0 (1)
+base-left pr2 x7 x6 y0 (1)
+base-left pr2 x6 x5 y0 (1)
+base-down pr2 x5 y0 y1 (1)
+base-down pr2 x5 y1 y2 (1)
+park pr2 (1)
+gripper-left pr2 x5 y2 xrel0 xrel-1 x5 x4 yrel0 y2 (1)
+get-down pr2 x5 y2 xrel-1 x4 yrel0 y2 object2 y3 (1)
+put-right pr2 x5 y2 xrel-1 x4 yrel0 y2 object2 x5 (1)
+get-right pr2 x5 y2 xrel-1 x4 yrel0 y2 object0 x5 (1)
+gripper-up pr2 x5 y2 xrel-1 x4 yrel0 yrel-1 y2 y1 (1)
+put-down pr2 x5 y2 xrel-1 x4 yrel-1 y1 object0 y2 (1)
+finish-object object0 x4 y2 (1)
+finish-object object2 x5 y2 (1)
+[t=15.2393s, 56400 KB] Plan length: 45 step(s).
+[t=15.2402s, 56400 KB] Plan cost: 45
+[t=15.2402s, 56400 KB] Solution: Incumbent solution found!
+[t=15.2402s, 56400 KB] Solution Timestep: 1682448168837 millisecond(s).
+[t=15.2403s, 56400 KB] Timestamp: 1682448168837 millisecond(s).
+[t=15.2403s, 56400 KB] Expanded 350 state(s).
+[t=15.2403s, 56400 KB] Reopened 18 state(s).
+[t=15.2403s, 56400 KB] Evaluated 674 state(s).
+[t=15.2404s, 56400 KB] Evaluations: 764
+[t=15.2404s, 56400 KB] Generated 1264 state(s).
+[t=15.2404s, 56400 KB] Dead ends: 0 state(s).
+[t=15.2404s, 56400 KB] Number of registered states: 764
+[t=15.2405s, 56400 KB] Int hash set load factor: 764/1024 = 0.746094
+[t=15.2405s, 56400 KB] Int hash set resizes: 10
+[t=52.6972s, 56400 KB] Solution found!
+unpark pr2 xrel0 yrel0 (1)
+base-right pr2 x0 x1 y0 (1)
+base-down pr2 x1 y0 y1 (1)
+base-down pr2 x1 y1 y2 (1)
+finish-object object3 x5 y3 (1)
+base-right pr2 x1 x2 y2 (1)
+base-down pr2 x2 y2 y3 (1)
+base-down pr2 x2 y3 y4 (1)
+base-down pr2 x2 y4 y5 (1)
+base-right pr2 x2 x3 y5 (1)
+base-right pr2 x3 x4 y5 (1)
+base-right pr2 x4 x5 y5 (1)
+base-right pr2 x5 x6 y5 (1)
+base-down pr2 x6 y5 y6 (1)
+park pr2 (1)
+gripper-down pr2 x6 y6 xrel0 x6 yrel0 yrel1 y6 y7 (1)
+get-left pr2 x6 y6 xrel0 x6 yrel1 y7 object1 x5 (1)
+put-right pr2 x6 y6 xrel0 x6 yrel1 y7 object1 x7 (1)
+gripper-up pr2 x6 y6 xrel0 x6 yrel1 yrel0 y7 y6 (1)
+unpark pr2 xrel0 yrel0 (1)
+finish-object object1 x7 y7 (1)
+base-up pr2 x6 y6 y5 (1)
+base-right pr2 x6 x7 y5 (1)
+base-up pr2 x7 y5 y4 (1)
+base-up pr2 x7 y4 y3 (1)
+base-up pr2 x7 y3 y2 (1)
+base-up pr2 x7 y2 y1 (1)
+base-up pr2 x7 y1 y0 (1)
+base-left pr2 x7 x6 y0 (1)
+base-left pr2 x6 x5 y0 (1)
+base-left pr2 x5 x4 y0 (1)
+base-down pr2 x4 y0 y1 (1)
+park pr2 (1)
+gripper-down pr2 x4 y1 xrel0 x4 yrel0 yrel1 y1 y2 (1)
+get-right pr2 x4 y1 xrel0 x4 yrel1 y2 object0 x5 (1)
+gripper-up pr2 x4 y1 xrel0 x4 yrel1 yrel0 y2 y1 (1)
+put-down pr2 x4 y1 xrel0 x4 yrel0 y1 object0 y2 (1)
+unpark pr2 xrel0 yrel0 (1)
+finish-object object0 x4 y2 (1)
+base-down pr2 x4 y1 y2 (1)
+park pr2 (1)
+get-down pr2 x4 y2 xrel0 x4 yrel0 y2 object2 y3 (1)
+put-right pr2 x4 y2 xrel0 x4 yrel0 y2 object2 x5 (1)
+finish-object object2 x5 y2 (1)
+[t=52.6999s, 56400 KB] Plan length: 44 step(s).
+[t=52.7008s, 56400 KB] Plan cost: 44
+[t=52.7009s, 56400 KB] Solution: Incumbent solution found!
+[t=52.7009s, 56400 KB] Solution Timestep: 1682448206379 millisecond(s).
+[t=52.7009s, 56400 KB] Timestamp: 1682448206379 millisecond(s).
+[t=52.7009s, 56400 KB] Expanded 1230 state(s).
+[t=52.701s, 56400 KB] Reopened 39 state(s).
+[t=52.701s, 56400 KB] Evaluated 2008 state(s).
+[t=52.701s, 56400 KB] Evaluations: 2526
+[t=52.701s, 56400 KB] Generated 4510 state(s).
+[t=52.7011s, 56400 KB] Dead ends: 0 state(s).
+[t=52.7011s, 56400 KB] Number of registered states: 2526
+[t=52.7011s, 56400 KB] Int hash set load factor: 2526/4096 = 0.616699
+[t=52.7011s, 56400 KB] Int hash set resizes: 12
+[t=54.0672s, 56400 KB] Solution found!
+unpark pr2 xrel0 yrel0 (1)
+base-right pr2 x0 x1 y0 (1)
+base-down pr2 x1 y0 y1 (1)
+base-down pr2 x1 y1 y2 (1)
+finish-object object3 x5 y3 (1)
+base-right pr2 x1 x2 y2 (1)
+base-down pr2 x2 y2 y3 (1)
+base-down pr2 x2 y3 y4 (1)
+base-down pr2 x2 y4 y5 (1)
+base-right pr2 x2 x3 y5 (1)
+base-right pr2 x3 x4 y5 (1)
+base-right pr2 x4 x5 y5 (1)
+base-right pr2 x5 x6 y5 (1)
+base-down pr2 x6 y5 y6 (1)
+park pr2 (1)
+gripper-down pr2 x6 y6 xrel0 x6 yrel0 yrel1 y6 y7 (1)
+get-left pr2 x6 y6 xrel0 x6 yrel1 y7 object1 x5 (1)
+put-right pr2 x6 y6 xrel0 x6 yrel1 y7 object1 x7 (1)
+gripper-up pr2 x6 y6 xrel0 x6 yrel1 yrel0 y7 y6 (1)
+unpark pr2 xrel0 yrel0 (1)
+finish-object object1 x7 y7 (1)
+base-up pr2 x6 y6 y5 (1)
+base-right pr2 x6 x7 y5 (1)
+base-up pr2 x7 y5 y4 (1)
+base-up pr2 x7 y4 y3 (1)
+base-up pr2 x7 y3 y2 (1)
+base-up pr2 x7 y2 y1 (1)
+base-up pr2 x7 y1 y0 (1)
+base-left pr2 x7 x6 y0 (1)
+base-left pr2 x6 x5 y0 (1)
+base-left pr2 x5 x4 y0 (1)
+base-down pr2 x4 y0 y1 (1)
+base-down pr2 x4 y1 y2 (1)
+base-right pr2 x4 x5 y2 (1)
+park pr2 (1)
+gripper-left pr2 x5 y2 xrel0 xrel-1 x5 x4 yrel0 y2 (1)
+get-down pr2 x5 y2 xrel-1 x4 yrel0 y2 object2 y3 (1)
+put-right pr2 x5 y2 xrel-1 x4 yrel0 y2 object2 x5 (1)
+get-right pr2 x5 y2 xrel-1 x4 yrel0 y2 object0 x5 (1)
+gripper-up pr2 x5 y2 xrel-1 x4 yrel0 yrel-1 y2 y1 (1)
+put-down pr2 x5 y2 xrel-1 x4 yrel-1 y1 object0 y2 (1)
+finish-object object0 x4 y2 (1)
+finish-object object2 x5 y2 (1)
+[t=54.0711s, 56400 KB] Plan length: 43 step(s).
+[t=54.072s, 56400 KB] Plan cost: 43
+[t=54.072s, 56400 KB] Solution: Incumbent solution found!
+[t=54.0721s, 56400 KB] Solution Timestep: 1682448207752 millisecond(s).
+[t=54.0721s, 56400 KB] Timestamp: 1682448207752 millisecond(s).
+[t=54.0721s, 56400 KB] Expanded 1287 state(s).
+[t=54.0721s, 56400 KB] Reopened 39 state(s).
+[t=54.0722s, 56400 KB] Evaluated 2065 state(s).
+[t=54.0722s, 56400 KB] Evaluations: 2639
+[t=54.0722s, 56400 KB] Generated 4702 state(s).
+[t=54.0722s, 56400 KB] Dead ends: 0 state(s).
+[t=54.0723s, 56400 KB] Number of registered states: 2639
+[t=54.0723s, 56400 KB] Int hash set load factor: 2639/4096 = 0.644287
+[t=54.0723s, 56400 KB] Int hash set resizes: 12
+[t=54.6263s, 56400 KB] Solution found!
+unpark pr2 xrel0 yrel0 (1)
+base-right pr2 x0 x1 y0 (1)
+base-down pr2 x1 y0 y1 (1)
+base-down pr2 x1 y1 y2 (1)
+finish-object object3 x5 y3 (1)
+base-right pr2 x1 x2 y2 (1)
+base-down pr2 x2 y2 y3 (1)
+base-down pr2 x2 y3 y4 (1)
+base-down pr2 x2 y4 y5 (1)
+base-right pr2 x2 x3 y5 (1)
+base-right pr2 x3 x4 y5 (1)
+base-right pr2 x4 x5 y5 (1)
+base-right pr2 x5 x6 y5 (1)
+base-down pr2 x6 y5 y6 (1)
+park pr2 (1)
+gripper-down pr2 x6 y6 xrel0 x6 yrel0 yrel1 y6 y7 (1)
+get-left pr2 x6 y6 xrel0 x6 yrel1 y7 object1 x5 (1)
+put-right pr2 x6 y6 xrel0 x6 yrel1 y7 object1 x7 (1)
+gripper-up pr2 x6 y6 xrel0 x6 yrel1 yrel0 y7 y6 (1)
+unpark pr2 xrel0 yrel0 (1)
+finish-object object1 x7 y7 (1)
+base-up pr2 x6 y6 y5 (1)
+base-right pr2 x6 x7 y5 (1)
+base-up pr2 x7 y5 y4 (1)
+base-up pr2 x7 y4 y3 (1)
+base-up pr2 x7 y3 y2 (1)
+base-up pr2 x7 y2 y1 (1)
+base-up pr2 x7 y1 y0 (1)
+base-left pr2 x7 x6 y0 (1)
+base-left pr2 x6 x5 y0 (1)
+base-down pr2 x5 y0 y1 (1)
+base-down pr2 x5 y1 y2 (1)
+park pr2 (1)
+gripper-left pr2 x5 y2 xrel0 xrel-1 x5 x4 yrel0 y2 (1)
+get-down pr2 x5 y2 xrel-1 x4 yrel0 y2 object2 y3 (1)
+put-right pr2 x5 y2 xrel-1 x4 yrel0 y2 object2 x5 (1)
+get-right pr2 x5 y2 xrel-1 x4 yrel0 y2 object0 x5 (1)
+gripper-up pr2 x5 y2 xrel-1 x4 yrel0 yrel-1 y2 y1 (1)
+put-down pr2 x5 y2 xrel-1 x4 yrel-1 y1 object0 y2 (1)
+finish-object object0 x4 y2 (1)
+finish-object object2 x5 y2 (1)
+[t=54.6299s, 56400 KB] Plan length: 41 step(s).
+[t=54.6303s, 56400 KB] Plan cost: 41
+[t=54.6303s, 56400 KB] Solution: Incumbent solution found!
+[t=54.6304s, 56400 KB] Solution Timestep: 1682448208311 millisecond(s).
+[t=54.6304s, 56400 KB] Timestamp: 1682448208311 millisecond(s).
+[t=54.6304s, 56400 KB] Expanded 1318 state(s).
+[t=54.6304s, 56400 KB] Reopened 57 state(s).
+[t=54.6305s, 56400 KB] Evaluated 2098 state(s).
+[t=54.6305s, 56400 KB] Evaluations: 2674
+[t=54.6305s, 56400 KB] Generated 4817 state(s).
+[t=54.6305s, 56400 KB] Dead ends: 0 state(s).
+[t=54.6306s, 56400 KB] Number of registered states: 2674
+[t=54.6306s, 56400 KB] Int hash set load factor: 2674/4096 = 0.652832
+[t=54.6306s, 56400 KB] Int hash set resizes: 12
+Peak memory: 56684 KB
+caught signal 24 -- exiting
+Time limit has been reached.
+Remove intermediate file output.sas
+search exit code: 23
+
+Driver aborting after search
+INFO     Planner time: 895.21s
