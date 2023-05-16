@@ -1,1 +1,1 @@
-../../../../../../../../benchmarks-test/blocks/probBLOCKS-7-2.pddl
+../../../../../../../../benchmarks-autoscale/21.11-agile-strips/transport/p10.pddl

@@ -1,1 +1,1 @@
-../../../../../../../../benchmarks-test/openstacks/p04.pddl
+../../../../../../../../benchmarks-autoscale/21.11-agile-strips/transport/p13.pddl
