@@ -189,6 +189,34 @@ fast_downward_plugin(
 )
 
 fast_downward_plugin(
+    NAME LINEAR_WEIGHTED_OPEN_LIST
+    HELP "Linear weighted biased open list"
+    SOURCES
+        open_lists/linear_weighted_open_list
+)
+
+fast_downward_plugin(
+    NAME LINEAR_WEIGHTED_TYPE_BASED_OPEN_LIST
+    HELP "Linear weighted type based open list"
+    SOURCES
+        open_lists/linear_weighted_type_based_open_list
+)
+
+fast_downward_plugin(
+    NAME SOFTMIN_OPEN_LIST
+    HELP "Softmin biased open list"
+    SOURCES
+        open_lists/softmin_open_list
+)
+
+fast_downward_plugin(
+    NAME SOFTMIN_TYPE_BASED_OPEN_LIST
+    HELP "Softmin type based open list"
+    SOURCES
+        open_lists/softmin_type_based_open_list
+)
+
+fast_downward_plugin(
     NAME DYNAMIC_BITSET
     HELP "Poor man's version of boost::dynamic_bitset"
     SOURCES
