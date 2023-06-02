@@ -182,6 +182,13 @@ fast_downward_plugin(
 )
 
 fast_downward_plugin(
+    NAME TYPE_BTS_OPEN_LIST
+    HELP "BTS entry state based type system open list"
+    SOURCES
+        open_lists/type_bts_open_list
+)
+
+fast_downward_plugin(
     NAME MONTE_CARLO_OPEN_LIST
     HELP "Monte carlo based open list"
     SOURCES
