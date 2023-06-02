@@ -55,6 +55,7 @@ def main():
         IssueConfig('type', ["--evaluator", "h=ff()", '--search', 'eager(alt([type_based([h, g()], random_seed=-1), single(h)]))'], driver_options=DRIVER_OPTIONS),
         IssueConfig('gbfs', ["--evaluator", "h=ff()", '--search', 'eager(single(h))'], driver_options=DRIVER_OPTIONS),
         IssueConfig('lwm', ["--evaluator", "h=ff()", '--search', 'eager(alt([lwm_based_type(h), single(h)]))'], driver_options=DRIVER_OPTIONS),
+        IssueConfig('bts', ["--evaluator", "h=ff()", '--search', 'eager(alt([bts_type(h), single(h)]))'], driver_options=DRIVER_OPTIONS),
     ]
 
     ATTRIBUTES = [
@@ -63,6 +64,7 @@ def main():
         "coverage",
         "expansions",
         "memory",
+        "cost"
     ]
 
     exp = IssueExperiment(
