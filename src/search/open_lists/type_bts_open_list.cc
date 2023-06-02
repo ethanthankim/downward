@@ -80,22 +80,16 @@ BTSOpenList<Entry>::TypeInfo BTSOpenList<Entry>::insert_type_info(EvaluationCont
     int new_h = eval_context.get_evaluator_value_or_infinity(evaluator.get());
     int new_id = eval_context.get_state().get_id().get_value();
 
-    int new_type_h, new_type_key;
+    int new_type_key;
     if (new_h < cached_parent_info.h) { 
         // if the new node is a new local minimum, it gets a new bucket
-        new_type_h = new_h;
         new_type_key = new_id;
     } else {
         // if the new node isn't a new local minimum, it gets bucketted with its parent
-        new_type_h = new_h;
         new_type_key = cached_parent_info.type_key;
     }
-    TypeInfo new_info = { new_type_h, new_type_key };
+    TypeInfo new_info = { new_h, new_type_key };
     state_type_infos[eval_context.get_state()] = new_info;
-        
-        // outfile.open ("spanning.out", ios_base::app);
-        // outfile << new_id << "," << cached_parent_id << "," << new_h << "," << new_type_h << "," << new_type_key << std::endl;
-        // outfile.close();
 
     return new_info;
 }
