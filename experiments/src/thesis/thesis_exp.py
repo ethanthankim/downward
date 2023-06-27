@@ -51,11 +51,11 @@ def main():
             "--always"]
 
     CONFIGS = [
-        # IssueConfig('epsilon-0.2', ["--evaluator", "h=ff()", '--search', 'eager(epsilon_greedy(h, epsilon=0.2))'], driver_options=DRIVER_OPTIONS),
+        IssueConfig('epsilon-0.2', ["--evaluator", "h=ff()", '--search', 'eager(epsilon_greedy(h, epsilon=0.2))'], driver_options=DRIVER_OPTIONS),
         IssueConfig('type', ["--evaluator", "h=ff()", '--search', 'eager(alt([type_based([h, g()], random_seed=-1), single(h)]))'], driver_options=DRIVER_OPTIONS),
         # IssueConfig('gbfs', ["--evaluator", "h=ff()", '--search', 'eager(single(h))'], driver_options=DRIVER_OPTIONS),
         IssueConfig('lwm-intra', ["--evaluator", "h=ff()", '--search', 'eager( alt( [lwm_intra_explore_type(h), single(h)] ) )'], driver_options=DRIVER_OPTIONS),
-        # IssueConfig('bts', ["--evaluator", "h=ff()", '--search', 'eager(alt([bts_type(h), single(h)]))'], driver_options=DRIVER_OPTIONS),
+        IssueConfig('bts', ["--evaluator", "h=ff()", '--search', 'eager(alt([bts_type(h), single(h)]))'], driver_options=DRIVER_OPTIONS),
     ]
 
     ATTRIBUTES = [

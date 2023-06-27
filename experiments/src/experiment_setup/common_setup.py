@@ -43,7 +43,7 @@ def parse_args():
 
     ARGPARSER.add_argument(
         "--overall-time-limit", 
-        default="5m",
+        default="10m",
         dest="time_limit",
         help="the overall time limit for each search algorithm."
     )

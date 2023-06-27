@@ -1,1 +1,1 @@
-../../../../../../../../benchmarks-test/barman-opt11-strips/pfile02-008.pddl
+../../../../../../../../benchmarks-test/elevators-sat11-strips/p08.pddl
