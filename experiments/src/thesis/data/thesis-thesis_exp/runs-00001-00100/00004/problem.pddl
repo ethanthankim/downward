@@ -1,1 +1,1 @@
-../../../../../../../../benchmarks-autoscale/21.11-agile-strips/transport/p04.pddl
+../../../../../../../../benchmarks-test/barman-opt11-strips/pfile02-008.pddl

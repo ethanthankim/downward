@@ -75,7 +75,7 @@ template<class Entry>
 void EpsilonGreedyOpenList<Entry>::do_insertion(
     EvaluationContext &eval_context, const Entry &entry) {
     heap.emplace_back(
-        next_id++, eval_context.get_evaluator_value(evaluator.get()), entry);
+        next_id++, eval_context.get_evaluator_value(evaluator.get()), entry);   
     push_heap(heap.begin(), heap.end(), greater<HeapNode>());
     ++size;
 }

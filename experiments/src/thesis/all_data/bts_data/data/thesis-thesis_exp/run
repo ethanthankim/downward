@@ -1,0 +1,74 @@
+#! /usr/bin/env python
+
+import logging
+import os
+import multiprocessing
+import subprocess
+import sys
+
+from lab.experiment import get_run_dir
+from lab import tools
+
+tools.configure_logging()
+
+SHUFFLED_TASK_IDS = [56, 134, 349, 507, 90, 528, 15, 198, 430, 398, 495, 585, 214, 438, 338, 257, 556, 127, 142, 168, 146, 79, 261, 114, 116, 596, 205, 353, 297, 50, 162, 335, 414, 359, 455, 427, 105, 348, 517, 178, 226, 468, 313, 363, 578, 587, 351, 145, 527, 177, 529, 506, 400, 496, 186, 150, 101, 494, 133, 301, 464, 408, 104, 572, 541, 303, 553, 234, 221, 28, 216, 510, 223, 174, 73, 405, 233, 85, 4, 1, 562, 302, 550, 128, 518, 509, 288, 308, 391, 255, 520, 574, 549, 530, 330, 251, 13, 325, 477, 320, 275, 531, 239, 584, 532, 376, 126, 32, 163, 110, 139, 564, 94, 132, 65, 30, 411, 407, 266, 312, 161, 44, 262, 130, 331, 165, 80, 228, 258, 154, 309, 157, 192, 448, 425, 555, 263, 190, 456, 84, 516, 5, 452, 434, 62, 152, 82, 212, 489, 58, 322, 386, 120, 19, 451, 34, 29, 432, 321, 122, 83, 472, 283, 196, 51, 306, 522, 213, 333, 167, 355, 16, 483, 599, 220, 548, 343, 208, 409, 404, 189, 12, 579, 20, 112, 305, 272, 399, 202, 148, 158, 182, 428, 545, 486, 175, 59, 170, 387, 2, 478, 199, 91, 181, 215, 482, 184, 395, 316, 372, 39, 42, 540, 383, 71, 450, 55, 319, 279, 290, 53, 410, 136, 580, 241, 534, 317, 577, 48, 194, 377, 586, 499, 125, 590, 402, 109, 156, 463, 47, 429, 559, 140, 264, 457, 282, 569, 171, 592, 342, 292, 523, 102, 512, 339, 479, 106, 390, 362, 581, 52, 78, 172, 211, 536, 426, 539, 364, 503, 27, 246, 439, 598, 310, 388, 166, 169, 273, 311, 6, 76, 147, 14, 384, 421, 74, 435, 500, 558, 93, 26, 357, 323, 491, 360, 9, 347, 401, 379, 232, 589, 485, 149, 565, 95, 488, 307, 593, 293, 274, 41, 304, 502, 201, 270, 515, 340, 490, 278, 552, 137, 547, 476, 350, 563, 164, 474, 337, 281, 594, 45, 296, 248, 200, 67, 346, 473, 225, 419, 367, 380, 396, 385, 560, 218, 356, 10, 595, 7, 433, 180, 285, 249, 437, 568, 508, 361, 513, 294, 245, 441, 8, 299, 229, 600, 236, 117, 418, 370, 243, 467, 378, 461, 354, 444, 46, 286, 179, 18, 542, 551, 326, 449, 43, 57, 582, 300, 143, 188, 64, 524, 392, 97, 280, 36, 576, 254, 108, 505, 423, 86, 68, 37, 129, 352, 525, 526, 341, 54, 480, 159, 481, 295, 487, 267, 497, 284, 315, 224, 328, 237, 230, 277, 381, 453, 124, 81, 445, 511, 193, 420, 60, 424, 23, 289, 521, 183, 366, 118, 543, 11, 244, 49, 314, 334, 259, 375, 227, 431, 329, 459, 123, 151, 493, 501, 115, 469, 533, 546, 466, 250, 144, 260, 561, 371, 475, 447, 96, 336, 265, 575, 567, 544, 219, 413, 535, 160, 571, 25, 389, 369, 92, 324, 141, 276, 373, 471, 35, 204, 138, 72, 231, 22, 173, 121, 238, 458, 203, 206, 454, 417, 470, 98, 436, 591, 63, 271, 566, 217, 570, 345, 287, 222, 40, 210, 298, 422, 119, 100, 291, 368, 498, 252, 588, 77, 484, 382, 397, 504, 442, 209, 88, 176, 462, 113, 89, 374, 597, 393, 207, 365, 69, 247, 103, 403, 412, 38, 537, 17, 465, 446, 3, 394, 344, 440, 460, 70, 443, 240, 406, 318, 185, 66, 256, 583, 268, 87, 538, 131, 514, 75, 31, 61, 492, 269, 416, 191, 415, 187, 554, 107, 111, 332, 573, 197, 135, 153, 33, 99, 557, 155, 195, 327, 358, 24, 242, 235, 519, 21, 253]
+
+# Make sure we're in the experiment directory.
+os.chdir(os.path.dirname(os.path.abspath(__file__)))
+
+
+def get_run_id(task_id):
+    return SHUFFLED_TASK_IDS[task_id - 1]
+
+
+def process_task(task_id):
+    run_id = get_run_id(task_id)
+    run_dir = get_run_dir(run_id)
+    error = False
+    driver_log_file = os.path.join(run_dir, "driver.log")
+
+    if os.path.exists(driver_log_file):
+        logging.info(f"The run in {run_dir} has already been started --> skip it")
+        return False
+
+    with open(driver_log_file, "w") as driver_log:
+        with open(os.path.join(run_dir, "driver.err"), "w") as driver_err:
+            logging.info(f"Starting run {run_id} (TASK_ID {task_id}) in {run_dir}")
+            try:
+                subprocess.check_call(
+                    [tools.get_python_executable(), "run"],
+                    cwd=run_dir, stdout=driver_log, stderr=driver_err)
+            except subprocess.CalledProcessError:
+                error = True
+
+    # driver.log always has content for a successful run, so we never delete it.
+    if os.path.getsize(driver_err.name) == 0:
+        os.remove(driver_err.name)
+    else:
+        error = True
+
+    return error
+
+
+def main():
+    pool = multiprocessing.Pool(processes=4)
+    num_tasks = len(SHUFFLED_TASK_IDS)
+    result = pool.map_async(process_task, range(1, num_tasks + 1))
+    try:
+        # Use "timeout" to fix passing KeyboardInterrupts from children
+        # (see https://stackoverflow.com/questions/1408356).
+        result.wait(timeout=99999)
+    except KeyboardInterrupt:
+        logging.warning("Main script interrupted")
+        pool.terminate()
+    finally:
+        pool.close()
+        logging.info("Joining pool processes")
+        pool.join()
+
+    if any(result.get()):
+        sys.exit("Error: At least one run failed.")
+
+
+if __name__ == "__main__":
+    main()
