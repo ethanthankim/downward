@@ -128,7 +128,7 @@ void LWMInvPercOpenList<Entry>::do_insertion(
     EvaluationContext &eval_context, const Entry &entry) {
 
     TypeInfo info = insert_type_info(eval_context);
-    int r = info.h > 0 ? rng->random(info.h) : 0;
+    int r = rng->random(info.h + 1);
     HeapNode new_node(r, entry);
     auto it = key_to_bucket_index.find(info.type_key);
     if (it == key_to_bucket_index.end()) {
