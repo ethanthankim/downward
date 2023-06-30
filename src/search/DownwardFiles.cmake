@@ -192,21 +192,21 @@ fast_downward_plugin(
     NAME TYPE_LWM_INTRA_EXPLORE_OPEN_LIST
     HELP "BTS entry state based type system open list with intra-bench exploration"
     SOURCES
-        open_lists/type_lwm_with_intra_explore_open_list
+        open_lists/type_lwm_inter_intra_explore_open_list
 )
 
 fast_downward_plugin(
     NAME TYPE_BTS_INTRA_EXPLORE_OPEN_LIST
     HELP "BTS entry state based type system open list with intra-bench exploration"
     SOURCES
-        open_lists/type_bts_with_intra_explore_open_list
+        open_lists/type_bts_inter_intra_explore_open_list
 )
 
 fast_downward_plugin(
-    NAME MONTE_CARLO_OPEN_LIST
-    HELP "Monte carlo based open list"
+    NAME TYPE_BTS_INTRE_EXPLORE_OPEN_LIST
+    HELP "BTS entry state based type system open list with intra-bench exploration"
     SOURCES
-        open_lists/monte_carlo_open_list
+        open_lists/type_bts_inter_explore_open_list
 )
 
 fast_downward_plugin(
