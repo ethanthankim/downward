@@ -25,42 +25,29 @@ class BTSIntraDepthOpenList : public OpenList<Entry> {
     shared_ptr<utils::RandomNumberGenerator> rng;
     shared_ptr<Evaluator> evaluator;
 
-    struct HeapNode {
+    struct TypeNode {
+        int type_index;
         int h;
         int depth;
         Entry entry;
-        HeapNode(int id, int h, const Entry &entry)
-            : id(id), h(h), entry(entry) {
-        }
-
-        bool operator>(const TypeBucket &other) const {
-            if (h == other.h) return depth > other.depth;
-            return h > other.h;
-        }
+        TypeNode(int type_index, int h, int depth, const Entry &entry) 
+            : type_index(type_index), h(h), depth(depth), entry(entry) {}
     };
-    struct TypeBucket {
-        int type_key;
-        int h;
-        int depth;
-        vector<HeapNode> nodes;
-        TypeBucket(int type_key, int h, int depth, const vector<HeapNode> &nodes)
-            : type_key(type_key), h(h), depth(depth), nodes(nodes) {
-        }
-    };
-    PerStateInformation<pair<int, int>> state_type_index_and_h;
-    vector<TypeBucket> type_buckets;
-    // i think need key to type index.
-    // remove_min still doesn't work. 
-
+    PerStateInformation<int> state_to_node_index;
+    vector<vector<int>> type_heaps;
+    vector<TypeNode> all_nodes;
+    
     int cached_parent_depth;
-    int cached_parent_type_depth;
     int cached_parent_h;
-    int cached_parent_type_key;
+    int cached_parent_type_index;
 
 
 protected:
     virtual void do_insertion(
         EvaluationContext &eval_context, const Entry &entry) override;
+
+private:
+    bool node_comparator(const int& index1, const int& index2);
 
 public:
     explicit BTSIntraDepthOpenList(const plugins::Options &opts);
@@ -83,27 +70,41 @@ public:
 
 template<class Entry>
 void BTSIntraDepthOpenList<Entry>::notify_initial_state(const State &initial_state) {
-    cached_parent_info = {INT32_MAX, -1};
-    state_type_infos[initial_state] = {-1, 0, 0};
+    cached_parent_depth = -1;
+    cached_parent_h = INT32_MAX;
+    cached_parent_type_index = -1;
 }
 
 template<class Entry>
 void BTSIntraDepthOpenList<Entry>::notify_state_transition(
     const State &parent_state, OperatorID op_id, const State &state) {
-    cached_parent_info = state_type_infos[parent_state];
+    int cached_parent_index = state_to_node_index[parent_state];
+    TypeNode parent = all_nodes[cached_parent_index];
+    cached_parent_depth = parent.depth;
+    cached_parent_h = parent.h;
+    cached_parent_type_index = parent.type_index;
 }
 
-template<class HeapNode>
-static void adjust_heap_up(vector<HeapNode> &heap, size_t pos) {
-    assert(utils::in_bounds(pos, heap));
-    while (pos != 0) {
-        size_t parent_pos = (pos - 1) / 2;
-        if (heap[pos] > heap[parent_pos]) {
-            break;
-        }
-        swap(heap[pos], heap[parent_pos]);
-        pos = parent_pos;
-    }
+// template<class HeapNode>
+// static void adjust_heap_up(vector<HeapNode> &heap, size_t pos) {
+//     assert(utils::in_bounds(pos, heap));
+//     while (pos != 0) {
+//         size_t parent_pos = (pos - 1) / 2;
+//         if (heap[pos] > heap[parent_pos]) {
+//             break;
+//         }
+//         swap(heap[pos], heap[parent_pos]);
+//         pos = parent_pos;
+//     }
+// }
+
+template<class Entry>
+bool BTSIntraDepthOpenList<Entry>::node_comparator(const int& index1, const int& index2) {
+    TypeNode first_node = all_nodes[index1];
+    TypeNode second_node = all_nodes[index2];
+
+    if (first_node.h == second_node.h) return first_node.depth > second_node.depth;
+    return first_node.h > second_node.h;
 }
 
 template<class Entry>
@@ -111,43 +112,48 @@ void BTSIntraDepthOpenList<Entry>::do_insertion(
     EvaluationContext &eval_context, const Entry &entry) {
     
     int new_h = eval_context.get_evaluator_value_or_infinity(evaluator.get());
-    int new_id = eval_context.get_state().get_id().get_value();
     int type_index;
+    int node_index = all_nodes.size(); 
 
     if (new_h < cached_parent_h) { 
         // if the new node is a new local minimum, it gets a new bucket
-        type_index = type_buckets.size();
-        HeapNode new_node(new_h, cached_parent_depth + 1, entry);
-        TypeBucket new_bucket(type_index, new_h, cached_parent_type_depth + 1, {new_node});
-        type_buckets.push_back(new_bucket);
+        type_index = type_heaps.size();
+        type_heaps.push_back({node_index});
+        TypeNode new_type_node(type_index, new_h, 0, entry);
+        all_nodes.push_back(new_type_node);
     } else {
         // if the new node isn't a new local minimum, it gets bucketted with its parent
-        type_index = cached_parent_type_key;
-        HeapNode new_node(new_h, cached_parent_depth + 1, entry);
-        type_buckets[cached_parent_type_key].nodes.push_back(new_node);
-        push_heap(type_buckets[cached_parent_type_key].nodes.begin(), type_buckets[cached_parent_type_key].nodes.end(), greater<HeapNode>());
+        type_index = cached_parent_type_index;
+        type_heaps[type_index].push_back(node_index);
+        TypeNode new_type_node(type_index, new_h, cached_parent_depth + 1, entry);
+        all_nodes.push_back(new_type_node);
+        auto heap_compare = [&] (const int& elem1, const int& elem2) -> bool
+        {
+            return node_comparator(elem1, elem2);
+        };
+        push_heap(type_heaps[type_index].begin(), type_heaps[type_index].end(), heap_compare);
     }
-    state_type_index_and_h[eval_context.get_state()] = make_pair(new_h, type_index);
+    state_to_node_index[eval_context.get_state()] = node_index;
 }
 
 template<class Entry>
 Entry BTSIntraDepthOpenList<Entry>::remove_min() {
-    size_t bucket_id = rng->random(type_buckets.size());
-    TypeBucket &type_bucket = type_buckets[bucket_id];
-    vector<HeapNode> &bucket = type_bucket.nodes; 
+    int type_index;
+    do {
+        type_index = rng->random(type_heaps.size());
+    } while (type_heaps[type_index].empty());
+    vector<int> &type_heap = type_heaps[type_index];
 
-    pop_heap(bucket.begin(), bucket.end(), greater<HeapNode>());
-    HeapNode heap_node = bucket.back();
-    bucket.pop_back();
+    auto heap_compare = [&] (const int& elem1, const int& elem2) -> bool
+    {
+        return node_comparator(elem1, elem2);
+    };
+    pop_heap(type_heap.begin(), type_heap.end(), heap_compare);
+    int node_index = type_heap.back();
+    type_heap.pop_back();
+    TypeNode min_node = all_nodes[node_index];
 
-    if (bucket.empty()) { 
-        // Swap the empty bucket with the last bucket, then delete it.
-        key_to_bucket_index[keys_and_buckets.back().first] = bucket_id;
-        key_to_bucket_index.erase(min_key);
-        utils::swap_and_pop_from_vector(keys_and_buckets, bucket_id);  
-    }
-
-    return heap_node.entry;
+    return min_node.entry;
 }
 
 template<class Entry>
@@ -158,13 +164,13 @@ BTSIntraDepthOpenList<Entry>::BTSIntraDepthOpenList(const plugins::Options &opts
 
 template<class Entry>
 bool BTSIntraDepthOpenList<Entry>::empty() const {
-    return keys_and_buckets.empty();
+    return type_heaps.empty();
 }
 
 template<class Entry>
 void BTSIntraDepthOpenList<Entry>::clear() {
-    keys_and_buckets.clear();
-    key_to_bucket_index.clear();
+    type_heaps.clear();
+    all_nodes.clear();
 }
 
 template<class Entry>

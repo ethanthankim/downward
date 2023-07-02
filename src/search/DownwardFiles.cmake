@@ -210,6 +210,13 @@ fast_downward_plugin(
 )
 
 fast_downward_plugin(
+    NAME TYPE_BTS_INTRA_DEPTH_OPEN_LIST
+    HELP "BTS entry state based type system open list with intra-bench exploration"
+    SOURCES
+        open_lists/type_bts_intra_depth_open_list
+)
+
+fast_downward_plugin(
     NAME LINEAR_WEIGHTED_OPEN_LIST
     HELP "Linear weighted biased open list"
     SOURCES
