@@ -75,7 +75,7 @@ template<class Entry>
 Entry LinearWeightedOpenList<Entry>::remove_min() {
     assert(size > 0);
     int key = buckets.begin()->first;
-
+    
     if (buckets.size() > 1) {
         double r = rng->random();
         if (r <= epsilon) {

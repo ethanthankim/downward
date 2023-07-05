@@ -1,9 +1,9 @@
 #ifndef OPEN_LISTS_LWM_INTRA_EXPLORE_BASED_OPEN_LIST_H
 #define OPEN_LISTS_LWM_INTRA_EXPLORE_BASED_OPEN_LIST_H
 
-#include "../open_list_factory.h"
+#include "../../open_list_factory.h"
 
-#include "../plugins/plugin.h"
+#include "../../plugins/plugin.h"
 
 
 /*
