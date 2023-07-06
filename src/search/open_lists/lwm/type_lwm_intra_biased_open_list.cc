@@ -35,11 +35,11 @@ class LWMIntraBiasedOpenList : public OpenList<Entry> {
             : type_index(type_index), h(h), depth(depth), entry(entry) {}
     };
     PerStateInformation<int> state_to_node_index;
-    vector<map<int, deque<Entry>>> type_buckets;
+    vector<pair<int, map<int, deque<Entry>>>> type_buckets;
     vector<TypeNode> all_nodes;
     
     int cached_parent_depth;
-    int cached_parent_h;
+    int cached_type_h;
     int cached_parent_type_index;
 
     double alpha;
@@ -76,7 +76,7 @@ public:
 template<class Entry>
 void LWMIntraBiasedOpenList<Entry>::notify_initial_state(const State &initial_state) {
     cached_parent_depth = -1;
-    cached_parent_h = INT32_MAX;
+    cached_type_h = INT32_MAX;
     cached_parent_type_index = -1;
 }
 
@@ -86,8 +86,8 @@ void LWMIntraBiasedOpenList<Entry>::notify_state_transition(
     int cached_parent_index = state_to_node_index[parent_state];
     TypeNode parent = all_nodes[cached_parent_index];
     cached_parent_depth = parent.depth;
-    cached_parent_h = parent.h;
     cached_parent_type_index = parent.type_index;
+    cached_type_h = type_buckets[cached_parent_type_index].first;
 }
 
 template<class Entry>
@@ -107,19 +107,19 @@ void LWMIntraBiasedOpenList<Entry>::do_insertion(
     int type_index;
     int node_index = all_nodes.size();
 
-    if (new_h < cached_parent_h) { 
+    if (new_h < cached_type_h) { 
 
         type_index = type_buckets.size();
         map<int, deque<Entry>> new_type; 
-        type_buckets.push_back(new_type);
-        type_buckets[type_index][new_h].push_back(entry);
+        type_buckets.push_back(make_pair(new_h, new_type));
+        type_buckets[type_index].second[new_h].push_back(entry);
 
         TypeNode new_type_node(type_index, new_h, 0, entry);
         all_nodes.push_back(new_type_node);
     } else {
         type_index = cached_parent_type_index;
-        type_buckets[type_index][new_h].push_back(entry);
-        TypeNode new_type_node(type_index, cached_parent_h, cached_parent_depth + 1, entry);
+        type_buckets[type_index].second[new_h].push_back(entry);
+        TypeNode new_type_node(type_index, new_h, cached_parent_depth + 1, entry);
         all_nodes.push_back(new_type_node);
     }
     state_to_node_index[eval_context.get_state()] = node_index;
@@ -130,8 +130,8 @@ Entry LWMIntraBiasedOpenList<Entry>::remove_min() {
     int type_index;
     do {
         type_index = rng->random(type_buckets.size());
-    } while (type_buckets[type_index].empty());
-    map<int, deque<Entry>> &type_bucket = type_buckets[type_index];
+    } while (type_buckets[type_index].second.empty());
+    map<int, deque<Entry>> &type_bucket = type_buckets[type_index].second;
     int key = type_bucket.begin()->first;
 
     if (type_bucket.size() > 1) {
