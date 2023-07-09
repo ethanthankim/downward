@@ -203,10 +203,17 @@ fast_downward_plugin(
 )
 
 fast_downward_plugin(
-    NAME TYPE_BTS_INTRE_EXPLORE_OPEN_LIST
+    NAME TYPE_BTS_INTER_BIASED_OPEN_LIST
     HELP "BTS entry state based type system open list with intra-bench exploration"
     SOURCES
-        open_lists/bts/type_bts_inter_explore_open_list
+        open_lists/bts/type_bts_inter_biased_open_list
+)
+
+fast_downward_plugin(
+    NAME TYPE_LWM_INTER_BIASED_OPEN_LIST
+    HELP "BTS entry state based type system open list with intra-bench exploration"
+    SOURCES
+        open_lists/lwm/type_lwm_inter_biased_open_list
 )
 
 fast_downward_plugin(

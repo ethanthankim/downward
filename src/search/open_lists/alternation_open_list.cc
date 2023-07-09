@@ -38,6 +38,11 @@ public:
         EvaluationContext &eval_context) const override;
     virtual bool is_reliable_dead_end(
         EvaluationContext &eval_context) const override;
+
+    virtual void notify_initial_state(const State &initial_state) override;
+    virtual void notify_state_transition(const State &parent_state,
+                                         OperatorID op_id,
+                                         const State &state) override;
 };
 
 
@@ -51,6 +56,19 @@ AlternationOpenList<Entry>::AlternationOpenList(const plugins::Options &opts)
         open_lists.push_back(factory->create_open_list<Entry>());
 
     priorities.resize(open_lists.size(), 0);
+}
+
+template<class Entry>
+void AlternationOpenList<Entry>::notify_initial_state(const State &initial_state) {
+    for (const auto &sublist : open_lists)
+        sublist->notify_initial_state(initial_state);
+}
+
+template<class Entry>
+void AlternationOpenList<Entry>::notify_state_transition(
+    const State &parent_state, OperatorID op_id, const State &state) {
+    for (const auto &sublist : open_lists)
+        sublist->notify_state_transition(parent_state, op_id, state);
 }
 
 template<class Entry>
