@@ -27,26 +27,29 @@ class BTSInterBiasedOpenList : public OpenList<Entry> {
     shared_ptr<utils::RandomNumberGenerator> rng;
     shared_ptr<Evaluator> evaluator;
 
-    struct Bucket {
+    struct TypeBucket {
         int type_def_i;
         vector<Entry> entries;
-        Bucket(int type_def_i, const vector<Entry> &entries) 
+        TypeBucket(int type_def_i, const vector<Entry> &entries) 
             : type_def_i(type_def_i), entries(entries) {}
     };
     struct TypeDef {
         int bucket_index;
         int type_h;
         TypeDef(int bucket_index, int type_h) 
-            : bucket_index(bucket_index), type_h(type_h) {};
-        TypeDef() : bucket_index(-1), type_h(-1) {}
+            : bucket_index(bucket_index), type_h(type_h) {}
     };
     PerStateInformation<int> state_h;
     PerStateInformation<int> state_type;
-    map<int, vector<Bucket>> type_buckets;
+    map<int, vector<TypeBucket>> type_buckets;
     vector<TypeDef> type_defs;
     
-    TypeDef cached_parent_type;
+    int cached_parent_type_bucket_index;
+    int cached_parent_type_h;
+
     int cached_parent_h;
+    int last_removed_key;
+    int last_removed_bucket_index;
 
     double alpha;
     double beta;
@@ -79,15 +82,20 @@ public:
 template<class Entry>
 void BTSInterBiasedOpenList<Entry>::notify_initial_state(const State &initial_state) {
     cached_parent_h = INT32_MAX;
-    cached_parent_type.bucket_index = -1;
-    cached_parent_type.type_h = -1;
+    cached_parent_type_bucket_index = -1;
+    cached_parent_type_h = -1;
+
+    last_removed_bucket_index = -1;
+    last_removed_key = -1;
 }
 
 template<class Entry>
 void BTSInterBiasedOpenList<Entry>::notify_state_transition(
     const State &parent_state, OperatorID op_id, const State &state) {
     int parent_type_index = state_type[parent_state];
-    cached_parent_type = type_defs[parent_type_index];
+    TypeDef parent_type = type_defs[parent_type_index];
+    cached_parent_type_bucket_index = parent_type.bucket_index;
+    cached_parent_type_h = parent_type.type_h;
     cached_parent_h = state_h[parent_state];
 }
 
@@ -105,13 +113,13 @@ void BTSInterBiasedOpenList<Entry>::do_insertion(
         TypeDef new_type_def(bucket_index, new_h);
         type_defs.push_back(new_type_def);
         
-        Bucket new_bucket(type_def_index, {entry});
+        TypeBucket new_bucket(type_def_index, {entry});
         type_buckets[new_h].push_back(new_bucket);
 
     } else {
-        int bucket_index = cached_parent_type.bucket_index;
-        type_def_index = type_buckets[cached_parent_type.type_h][bucket_index].type_def_i;
-        type_buckets[cached_parent_type.type_h][bucket_index].entries.push_back(entry);
+        int bucket_index = cached_parent_type_bucket_index;
+        type_def_index = type_buckets[cached_parent_type_h][bucket_index].type_def_i;
+        type_buckets[cached_parent_type_h][bucket_index].entries.push_back(entry);
     }
     state_h[eval_context.get_state()] = new_h;
     state_type[eval_context.get_state()] = type_def_index;
@@ -120,8 +128,28 @@ void BTSInterBiasedOpenList<Entry>::do_insertion(
 template<class Entry>
 Entry BTSInterBiasedOpenList<Entry>::remove_min() {
 
-    while(true) {
+    if (!(last_removed_bucket_index == -1) && !(last_removed_key == -1)) {
+        vector<TypeBucket> &buckets = type_buckets[last_removed_key];
+        if (buckets.empty())
+            type_buckets.erase(last_removed_key);
 
+        else {
+            TypeBucket &bucket = buckets[last_removed_bucket_index];
+            if (bucket.entries.empty()) {
+                utils::swap_and_pop_from_vector(buckets, last_removed_bucket_index);
+                if (last_removed_bucket_index < buckets.size())
+                    type_defs[buckets[last_removed_bucket_index].type_def_i].bucket_index = last_removed_bucket_index;
+
+                utils::swap_and_pop_from_vector(type_defs, bucket.type_def_i);
+                if (bucket.type_def_i < type_defs.size()) {
+                    TypeDef tmp = type_defs[bucket.type_def_i];
+                    type_buckets[tmp.type_h][tmp.bucket_index].type_def_i = bucket.type_def_i;
+                }
+            }
+        }
+    }
+
+    while(true) {
         int key = type_buckets.begin()->first;
         if (type_buckets.size() > 1) {
             double r = rng->random();
@@ -144,30 +172,15 @@ Entry BTSInterBiasedOpenList<Entry>::remove_min() {
             }
         }
 
-        vector<Bucket> &buckets = type_buckets[key];
-        if (buckets.empty()) {
-
-            type_buckets.erase(key);
+        vector<TypeBucket> &buckets = type_buckets[key];
+        if (buckets.empty()) 
             continue;
-        }
 
         int bucket_index = rng->random(buckets.size());
-        Bucket &bucket = type_buckets[key][bucket_index];
-        if (bucket.entries.empty()) {
-            
-            utils::swap_and_pop_from_vector(buckets, bucket_index);
-            if (bucket_index < buckets.size())
-                type_defs[buckets[bucket_index].type_def_i].bucket_index = bucket_index;
+        TypeBucket &bucket = type_buckets[key][bucket_index];
 
-            utils::swap_and_pop_from_vector(type_defs, bucket.type_def_i);
-            if (bucket.type_def_i < type_defs.size()) {
-                TypeDef tmp = type_defs[bucket.type_def_i];
-                type_buckets[tmp.type_h][tmp.bucket_index].type_def_i = bucket.type_def_i;
-            }
-
-
-            continue;
-        }
+        last_removed_bucket_index = bucket_index;
+        last_removed_key = key;
 
         int entry_index = rng->random(bucket.entries.size());
         Entry result = utils::swap_and_pop_from_vector(bucket.entries, entry_index);

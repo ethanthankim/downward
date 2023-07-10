@@ -27,10 +27,10 @@ class LWMInterBiasedOpenList : public OpenList<Entry> {
     shared_ptr<utils::RandomNumberGenerator> rng;
     shared_ptr<Evaluator> evaluator;
 
-    struct Bucket {
+    struct TypeBucket {
         int type_def_i;
         vector<Entry> entries;
-        Bucket(int type_def_i, const vector<Entry> &entries) 
+        TypeBucket(int type_def_i, const vector<Entry> &entries) 
             : type_def_i(type_def_i), entries(entries) {}
     };
     struct TypeDef {
@@ -41,10 +41,12 @@ class LWMInterBiasedOpenList : public OpenList<Entry> {
         TypeDef() : bucket_index(-1), type_h(-1) {}
     };
     PerStateInformation<int> state_type;
-    map<int, vector<Bucket>> type_buckets;
-    vector<TypeDef> type_defs;
+    map<int, vector<TypeBucket>> type_buckets;
+    map<int, TypeDef> type_defs;
     
     TypeDef cached_parent_type;
+    int last_removed_key;
+    int last_removed_bucket_index;
 
     double alpha;
     double beta;
@@ -78,6 +80,9 @@ template<class Entry>
 void LWMInterBiasedOpenList<Entry>::notify_initial_state(const State &initial_state) {
     cached_parent_type.bucket_index = -1;
     cached_parent_type.type_h = INT32_MAX;
+
+    last_removed_bucket_index = -1;
+    last_removed_key = -1;
 }
 
 template<class Entry>
@@ -97,11 +102,11 @@ void LWMInterBiasedOpenList<Entry>::do_insertion(
     if (new_h < cached_parent_type.type_h) { 
 
         int bucket_index = type_buckets[new_h].size();
-        type_def_index = type_defs.size();
+        type_def_index = eval_context.get_state().get_id().get_value();
         TypeDef new_type_def(bucket_index, new_h);
-        type_defs.push_back(new_type_def);
+        type_defs[type_def_index] = new_type_def;
         
-        Bucket new_bucket(type_def_index, {entry});
+        TypeBucket new_bucket(type_def_index, {entry});
         type_buckets[new_h].push_back(new_bucket);
 
     } else {
@@ -114,6 +119,21 @@ void LWMInterBiasedOpenList<Entry>::do_insertion(
 
 template<class Entry>
 Entry LWMInterBiasedOpenList<Entry>::remove_min() {
+
+    if (!(last_removed_bucket_index == -1) && !(last_removed_key == -1)) {
+
+        vector<TypeBucket> &buckets = type_buckets[last_removed_key];
+        TypeBucket bucket = buckets[last_removed_bucket_index];
+        if (bucket.entries.empty()) {
+            utils::swap_and_pop_from_vector(buckets, last_removed_bucket_index);
+            if (last_removed_bucket_index < buckets.size())
+                type_defs[buckets[last_removed_bucket_index].type_def_i].bucket_index = last_removed_bucket_index;
+            
+            type_defs.erase(bucket.type_def_i);
+            if (buckets.empty())
+                type_buckets.erase(last_removed_key);
+        }
+    }
 
     while(true) {
 
@@ -139,29 +159,12 @@ Entry LWMInterBiasedOpenList<Entry>::remove_min() {
             }
         }
 
-        vector<Bucket> &buckets = type_buckets[key];
-        if (buckets.empty()) {
-
-            type_buckets.erase(key);
-            continue;
-        }
-
+        vector<TypeBucket> &buckets = type_buckets[key];
         int bucket_index = rng->random(buckets.size());
-        Bucket &bucket = type_buckets[key][bucket_index];
-        if (bucket.entries.empty()) {
+        TypeBucket &bucket = type_buckets[key][bucket_index];
 
-            utils::swap_and_pop_from_vector(buckets, bucket_index);
-            if (bucket_index < buckets.size())
-                type_defs[buckets[bucket_index].type_def_i].bucket_index = bucket_index;
-
-            utils::swap_and_pop_from_vector(type_defs, bucket.type_def_i);
-            if (bucket.type_def_i < type_defs.size()) {
-                TypeDef tmp = type_defs[bucket.type_def_i];
-                type_buckets[tmp.type_h][tmp.bucket_index].type_def_i = bucket.type_def_i;
-            }
-
-            continue;
-        }
+        last_removed_bucket_index = bucket_index;
+        last_removed_key = key;
 
         int entry_index = rng->random(bucket.entries.size());
         Entry result = utils::swap_and_pop_from_vector(bucket.entries, entry_index);
