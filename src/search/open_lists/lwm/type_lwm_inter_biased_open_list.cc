@@ -88,8 +88,10 @@ void LWMInterBiasedOpenList<Entry>::notify_initial_state(const State &initial_st
 template<class Entry>
 void LWMInterBiasedOpenList<Entry>::notify_state_transition(
     const State &parent_state, OperatorID op_id, const State &state) {
-    int parent_type_index = state_type[parent_state];
-    cached_parent_type = type_defs[parent_type_index];
+
+    int parent_type = state_type[parent_state];
+    cached_parent_type = type_defs[parent_type];
+
 }
 
 template<class Entry>
@@ -103,6 +105,7 @@ void LWMInterBiasedOpenList<Entry>::do_insertion(
 
         int bucket_index = type_buckets[new_h].size();
         type_def_index = eval_context.get_state().get_id().get_value();
+
         TypeDef new_type_def(bucket_index, new_h);
         type_defs[type_def_index] = new_type_def;
         
@@ -120,7 +123,7 @@ void LWMInterBiasedOpenList<Entry>::do_insertion(
 template<class Entry>
 Entry LWMInterBiasedOpenList<Entry>::remove_min() {
 
-    if (!(last_removed_bucket_index == -1) && !(last_removed_key == -1)) {
+    if (!(last_removed_key == -1)) {
 
         vector<TypeBucket> &buckets = type_buckets[last_removed_key];
         TypeBucket bucket = buckets[last_removed_bucket_index];
