@@ -203,6 +203,27 @@ fast_downward_plugin(
 )
 
 fast_downward_plugin(
+    NAME TYPE_BTS_INTER_BIASED_INTRA_HEAP_OPEN_LIST
+    HELP "BTS entry state based type system open list with intra-bench exploration"
+    SOURCES
+        open_lists/bts/bts_inter_biased_intra_heap_open_list
+)
+
+fast_downward_plugin(
+    NAME TYPE_BTS_INTER_BIASED_INTRA_PERCOLATION_OPEN_LIST
+    HELP "BTS entry state based type system open list with intra-bench exploration"
+    SOURCES
+        open_lists/bts/bts_inter_biased_intra_percolation
+)
+
+fast_downward_plugin(
+    NAME TYPE_BTS_INTER_BIASED_INTRA_PERCOLATION_OPEN_LIST
+    HELP "BTS entry state based type system open list with intra-bench exploration"
+    SOURCES
+        open_lists/bts/bts_inter_epsilon_intra_epsilon
+)
+
+fast_downward_plugin(
     NAME TYPE_BTS_INTER_BIASED_OPEN_LIST
     HELP "BTS entry state based type system open list with intra-bench exploration"
     SOURCES

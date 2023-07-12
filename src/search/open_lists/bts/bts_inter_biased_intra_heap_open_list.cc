@@ -27,32 +27,54 @@ class BTSInterBiasedIntraHeapOpenList : public OpenList<Entry> {
     shared_ptr<Evaluator> evaluator;
 
     struct TypeNode {
+        int h;
+        int depth;
+        Entry entry;
+        TypeNode(int h, int depth, const Entry &entry) 
+            : h(h), depth(depth), entry(entry) {}
+        
+        bool operator>(const TypeNode &other) const {
+            if (h == other.h) return depth < other.depth;
+            return h > other.h;
+        }
+    };
+    struct TypeBucket {
+        int type_def_i;
+        vector<TypeNode> entries;
+        TypeBucket(int type_def_i, const vector<TypeNode> &entries) 
+            : type_def_i(type_def_i), entries(entries) {}
+    };
+    struct TypeDef {
         int bucket_index;
         int type_h;
-        int h;
-        Entry entry;
-        TypeNode(int bucket_index, int type_h, int h, const Entry &entry) 
-            : bucket_index(bucket_index), type_h(type_h), h(h), entry(entry) {}
+        TypeDef(int bucket_index, int type_h) 
+            : bucket_index(bucket_index), type_h(type_h) {};
+        TypeDef() : bucket_index(-1), type_h(-1) {}
     };
-    PerStateInformation<int> state_to_node_index;
-    map<int, vector<vector<int>>> type_buckets;
-    vector<TypeNode> all_nodes;
+    PerStateInformation<int> state_h;
+    PerStateInformation<int> state_type;
+    map<int, vector<TypeBucket>> type_buckets;
+    map<int, TypeDef> type_defs;
     
-    int cached_type_h;
+    int cached_parent_type_bucket_index;
+    int cached_parent_type_h;
+
     int cached_parent_h;
-    int cached_parent_bucket_index;
+    int last_removed_key;
+    int last_removed_bucket_index;
 
     double alpha;
     double beta;
     double epsilon;
 
 
+
 protected:
     virtual void do_insertion(
         EvaluationContext &eval_context, const Entry &entry) override;
 
-private:
-    bool node_at_index_1_bigger(const int& index1, const int& index2);
+// private:
+//     bool node_at_index_1_bigger(const int& index1, const int& index2);
 
 public:
     explicit BTSInterBiasedIntraHeapOpenList(const plugins::Options &opts);
@@ -75,62 +97,83 @@ public:
 
 template<class Entry>
 void BTSInterBiasedIntraHeapOpenList<Entry>::notify_initial_state(const State &initial_state) {
-    cached_type_h = -1;
     cached_parent_h = INT32_MAX;
-    cached_parent_bucket_index = -1;
+    cached_parent_type_bucket_index = -1;
+    cached_parent_type_h = -1;
+
+    last_removed_bucket_index = -1;
+    last_removed_key = -1;
 }
 
 template<class Entry>
 void BTSInterBiasedIntraHeapOpenList<Entry>::notify_state_transition(
     const State &parent_state, OperatorID op_id, const State &state) {
-    int cached_parent_index = state_to_node_index[parent_state];
-    TypeNode parent = all_nodes[cached_parent_index];
-    cached_parent_h = parent.h;
-    cached_parent_bucket_index = parent.bucket_index;
-    cached_type_h = parent.type_h;
+    int parent_type_i = state_type[parent_state];
+    TypeDef parent_type = type_defs[parent_type_i];
+    cached_parent_type_bucket_index = parent_type.bucket_index;
+    cached_parent_type_h = parent_type.type_h;
+    cached_parent_h = state_h[parent_state];
 }
 
-template<class Entry>
-bool BTSInterBiasedIntraHeapOpenList<Entry>::node_at_index_1_bigger(const int& index1, const int& index2) {
-    TypeNode first_node = all_nodes[index1];
-    TypeNode second_node = all_nodes[index2];
+// template<class Entry>
+// bool BTSInterBiasedIntraHeapOpenList<Entry>::node_at_index_1_bigger(const int& index1, const int& index2) {
+//     TypeNode first_node = all_nodes[index1];
+//     TypeNode second_node = all_nodes[index2];
 
-    // if (first_node.h == second_node.h) return first_node.depth < second_node.depth;
-    return first_node.h > second_node.h;
-}
+//     if (first_node.h == second_node.h) return first_node.depth < second_node.depth;
+//     return first_node.h > second_node.h;
+// }
 
 template<class Entry>
 void BTSInterBiasedIntraHeapOpenList<Entry>::do_insertion(
     EvaluationContext &eval_context, const Entry &entry) {
     
     int new_h = eval_context.get_evaluator_value_or_infinity(evaluator.get());
-    int type_index;
-    int node_index = all_nodes.size();
+    int type_def_index;
 
     if (new_h < cached_parent_h) { 
 
-        type_index = type_buckets[new_h].size();
-        type_buckets[new_h].push_back({node_index});
+        int bucket_index = type_buckets[new_h].size();
+        type_def_index = eval_context.get_state().get_id().get_value();
 
-        TypeNode new_type_node(type_index, new_h, new_h, entry);
-        all_nodes.push_back(new_type_node);
+        TypeDef new_type_def(bucket_index, new_h);
+        type_defs[type_def_index] = new_type_def;
+        
+        TypeNode new_node(new_h, 0, entry);
+        TypeBucket new_bucket(type_def_index, {new_node});
+        type_buckets[new_h].push_back(new_bucket);
 
     } else {
-        type_index = cached_parent_bucket_index;
-        type_buckets[cached_type_h][type_index].push_back(node_index);
-        TypeNode new_type_node(type_index, cached_type_h, new_h, entry);
-        all_nodes.push_back(new_type_node);
-        auto heap_compare = [&] (const int& elem1, const int& elem2) -> bool
-        {
-            return node_at_index_1_bigger(elem1, elem2);
-        };
-        push_heap(type_buckets[cached_type_h][type_index].begin(), type_buckets[cached_type_h][type_index].end(), heap_compare);
+        int bucket_index = cached_parent_type_bucket_index;
+        type_def_index = type_buckets[cached_parent_type_h][bucket_index].type_def_i;
+        TypeNode new_node(new_h, 0, entry);
+        type_buckets[cached_parent_type_h][bucket_index].entries.push_back(new_node);  
+        push_heap(
+            type_buckets[cached_parent_type_h][bucket_index].entries.begin(), 
+            type_buckets[cached_parent_type_h][bucket_index].entries.end(), 
+            greater<TypeNode>());  
     }
-    state_to_node_index[eval_context.get_state()] = node_index;
+    state_h[eval_context.get_state()] = new_h;
+    state_type[eval_context.get_state()] = type_def_index;
 }
 
 template<class Entry>
 Entry BTSInterBiasedIntraHeapOpenList<Entry>::remove_min() {
+
+    if (!(last_removed_key == -1)) {
+
+        vector<TypeBucket> &buckets = type_buckets[last_removed_key];
+        TypeBucket bucket = buckets[last_removed_bucket_index];
+        if (bucket.entries.empty()) {
+            utils::swap_and_pop_from_vector(buckets, last_removed_bucket_index);
+            if (last_removed_bucket_index < buckets.size())
+                type_defs[buckets[last_removed_bucket_index].type_def_i].bucket_index = last_removed_bucket_index;
+            
+            type_defs.erase(bucket.type_def_i);
+            if (buckets.empty())
+                type_buckets.erase(last_removed_key);
+        }
+    }
 
     while(true) {
 
@@ -156,22 +199,17 @@ Entry BTSInterBiasedIntraHeapOpenList<Entry>::remove_min() {
             }
         }
 
-        vector<vector<Entry>> &buckets = type_buckets[key];
-        if (buckets.empty()) {
-            type_buckets.erase(key);
-            continue;
-        }
+        vector<TypeBucket> &buckets = type_buckets[key];
+        int bucket_index = rng->random(buckets.size());
+        TypeBucket &bucket = type_buckets[key][bucket_index];
 
-        int type_index = rng->random(buckets.size());
-        vector<Entry> &bucket = type_buckets[key][type_index];
-        if (bucket.empty()) {
-            utils::swap_and_pop_from_vector(buckets, type_index);
-            continue;
-        }
+        last_removed_bucket_index = bucket_index;
+        last_removed_key = key;
 
-        int entry_index = rng->random(bucket.size());
-        Entry result = utils::swap_and_pop_from_vector(bucket, entry_index);
-        return result;
+        pop_heap(bucket.entries.begin(), bucket.entries.end(), greater<TypeNode>());
+        TypeNode heap_node = bucket.entries.back();
+        bucket.entries.pop_back();
+        return heap_node.entry;
 
     }
 }
@@ -193,7 +231,6 @@ bool BTSInterBiasedIntraHeapOpenList<Entry>::empty() const {
 template<class Entry>
 void BTSInterBiasedIntraHeapOpenList<Entry>::clear() {
     type_buckets.clear();
-    all_nodes.clear();
 }
 
 template<class Entry>

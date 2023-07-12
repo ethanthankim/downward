@@ -1,1 +1,1 @@
-../../../../../../../../benchmarks-test/elevators-sat11-strips/domain.pddl
+../../../../../../../../benchmarks-test/barman-opt11-strips/domain.pddl
