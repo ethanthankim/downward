@@ -1,1 +1,1 @@
-../../../../../../../../benchmarks-test/barman-opt11-strips/domain.pddl
+../../../../../../../../benchmarks-test/blocksworld/domain.pddl

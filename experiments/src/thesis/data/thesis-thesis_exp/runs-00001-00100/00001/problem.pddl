@@ -1,1 +1,1 @@
-../../../../../../../../benchmarks-test/barman-opt11-strips/pfile02-007.pddl
+../../../../../../../../benchmarks-test/gripper/p02.pddl

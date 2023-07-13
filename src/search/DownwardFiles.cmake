@@ -217,10 +217,17 @@ fast_downward_plugin(
 )
 
 fast_downward_plugin(
-    NAME TYPE_BTS_INTER_BIASED_INTRA_PERCOLATION_OPEN_LIST
+    NAME TYPE_BTS_INTER_EPSILON_INTRA_EPSILON_OPEN_LIST
     HELP "BTS entry state based type system open list with intra-bench exploration"
     SOURCES
         open_lists/bts/bts_inter_epsilon_intra_epsilon
+)
+
+fast_downward_plugin(
+    NAME TYPE_LWM_INTER_EPSILON_INTRA_EPSILON_OPEN_LIST
+    HELP "LWM entry state based type system open list with intra-bench exploration"
+    SOURCES
+        open_lists/lwm/lwm_inter_epsilon_intra_epsilon
 )
 
 fast_downward_plugin(

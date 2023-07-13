@@ -51,8 +51,8 @@ def main():
             "--always"]
 
     CONFIGS = [
-        IssueConfig('lwm', ["--evaluator", "h=ff()", '--search', 'eager(lwm_inter_biased(hff))'], driver_options=DRIVER_OPTIONS),
-        IssueConfig('bts', ["--evaluator", "h=ff()", '--search', 'eager(bts_inter_biased(hff))'], driver_options=DRIVER_OPTIONS),
+        IssueConfig('lwm', ["--evaluator", "h=ff()", '--search', 'eager(lwm_inter_biased(h))'], driver_options=DRIVER_OPTIONS),
+        IssueConfig('bts', ["--evaluator", "h=ff()", '--search', 'eager(bts_inter_biased(h))'], driver_options=DRIVER_OPTIONS),
         # IssueConfig('gbfs', ["--evaluator", "h=ff()", '--search', 'eager(single(h))'], driver_options=DRIVER_OPTIONS),
         # IssueConfig('lwm-intra', ["--evaluator", "h=ff()", '--search', 'eager( alt( [lwm_intra_explore_type(h), single(h)] ) )'], driver_options=DRIVER_OPTIONS),
         # IssueConfig('bts', ["--evaluator", "h=ff()", '--search', 'eager(alt([bts_type(h), single(h)]))'], driver_options=DRIVER_OPTIONS),

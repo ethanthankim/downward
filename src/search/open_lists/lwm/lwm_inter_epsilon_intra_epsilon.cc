@@ -1,4 +1,4 @@
-#include "bts_inter_epsilon_intra_epsilon.h"
+#include "lwm_inter_epsilon_intra_epsilon.h"
 
 #include "../../evaluator.h"
 #include "../../open_list.h"
@@ -20,9 +20,9 @@
 
 using namespace std;
 
-namespace inter_epsilon_intra_epsilon_open_list {
+namespace lwm_inter_epsilon_intra_epsilon_open_list {
 template<class Entry>
-class BTSInterEpIntraEpOpenList : public OpenList<Entry> {
+class LWMInterEpIntraEpOpenList : public OpenList<Entry> {
     shared_ptr<utils::RandomNumberGenerator> rng;
     shared_ptr<Evaluator> evaluator;
 
@@ -43,13 +43,12 @@ class BTSInterEpIntraEpOpenList : public OpenList<Entry> {
             : type_h(type_h), entries(entries) {};
         TypeDef() : type_h(-1), entries({}){}
     };
-    PerStateInformation<int> state_h;
     PerStateInformation<int> state_type;
     vector<int> type_defs_index_heap;
     map<int, TypeDef> type_defs;
     
     int cached_parent_type_def_i;
-    int cached_parent_h;
+    int cached_type_h;
 
     int last_removed_key;
     int last_removed_bucket_index;
@@ -69,8 +68,8 @@ private:
     void adjust_node_up(vector<TypeNode> &heap, size_t pos);    
 
 public:
-    explicit BTSInterEpIntraEpOpenList(const plugins::Options &opts);
-    virtual ~BTSInterEpIntraEpOpenList() override = default;
+    explicit LWMInterEpIntraEpOpenList(const plugins::Options &opts);
+    virtual ~LWMInterEpIntraEpOpenList() override = default;
 
     virtual Entry remove_min() override;
     virtual bool empty() const override;
@@ -88,23 +87,23 @@ public:
 
 
 template<class Entry>
-void BTSInterEpIntraEpOpenList<Entry>::notify_initial_state(const State &initial_state) {
-    cached_parent_h = INT32_MAX;
+void LWMInterEpIntraEpOpenList<Entry>::notify_initial_state(const State &initial_state) {
+    cached_type_h = INT32_MAX;
 
     last_removed_bucket_index = -1;
     last_removed_key = -1;
 }
 
 template<class Entry>
-void BTSInterEpIntraEpOpenList<Entry>::notify_state_transition(
+void LWMInterEpIntraEpOpenList<Entry>::notify_state_transition(
     const State &parent_state, OperatorID op_id, const State &state) {
 
     cached_parent_type_def_i = state_type[parent_state];
-    cached_parent_h = state_h[parent_state];
+    cached_type_h = type_defs[cached_parent_type_def_i].type_h;
 }
 
 template<class Entry>
-bool BTSInterEpIntraEpOpenList<Entry>::type_at_index_1_bigger(const int& index1, const int& index2) {
+bool LWMInterEpIntraEpOpenList<Entry>::type_at_index_1_bigger(const int& index1, const int& index2) {
     TypeDef first_type = type_defs[index1];
     TypeDef second_type = type_defs[index2];
 
@@ -112,13 +111,13 @@ bool BTSInterEpIntraEpOpenList<Entry>::type_at_index_1_bigger(const int& index1,
 }
 
 template<class Entry>
-void BTSInterEpIntraEpOpenList<Entry>::do_insertion(
+void LWMInterEpIntraEpOpenList<Entry>::do_insertion(
     EvaluationContext &eval_context, const Entry &entry) {
     
     int new_h = eval_context.get_evaluator_value_or_infinity(evaluator.get());
     int type_def_index;
 
-    if (new_h < cached_parent_h) { 
+    if (new_h < cached_type_h) { 
 
         TypeNode new_node(new_h, entry);
         TypeDef new_type_def(new_h, {new_node});
@@ -145,12 +144,11 @@ void BTSInterEpIntraEpOpenList<Entry>::do_insertion(
             cached_parent_type_def.entries.end(), 
             greater<TypeNode>());  
     }
-    state_h[eval_context.get_state()] = new_h;
     state_type[eval_context.get_state()] = type_def_index;
 }
 
 template<class Entry>
-void BTSInterEpIntraEpOpenList<Entry>::adjust_type_up(vector<int> &type_heap, size_t pos) {
+void LWMInterEpIntraEpOpenList<Entry>::adjust_type_up(vector<int> &type_heap, size_t pos) {
     while (pos != 0) {
         size_t parent_pos = (pos - 1) / 2;
         if (type_at_index_1_bigger(type_heap[pos], type_heap[parent_pos])) {
@@ -162,7 +160,7 @@ void BTSInterEpIntraEpOpenList<Entry>::adjust_type_up(vector<int> &type_heap, si
 }
 
 template<class Entry>
-void BTSInterEpIntraEpOpenList<Entry>::adjust_node_up(vector<TypeNode> &heap, size_t pos) {
+void LWMInterEpIntraEpOpenList<Entry>::adjust_node_up(vector<TypeNode> &heap, size_t pos) {
     assert(utils::in_bounds(pos, heap));
     while (pos != 0) {
         size_t parent_pos = (pos - 1) / 2;
@@ -175,7 +173,7 @@ void BTSInterEpIntraEpOpenList<Entry>::adjust_node_up(vector<TypeNode> &heap, si
 }
 
 template<class Entry>
-Entry BTSInterEpIntraEpOpenList<Entry>::remove_min() {
+Entry LWMInterEpIntraEpOpenList<Entry>::remove_min() {
     int pos, type_i;
     
     // select a type
@@ -222,7 +220,7 @@ Entry BTSInterEpIntraEpOpenList<Entry>::remove_min() {
 }
 
 template<class Entry>
-BTSInterEpIntraEpOpenList<Entry>::BTSInterEpIntraEpOpenList(const plugins::Options &opts)
+LWMInterEpIntraEpOpenList<Entry>::LWMInterEpIntraEpOpenList(const plugins::Options &opts)
     : rng(utils::parse_rng_from_options(opts)),
       evaluator(opts.get<shared_ptr<Evaluator>>("eval")), 
       inter_e(opts.get<double>("inter_e")),
@@ -230,52 +228,52 @@ BTSInterEpIntraEpOpenList<Entry>::BTSInterEpIntraEpOpenList(const plugins::Optio
 }
 
 template<class Entry>
-bool BTSInterEpIntraEpOpenList<Entry>::empty() const {
+bool LWMInterEpIntraEpOpenList<Entry>::empty() const {
     return type_defs.empty();
 }
 
 template<class Entry>
-void BTSInterEpIntraEpOpenList<Entry>::clear() {
+void LWMInterEpIntraEpOpenList<Entry>::clear() {
     type_defs_index_heap.clear();
     type_defs.clear();
 }
 
 template<class Entry>
-bool BTSInterEpIntraEpOpenList<Entry>::is_dead_end(
+bool LWMInterEpIntraEpOpenList<Entry>::is_dead_end(
     EvaluationContext &eval_context) const {
     return eval_context.is_evaluator_value_infinite(evaluator.get());
 }
 
 template<class Entry>
-bool BTSInterEpIntraEpOpenList<Entry>::is_reliable_dead_end(
+bool LWMInterEpIntraEpOpenList<Entry>::is_reliable_dead_end(
     EvaluationContext &eval_context) const {
     return is_dead_end(eval_context) && evaluator->dead_ends_are_reliable();
 }
 
 template<class Entry>
-void BTSInterEpIntraEpOpenList<Entry>::get_path_dependent_evaluators(
+void LWMInterEpIntraEpOpenList<Entry>::get_path_dependent_evaluators(
     set<Evaluator *> &evals) {
     evaluator->get_path_dependent_evaluators(evals);
 }
 
-BTSInterEpIntraEpOpenListFactory::BTSInterEpIntraEpOpenListFactory(
+LWMInterEpIntraEpOpenListFactory::LWMInterEpIntraEpOpenListFactory(
     const plugins::Options &options)
     : options(options) {
 }
 
 unique_ptr<StateOpenList>
-BTSInterEpIntraEpOpenListFactory::create_state_open_list() {
-    return utils::make_unique_ptr<BTSInterEpIntraEpOpenList<StateOpenListEntry>>(options);
+LWMInterEpIntraEpOpenListFactory::create_state_open_list() {
+    return utils::make_unique_ptr<LWMInterEpIntraEpOpenList<StateOpenListEntry>>(options);
 }
 
 unique_ptr<EdgeOpenList>
-BTSInterEpIntraEpOpenListFactory::create_edge_open_list() {
-    return utils::make_unique_ptr<BTSInterEpIntraEpOpenList<EdgeOpenListEntry>>(options);
+LWMInterEpIntraEpOpenListFactory::create_edge_open_list() {
+    return utils::make_unique_ptr<LWMInterEpIntraEpOpenList<EdgeOpenListEntry>>(options);
 }
 
-class BTSInterEpIntraEpOpenListFeature : public plugins::TypedFeature<OpenListFactory, BTSInterEpIntraEpOpenListFactory> {
+class LWMInterEpIntraEpOpenListFeature : public plugins::TypedFeature<OpenListFactory, LWMInterEpIntraEpOpenListFactory> {
 public:
-    BTSInterEpIntraEpOpenListFeature() : TypedFeature("bts_inter_ep_intra_ep") {
+    LWMInterEpIntraEpOpenListFeature() : TypedFeature("lwm_inter_ep_intra_ep") {
         document_title("Type system to approximate bench transition system (BTS) and perform both inter- and intra-bench exploration");
         document_synopsis(
             "Uses local search tree minima to assign entries to a bucket. "
@@ -300,5 +298,5 @@ public:
     }
 };
 
-static plugins::FeaturePlugin<BTSInterEpIntraEpOpenListFeature> _plugin;
+static plugins::FeaturePlugin<LWMInterEpIntraEpOpenListFeature> _plugin;
 }
