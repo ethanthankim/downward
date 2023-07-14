@@ -51,8 +51,10 @@ def main():
             "--always"]
 
     CONFIGS = [
-        IssueConfig('lwm', ["--evaluator", "h=ff()", '--search', 'eager(lwm_inter_biased_intra_epsilon(h, intra_e=0.5))'], driver_options=DRIVER_OPTIONS),
-        IssueConfig('bts', ["--evaluator", "h=ff()", '--search', 'eager(bts_inter_biased_intra_epsilon(h, intra_e=0.5))'], driver_options=DRIVER_OPTIONS),
+        IssueConfig('lwm-biased', ["--evaluator", "h=ff()", '--search', 'eager(lwm_inter_biased_intra_epsilon(h, intra_e=0.5))'], driver_options=DRIVER_OPTIONS),
+        IssueConfig('bts-biased', ["--evaluator", "h=ff()", '--search', 'eager(bts_inter_biased_intra_epsilon(h, intra_e=0.5))'], driver_options=DRIVER_OPTIONS),
+        IssueConfig('lwm-epsilon', ["--evaluator", "h=ff()", '--search', 'eager(alt([single(h), lwm_inter_ep_intra_ep(h, 0.5, 0.5)]))'], driver_options=DRIVER_OPTIONS),
+        IssueConfig('bts-epsilon', ["--evaluator", "h=ff()", '--search', 'eager(alt([single(h), bts_inter_ep_intra_ep(h, 0.5, 0.5)]))'], driver_options=DRIVER_OPTIONS),
         # IssueConfig('gbfs', ["--evaluator", "h=ff()", '--search', 'eager(single(h))'], driver_options=DRIVER_OPTIONS),
         # IssueConfig('lwm-intra', ["--evaluator", "h=ff()", '--search', 'eager( alt( [lwm_intra_explore_type(h), single(h)] ) )'], driver_options=DRIVER_OPTIONS),
         # IssueConfig('bts', ["--evaluator", "h=ff()", '--search', 'eager(alt([bts_type(h), single(h)]))'], driver_options=DRIVER_OPTIONS),
