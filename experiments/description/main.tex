@@ -1,0 +1,76 @@
+
+\documentclass{article} 
+\usepackage{amsthm, amssymb}
+\usepackage[a4paper,
+            bindingoffset=0.2in,
+            left=1in,
+            right=1in,
+            top=1in,
+            bottom=1in,
+            footskip=.25in]{geometry}
+            
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+
+
+\title{Experiment Descriptions}
+\author{}
+
+\date{}
+\begin{document}
+\maketitle
+\pagestyle{plain}
+
+\section{Definitions}
+Given a state space topology $\langle S, h \rangle$ with state space $S$ and heuristic $h$: 
+\begin{definition}
+    \textbf{Heuristic Plateau:} the heuristic plateau of state $s \in S$, denoted $P_h(s)$, is the set of all states $s' \in S$ such that $h(s) = h(s')$
+\end{definition}
+
+\begin{definition}
+    \textbf{Connected Heuristic Plateau:} the connected heuristic plateau of state $s \in S$, denoted $P^c_h(s)$, is the set of all states $s' \in S$ such that $h(s) = h(s')$ and $s'$ is reachable from $s$ using only states $s'' \in P_h(s)$
+\end{definition}
+
+\begin{definition}
+    \textbf{Heuristic Crater:} the  heuristic crater of a state $s \in S$, denoted $C_h(s)$, is the set of all states $s' \in S$ such that $h(s') \geq h(s)$
+\end{definition}
+
+\begin{definition}
+    \textbf{Connected Heuristic Crater:} the connected heuristic crater of a state $s \in S$, denoted $C^c_h(s)$, is the set of all states $s' \in S$ such that $h(s') \geq h(s)$ and $s'$ is reachable from $s$ using only states $s'' \in C_h(s)$. 
+\end{definition}
+
+For some state $s \in S$, $P_h(s) \subset C_h(s)$ and $P^c_h(s) \subset C^c_h(s)$. A connected plateau is the \textit{flat} region at the bottom of a crater. 
+
+\section{Breadth-Based Diversification (Path Sensitivity)}
+One shortcoming of many type-based diversification strategies is that they don't distinguish states by breadth; only notions of depth (h, g, d) are used to bucket nodes, but there is no path sensitivity. For example, nodes in Fan's Type-Based Exploration, are bucketted by the tuple $\langle g, h \rangle$, meaning nodes in the same bucket are on the same plateau, but not necessarily on the same connected plateau. This lack of path sensitivity can lead to pathological behaviour in many exploration techniques due to the large numbers of nodes that end up getting bucketted together when bucketted globally. 
+
+The following experiments are meant to empirically assess the importance of path sensitivity in stochastic exploration techniques.
+
+\subsection{Biased Exploration with Path Sensitivity}
+This experiment will compare Kuroiwa's Biased Exploration, denoted Softmin-Type(h), with biased inter-plateau exploration and uniform intra-plateau exploration over the HI partitioning system, denoted HI-Softmin-Uniform(h). Both will use queue alternation with a minimum heap over h.  
+
+Softmin-Type(h) works by bucketting nodes in the same way as Fan's, but during selection it will first choose an $h$ in a biased way (preferring low $h$ values), and then choose uniformly from the buckets with that $h$-value (which means uniformly choosing a $g$-value from the candidate buckets). HI-Softmin-Uniform(h) will select types in a near identical way, with the only difference being that the $g$-value isn't used in the bucket key, but both will still select a bucket uniformly from the candidate buckets according to the selected $h$.
+
+This experiment seeks to explore the idea that Kuroiwa's Biased Exploration might benefit from path sensitivity. And more generally, it seeks to investigate the idea that the pathological behaviour path sensitivity helps avoid is common enough for it to be a useful wrinkle to introduce to an exploration technique.  
+
+\subsection{Type-Based Exploration with Path Sensitivity}
+This experiment will compare Fan's Type-Based Exploration, denoted Type-Based(h), with uniform inter-plateau exploration and uniform intra-plateau exploration over the HI partitioning system, denoted HI-Uniform$^2$(h). Both will use queue alternation with a minimum heap over h.  
+
+Type-Based(h) works by bucketting nodes according to the tuple $\langle h, g \rangle$ and during selection a bucket will be chosen uniformly at random, and then choose a node uniformly from that bucket. HI-Uniform$^2$(h) will partition nodes by HI and during a selection a random bucket will be chosen followed by a random node from that bucket.
+
+Like above, this experiment seeks to explore the idea that Type-Based exploration might benefit from path sensitivity. And more generally, it seeks to explore the idea that path sensitivity is a useful approach in exploration.
+
+\section{Inter- and Intra- Plateau Exploration}
+Asai \textit{et al.} noted the orthogonal and complementary nature of intra- vs. inter-exploration and demonstrated their orthogonality empirically. 
+
+In an attempt confirm their results and investigate the relative importance of inter- vs. intra- exploration, the HI partitioning system will be used to investigate the relative importance of the two approaches. 
+
+\subsection{Inter vs. Intra Plateau Exploration}
+To start, I want to demonstrate that both inter- and intra-plateau exploration are independently beneficial to GBFS. To do this, I will compare \textit{pure inter-exploration}, \textit{pure intra-exploration}, and GBFS. \textit{Pure inter-exploration} is HI-Uniform-Greedy(h), while \textit{pure intra-exploration} works a bit different: at each exploration step, the type of the minimum h-valued state is selected, and then a node from that type is chosen uniformly at random; this will be denoted HI-Greedy-Uniform(h). Both will use alternation with a minimum heap. 
+
+This experiment will hopefully demonstrate that GBFS benefits from diversification both for inter-plateau exploration and intra-exploration. 
+
+\subsection{Combined Inter- and Intra- Plateau Exploration}
+This experiment will hopefully confirm Asai's result that inter- and intra- are orthogonal and complementary. HI-Uniform-Uniform(h) with alternation should outperform GBFS, HI-Greedy-Uniform(h) and HI-Uniform-Greedy(h).
+
+\end{document}
