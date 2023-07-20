@@ -68,9 +68,17 @@ In an attempt confirm their results and investigate the relative importance of i
 \subsection{Inter vs. Intra Plateau Exploration}
 To start, I want to demonstrate that both inter- and intra-plateau exploration are independently beneficial to GBFS. To do this, I will compare \textit{pure inter-exploration}, \textit{pure intra-exploration}, and GBFS. \textit{Pure inter-exploration} is HI-Uniform-Greedy(h), while \textit{pure intra-exploration} works a bit different: at each exploration step, the type of the minimum h-valued state is selected, and then a node from that type is chosen uniformly at random; this will be denoted HI-Greedy-Uniform(h). Both will use alternation with a minimum heap. 
 
-This experiment will hopefully demonstrate that GBFS benefits from diversification both for inter-plateau exploration and intra-exploration. 
+This experiment will hopefully demonstrate that GBFS benefits from diversification both for inter-plateau exploration and intra-exploration. I do expect \textit{pure intra-exploration} to perform worse due to the possibility for pathological behaviour in doing greedy type select (see section 4). 
 
 \subsection{Combined Inter- and Intra- Plateau Exploration}
 This experiment will hopefully confirm Asai's result that inter- and intra- are orthogonal and complementary. HI-Uniform-Uniform(h) with alternation should outperform GBFS, HI-Greedy-Uniform(h) and HI-Uniform-Greedy(h).
+
+\subsection{Intra-Plateau Exploration}
+In this experiment I want to start understanding the relative importance of intra-plateau exploration along with how much is too much. To do this, 3 versions of HI-Uniform-Epsilon(h) will be run. In all cases the inter-plateau step will choose a type uniformly at random, for the second step, with probability $\epsilon$ choose a random node from the type, otherwise choose the minimum node from the type. This will be tested with $\epsilon=0.2,0.5,1.0$ giving HI-Uniform-0.2(h), HI-Uniform-0.5(h), and HI-Uniform-1.0(h) respectively.
+
+\section{Pathological Behaviour of Greedy Type Selection}
+Greedily choosing a type should sometimes result in pathological behaviour. If the selected type does not lead to a goal node than its continued selection will result in exhausting all nodes reachable from that type until it and all generated types are empty allowing the search to finally select a type that can actually lead to a goal. To test this idea, I will compare 3 instances of HI-Epsilon-Uniform(h), setting $\epsilon=0.0, 0.01, 0.5$.
+
+The expected behaviour of here is that setting $\epsilon=0.0$ will result in many searches timing out or running out of resources as they try to exhaust unproductive paths. Setting $0.01$, should partially mitigate this, but at 1\% exploration I still expect many timeouts. Setting $\epsilon=0.5$ should perform the best.
 
 \end{document}

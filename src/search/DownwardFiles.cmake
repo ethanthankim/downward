@@ -224,6 +224,13 @@ fast_downward_plugin(
 )
 
 fast_downward_plugin(
+    NAME TYPE_BTS_INTER_LWM_INTRA_EPSILON_OPEN_LIST
+    HELP "BTS entry state based type system open list with intra-bench exploration"
+    SOURCES
+        open_lists/bts/bts_inter_lwm_intra_epsilon
+)
+
+fast_downward_plugin(
     NAME TYPE_BTS_INTER_EPSILON_INTRA_EPSILON_OPEN_LIST
     HELP "BTS entry state based type system open list with intra-bench exploration"
     SOURCES
