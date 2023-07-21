@@ -51,8 +51,14 @@ def main():
             "--always"]
 
     CONFIGS = [
-        IssueConfig('HI-uniform2', ["--evaluator", "h=ff()", '--search', 'eager(alt([single(h), bts_inter_ep_intra_ep(h, inter_e=1.0, intra_e=1.0)]))'], driver_options=DRIVER_OPTIONS),
-        IssueConfig('type-based', ["--evaluator", "h=ff()", '--search', 'eager( alt( [single(h), type_based( [h, g()] )] ))'], driver_options=DRIVER_OPTIONS),
+        IssueConfig('HI-pure-inter', ["--evaluator", "h=ff()", '--search', 'eager(alt([single(h), bts_inter_ep_intra_ep(h, inter_e=1.0, intra_e=0.0)]))'], driver_options=DRIVER_OPTIONS),
+        IssueConfig('HI-pure-intra', ["--evaluator", "h=ff()", '--search', 'eager( alt( [single(h), bts_inter_greedy_intra_ep(h, inter_e=0.0, intra_e=1.0)]))'], driver_options=DRIVER_OPTIONS),
+        IssueConfig('HI-uniform-uniform', ["--evaluator", "h=ff()", '--search', 'eager( alt( [single(h), bts_inter_ep_intra_ep(h, inter_e=1.0, intra_e=1.0)]))'], driver_options=DRIVER_OPTIONS),
+        
+        # IssueConfig('HI-lwm0.5-ep0.5', ["--evaluator", "h=ff()", '--search', 'eager(bts_inter_lwm_intra_ep(h, inter_e=0.5, intra_e=0.5))'], driver_options=DRIVER_OPTIONS),
+        # IssueConfig('HI-greedy0.5-ep0.5', ["--evaluator", "h=ff()", '--search', 'eager(bts_inter_greedy_intra_ep(h, inter_e=0.5, intra_e=0.5))'], driver_options=DRIVER_OPTIONS),
+        
+        
         # IssueConfig('lwm-epsilon', ["--evaluator", "h=ff()", '--search', 'eager(alt([single(h), lwm_inter_ep_intra_ep(h, 0.5, 0.5)]))'], driver_options=DRIVER_OPTIONS),
         # IssueConfig('bts-epsilon', ["--evaluator", "h=ff()", '--search', 'eager(alt([single(h), bts_inter_ep_intra_ep(h, 0.5, 0.5)]))'], driver_options=DRIVER_OPTIONS),
         # IssueConfig('gbfs', ["--evaluator", "h=ff()", '--search', 'eager(single(h))'], driver_options=DRIVER_OPTIONS),
