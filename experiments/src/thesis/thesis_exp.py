@@ -50,10 +50,12 @@ def main():
             # additional options later.
             "--always"]
 
+    ff = 'ff(transform=adapt_costs(cost_type=one))'
     CONFIGS = [
-        IssueConfig('HI-pure-inter', ["--evaluator", "h=ff()", '--search', 'eager(alt([single(h), bts_inter_ep_intra_ep(h, inter_e=1.0, intra_e=0.0)]))'], driver_options=DRIVER_OPTIONS),
-        IssueConfig('HI-pure-intra', ["--evaluator", "h=ff()", '--search', 'eager( alt( [single(h), bts_inter_greedy_intra_ep(h, inter_e=0.0, intra_e=1.0)]))'], driver_options=DRIVER_OPTIONS),
-        IssueConfig('HI-uniform-uniform', ["--evaluator", "h=ff()", '--search', 'eager( alt( [single(h), bts_inter_ep_intra_ep(h, inter_e=1.0, intra_e=1.0)]))'], driver_options=DRIVER_OPTIONS),
+        IssueConfig('HI-pure-inter', ["--evaluator", f"h={ff}", '--search', 'eager(bts_inter_greedy_intra_ep(h, inter_e=1.0, intra_e=0.0))'], driver_options=DRIVER_OPTIONS),
+        IssueConfig('HI-pure-intra', ["--evaluator", f"h={ff}", '--search', 'eager(bts_inter_greedy_intra_ep(h, inter_e=0.0, intra_e=1.0))'], driver_options=DRIVER_OPTIONS),
+        # IssueConfig('HI-alt-uniform', ["--evaluator", f"h={ff}", '--search', 'eager(bts_inter_greedy_intra_ep(h, inter_e=1.0, intra_e=1.0))'], driver_options=DRIVER_OPTIONS),
+        IssueConfig('HI-combined', ["--evaluator", f"h={ff}", '--search', 'eager(bts_inter_greedy_intra_ep(h, inter_e=0.5, intra_e=0.5))'], driver_options=DRIVER_OPTIONS),
         
         # IssueConfig('HI-lwm0.5-ep0.5', ["--evaluator", "h=ff()", '--search', 'eager(bts_inter_lwm_intra_ep(h, inter_e=0.5, intra_e=0.5))'], driver_options=DRIVER_OPTIONS),
         # IssueConfig('HI-greedy0.5-ep0.5', ["--evaluator", "h=ff()", '--search', 'eager(bts_inter_greedy_intra_ep(h, inter_e=0.5, intra_e=0.5))'], driver_options=DRIVER_OPTIONS),

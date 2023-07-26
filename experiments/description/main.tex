@@ -8,6 +8,8 @@
             top=1in,
             bottom=1in,
             footskip=.25in]{geometry}
+\usepackage{array}
+\usepackage{makecell}
             
 \theoremstyle{definition}
 \newtheorem{definition}{Definition}[section]
@@ -40,6 +42,15 @@ Given a state space topology $\langle S, h \rangle$ with state space $S$ and heu
 \end{definition}
 
 For some state $s \in S$, $P_h(s) \subset C_h(s)$ and $P^c_h(s) \subset C^c_h(s)$. A connected plateau is the \textit{flat} region at the bottom of a crater. 
+
+\section{Exploration Configurations: Summary}
+\begin{tabular}{ | c | c | c | } 
+    \hline
+    Partition System & Inter-Plateau Policy & Intra-Plateau Policy \\
+    \hline
+    \makecell{HI\\LWM\\(h,g)\\h}& \makecell{Epsilon Greedy\\Uninformed\\h-Bias\\Invasion Percolation\\Depth\\Epsilon LWM\\Alternation} & \makecell{Epsilon Greedy\\Uninformed\\h-Bias\\Invasion Percolation\\Depth} \\ 
+    \hline
+\end{tabular}
 
 \section{Breadth-Based Diversification (Path Sensitivity)}
 One shortcoming of many type-based diversification strategies is that they don't distinguish states by breadth; only notions of depth (h, g, d) are used to bucket nodes, but there is no path sensitivity. For example, nodes in Fan's Type-Based Exploration, are bucketted by the tuple $\langle g, h \rangle$, meaning nodes in the same bucket are on the same plateau, but not necessarily on the same connected plateau. This lack of path sensitivity can lead to pathological behaviour in many exploration techniques due to the large numbers of nodes that end up getting bucketted together when bucketted globally. 

@@ -26,34 +26,23 @@ class BTSInterGreedyIntraEpOpenList : public OpenList<Entry> {
     shared_ptr<utils::RandomNumberGenerator> rng;
     shared_ptr<Evaluator> evaluator;
 
-    struct TypeNode {
+    using Type = int;
+    using TypeLoc = int;
+    struct StateType {
+        Type type_key;
         int h;
         Entry entry;
-        TypeNode(int h, const Entry &entry) 
-            : h(h), entry(entry) {}
-        
-        bool operator>(const TypeNode &other) const {
-            return h > other.h;
-        }
+        StateType(Type type_key, int h, const Entry &entry) 
+            : type_key(type_key), h(h), entry(entry) {};
     };
-    struct TypeDef {
-        int type_h;
-        vector<TypeNode> entries;
-        TypeDef(int type_h, const vector<TypeNode> &entries) 
-            : type_h(type_h), entries(entries) {};
-        TypeDef() : type_h(-1), entries({}){}
-    };
-    PerStateInformation<int> state_h;
-    PerStateInformation<int> state_type;
-    map<int, TypeDef> type_defs;
-    vector<pair<int, int>> node_heap;
+    unordered_map<int, StateType> state_types;
+    unordered_map<Type, pair<TypeLoc, vector<int>>> type_buckets;
+    vector<Type> type_heap;
 
-
-    int cached_parent_type_def_i;
+    Type cached_parent_key;
+    int cached_parent_id;
     int cached_parent_h;
-
-    int last_removed_key;
-    int last_removed_bucket_index;
+    int num_types = 0;
 
     double inter_e;
     double intra_e;
@@ -65,8 +54,12 @@ protected:
         EvaluationContext &eval_context, const Entry &entry) override;
 
 private:
-    void adjust_type_node_up(vector<TypeNode> &heap, size_t pos);  
-    void adjust_node_up(vector<int> &type_heap, size_t pos);  
+    // bool node_at_index_1_bigger(const int& index1, const int& index2);  
+    void adjust_type_node_up(vector<int> &heap, size_t pos);
+    void adjust_type_down(vector<Type> &heap, int loc); 
+    void adjust_type_up(vector<Type> &heap, int loc);   
+    void move_to_top(vector<Type> &heap, int loc); 
+    inline int state_h(int state_id);
 
 public:
     explicit BTSInterGreedyIntraEpOpenList(const plugins::Options &opts);
@@ -90,62 +83,62 @@ public:
 template<class Entry>
 void BTSInterGreedyIntraEpOpenList<Entry>::notify_initial_state(const State &initial_state) {
     cached_parent_h = INT32_MAX;
-
-    last_removed_bucket_index = -1;
-    last_removed_key = -1;
 }
 
 template<class Entry>
 void BTSInterGreedyIntraEpOpenList<Entry>::notify_state_transition(
     const State &parent_state, OperatorID op_id, const State &state) {
+    
+    StateType tmp = state_types.at(parent_state.get_id().get_value());
 
-    cached_parent_type_def_i = state_type[parent_state];
-    cached_parent_h = state_h[parent_state];
+    cached_parent_id = parent_state.get_id().get_value();
+    cached_parent_h = tmp.h;
+    cached_parent_key = tmp.type_key;
 }
 
 template<class Entry>
 void BTSInterGreedyIntraEpOpenList<Entry>::do_insertion(
     EvaluationContext &eval_context, const Entry &entry) {
-    
+
+    auto heap_compare = [&] (const int& elem1, const int& elem2) -> bool
+    {
+        return state_types.at(elem1).h > state_types.at(elem2).h;
+    };
+
     int new_h = eval_context.get_evaluator_value_or_infinity(evaluator.get());
-    int type_def_index;
+    int new_id = eval_context.get_state().get_id().get_value();
+    Type type_to_insert_into;
 
-    if (new_h < cached_parent_h) { 
-        TypeNode new_node(new_h, entry);
-        TypeDef new_type_def(new_h, {new_node});
-        type_def_index = eval_context.get_state().get_id().get_value();
-        type_defs[type_def_index] = new_type_def;
-
+    if (new_h < cached_parent_h) {
+        type_to_insert_into = num_types;
+        type_heap.push_back(num_types);
+        vector<int> new_vec{new_id};
+        type_buckets.emplace(num_types, make_pair(type_buckets.size(), new_vec));
+        num_types+=1;
     } else {
-        TypeDef &cached_parent_type_def = type_defs[cached_parent_type_def_i];
-        type_def_index = cached_parent_type_def_i;
-        TypeNode new_node(new_h, entry);
-        cached_parent_type_def.entries.push_back(new_node);  
-        push_heap(
-            cached_parent_type_def.entries.begin(), 
-            cached_parent_type_def.entries.end(), 
-            greater<TypeNode>());  
+        type_to_insert_into = cached_parent_key;
+        type_buckets.at(cached_parent_key).second.push_back(new_id);
     }
-    state_type[eval_context.get_state()] = type_def_index;
 
-    state_h[eval_context.get_state()] = new_h;
-    node_heap.push_back(make_pair(new_h, type_def_index));
-    auto heap_compare = [] (const pair<int, int>& state1, const pair<int, int>& state2) -> bool
-        {
-            return state1.first > state2.first;
-        };
+    StateType new_state_type(type_to_insert_into, new_h, entry);
+    state_types.emplace(new_id, new_state_type);
+
     push_heap(
-        node_heap.begin(), 
-        node_heap.end(), 
-        heap_compare); 
+        type_buckets.at(type_to_insert_into).second.begin(),
+        type_buckets.at(type_to_insert_into).second.end(),
+        heap_compare
+    );
+
+    adjust_type_up(type_heap, type_buckets.at(type_to_insert_into).first);
+
 }
 
 template<class Entry>
-void BTSInterGreedyIntraEpOpenList<Entry>::adjust_type_node_up(vector<TypeNode> &heap, size_t pos) {
+void BTSInterGreedyIntraEpOpenList<Entry>::adjust_type_node_up(vector<int> &heap, size_t pos) {
     assert(utils::in_bounds(pos, heap));
     while (pos != 0) {
         size_t parent_pos = (pos - 1) / 2;
-        if (heap[pos] > heap[parent_pos]) {
+        if (state_types.at(heap[pos]).h > state_types.at(heap[parent_pos]).h) {
             break;
         }
         swap(heap[pos], heap[parent_pos]);
@@ -154,48 +147,102 @@ void BTSInterGreedyIntraEpOpenList<Entry>::adjust_type_node_up(vector<TypeNode> 
 }
 
 template<class Entry>
+inline int BTSInterGreedyIntraEpOpenList<Entry>::state_h(int state_id) {
+    return state_types.at(state_id).h;
+}
+
+template<class Entry>
+void BTSInterGreedyIntraEpOpenList<Entry>::move_to_top(vector<Type> &heap, int pos) {
+    assert(utils::in_bounds(pos, heap));
+    while (pos != 0) {
+        size_t parent_pos = (pos - 1) / 2;
+        type_buckets.at(heap[pos]).first = parent_pos;
+        type_buckets.at(heap[parent_pos]).first = pos;
+        swap(heap[pos], heap[parent_pos]);
+        pos = parent_pos;
+    }
+}
+
+template<class Entry>
+void BTSInterGreedyIntraEpOpenList<Entry>::adjust_type_up(vector<Type> &heap, int pos) {
+    assert(utils::in_bounds(pos, heap));
+    while (pos != 0) {
+        size_t parent_pos = (pos - 1) / 2;
+        if (state_h(type_buckets.at(heap[parent_pos]).second[0]) < 
+            state_h(type_buckets.at(heap[pos]).second[0])) {
+            break;
+        }
+        type_buckets.at(heap[pos]).first = parent_pos;
+        type_buckets.at(heap[parent_pos]).first = pos;
+        swap(heap[pos], heap[parent_pos]);
+        pos = parent_pos;
+    }
+}
+
+template<class Entry>
+void BTSInterGreedyIntraEpOpenList<Entry>::adjust_type_down(vector<Type> &heap, int loc)
+{
+    int left_child_loc = loc * 2 + 1;
+    int right_child_loc = loc * 2 + 2;
+    int minimum = loc;
+
+    if(left_child_loc < heap.size() && 
+        ( state_h(type_buckets.at(heap[left_child_loc]).second[0]) < 
+          state_h(type_buckets.at(heap[minimum]).second[0]) ))
+            minimum = left_child_loc;
+
+    if(right_child_loc < heap.size() && 
+        ( state_h(type_buckets.at(heap[right_child_loc]).second[0]) < 
+          state_h(type_buckets.at(heap[minimum]).second[0]) ))
+            minimum = right_child_loc;
+
+    if(minimum != loc) {
+        type_buckets.at(heap[loc]).first = minimum;
+        type_buckets.at(heap[minimum]).first = loc;
+        swap(heap[loc], heap[minimum]);
+        adjust_type_down(heap, minimum);
+    }
+
+}
+
+template<class Entry>
 Entry BTSInterGreedyIntraEpOpenList<Entry>::remove_min() {
-    int pos, type_i;
-    
-    // select a type
-    while (true) {
+    auto heap_compare = [&] (const int& elem1, const int& elem2) -> bool
+    {
+        return state_types.at(elem1).h > state_types.at(elem2).h;
+    };
 
-        if (rng->random() < inter_e) {
-            auto it = type_defs.begin();
-            std::advance(it,  rng->random(type_defs.size()) );
-            type_i = it->first;
-        } else {
-            type_i = node_heap[0].second;
-            auto heap_compare = [] (const pair<int, int>& state1, const pair<int, int>& state2) -> bool
-            {
-                return state1.first > state2.first;
-            };
-            pop_heap(
-                node_heap.begin(), 
-                node_heap.end(), 
-                heap_compare);
-            node_heap.pop_back();
-        }
+    state_types.erase(cached_parent_id);
+    if ( (type_buckets.find(cached_parent_key) != type_buckets.end()) 
+        && type_buckets.at(cached_parent_key).second.empty()) {
+        
+        move_to_top(type_heap, type_buckets.at(cached_parent_key).first);
+        swap(type_heap.front(), type_heap.back());
+        type_heap.pop_back();
+        type_buckets.at(type_heap[0]).first = 0;
+        adjust_type_down(type_heap, 0);
 
-        if (type_defs[type_i].entries.empty()) {
-            type_defs.erase(type_i);
-            continue;
-        }
-        break;
+        type_buckets.erase(cached_parent_key);
     }
 
-    TypeDef &selected_type = type_defs[type_i];
-    // select node in type
-    pos = 0;
+    int pos = 0;
+    if (rng->random() < inter_e) {
+        pos = rng->random(type_heap.size());
+    }
+
+    Type type_to_remove_from = type_heap[pos];
+    vector<int>& selected_bucket = type_buckets.at(type_to_remove_from).second;
     if (rng->random() < intra_e) {
-        pos = rng->random(selected_type.entries.size());
-        selected_type.entries[pos].h = numeric_limits<int>::min();
-        adjust_type_node_up(selected_type.entries, pos);
+        int node_pos = rng->random(selected_bucket.size());
+        state_types.at(selected_bucket[node_pos]).h = numeric_limits<int>::min();
+        adjust_type_node_up(selected_bucket, node_pos);
     }
-    pop_heap(selected_type.entries.begin(), selected_type.entries.end(), greater<TypeNode>());
-    TypeNode heap_node = selected_type.entries.back();
-    selected_type.entries.pop_back();
-    return heap_node.entry;
+    pop_heap(selected_bucket.begin(), selected_bucket.end(), heap_compare);
+    int heap_node = selected_bucket.back();
+    selected_bucket.pop_back();
+
+    adjust_type_down(type_heap, pos);
+    return state_types.at(heap_node).entry;
 
 }
 
@@ -209,12 +256,18 @@ BTSInterGreedyIntraEpOpenList<Entry>::BTSInterGreedyIntraEpOpenList(const plugin
 
 template<class Entry>
 bool BTSInterGreedyIntraEpOpenList<Entry>::empty() const {
-    return type_defs.empty();
+    return type_heap.empty();
 }
 
 template<class Entry>
 void BTSInterGreedyIntraEpOpenList<Entry>::clear() {
-    type_defs.clear();
+    type_heap.clear();
+    type_buckets.clear();
+    state_types.clear();
+
+    num_types = 0;
+    cached_parent_h = INT32_MAX;
+    cached_parent_key = -1;
 }
 
 template<class Entry>
