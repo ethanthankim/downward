@@ -1,1 +1,1 @@
-../../../../../../../../benchmarks-test/blocksworld/p04.pddl
+../../../../../../../../benchmarks-test/pegsol/p02.pddl

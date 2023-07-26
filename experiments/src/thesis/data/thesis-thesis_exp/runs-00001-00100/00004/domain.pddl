@@ -1,1 +1,1 @@
-../../../../../../../../benchmarks-test/blocksworld/domain.pddl
+../../../../../../../../benchmarks-test/pegsol/domain.pddl
