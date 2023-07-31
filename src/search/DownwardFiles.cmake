@@ -437,6 +437,14 @@ fast_downward_plugin(
 )
 
 fast_downward_plugin(
+    NAME RANDOM_EDGE_EVALUATOR
+    HELP "The random edge evaluator"
+    SOURCES
+        evaluators/random_edge_evaluator
+    DEPENDS EVALUATORS_SUBCATEGORY
+)
+
+fast_downward_plugin(
     NAME VELOCITY_EVALUATOR
     HELP "The velocity evaluator"
     SOURCES

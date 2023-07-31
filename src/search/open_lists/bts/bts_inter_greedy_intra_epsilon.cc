@@ -63,7 +63,9 @@ private:
     Key random_access_heap_pop(vector<Key> &heap, int loc, Comparer, Synchronizer = NULL);
 
     bool compare_parent_node_smaller(vector<Key>& heap, int parent, int child);
+    bool compare_parent_node_bigger(vector<Key>& heap, int parent, int child);
     bool compare_parent_type_smaller(vector<Key>& heap, int parent, int child);
+    bool compare_parent_type_bigger(vector<Key>& heap, int parent, int child);
     void sync_type_heap_and_type_location(vector<Key> &heap, int pos1, int pos2);
 
     inline int state_h(int state_id);
@@ -118,10 +120,22 @@ bool BTSInterGreedyIntraEpOpenList<Entry>::compare_parent_node_smaller(vector<Ke
 }
 
 template<class Entry>
+bool BTSInterGreedyIntraEpOpenList<Entry>::compare_parent_node_bigger(vector<Key>& heap, int parent, int child) {
+    return state_h(heap[parent]) > state_h(heap[child]);
+}
+
+template<class Entry>
 bool BTSInterGreedyIntraEpOpenList<Entry>::compare_parent_type_smaller(vector<Key>& heap, int parent, int child) {
     if (type_buckets.at(heap[parent]).second.empty()) return false;
     if (type_buckets.at(heap[child]).second.empty()) return true;
     return state_h(type_buckets.at(heap[parent]).second[0]) < state_h(type_buckets.at(heap[child]).second[0]);
+}
+
+template<class Entry>
+bool BTSInterGreedyIntraEpOpenList<Entry>::compare_parent_type_bigger(vector<Key>& heap, int parent, int child) {
+    if (type_buckets.at(heap[parent]).second.empty()) return true;
+    if (type_buckets.at(heap[child]).second.empty()) return false;
+    return state_h(type_buckets.at(heap[parent]).second[0]) > state_h(type_buckets.at(heap[child]).second[0]);
 }
 
 template<class Entry>
@@ -252,7 +266,7 @@ Entry BTSInterGreedyIntraEpOpenList<Entry>::remove_min() {
         Key erase_key = random_access_heap_pop(
             type_heap, 
             type_buckets.at(cached_parent_key).first,
-            &BTSInterGreedyIntraEpOpenList<Entry>::compare_parent_type_smaller,
+            &BTSInterGreedyIntraEpOpenList<Entry>::compare_parent_type_bigger,
             &BTSInterGreedyIntraEpOpenList<Entry>::sync_type_heap_and_type_location
         );
         type_buckets.erase(cached_parent_key);
@@ -268,15 +282,16 @@ Entry BTSInterGreedyIntraEpOpenList<Entry>::remove_min() {
     Key selected_node = random_access_heap_pop(
         selected_bucket, 
         rng->random() < intra_e ? rng->random(selected_bucket.size()) : 0, // epsilon greedy selection
-        &BTSInterGreedyIntraEpOpenList<Entry>::compare_parent_node_smaller
+        &BTSInterGreedyIntraEpOpenList<Entry>::compare_parent_node_bigger
     );
 
     adjust_heap_down(
         type_heap, 
         pos, 
-        &BTSInterGreedyIntraEpOpenList<Entry>::compare_parent_type_smaller,
+        &BTSInterGreedyIntraEpOpenList<Entry>::compare_parent_type_bigger,
         &BTSInterGreedyIntraEpOpenList<Entry>::sync_type_heap_and_type_location
     );
+    int min_h = state_types.at(selected_node).h;
     return state_types.at(selected_node).entry;
 
 }
