@@ -3,7 +3,6 @@
 #include "../evaluation_context.h"
 #include "../search_space.h"
 #include "../plugins/plugin.h"
-#include "../utils/rng_options.h"
 
 #include <vector>
 #include <cassert>
@@ -62,7 +61,7 @@ class RandomEdgeEvaluatorFeature : public plugins::TypedFeature<Evaluator, Rando
 public:
 RandomEdgeEvaluatorFeature() : TypedFeature("random_edge") {
     document_subcategory("evaluators_basic");
-    document_title("Weighted evaluator");
+    document_title("Random Edge evaluator");
     document_synopsis(
         "RandomEdge evaluator. Calculates the random value for a node, based on the edge it comes from.");
 

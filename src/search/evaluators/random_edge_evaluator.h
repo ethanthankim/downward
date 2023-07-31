@@ -9,13 +9,14 @@
 #include "../per_state_information.h"
 #include "../task_proxy.h"
 #include "../utils/rng.h"
+#include "../utils/rng_options.h"
 
 namespace random_edge_evaluator {
 class RandomEdgeEvaluator : public Evaluator {
     PerStateInformation<int> state_db;
     std::map<const OperatorProxy*,int> edge_db;
     int bound;
-    shared_ptr<utils::RandomNumberGenerator> rng;
+    std::shared_ptr<utils::RandomNumberGenerator> rng;
 
     OperatorID creating_op = OperatorID::no_operator;
     StateID created_state_id = StateID::no_state;
