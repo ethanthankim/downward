@@ -1,4 +1,4 @@
-#include "bts_inter_greedy_intra_epsilon.h"
+#include "hi_inter_eg-minh_intra_eg-minh.h"
 
 #include "../../evaluator.h"
 #include "../../open_list.h"
@@ -355,25 +355,19 @@ BTSInterGreedyIntraEpOpenListFactory::create_edge_open_list() {
 
 class BTSInterGreedyIntraEpOpenListFeature : public plugins::TypedFeature<OpenListFactory, BTSInterGreedyIntraEpOpenListFactory> {
 public:
-    BTSInterGreedyIntraEpOpenListFeature() : TypedFeature("bts_inter_greedy_intra_ep") {
+    BTSInterGreedyIntraEpOpenListFeature() : TypedFeature("hi_minh") {
         document_title("Type system to approximate bench transition system (BTS) and perform both inter- and intra-bench exploration");
-        document_synopsis(
-            "Uses local search tree minima to assign entries to a bucket. "
-            "All entries in a bucket are part of the same local minimum in the search tree."
-            "When retrieving an entry, a bucket is chosen uniformly at "
-            "random and one of the contained entries is selected "
-            "according to invasion percolation. "
-            "TODO: add non-uniform type and node selection");
+        document_synopsis("TODO");
 
         add_option<shared_ptr<Evaluator>>("eval", "evaluator");
         add_option<double>(
             "inter_e",
-            "probability for choosing the next type randomly",
+            "probability of choosing the next type randomly",
             "1.0",
             plugins::Bounds("0.0", "1.0"));
         add_option<double>(
             "intra_e",
-            "probability for choosing the next node randomly",
+            "probability of choosing the next node randomly",
             "1.0",
             plugins::Bounds("0.0", "1.0"));
         utils::add_rng_options(*this);

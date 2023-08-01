@@ -175,134 +175,17 @@ fast_downward_plugin(
 )
 
 fast_downward_plugin(
-    NAME TYPE_LOW_WATER_MARK_OPEN_LIST
-    HELP "Low-water mark based type system open list"
-    SOURCES
-        open_lists/lwm/type_low_water_mark_open_list
-)
-
-fast_downward_plugin(
-    NAME TYPE_BTS_OPEN_LIST
-    HELP "BTS entry state based type system open list"
-    SOURCES
-        open_lists/bts/type_bts_open_list
-)
-
-fast_downward_plugin(
-    NAME TYPE_LWM_INTRA_EXPLORE_OPEN_LIST
+    NAME TYPE_HI_INTER_GREEDY_INTRA_EPSILON_OPEN_LIST
     HELP "BTS entry state based type system open list with intra-bench exploration"
     SOURCES
-        open_lists/lwm/type_lwm_inter_intra_explore_open_list
+        open_lists/hi/hi_inter_eg-minh_intra_eg-minh
 )
 
 fast_downward_plugin(
-    NAME TYPE_BTS_INTRA_EXPLORE_OPEN_LIST
+    NAME TYPE_HI_INTER_LWM_INTRA_EPSILON_OPEN_LIST
     HELP "BTS entry state based type system open list with intra-bench exploration"
     SOURCES
-        open_lists/bts/type_bts_inter_intra_explore_open_list
-)
-
-fast_downward_plugin(
-    NAME TYPE_BTS_INTER_BIASED_INTRA_EPSILON_OPEN_LIST
-    HELP "BTS entry state based type system open list with intra-bench exploration"
-    SOURCES
-        open_lists/bts/bts_inter_biased_intra_epsilon
-)
-
-fast_downward_plugin(
-    NAME TYPE_LWM_INTER_BIASED_INTRA_EPSILON_OPEN_LIST
-    HELP "LWM entry state based type system open list with intra-bench exploration"
-    SOURCES
-        open_lists/lwm/lwm_inter_biased_intra_epsilon
-)
-
-fast_downward_plugin(
-    NAME TYPE_BTS_INTER_BIASED_INTRA_PERCOLATION_OPEN_LIST
-    HELP "BTS entry state based type system open list with intra-bench exploration"
-    SOURCES
-        open_lists/bts/bts_inter_biased_intra_percolation
-)
-
-fast_downward_plugin(
-    NAME TYPE_BTS_INTER_LWM_INTRA_EPSILON_OPEN_LIST
-    HELP "BTS entry state based type system open list with intra-bench exploration"
-    SOURCES
-        open_lists/bts/bts_inter_lwm_intra_epsilon
-)
-
-fast_downward_plugin(
-    NAME TYPE_BTS_INTER_GREEDY_INTRA_EPSILON_OPEN_LIST
-    HELP "BTS entry state based type system open list with intra-bench exploration"
-    SOURCES
-        open_lists/bts/bts_inter_greedy_intra_epsilon
-)
-
-fast_downward_plugin(
-    NAME TYPE_BTS_INTER_EPSILON_INTRA_EPSILON_OPEN_LIST
-    HELP "BTS entry state based type system open list with intra-bench exploration"
-    SOURCES
-        open_lists/bts/bts_inter_epsilon_intra_epsilon
-)
-
-fast_downward_plugin(
-    NAME TYPE_LWM_INTER_EPSILON_INTRA_EPSILON_OPEN_LIST
-    HELP "LWM entry state based type system open list with intra-bench exploration"
-    SOURCES
-        open_lists/lwm/lwm_inter_epsilon_intra_epsilon
-)
-
-fast_downward_plugin(
-    NAME TYPE_BTS_INTER_BIASED_OPEN_LIST
-    HELP "BTS entry state based type system open list with intra-bench exploration"
-    SOURCES
-        open_lists/bts/type_bts_inter_biased_open_list
-)
-
-fast_downward_plugin(
-    NAME TYPE_LWM_INTER_BIASED_OPEN_LIST
-    HELP "BTS entry state based type system open list with intra-bench exploration"
-    SOURCES
-        open_lists/lwm/type_lwm_inter_biased_open_list
-)
-
-fast_downward_plugin(
-    NAME TYPE_BTS_INTRA_DEPTH_OPEN_LIST
-    HELP "BTS entry state based type system open list with intra-bench exploration"
-    SOURCES
-        open_lists/bts/type_bts_intra_depth_open_list
-)
-
-fast_downward_plugin(
-    NAME TYPE_BTS_INTRA_PERCOLATION_OPEN_LIST
-    HELP "BTS entry state based type system open list with intra-bench exploration"
-    SOURCES
-        open_lists/bts/type_bts_intra_percolation_open_list
-)
-fast_downward_plugin(
-    NAME TYPE_BTS_INTRA_BIASED_OPEN_LIST
-    HELP "BTS entry state based type system open list with intra-bench exploration"
-    SOURCES
-        open_lists/bts/type_bts_intra_biased_open_list
-)
-
-fast_downward_plugin(
-    NAME TYPE_LWM_INTRA_DEPTH_OPEN_LIST
-    HELP "LWM entry state based type system open list with intra-bench exploration"
-    SOURCES
-        open_lists/lwm/type_lwm_intra_depth_open_list
-)
-
-fast_downward_plugin(
-    NAME TYPE_LWM_INTRA_PERCOLATION_OPEN_LIST
-    HELP "LWM entry state based type system open list with intra-bench exploration"
-    SOURCES
-        open_lists/lwm/type_lwm_intra_percolation_open_list
-)
-fast_downward_plugin(
-    NAME TYPE_LWM_INTRA_BIASED_OPEN_LIST
-    HELP "LWM entry state based type system open list with intra-bench exploration"
-    SOURCES
-        open_lists/lwm/type_lwm_intra_biased_open_list
+        open_lists/hi/hi_inter_eg-lwm_intra_eg-minh
 )
 
 fast_downward_plugin(
