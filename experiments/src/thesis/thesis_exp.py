@@ -54,7 +54,7 @@ def main():
     # ff='ff()'
     CONFIGS = [
         IssueConfig('type-h', ["--evaluator", f"h={ff}", '--search', 'eager(alt( [single(h), type_based( [h] )] )) '], driver_options=DRIVER_OPTIONS),
-        IssueConfig('type-breadth', ["--evaluator", f"h={ff}", '--search', 'eager(alt( [single(h), type_based( [h, g()] )] )) '], driver_options=DRIVER_OPTIONS),
+        IssueConfig('type-breadth', ["--evaluator", f"h={ff}", '--search', 'eager(alt( [single(h), type_based_path( [h] )] )) '], driver_options=DRIVER_OPTIONS),
 
         # IssueConfig('invasion-percolation', ["--evaluator", f"h={ff}", "--evaluator", "r=random_edge()", '--search', "eager(alt( [tiebreaking( [h, r] ), single(r)]) )"], driver_options=DRIVER_OPTIONS),
         # IssueConfig('biased', ["--evaluator", f"h={ff}", '--search', 'eager(alt([single(h), softmin_type_based([h, g()], ignore_size=true)]), cost_type=one)'], driver_options=DRIVER_OPTIONS),
