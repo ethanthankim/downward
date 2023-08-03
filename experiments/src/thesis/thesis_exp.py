@@ -53,10 +53,14 @@ def main():
     ff = 'ff(transform=adapt_costs(cost_type=one))'
     # ff='ff()'
     CONFIGS = [
-        IssueConfig('invasion-percolation', ["--evaluator", f"h={ff}", "--evaluator", "r=random_edge()", '--search', "eager(alt( [tiebreaking( [h, r] ), single(r)]) )"], driver_options=DRIVER_OPTIONS),
-        IssueConfig('biased', ["--evaluator", f"h={ff}", '--search', 'eager(alt([single(h), softmin_type_based([h, g()], ignore_size=true)]), cost_type=one)'], driver_options=DRIVER_OPTIONS),
-        IssueConfig('type', ["--evaluator", f"h={ff}", '--search', 'eager(alt( [single(h), type_based( [h, g()] )] )) '], driver_options=DRIVER_OPTIONS),
-        IssueConfig('epsilon', ["--evaluator", f"h={ff}", '--search', "eager(epsilon_greedy(h))"], driver_options=DRIVER_OPTIONS)
+        IssueConfig('type-h', ["--evaluator", f"h={ff}", '--search', 'eager(alt( [single(h), type_based( [h] )] )) '], driver_options=DRIVER_OPTIONS),
+        IssueConfig('type-breadth', ["--evaluator", f"h={ff}", '--search', 'eager(alt( [single(h), type_based( [h, g()] )] )) '], driver_options=DRIVER_OPTIONS),
+
+        # IssueConfig('invasion-percolation', ["--evaluator", f"h={ff}", "--evaluator", "r=random_edge()", '--search', "eager(alt( [tiebreaking( [h, r] ), single(r)]) )"], driver_options=DRIVER_OPTIONS),
+        # IssueConfig('biased', ["--evaluator", f"h={ff}", '--search', 'eager(alt([single(h), softmin_type_based([h, g()], ignore_size=true)]), cost_type=one)'], driver_options=DRIVER_OPTIONS),
+        # IssueConfig('type', ["--evaluator", f"h={ff}", '--search', 'eager(alt( [single(h), type_based( [h, g()] )] )) '], driver_options=DRIVER_OPTIONS),
+        # IssueConfig('epsilon', ["--evaluator", f"h={ff}", '--search', "eager(epsilon_greedy(h))"], driver_options=DRIVER_OPTIONS)
+        
         # IssueConfig('HI-pure-inter', ["--evaluator", f"h={ff}", '--search', 'eager(bts_inter_greedy_intra_ep(h, inter_e=0.9, intra_e=0.1))'], driver_options=DRIVER_OPTIONS),
         # IssueConfig('HI-pure-intra', ["--evaluator", f"h={ff}", '--search', 'eager(bts_inter_greedy_intra_ep(h, inter_e=0.1, intra_e=0.9))'], driver_options=DRIVER_OPTIONS),
         # IssueConfig('HI-alt-uniform', ["--evaluator", f"h={ff}", '--search', 'eager(bts_inter_greedy_intra_ep(h, inter_e=1.0, intra_e=1.0))'], driver_options=DRIVER_OPTIONS),

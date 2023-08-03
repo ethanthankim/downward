@@ -175,6 +175,13 @@ fast_downward_plugin(
 )
 
 fast_downward_plugin(
+    NAME TYPE_BASED_PATH_OPEN_LIST
+    HELP "Type-based open list"
+    SOURCES
+        open_lists/type_based_path_open_list
+)
+
+fast_downward_plugin(
     NAME TYPE_HI_INTER_GREEDY_INTRA_EPSILON_OPEN_LIST
     HELP "BTS entry state based type system open list with intra-bench exploration"
     SOURCES
