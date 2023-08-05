@@ -15,7 +15,7 @@ RandomEdgeEvaluator::RandomEdgeEvaluator(const plugins::Options &opts) :
     rng(utils::parse_rng_from_options(opts)) {}
 
 void RandomEdgeEvaluator::notify_initial_state(const State &initial_state) {
-    created_state_id = StateID::no_state;
+    created_state_id = initial_state.get_id();
     creating_op = OperatorID::no_operator;
 }
 
@@ -35,25 +35,32 @@ EvaluationResult RandomEdgeEvaluator::compute_result(EvaluationContext &ctx) {
     if (state_value < 0){
         state_value = rng->random(std::numeric_limits<int>::max());
     }
-    auto op = current.get_registry()->get_task_proxy().get_operators()[creating_op];
 
-    auto it = edge_db.find(&op); 
-    int edge_value;
-    if (it == edge_db.end()){
-        edge_value = rng->random(std::numeric_limits<int>::max());
-        edge_db[&op] = edge_value;
-    }else{
-        edge_value = it->second;
+    if (creating_op != OperatorID::no_operator) {
+        auto op = current.get_registry()->get_task_proxy().get_operators()[creating_op];
+
+        auto it = edge_db.find(&op); 
+        int edge_value;
+        if (it == edge_db.end()){
+            edge_value = rng->random(std::numeric_limits<int>::max());
+            edge_db[&op] = edge_value;
+        }else{
+            edge_value = it->second;
+        }
+
+        int value = abs(state_value ^ edge_value);
+    
+        if (value > bound){
+            value = EvaluationResult::INFTY;
+        }
+        
+        result.set_evaluator_value(value);
+        return result;
     }
 
-    int value = abs(state_value ^ edge_value);
-    
-    if (value > bound){
-        value = EvaluationResult::INFTY;
-    }
-    
-    result.set_evaluator_value(value);
+    result.set_evaluator_value(rng->random(std::numeric_limits<int>::max()));
     return result;
+
 }
 
 

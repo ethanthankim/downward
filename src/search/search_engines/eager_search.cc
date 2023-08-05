@@ -69,6 +69,11 @@ void EagerSearch::initialize() {
         lazy_evaluator->get_path_dependent_evaluators(evals);
     }
 
+    /*
+    Collect openlist path dependent evaluators
+    */
+    open_list->get_path_dependent_evaluators(evals);
+
     path_dependent_evaluators.assign(evals.begin(), evals.end());
 
     State initial_state = state_registry.get_initial_state();

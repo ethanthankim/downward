@@ -38,7 +38,6 @@ class BTSInterGreedyIntraEpOpenList : public OpenList<Entry> {
     unordered_map<int, StateType> state_types;
     unordered_map<Key, pair<Index, vector<Key>>> type_buckets;
     vector<Key> type_heap;
-    std::function<bool(int, int)> node_comparer;
 
     Key cached_parent_key;
     int cached_parent_id;
@@ -92,10 +91,6 @@ public:
 template<class Entry>
 void BTSInterGreedyIntraEpOpenList<Entry>::notify_initial_state(const State &initial_state) {
     cached_parent_h = INT32_MAX;
-    node_comparer = [&] (const int& elem1, const int& elem2) -> bool
-    {
-        return state_h(elem1) > state_h(elem2);
-    };
 }
 
 template<class Entry>
