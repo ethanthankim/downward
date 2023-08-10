@@ -133,6 +133,35 @@ fast_downward_plugin(
 )
 
 fast_downward_plugin(
+    NAME PARTITION_SYSTEM
+    HELP "Base class for partition systems"
+    SOURCES
+        open_lists/partitions/partition_system
+)
+
+fast_downward_plugin(
+    NAME PARTITION_SYSTEMS_SUBCATEGORY
+    HELP "Subcategory plugin for partition systems"
+    SOURCES
+        open_lists/partitions/subcategory
+)
+
+fast_downward_plugin(
+    NAME RANDOM_PARTITION_SYSTEM
+    HELP "A random node partitioner"
+    SOURCES
+        open_lists/partitions/random_partition
+    DEPENDS PARTITION_SYSTEMS_SUBCATEGORY
+)
+
+fast_downward_plugin(
+    NAME PARTITION_OPEN_LIST
+    HELP "Partition open list"
+    SOURCES
+        open_lists/partition_open_list
+)
+
+fast_downward_plugin(
     NAME ALTERNATION_OPEN_LIST
     HELP "Open list that alternates between underlying open lists in a round-robin manner"
     SOURCES

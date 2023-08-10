@@ -294,7 +294,6 @@ Entry BTSInterLWMIntraEpOpenList<Entry>::remove_min() {
         &BTSInterLWMIntraEpOpenList<Entry>::compare_parent_type_bigger,
         &BTSInterLWMIntraEpOpenList<Entry>::sync_type_heap_and_type_location
     );
-    int min_h = state_types.at(selected_node).h;
     return state_types.at(selected_node).entry;
 
 }
