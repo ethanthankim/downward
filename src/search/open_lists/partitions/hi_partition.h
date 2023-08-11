@@ -8,33 +8,18 @@
 
 namespace hi_partition {
 class HIPartition : public PartitionSystem {
-    std::shared_ptr<utils::RandomNumberGenerator> rng;
-    double inter_epsilon, intra_epsilon;
 
-    utils::HashMap<Key, vector<Key>> heaped_partitions;
-    vector<Key> partition_heap;
-    int last_partition_index = -1;
-    bool last_partition_was_emptied = false;
-
-private:
-    using Comparer = bool (HIPartition::*)(vector<Key>&, int, int, const utils::HashMap<Key, OpenState> &);
-    void adjust_heap_down(vector<Key> &heap, int loc, Comparer, const utils::HashMap<Key, OpenState> &open_states); 
-    void adjust_heap_up(vector<Key> &heap, int loc, Comparer, const utils::HashMap<Key, OpenState> &open_states);   
-    void adjust_to_top(vector<Key> &heap, int loc); 
-    Key random_access_heap_pop(vector<Key> &heap, int loc, Comparer, const utils::HashMap<Key, OpenState> &open_states);
-
-    bool compare_parent_node_smaller(vector<Key>& heap, int parent, int child, const utils::HashMap<Key, OpenState> &open_states);
-    bool compare_parent_node_bigger(vector<Key>& heap, int parent, int child, const utils::HashMap<Key, OpenState> &open_states);
-    bool compare_parent_type_smaller(vector<Key>& heap, int parent, int child, const utils::HashMap<Key, OpenState> &open_states);
-    bool compare_parent_type_bigger(vector<Key>& heap, int parent, int child, const utils::HashMap<Key, OpenState> &open_states);
+    StateID cached_parent_id = StateID::no_state;
+    StateID cached_next_state_id = StateID::no_state;
 public:
     explicit HIPartition(const plugins::Options &opts);
     virtual ~HIPartition() override = default;
 
-    virtual Key insert_state(Key to_insert, const utils::HashMap<Key, OpenState> &open_states) override;
-    virtual Key select_next_partition(const utils::HashMap<Key, OpenState> &open_states) override;
-    virtual Key select_next_state_from_partition(Key partition, const utils::HashMap<Key, OpenState> &open_states) override;
-
+    Key choose_state_partition(utils::HashMap<Key, PartitionedState> active_states) override;
+    virtual void notify_initial_state(const State &initial_state) override;
+    virtual void notify_state_transition(const State &parent_state,
+                                         OperatorID op_id,
+                                         const State &state) override;
 };
 }
 

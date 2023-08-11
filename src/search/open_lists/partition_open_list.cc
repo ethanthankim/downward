@@ -25,12 +25,10 @@ class PartitionOpenList : public OpenList<Entry> {
     shared_ptr<PartitionSystem> partition_system;
     shared_ptr<Evaluator> evaluator;
 
-    utils::HashMap<Key, OpenState> active_states;
-    utils::HashMap<Key, utils::HashMap<Key, Entry>> partitions;
+    utils::HashMap<Key, PartitionedState> active_states;
 
     StateID cached_next_state_id = StateID::no_state;
     StateID cached_parent_id = StateID::no_state;
-    OperatorID cached_creating_id = OperatorID::no_operator;
     
 
 protected:
@@ -59,6 +57,18 @@ public:
 template<class Entry>
 void PartitionOpenList<Entry>::notify_initial_state(const State &initial_state) {
     cached_next_state_id = initial_state.get_id();
+    cached_parent_id = StateID::no_state;
+
+    active_states.emplace(cached_parent_id.get_value(), 
+        PartitionedState(
+            cached_parent_id,
+            -1,
+            numeric_limits<int>::max();
+            0;
+        )
+    );
+
+    partition_system->notify_initial_state(initial_state);
 }
 
 template<class Entry>
@@ -67,7 +77,9 @@ void PartitionOpenList<Entry>::notify_state_transition(
     
     cached_next_state_id = state.get_id();
     cached_parent_id = parent_state.get_id();
-    cached_creating_id = op_id;
+
+    partition_system->notify_state_transition(parent_state, op_id, state);
+
 }
 
 template<class Entry>
@@ -80,17 +92,14 @@ void PartitionOpenList<Entry>::do_insertion(
     
     active_states.emplace(
         next_id, 
-        OpenState(
+        PartitionedState(
             cached_next_state_id,
-            cached_parent_id,
-            cached_creating_id,
             -1,
             new_h,
             new_g
         ));
-    Key partition_key = partition_system->insert_state(next_id, active_states);
+    Key partition_key = partition_system->choose_state_partition(active_states);
     active_states.at(next_id).partition = partition_key;
-    partitions[partition_key].emplace(next_id, entry);
     
 }
 

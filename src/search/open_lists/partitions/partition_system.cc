@@ -11,17 +11,15 @@ const string &PartitionSystem::get_description() const {
     return description;
 }
 
-bool PartitionSystem::safe_to_remove_node(Key to_remove) {
-    return true;
-}
-
-bool PartitionSystem::safe_to_remove_partition(Key to_remove) {
-    return true;
+Key PartitionSystem::choose_state_partition(utils::HashMap<Key, PartitionedState> active_states) {
+    return 0; // default to trivial case where every node gets put in one partition
 }
 
 void add_partition_options_to_feature(plugins::Feature &feature) {
     utils::add_log_options_to_feature(feature);
 }
+
+
 
 static class PartitionSystemCategoryPlugin : public plugins::TypedCategoryPlugin<PartitionSystem> {
 public:

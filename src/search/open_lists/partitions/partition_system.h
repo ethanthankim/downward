@@ -1,22 +1,23 @@
 #ifndef PARTITION_SYSTEM_H
 #define PARTITION_SYSTEM_H
 
-#include "../partition_open_list.h"
+#include "../../state_id.h"
 #include "../../plugins/plugin.h"
 #include "../../utils/logging.h"
 #include "../../utils/hash.h"
+#include "../../operator_id.h"
+#include "../../task_proxy.h"
 
 
 using Key = int;
-struct OpenState {
-    StateID id;
-    StateID parent_id;
-    OperatorID creating_op;
-    Key partition; 
+struct PartitionedState {
+    StateID id = StateID::no_state;
+    Key partition;
     int h;
-    int g;
-    OpenState(StateID &id, StateID &parent_id, OperatorID &creating_op, Key partition, int h, int g) 
-        : id(id), parent_id(parent_id), creating_op(creating_op), partition(partition), h(h), g(g) {};
+    int g; 
+    PartitionedState() {};
+    PartitionedState(StateID &id, Key partition, int h, int g) 
+        : id(id), partition(partition), h(h), g(g) {};
 };
 
 
@@ -32,11 +33,11 @@ public:
 
     const std::string &get_description() const;
 
-    bool safe_to_remove_node(Key to_remove);
-    bool safe_to_remove_partition(Key to_remove);
-    virtual Key insert_state(Key to_insert, const utils::HashMap<Key, OpenState> &open_states) = 0;
-    virtual Key select_next_partition(const utils::HashMap<Key, OpenState> &open_states) = 0;
-    virtual Key select_next_state_from_partition(Key partition, const utils::HashMap<Key, OpenState> &open_states) = 0;
+    virtual Key choose_state_partition(utils::HashMap<Key, PartitionedState> active_states);
+    virtual void notify_initial_state(const State &initial_state) {};
+    virtual void notify_state_transition(const State &parent_state,
+                                         OperatorID op_id,
+                                         const State &state) {};
 
     // inspiration for logging things
     // void report_value_for_initial_state(const EvaluationResult &result) const;
