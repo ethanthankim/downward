@@ -1,6 +1,8 @@
 #include "partition_open_list.h"
 
 #include "partitions/partition_system.h"
+#include "partitions/inter/partition_policy.h"
+#include "partitions/intra/node_policy.h"
 #include "../evaluator.h"
 #include "../open_list.h"
 
@@ -23,9 +25,14 @@ namespace partition_open_list {
 template<class Entry>
 class PartitionOpenList : public OpenList<Entry> {
     shared_ptr<PartitionSystem> partition_system;
+    shared_ptr<PartitionPolicy> partition_selector;
+    shared_ptr<NodePolicy> node_selector;
     shared_ptr<Evaluator> evaluator;
 
     utils::HashMap<Key, PartitionedState> active_states;
+    utils::HashMap<Key, Partition> partition_buckets;
+    utils::HashMap<Key, Entry> node_entries;
+    // utils::HashMap<Key, Entry> entries;
 
     StateID cached_next_state_id = StateID::no_state;
     StateID cached_parent_id = StateID::no_state;
@@ -63,8 +70,8 @@ void PartitionOpenList<Entry>::notify_initial_state(const State &initial_state) 
         PartitionedState(
             cached_parent_id,
             -1,
-            numeric_limits<int>::max();
-            0;
+            numeric_limits<int>::max(),
+            0
         )
     );
 
@@ -89,7 +96,8 @@ void PartitionOpenList<Entry>::do_insertion(
     int new_h = eval_context.get_evaluator_value_or_infinity(evaluator.get());
     int new_g = eval_context.get_g_value();
     Key next_id = cached_next_state_id.get_value();
-    
+    node_entries.emplace(next_id, entry);
+    // empplae entry for new active state
     active_states.emplace(
         next_id, 
         PartitionedState(
@@ -100,7 +108,12 @@ void PartitionOpenList<Entry>::do_insertion(
         ));
     Key partition_key = partition_system->choose_state_partition(active_states);
     active_states.at(next_id).partition = partition_key;
-    
+
+    // notify node selector insert
+    node_selector->insert(next_id, active_states, partition_buckets[partition_key]);
+
+    // then notify partition selector of a change in the partition inserted into
+    partition_selector->notify_insert(next_id, active_states, partition_buckets);
 }
 
 template<class Entry>
@@ -108,32 +121,20 @@ Entry PartitionOpenList<Entry>::remove_min() {
 
     // PartitionSystem get partition until partition not empty--allows for empty partitions
     Key selected_partition_key;
-    utils::HashMap<Key, Entry> selected_partition;
     do {
-        selected_partition_key = partition_system->select_next_partition();
-        selected_partition = partitions.at(selected_partition_key);
-    } while(selected_partition.empty());
-
+        selected_partition_key = partition_selector->remove_min(active_states, partition_buckets);
+    } while(partition_buckets.at(selected_partition_key).empty());
+    Partition &selected_partition = partition_buckets.at(selected_partition_key);
 
     //select node from partition system
-    Key selected_state_id = partition_system->select_next_state_from_partition(selected_partition_key, active_states);
-    assert(active_states.find(selected_state_id) != active_states.end());
-    OpenState selected_state = active_states.at(selected_state_id);
-    assert(selected_partition_key == selected_state.partition);
-    assert(selected_partition.count(selected_state_id) != 0); //make sure selected partition actually contains node
+    Key selected_state_id = node_selector->remove_next_state_from_partition(active_states, selected_partition);
+    PartitionedState selected_state = active_states.at(selected_state_id);
 
-    // maybe loop if entries doesn't contain it? to allow for entries and active_states to temporarily be out of sync
-    Entry result = selected_partition.at(selected_state_id);
-    selected_partition.erase(selected_state_id);
+    // notify partition selector of removed node
+    partition_selector->notify_remove(selected_state_id, active_states, partition_buckets);
 
-    // safe to remove?
-    if (partition_system->safe_to_remove_node(selected_state_id)) {
-        active_states.erase(selected_state_id);
-    }
-
-    if (selected_partition.empty() && partition_system->safe_to_remove_partition(selected_partition_key)) {
-        partitions.erase(selected_partition_key);
-    }
+    Entry result = node_entries.at(selected_state_id);
+    node_entries.erase(selected_state_id);
 
     return result;
 
@@ -142,7 +143,9 @@ Entry PartitionOpenList<Entry>::remove_min() {
 template<class Entry>
 PartitionOpenList<Entry>::PartitionOpenList(const plugins::Options &opts)
     : partition_system(opts.get<shared_ptr<PartitionSystem>>("part")),
-    evaluator(opts.get<shared_ptr<Evaluator>>("eval")) {
+    evaluator(opts.get<shared_ptr<Evaluator>>("eval")),
+    partition_selector(opts.get<shared_ptr<PartitionPolicy>>("part_policy")),
+    node_selector(opts.get<shared_ptr<NodePolicy>>("node_policy")) {
 }
 
 template<class Entry>
@@ -153,7 +156,7 @@ bool PartitionOpenList<Entry>::empty() const {
 template<class Entry>
 void PartitionOpenList<Entry>::clear() {
     active_states.clear();
-    partitions.clear();
+    partition_buckets.clear();
 }
 
 template<class Entry>
@@ -196,6 +199,8 @@ public:
         document_synopsis("A configurable open list that selects nodes by first choosing a node parition and then choosing a node from within it. The policies for insertion (choosing a partition to insert into or creating a new one) and selection (partition first, then a node within it) are  specified policies");
         add_option<shared_ptr<Evaluator>>("eval", "evaluator");
         add_option<shared_ptr<PartitionSystem>>("part", "partition");
+        add_option<shared_ptr<PartitionPolicy>>("part_policy", "partition policy");
+        add_option<shared_ptr<NodePolicy>>("node_policy", "node policy");
     }
 };
 

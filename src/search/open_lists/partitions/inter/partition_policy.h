@@ -5,6 +5,7 @@
 #include "../../../plugins/plugin.h"
 #include "../../../utils/logging.h"
 #include "../../../utils/hash.h"
+#include "../../../evaluation_context.h"
 
 
 class PartitionPolicy {
@@ -20,11 +21,9 @@ public:
 
     const std::string &get_description() const;
 
-    virtual Key remove_min() = 0;
-    virtual void notify_insert(Key inserted, utils::HashMap<Key, PartitionedState> active_states) = 0;
-    virtual void notify_remove(Key removed, utils::HashMap<Key, PartitionedState> active_states) = 0;
-
-
+    virtual Key remove_min(utils::HashMap<Key, PartitionedState> &active_states, utils::HashMap<Key, Partition> &partition_buckets) = 0;
+    virtual void notify_insert(Key inserted, utils::HashMap<Key, PartitionedState> &active_states, utils::HashMap<Key, Partition> &partition_buckets) = 0;
+    virtual void notify_remove(Key removed, utils::HashMap<Key, PartitionedState> &active_states, utils::HashMap<Key, Partition> &partition_buckets) = 0;
 };
 
 extern void add_partition_policy_options_to_feature(plugins::Feature &feature);

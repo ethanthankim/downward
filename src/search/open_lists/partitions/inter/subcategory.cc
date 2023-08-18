@@ -1,4 +1,4 @@
-#include "../../plugins/plugin.h"
+#include "../../../plugins/plugin.h"
 
 namespace partition_policy_plugin_group {
 static class PartitionPolicyGroupPlugin : public plugins::SubcategoryPlugin {

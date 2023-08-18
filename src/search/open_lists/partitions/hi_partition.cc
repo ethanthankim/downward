@@ -9,7 +9,7 @@ HIPartition::HIPartition(const plugins::Options &opts)
 
 
 void HIPartition::notify_initial_state(const State &initial_state) {
-    
+    cached_next_state_id = initial_state.get_id();
 };
 
 void HIPartition::notify_state_transition(const State &parent_state,
@@ -26,7 +26,7 @@ Key HIPartition::choose_state_partition(utils::HashMap<Key, PartitionedState> ac
     PartitionedState parent_state = active_states.at(cached_parent_id.get_value());
     Key partition_key;
     if ( (state_to_insert.h < parent_state.h)) {
-        partition_key = cached_next_state_id.get_value();
+        partition_key = state_to_insert.id.get_value();
     } else {
         partition_key = parent_state.partition;
     }

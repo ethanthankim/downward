@@ -10,6 +10,7 @@
 
 
 using Key = int;
+using Partition = std::vector<Key>;
 struct PartitionedState {
     StateID id = StateID::no_state;
     Key partition;

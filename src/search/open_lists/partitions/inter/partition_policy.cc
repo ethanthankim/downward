@@ -21,7 +21,7 @@ static class PartitionPolicyCategoryPlugin : public plugins::TypedCategoryPlugin
 public:
     PartitionPolicyCategoryPlugin() : TypedCategoryPlugin("Partition Policies") {
         document_synopsis(
-            "Partition selection policies (inter and intra)"
+            "Partition selection policies (inter)"
         );
         allow_variable_binding();
     }

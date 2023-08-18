@@ -147,11 +147,52 @@ fast_downward_plugin(
 )
 
 fast_downward_plugin(
-    NAME RANDOM_PARTITION_SYSTEM
-    HELP "A random node partitioner"
+    NAME PARTITION_SYSTEMS_HI_PARTITION
+    HELP "The HI partition system"
     SOURCES
-        open_lists/partitions/random_partition
-    DEPENDS PARTITION_SYSTEMS_SUBCATEGORY
+        open_lists/partitions/hi_partition
+)
+
+fast_downward_plugin(
+    NAME PARTITION_SELECTION
+    HELP "Base class for partition selection policies"
+    SOURCES
+        open_lists/partitions/inter/partition_policy
+)
+
+fast_downward_plugin(
+    NAME PARTITION_SELECTION_SUBCATEGORY
+    HELP "Subcategory plugin for partition selection policies"
+    SOURCES
+        open_lists/partitions/inter/subcategory
+)
+
+fast_downward_plugin(
+    NAME PARTITION_SELECTION_EPSILON_GREEDY
+    HELP "Epsilon greedy over min-h heap partition selection policy"
+    SOURCES
+        open_lists/partitions/inter/epsilon_greedy_minh
+)
+
+fast_downward_plugin(
+    NAME NODE_SELECTION
+    HELP "Base class for node selection policies"
+    SOURCES
+        open_lists/partitions/intra/node_policy
+)
+
+fast_downward_plugin(
+    NAME NODE_SELECTION_SUBCATEGORY
+    HELP "Subcategory plugin for node selection policies"
+    SOURCES
+        open_lists/partitions/intra/subcategory
+)
+
+fast_downward_plugin(
+    NAME NODE_SELECTION_EPSILON_GREEDY
+    HELP "Epsilon greedy over min-h heap node selection policy"
+    SOURCES
+        open_lists/partitions/intra/epsilon_greedy_minh
 )
 
 fast_downward_plugin(
