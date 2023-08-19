@@ -175,6 +175,13 @@ fast_downward_plugin(
 )
 
 fast_downward_plugin(
+    NAME PARTITION_SELECTION_UNIFORM
+    HELP "uniform partition selection policy"
+    SOURCES
+        open_lists/partitions/inter/uniform
+)
+
+fast_downward_plugin(
     NAME NODE_SELECTION
     HELP "Base class for node selection policies"
     SOURCES
@@ -193,6 +200,13 @@ fast_downward_plugin(
     HELP "Epsilon greedy over min-h heap node selection policy"
     SOURCES
         open_lists/partitions/intra/epsilon_greedy_minh
+)
+
+fast_downward_plugin(
+    NAME NODE_SELECTION_UNIFORM
+    HELP "uniform node selection policy"
+    SOURCES
+        open_lists/partitions/intra/uniform
 )
 
 fast_downward_plugin(

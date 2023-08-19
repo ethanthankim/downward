@@ -21,8 +21,8 @@ public:
 
     const std::string &get_description() const;
 
-    virtual void insert(Key inserted, utils::HashMap<Key, PartitionedState> active_states, std::vector<Key> &partition) = 0;
-    virtual Key remove_next_state_from_partition(utils::HashMap<Key, PartitionedState> &active_states, std::vector<Key> &partition) = 0;
+    virtual void insert(NodeKey inserted, utils::HashMap<NodeKey, PartitionedState> active_states, std::vector<NodeKey> &partition) = 0;
+    virtual NodeKey remove_next_state_from_partition(utils::HashMap<NodeKey, PartitionedState> &active_states, std::vector<NodeKey> &partition) = 0;
 
 
 };

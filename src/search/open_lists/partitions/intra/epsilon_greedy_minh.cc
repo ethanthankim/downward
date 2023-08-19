@@ -9,15 +9,15 @@ IntraEpsilonGreedyMinHPolicy::IntraEpsilonGreedyMinHPolicy(const plugins::Option
     rng(utils::parse_rng_from_options(opts)),
     epsilon(opts.get<double>("epsilon")) {}
 
-bool IntraEpsilonGreedyMinHPolicy::compare_parent_node_smaller(Key parent, Key child, utils::HashMap<Key, PartitionedState> & active_states) {
+bool IntraEpsilonGreedyMinHPolicy::compare_parent_node_smaller(NodeKey parent, NodeKey child, utils::HashMap<NodeKey, PartitionedState> & active_states) {
     return active_states.at(parent).h < active_states.at(child).h; 
 }
 
-bool IntraEpsilonGreedyMinHPolicy::compare_parent_node_bigger(Key parent, Key child, utils::HashMap<Key, PartitionedState> & active_states) {
+bool IntraEpsilonGreedyMinHPolicy::compare_parent_node_bigger(NodeKey parent, NodeKey child, utils::HashMap<NodeKey, PartitionedState> & active_states) {
     return active_states.at(parent).h > active_states.at(child).h; 
 }
 
-void IntraEpsilonGreedyMinHPolicy::adjust_heap_up(std::vector<Key> &heap, int pos, utils::HashMap<Key, PartitionedState> &active_states) {
+void IntraEpsilonGreedyMinHPolicy::adjust_heap_up(std::vector<NodeKey> &heap, int pos, utils::HashMap<NodeKey, PartitionedState> &active_states) {
     assert(utils::in_bounds(pos, heap));
     while (pos != 0) {
         size_t parent_pos = (pos - 1) / 2;
@@ -29,7 +29,7 @@ void IntraEpsilonGreedyMinHPolicy::adjust_heap_up(std::vector<Key> &heap, int po
     }
 }
 
-void IntraEpsilonGreedyMinHPolicy::adjust_to_top(std::vector<Key> &heap, int pos) {
+void IntraEpsilonGreedyMinHPolicy::adjust_to_top(std::vector<NodeKey> &heap, int pos) {
     assert(utils::in_bounds(pos, heap));
     while (pos != 0) {
         size_t parent_pos = (pos - 1) / 2;
@@ -38,7 +38,7 @@ void IntraEpsilonGreedyMinHPolicy::adjust_to_top(std::vector<Key> &heap, int pos
     }       
 }
 
-void IntraEpsilonGreedyMinHPolicy::adjust_heap_down(std::vector<Key> &heap, int loc, utils::HashMap<Key, PartitionedState> &active_states) {
+void IntraEpsilonGreedyMinHPolicy::adjust_heap_down(std::vector<NodeKey> &heap, int loc, utils::HashMap<NodeKey, PartitionedState> &active_states) {
     int left_child_loc = loc * 2 + 1;
     int right_child_loc = loc * 2 + 2;
     int minimum = loc;
@@ -55,18 +55,18 @@ void IntraEpsilonGreedyMinHPolicy::adjust_heap_down(std::vector<Key> &heap, int 
     }
 }
 
-Key IntraEpsilonGreedyMinHPolicy::random_access_heap_pop(std::vector<Key> &heap, int loc, utils::HashMap<Key, PartitionedState> &active_states) {
+NodeKey IntraEpsilonGreedyMinHPolicy::random_access_heap_pop(std::vector<NodeKey> &heap, int loc, utils::HashMap<NodeKey, PartitionedState> &active_states) {
     adjust_to_top(heap, loc);
     swap(heap.front(), heap.back());
 
-    Key to_return = heap.back();
+    NodeKey to_return = heap.back();
     heap.pop_back();
 
     adjust_heap_down(heap, 0, active_states);
     return to_return;
 }
 
-Key IntraEpsilonGreedyMinHPolicy::remove_next_state_from_partition(utils::HashMap<Key, PartitionedState> &active_states, std::vector<Key> &partition) { 
+NodeKey IntraEpsilonGreedyMinHPolicy::remove_next_state_from_partition(utils::HashMap<NodeKey, PartitionedState> &active_states, std::vector<NodeKey> &partition) { 
     
     active_states.erase(cached_last_removed);
     
@@ -75,12 +75,12 @@ Key IntraEpsilonGreedyMinHPolicy::remove_next_state_from_partition(utils::HashMa
         pos = rng->random(partition.size());
     }
 
-    Key to_return = random_access_heap_pop(partition, pos, active_states);
+    NodeKey to_return = random_access_heap_pop(partition, pos, active_states);
     cached_last_removed = to_return;
     return to_return;
 }
 
-void IntraEpsilonGreedyMinHPolicy::insert(Key inserted, utils::HashMap<Key, PartitionedState> active_states, std::vector<Key> &partition) {
+void IntraEpsilonGreedyMinHPolicy::insert(NodeKey inserted, utils::HashMap<NodeKey, PartitionedState> active_states, std::vector<NodeKey> &partition) {
 
     partition.push_back(inserted);
     adjust_heap_up( 

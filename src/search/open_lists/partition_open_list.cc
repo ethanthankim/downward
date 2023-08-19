@@ -29,10 +29,9 @@ class PartitionOpenList : public OpenList<Entry> {
     shared_ptr<NodePolicy> node_selector;
     shared_ptr<Evaluator> evaluator;
 
-    utils::HashMap<Key, PartitionedState> active_states;
-    utils::HashMap<Key, Partition> partition_buckets;
-    utils::HashMap<Key, Entry> node_entries;
-    // utils::HashMap<Key, Entry> entries;
+    utils::HashMap<NodeKey, PartitionedState> active_states;
+    utils::HashMap<PartitionKey, Partition> partition_buckets;
+    utils::HashMap<NodeKey, Entry> node_entries; // Entry should really be member of PartitionedState
 
     StateID cached_next_state_id = StateID::no_state;
     StateID cached_parent_id = StateID::no_state;
@@ -95,7 +94,7 @@ void PartitionOpenList<Entry>::do_insertion(
     
     int new_h = eval_context.get_evaluator_value_or_infinity(evaluator.get());
     int new_g = eval_context.get_g_value();
-    Key next_id = cached_next_state_id.get_value();
+    NodeKey next_id = cached_next_state_id.get_value();
     node_entries.emplace(next_id, entry);
     // empplae entry for new active state
     active_states.emplace(
@@ -106,28 +105,30 @@ void PartitionOpenList<Entry>::do_insertion(
             new_h,
             new_g
         ));
-    Key partition_key = partition_system->choose_state_partition(active_states);
+    pair<bool, PartitionKey> result = partition_system->choose_state_partition(active_states);
+    PartitionKey partition_key = result.second;
+    bool new_type = result.first;
     active_states.at(next_id).partition = partition_key;
 
     // notify node selector insert
     node_selector->insert(next_id, active_states, partition_buckets[partition_key]);
 
     // then notify partition selector of a change in the partition inserted into
-    partition_selector->notify_insert(next_id, active_states, partition_buckets);
+    partition_selector->notify_insert(new_type, next_id, active_states, partition_buckets);
 }
 
 template<class Entry>
 Entry PartitionOpenList<Entry>::remove_min() {
 
     // PartitionSystem get partition until partition not empty--allows for empty partitions
-    Key selected_partition_key;
+    PartitionKey selected_partition_key;
     do {
-        selected_partition_key = partition_selector->remove_min(active_states, partition_buckets);
+        selected_partition_key = partition_selector->get_next_partition(active_states, partition_buckets);
     } while(partition_buckets.at(selected_partition_key).empty());
     Partition &selected_partition = partition_buckets.at(selected_partition_key);
 
     //select node from partition system
-    Key selected_state_id = node_selector->remove_next_state_from_partition(active_states, selected_partition);
+    NodeKey selected_state_id = node_selector->remove_next_state_from_partition(active_states, selected_partition);
     PartitionedState selected_state = active_states.at(selected_state_id);
 
     // notify partition selector of removed node

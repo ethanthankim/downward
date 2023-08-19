@@ -21,9 +21,17 @@ public:
 
     const std::string &get_description() const;
 
-    virtual Key remove_min(utils::HashMap<Key, PartitionedState> &active_states, utils::HashMap<Key, Partition> &partition_buckets) = 0;
-    virtual void notify_insert(Key inserted, utils::HashMap<Key, PartitionedState> &active_states, utils::HashMap<Key, Partition> &partition_buckets) = 0;
-    virtual void notify_remove(Key removed, utils::HashMap<Key, PartitionedState> &active_states, utils::HashMap<Key, Partition> &partition_buckets) = 0;
+    virtual PartitionKey get_next_partition(
+        utils::HashMap<NodeKey, PartitionedState> &active_states, 
+        utils::HashMap<PartitionKey, Partition> &partition_buckets) = 0;
+        
+    virtual void notify_insert(bool new_type, NodeKey inserted, 
+        utils::HashMap<NodeKey, PartitionedState> &active_states, 
+        utils::HashMap<PartitionKey, Partition> &partition_buckets) = 0;
+
+    virtual void notify_remove(NodeKey removed, 
+        utils::HashMap<NodeKey, PartitionedState> &active_states, 
+        utils::HashMap<PartitionKey, Partition> &partition_buckets) = 0;
 };
 
 extern void add_partition_policy_options_to_feature(plugins::Feature &feature);

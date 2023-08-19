@@ -11,37 +11,38 @@ InterEpsilonGreedyMinHPolicy::InterEpsilonGreedyMinHPolicy(const plugins::Option
 
 
 
-inline int InterEpsilonGreedyMinHPolicy::state_h(int state_id, utils::HashMap<Key, PartitionedState> &active_states) {
+inline int InterEpsilonGreedyMinHPolicy::state_h(int state_id, utils::HashMap<NodeKey, PartitionedState> &active_states) {
     return active_states.at(state_id).h;
 }
 
 bool InterEpsilonGreedyMinHPolicy::compare_parent_type_smaller(int parent, int child, 
-    utils::HashMap<Key, PartitionedState> &active_states,
-    utils::HashMap<Key, Partition> &partition_buckets)
+    utils::HashMap<NodeKey, PartitionedState> &active_states,
+    utils::HashMap<PartitionKey, Partition> &partition_buckets)
 {
+    // something is broken with the order i do things -- somehow partitions are removed from buckets but not from  the heap
     if (partition_buckets.at(partition_heap[parent]).empty()) return false;
     if (partition_buckets.at(partition_heap[child]).empty()) return true;
     return state_h(partition_buckets.at(partition_heap[parent])[0], active_states) < state_h(partition_buckets.at(partition_heap[child])[0], active_states);
 }
 
 bool InterEpsilonGreedyMinHPolicy::compare_parent_type_bigger(int parent, int child, 
-    utils::HashMap<Key, PartitionedState> &active_states,
-    utils::HashMap<Key, Partition> &partition_buckets) 
+    utils::HashMap<NodeKey, PartitionedState> &active_states,
+    utils::HashMap<PartitionKey, Partition> &partition_buckets) 
 {
     if (partition_buckets.at(partition_heap[parent]).empty()) return true;
     if (partition_buckets.at(partition_heap[child]).empty()) return false;
     return state_h(partition_buckets.at(partition_heap[parent])[0], active_states) > state_h(partition_buckets.at(partition_heap[child])[0], active_states);
 }
 
-Key InterEpsilonGreedyMinHPolicy::random_access_heap_pop(
+PartitionKey InterEpsilonGreedyMinHPolicy::random_access_heap_pop(
         int loc, 
-        utils::HashMap<Key, PartitionedState> &active_states,
-        utils::HashMap<Key, Partition> &partition_buckets) 
+        utils::HashMap<NodeKey, PartitionedState> &active_states,
+        utils::HashMap<PartitionKey, Partition> &partition_buckets) 
 {
     adjust_to_top(loc);
     swap(partition_heap.front(), partition_heap.back());
 
-    Key to_return = partition_heap.back();
+    PartitionKey to_return = partition_heap.back();
     partition_heap.pop_back();
 
     adjust_heap_down(0, active_states, partition_buckets);
@@ -53,14 +54,15 @@ void InterEpsilonGreedyMinHPolicy::adjust_to_top(int pos) {
     while (pos != 0) {
         size_t parent_pos = (pos - 1) / 2;
         swap(partition_heap[pos], partition_heap[parent_pos]);
+        if (cached_partition_position == pos) cached_partition_position = parent_pos;
         pos = parent_pos;
     }
 }
 
 void InterEpsilonGreedyMinHPolicy::adjust_heap_up(
         int pos, 
-        utils::HashMap<Key, PartitionedState> &active_states,
-        utils::HashMap<Key, Partition> &partition_buckets) 
+        utils::HashMap<NodeKey, PartitionedState> &active_states,
+        utils::HashMap<PartitionKey, Partition> &partition_buckets) 
 {
     assert(utils::in_bounds(pos, partition_heap));
     while (pos != 0) {
@@ -69,14 +71,16 @@ void InterEpsilonGreedyMinHPolicy::adjust_heap_up(
             break;
 
         swap(partition_heap[pos], partition_heap[parent_pos]);
+        if (parent_pos == cached_partition_position) cached_partition_position = pos;
         pos = parent_pos;
+
     }
 }
 
 void InterEpsilonGreedyMinHPolicy::adjust_heap_down(
         int loc, 
-        utils::HashMap<Key, PartitionedState> &active_states,
-        utils::HashMap<Key, Partition> &partition_buckets)
+        utils::HashMap<NodeKey, PartitionedState> &active_states,
+        utils::HashMap<PartitionKey, Partition> &partition_buckets)
 {
     int left_child_loc = loc * 2 + 1;
     int right_child_loc = loc * 2 + 2;
@@ -90,18 +94,19 @@ void InterEpsilonGreedyMinHPolicy::adjust_heap_down(
 
     if(minimum != loc) {
         swap(partition_heap[loc], partition_heap[minimum]);
+        if (cached_partition_position == minimum) cached_partition_position = loc;
         adjust_heap_down(minimum, active_states, partition_buckets);
     }
 
 }
 
 
-Key InterEpsilonGreedyMinHPolicy::remove_min(utils::HashMap<Key, PartitionedState> &active_states, utils::HashMap<Key, Partition> &partition_buckets) { 
-
+PartitionKey InterEpsilonGreedyMinHPolicy::get_next_partition(utils::HashMap<NodeKey, PartitionedState> &active_states, utils::HashMap<PartitionKey, Partition> &partition_buckets) { 
+// logic error in how cached variables are set and used -- follow them through...
     if ( (partition_buckets.find(cached_parent_type) != partition_buckets.end()) 
         && partition_buckets.at(cached_parent_type).empty()) {
         
-        Key erase_key = random_access_heap_pop( 
+        random_access_heap_pop( 
             cached_partition_position,
             active_states,
             partition_buckets
@@ -125,10 +130,10 @@ Key InterEpsilonGreedyMinHPolicy::remove_min(utils::HashMap<Key, PartitionedStat
     return partition_heap[pos];
 }
 
-void InterEpsilonGreedyMinHPolicy::notify_insert(Key inserted, utils::HashMap<Key, PartitionedState> &active_states, utils::HashMap<Key, Partition> &partition_buckets) {
-
-    if (partition_buckets.at(inserted).size() == 1) {
-        partition_heap.push_back(inserted);
+void InterEpsilonGreedyMinHPolicy::notify_insert(bool new_type, NodeKey inserted, utils::HashMap<NodeKey, PartitionedState> &active_states, utils::HashMap<PartitionKey, Partition> &partition_buckets) {
+    // TODO: create a robust way to check if a type is new or not. Maybe just a flag.
+    if (new_type) {
+        partition_heap.push_back(active_states.at(inserted).partition);
 
         adjust_heap_up( 
             partition_heap.size()-1, 
