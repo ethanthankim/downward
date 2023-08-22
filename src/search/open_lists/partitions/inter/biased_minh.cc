@@ -19,7 +19,7 @@ PartitionKey InterBiasedPolicy::get_next_partition(utils::HashMap<NodeKey, Parti
         && partition_buckets.at(last_chosen_partition_key).empty() ) {
         
         utils::swap_and_pop_from_vector(h_buckets.at(last_chosen_h), last_chosen_partition_i);
-        vector<PartitionKey>& bucket = partition_buckets.at(last_chosen_partition_key);
+        vector<PartitionKey>& bucket = h_buckets.at(last_chosen_h);
         if (bucket.empty()) {
             h_buckets.erase(last_chosen_h);
 

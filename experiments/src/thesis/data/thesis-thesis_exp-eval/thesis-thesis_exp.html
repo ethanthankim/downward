@@ -102,7 +102,7 @@ document.addEventListener("DOMContentLoaded", show_main_tables);
 <header>
 <hgroup>
 <h1>thesis-thesis_exp</h1>
-<h3>2023-07-30</h3>
+<h3>2023-08-22</h3>
 </hgroup>
 </header>
 
@@ -110,6 +110,8 @@ document.addEventListener("DOMContentLoaded", show_main_tables);
 <div class="body">
 
 <ul>
+<li><strong><a href="#unexplained-errors" onclick="show_table(document.getElementById('unexplained-errors'));">Unexplained Errors</a></strong>
+</li>
 <li><strong><a href="#info" onclick="show_table(document.getElementById('info'));">Info</a></strong>
 </li>
 <li><strong><a href="#summary" onclick="show_table(document.getElementById('summary'));">Summary</a></strong>
@@ -128,7 +130,7 @@ document.addEventListener("DOMContentLoaded", show_main_tables);
 </li>
 <li><strong><a href="#error" onclick="show_table(document.getElementById('error'));">error</a></strong>
   <ul>
-  <li><a href="#error-error-success" onclick="show_table(document.getElementById('error-error-success'));">error-success</a> <a href="#error-blocksworld" onclick="show_table(document.getElementById('error-blocksworld'));">blocksworld</a> <a href="#error-gripper" onclick="show_table(document.getElementById('error-gripper'));">gripper</a> <a href="#error-pegsol" onclick="show_table(document.getElementById('error-pegsol'));">pegsol</a>
+  <li><a href="#error-error-segfault" onclick="show_table(document.getElementById('error-error-segfault'));">error-segfault</a> <a href="#error-error-success" onclick="show_table(document.getElementById('error-error-success'));">error-success</a> <a href="#error-blocksworld" onclick="show_table(document.getElementById('error-blocksworld'));">blocksworld</a> <a href="#error-gripper" onclick="show_table(document.getElementById('error-gripper'));">gripper</a> <a href="#error-pegsol" onclick="show_table(document.getElementById('error-pegsol'));">pegsol</a>
   </li>
   </ul>
 </li>
@@ -154,6 +156,59 @@ document.addEventListener("DOMContentLoaded", show_main_tables);
 
 <section~A~>
 <h1></h1>
+<section id="unexplained-errors">
+<h2>unexplained-errors</h2>
+
+<button type="button" class="toggle-table" onclick="toggle_table(this)">Show table</button><p></p>
+
+<table class="tableborder" style="display:none">
+<tr>
+<th>Unexplained errors</th>
+<th>domain</th>
+<th>problem</th>
+<th>algorithm</th>
+<th>unexplained_<wbr>errors</th>
+<th>error</th>
+<th>planner_<wbr>wall_<wbr>clock_<wbr>time</th>
+<th>raw_<wbr>memory</th>
+<th>node</th>
+</tr>
+<tr>
+<td>runs-00001-00100/00005</td>
+<td>pegsol</td>
+<td>p04.pddl</td>
+<td>dawson-masters-HI-biased-uniform</td>
+<td>['segfault']</td>
+<td>segfault</td>
+<td class="right">0.96</td>
+<td class="right">?</td>
+<td>dawson-Latitude-5490</td>
+</tr>
+<tr>
+<td>runs-00001-00100/00010</td>
+<td>pegsol</td>
+<td>p04.pddl</td>
+<td>dawson-masters-HI-biased-invasion</td>
+<td>['segfault']</td>
+<td>segfault</td>
+<td class="right">0.81</td>
+<td class="right">?</td>
+<td>dawson-Latitude-5490</td>
+</tr>
+<tr>
+<td>runs-00001-00100/00015</td>
+<td>pegsol</td>
+<td>p04.pddl</td>
+<td>dawson-masters-HI-biased-epsilon</td>
+<td>['segfault']</td>
+<td>segfault</td>
+<td class="right">0.96</td>
+<td class="right">?</td>
+<td>dawson-Latitude-5490</td>
+</tr>
+</table>
+
+</section>
 <section id="info">
 <h2>info</h2>
 
@@ -168,32 +223,25 @@ document.addEventListener("DOMContentLoaded", show_main_tables);
 <th>component_<wbr>options</th>
 </tr>
 <tr>
-<td>dawson-masters-biased</td>
+<td>dawson-masters-HI-biased-epsilon</td>
 <td>dawson-masters</td>
-<td>97b4a86ce4d4c7e1c8b7a206b5bba75e4a42b953</td>
+<td>63b71434d7796b0b79935a1d31163a5f14e21c31</td>
 <td>['--validate', '--overall-time-limit', '30m', '--overall-memory-limit', '3584M', '--overall-time-limit', '10m']</td>
-<td>['--evaluator', 'h=ff(transform=adapt_costs(cost_type=one))', '--search', 'eager(alt([single(h), softmin_type_based([h, g()], ignore_size=true)]), cost_type=one)']</td>
+<td>['--evaluator', 'h=ff(transform=adapt_costs(cost_type=one))', '--search', 'eager(partition(h, hi_partition(), inter_biased(), intra_ep_minh() ))']</td>
 </tr>
 <tr>
-<td>dawson-masters-epsilon</td>
+<td>dawson-masters-HI-biased-invasion</td>
 <td>dawson-masters</td>
-<td>97b4a86ce4d4c7e1c8b7a206b5bba75e4a42b953</td>
+<td>63b71434d7796b0b79935a1d31163a5f14e21c31</td>
 <td>['--validate', '--overall-time-limit', '30m', '--overall-memory-limit', '3584M', '--overall-time-limit', '10m']</td>
-<td>['--evaluator', 'h=ff(transform=adapt_costs(cost_type=one))', '--search', 'eager(epsilon_greedy(h))']</td>
+<td>['--evaluator', 'h=ff(transform=adapt_costs(cost_type=one))', '--search', 'eager(partition(h, hi_partition(), inter_biased(), intra_custom_evaluator(random_edge(), 0.0) ))']</td>
 </tr>
 <tr>
-<td>dawson-masters-invasion-percolation</td>
+<td>dawson-masters-HI-biased-uniform</td>
 <td>dawson-masters</td>
-<td>97b4a86ce4d4c7e1c8b7a206b5bba75e4a42b953</td>
+<td>63b71434d7796b0b79935a1d31163a5f14e21c31</td>
 <td>['--validate', '--overall-time-limit', '30m', '--overall-memory-limit', '3584M', '--overall-time-limit', '10m']</td>
-<td>['--evaluator', 'h=ff(transform=adapt_costs(cost_type=one))', '--evaluator', 'r=random_edge()', '--search', 'eager(alt( [tiebreaking( [h, r] ), single(r)]) )']</td>
-</tr>
-<tr>
-<td>dawson-masters-type</td>
-<td>dawson-masters</td>
-<td>97b4a86ce4d4c7e1c8b7a206b5bba75e4a42b953</td>
-<td>['--validate', '--overall-time-limit', '30m', '--overall-memory-limit', '3584M', '--overall-time-limit', '10m']</td>
-<td>['--evaluator', 'h=ff(transform=adapt_costs(cost_type=one))', '--search', 'eager(alt( [single(h), type_based( [h, g()] )] )) ']</td>
+<td>['--evaluator', 'h=ff(transform=adapt_costs(cost_type=one))', '--search', 'eager(partition(h, hi_partition(), inter_biased(), intra_uniform() ))']</td>
 </tr>
 </table>
 
@@ -210,52 +258,51 @@ Used nodes: {dawson-Latitude-5490}
 <table class="tableborder" style="display:none">
 <tr>
 <th>Summary</th>
-<th>dawson-masters-biased</th>
-<th>dawson-masters-epsilon</th>
-<th>dawson-masters-invasion-percolation</th>
-<th>dawson-masters-type</th>
+<th>dawson-masters-HI-biased-epsilon</th>
+<th>dawson-masters-HI-biased-invasion</th>
+<th>dawson-masters-HI-biased-uniform</th>
 </tr>
 <tr>
 <td><a href="#cost" onclick="show_table(document.getElementById('cost'));">cost - Sum</a></td>
-<td class="right"><span style="color:rgb(0,0,178)">268.00</span></td>
-<td class="right"><span style="color:rgb(0,82,178)">265.00</span></td>
-<td class="right"><span style="color:rgb(0,0,178)">268.00</span></td>
-<td class="right"><span style="color:rgb(0,178,0)">255.00</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">254.00</span></td>
+<td class="right"><span style="color:rgb(0,0,178)">488.00</span></td>
+<td class="right"><span style="color:rgb(0,178,146)">350.00</span></td>
 </tr>
 <tr>
 <td><a href="#coverage" onclick="show_table(document.getElementById('coverage'));">coverage - Sum</a></td>
-<td class="right"><span style="color:rgb(127,127,127)">5</span></td>
-<td class="right"><span style="color:rgb(127,127,127)">5</span></td>
-<td class="right"><span style="color:rgb(127,127,127)">5</span></td>
-<td class="right"><span style="color:rgb(127,127,127)">5</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">4</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">4</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">4</span></td>
+</tr>
+<tr>
+<td><a href="#error-error-segfault" onclick="show_table(document.getElementById('error-error-segfault'));">error-segfault - Sum</a></td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
 </tr>
 <tr>
 <td><a href="#error-error-success" onclick="show_table(document.getElementById('error-error-success'));">error-success - Sum</a></td>
-<td class="right"><span style="color:rgb(127,127,127)">5</span></td>
-<td class="right"><span style="color:rgb(127,127,127)">5</span></td>
-<td class="right"><span style="color:rgb(127,127,127)">5</span></td>
-<td class="right"><span style="color:rgb(127,127,127)">5</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">4</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">4</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">4</span></td>
 </tr>
 <tr>
 <td><a href="#expansions" onclick="show_table(document.getElementById('expansions'));">expansions - Geometric mean</a></td>
-<td class="right"><span style="color:rgb(0,178,31)">254.85</span></td>
-<td class="right"><span style="color:rgb(0,178,174)">363.27</span></td>
-<td class="right"><span style="color:rgb(0,178,0)">230.58</span></td>
-<td class="right"><span style="color:rgb(0,0,178)">501.45</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">117.31</span></td>
+<td class="right"><span style="color:rgb(0,6,178)">298.02</span></td>
+<td class="right"><span style="color:rgb(0,0,178)">301.53</span></td>
 </tr>
 <tr>
 <td><a href="#memory" onclick="show_table(document.getElementById('memory'));">memory - Sum</a></td>
-<td class="right"><span style="color:rgb(0,178,0)">61828</span></td>
-<td class="right"><span style="color:rgb(0,178,34)">62924</span></td>
-<td class="right"><span style="color:rgb(0,0,178)">73164</span></td>
-<td class="right"><span style="color:rgb(0,178,33)">62900</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">49376</span></td>
+<td class="right"><span style="color:rgb(0,0,178)">53984</span></td>
+<td class="right"><span style="color:rgb(0,178,140)">51184</span></td>
 </tr>
 <tr>
 <td><a href="#total_time" onclick="show_table(document.getElementById('total_time'));">total_time - Geometric mean</a></td>
-<td class="right"><span style="color:rgb(0,178,0)">0.06</span></td>
-<td class="right"><span style="color:rgb(0,178,89)">0.07</span></td>
-<td class="right"><span style="color:rgb(0,178,0)">0.06</span></td>
-<td class="right"><span style="color:rgb(0,0,178)">0.10</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">0.13</span></td>
+<td class="right"><span style="color:rgb(0,0,178)">0.56</span></td>
+<td class="right"><span style="color:rgb(0,24,178)">0.53</span></td>
 </tr>
 </table>
 
@@ -268,38 +315,33 @@ Used nodes: {dawson-Latitude-5490}
 <table class="tableborder" style="display:none">
 <tr>
 <th>cost</th>
-<th>dawson-masters-biased</th>
-<th>dawson-masters-epsilon</th>
-<th>dawson-masters-invasion-percolation</th>
-<th>dawson-masters-type</th>
+<th>dawson-masters-HI-biased-epsilon</th>
+<th>dawson-masters-HI-biased-invasion</th>
+<th>dawson-masters-HI-biased-uniform</th>
 </tr>
 <tr>
 <td><a href="#cost-blocksworld" onclick="show_table(document.getElementById('cost-blocksworld'));">blocksworld</a> (1)</td>
-<td class="right"><span style="color:rgb(0,0,178)">72.00</span></td>
-<td class="right"><span style="color:rgb(0,178,79)">44.00</span></td>
-<td class="right"><span style="color:rgb(0,19,178)">70.00</span></td>
-<td class="right"><span style="color:rgb(0,178,0)">36.00</span></td>
+<td class="right"><span style="color:rgb(0,178,133)">68.00</span></td>
+<td class="right"><span style="color:rgb(0,0,178)">88.00</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">56.00</span></td>
 </tr>
 <tr>
 <td><a href="#cost-gripper" onclick="show_table(document.getElementById('cost-gripper'));">gripper</a> (2)</td>
 <td class="right"><span style="color:rgb(0,178,0)">180.00</span></td>
-<td class="right"><span style="color:rgb(0,0,178)">208.00</span></td>
-<td class="right"><span style="color:rgb(0,178,25)">182.00</span></td>
-<td class="right"><span style="color:rgb(0,25,178)">206.00</span></td>
+<td class="right"><span style="color:rgb(0,0,178)">394.00</span></td>
+<td class="right"><span style="color:rgb(0,176,178)">288.00</span></td>
 </tr>
 <tr>
-<td><a href="#cost-pegsol" onclick="show_table(document.getElementById('cost-pegsol'));">pegsol</a> (2)</td>
-<td class="right"><span style="color:rgb(0,0,178)">16.00</span></td>
-<td class="right"><span style="color:rgb(0,178,0)">13.00</span></td>
-<td class="right"><span style="color:rgb(0,0,178)">16.00</span></td>
-<td class="right"><span style="color:rgb(0,178,0)">13.00</span></td>
+<td><a href="#cost-pegsol" onclick="show_table(document.getElementById('cost-pegsol'));">pegsol</a> (1)</td>
+<td class="right"><span style="color:rgb(127,127,127)">6.00</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">6.00</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">6.00</span></td>
 </tr>
 <tr>
-<td><strong>Sum (5)</strong></td>
-<td class="right"><span style="color:rgb(0,0,178)">268.00</span></td>
-<td class="right"><span style="color:rgb(0,82,178)">265.00</span></td>
-<td class="right"><span style="color:rgb(0,0,178)">268.00</span></td>
-<td class="right"><span style="color:rgb(0,178,0)">255.00</span></td>
+<td><strong>Sum (4)</strong></td>
+<td class="right"><span style="color:rgb(0,178,0)">254.00</span></td>
+<td class="right"><span style="color:rgb(0,0,178)">488.00</span></td>
+<td class="right"><span style="color:rgb(0,178,146)">350.00</span></td>
 </tr>
 </table>
 
@@ -315,17 +357,15 @@ Only tasks where all algorithms have a value for "cost" are considered. Each tab
 <table class="tableborder" style="display:none">
 <tr>
 <th>cost</th>
-<th>dawson-masters-biased</th>
-<th>dawson-masters-epsilon</th>
-<th>dawson-masters-invasion-percolation</th>
-<th>dawson-masters-type</th>
+<th>dawson-masters-HI-biased-epsilon</th>
+<th>dawson-masters-HI-biased-invasion</th>
+<th>dawson-masters-HI-biased-uniform</th>
 </tr>
 <tr>
 <td>p02.pddl</td>
-<td class="right"><span style="color:rgb(0,0,178)">72.00</span></td>
-<td class="right"><span style="color:rgb(0,178,79)">44.00</span></td>
-<td class="right"><span style="color:rgb(0,19,178)">70.00</span></td>
-<td class="right"><span style="color:rgb(0,178,0)">36.00</span></td>
+<td class="right"><span style="color:rgb(0,178,133)">68.00</span></td>
+<td class="right"><span style="color:rgb(0,0,178)">88.00</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">56.00</span></td>
 </tr>
 </table>
 
@@ -338,24 +378,21 @@ Only tasks where all algorithms have a value for "cost" are considered. Each tab
 <table class="tableborder" style="display:none">
 <tr>
 <th>cost</th>
-<th>dawson-masters-biased</th>
-<th>dawson-masters-epsilon</th>
-<th>dawson-masters-invasion-percolation</th>
-<th>dawson-masters-type</th>
+<th>dawson-masters-HI-biased-epsilon</th>
+<th>dawson-masters-HI-biased-invasion</th>
+<th>dawson-masters-HI-biased-uniform</th>
 </tr>
 <tr>
 <td>p02.pddl</td>
 <td class="right"><span style="color:rgb(0,178,0)">75.00</span></td>
-<td class="right"><span style="color:rgb(0,0,178)">89.00</span></td>
-<td class="right"><span style="color:rgb(0,178,0)">75.00</span></td>
-<td class="right"><span style="color:rgb(0,102,178)">85.00</span></td>
+<td class="right"><span style="color:rgb(0,0,178)">143.00</span></td>
+<td class="right"><span style="color:rgb(0,136,178)">117.00</span></td>
 </tr>
 <tr>
 <td>p04.pddl</td>
 <td class="right"><span style="color:rgb(0,178,0)">105.00</span></td>
-<td class="right"><span style="color:rgb(0,44,178)">119.00</span></td>
-<td class="right"><span style="color:rgb(0,178,44)">107.00</span></td>
-<td class="right"><span style="color:rgb(0,0,178)">121.00</span></td>
+<td class="right"><span style="color:rgb(0,0,178)">251.00</span></td>
+<td class="right"><span style="color:rgb(0,178,161)">171.00</span></td>
 </tr>
 </table>
 
@@ -368,24 +405,21 @@ Only tasks where all algorithms have a value for "cost" are considered. Each tab
 <table class="tableborder" style="display:none">
 <tr>
 <th>cost</th>
-<th>dawson-masters-biased</th>
-<th>dawson-masters-epsilon</th>
-<th>dawson-masters-invasion-percolation</th>
-<th>dawson-masters-type</th>
+<th>dawson-masters-HI-biased-epsilon</th>
+<th>dawson-masters-HI-biased-invasion</th>
+<th>dawson-masters-HI-biased-uniform</th>
 </tr>
 <tr>
 <td>p02.pddl</td>
 <td class="right"><span style="color:rgb(127,127,127)">6.00</span></td>
 <td class="right"><span style="color:rgb(127,127,127)">6.00</span></td>
 <td class="right"><span style="color:rgb(127,127,127)">6.00</span></td>
-<td class="right"><span style="color:rgb(127,127,127)">6.00</span></td>
 </tr>
 <tr>
 <td>p04.pddl</td>
-<td class="right"><span style="color:rgb(0,0,178)">10.00</span></td>
-<td class="right"><span style="color:rgb(0,178,0)">7.00</span></td>
-<td class="right"><span style="color:rgb(0,0,178)">10.00</span></td>
-<td class="right"><span style="color:rgb(0,178,0)">7.00</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">None</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">None</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">None</span></td>
 </tr>
 </table>
 
@@ -399,14 +433,12 @@ Only tasks where all algorithms have a value for "cost" are considered. Each tab
 <table class="tableborder" style="display:none">
 <tr>
 <th>coverage</th>
-<th>dawson-masters-biased</th>
-<th>dawson-masters-epsilon</th>
-<th>dawson-masters-invasion-percolation</th>
-<th>dawson-masters-type</th>
+<th>dawson-masters-HI-biased-epsilon</th>
+<th>dawson-masters-HI-biased-invasion</th>
+<th>dawson-masters-HI-biased-uniform</th>
 </tr>
 <tr>
 <td><a href="#coverage-blocksworld" onclick="show_table(document.getElementById('coverage-blocksworld'));">blocksworld</a> (1)</td>
-<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
 <td class="right"><span style="color:rgb(127,127,127)">1</span></td>
 <td class="right"><span style="color:rgb(127,127,127)">1</span></td>
 <td class="right"><span style="color:rgb(127,127,127)">1</span></td>
@@ -416,21 +448,18 @@ Only tasks where all algorithms have a value for "cost" are considered. Each tab
 <td class="right"><span style="color:rgb(127,127,127)">2</span></td>
 <td class="right"><span style="color:rgb(127,127,127)">2</span></td>
 <td class="right"><span style="color:rgb(127,127,127)">2</span></td>
-<td class="right"><span style="color:rgb(127,127,127)">2</span></td>
 </tr>
 <tr>
 <td><a href="#coverage-pegsol" onclick="show_table(document.getElementById('coverage-pegsol'));">pegsol</a> (2)</td>
-<td class="right"><span style="color:rgb(127,127,127)">2</span></td>
-<td class="right"><span style="color:rgb(127,127,127)">2</span></td>
-<td class="right"><span style="color:rgb(127,127,127)">2</span></td>
-<td class="right"><span style="color:rgb(127,127,127)">2</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
 </tr>
 <tr>
 <td><strong>Sum (5)</strong></td>
-<td class="right"><span style="color:rgb(127,127,127)">5</span></td>
-<td class="right"><span style="color:rgb(127,127,127)">5</span></td>
-<td class="right"><span style="color:rgb(127,127,127)">5</span></td>
-<td class="right"><span style="color:rgb(127,127,127)">5</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">4</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">4</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">4</span></td>
 </tr>
 </table>
 
@@ -446,14 +475,12 @@ The bottom row reports the sum across all domains.
 <table class="tableborder" style="display:none">
 <tr>
 <th>coverage</th>
-<th>dawson-masters-biased</th>
-<th>dawson-masters-epsilon</th>
-<th>dawson-masters-invasion-percolation</th>
-<th>dawson-masters-type</th>
+<th>dawson-masters-HI-biased-epsilon</th>
+<th>dawson-masters-HI-biased-invasion</th>
+<th>dawson-masters-HI-biased-uniform</th>
 </tr>
 <tr>
 <td>p02.pddl</td>
-<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
 <td class="right"><span style="color:rgb(127,127,127)">1</span></td>
 <td class="right"><span style="color:rgb(127,127,127)">1</span></td>
 <td class="right"><span style="color:rgb(127,127,127)">1</span></td>
@@ -469,21 +496,18 @@ The bottom row reports the sum across all domains.
 <table class="tableborder" style="display:none">
 <tr>
 <th>coverage</th>
-<th>dawson-masters-biased</th>
-<th>dawson-masters-epsilon</th>
-<th>dawson-masters-invasion-percolation</th>
-<th>dawson-masters-type</th>
+<th>dawson-masters-HI-biased-epsilon</th>
+<th>dawson-masters-HI-biased-invasion</th>
+<th>dawson-masters-HI-biased-uniform</th>
 </tr>
 <tr>
 <td>p02.pddl</td>
 <td class="right"><span style="color:rgb(127,127,127)">1</span></td>
 <td class="right"><span style="color:rgb(127,127,127)">1</span></td>
 <td class="right"><span style="color:rgb(127,127,127)">1</span></td>
-<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
 </tr>
 <tr>
 <td>p04.pddl</td>
-<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
 <td class="right"><span style="color:rgb(127,127,127)">1</span></td>
 <td class="right"><span style="color:rgb(127,127,127)">1</span></td>
 <td class="right"><span style="color:rgb(127,127,127)">1</span></td>
@@ -499,24 +523,21 @@ The bottom row reports the sum across all domains.
 <table class="tableborder" style="display:none">
 <tr>
 <th>coverage</th>
-<th>dawson-masters-biased</th>
-<th>dawson-masters-epsilon</th>
-<th>dawson-masters-invasion-percolation</th>
-<th>dawson-masters-type</th>
+<th>dawson-masters-HI-biased-epsilon</th>
+<th>dawson-masters-HI-biased-invasion</th>
+<th>dawson-masters-HI-biased-uniform</th>
 </tr>
 <tr>
 <td>p02.pddl</td>
 <td class="right"><span style="color:rgb(127,127,127)">1</span></td>
 <td class="right"><span style="color:rgb(127,127,127)">1</span></td>
 <td class="right"><span style="color:rgb(127,127,127)">1</span></td>
-<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
 </tr>
 <tr>
 <td>p04.pddl</td>
-<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
-<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
-<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
-<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">0</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">0</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">0</span></td>
 </tr>
 </table>
 
@@ -525,6 +546,45 @@ The bottom row reports the sum across all domains.
 <section id="error">
 <h2>error</h2>
 
+<section id="error-error-segfault">
+<h3>error-segfault</h3>
+
+<button type="button" class="toggle-table" onclick="toggle_table(this)">Show table</button><p></p>
+
+<table class="tableborder" style="display:none">
+<tr>
+<th>error-segfault</th>
+<th>dawson-masters-HI-biased-epsilon</th>
+<th>dawson-masters-HI-biased-invasion</th>
+<th>dawson-masters-HI-biased-uniform</th>
+</tr>
+<tr>
+<td><a href="#error-blocksworld" onclick="show_table(document.getElementById('error-blocksworld'));">blocksworld</a></td>
+<td class="right"><span style="color:rgb(127,127,127)">0</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">0</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">0</span></td>
+</tr>
+<tr>
+<td><a href="#error-gripper" onclick="show_table(document.getElementById('error-gripper'));">gripper</a></td>
+<td class="right"><span style="color:rgb(127,127,127)">0</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">0</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">0</span></td>
+</tr>
+<tr>
+<td><a href="#error-pegsol" onclick="show_table(document.getElementById('error-pegsol'));">pegsol</a></td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+</tr>
+<tr>
+<td><strong>Sum</strong></td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+</tr>
+</table>
+
+</section>
 <section id="error-error-success">
 <h3>error-success</h3>
 
@@ -533,14 +593,12 @@ The bottom row reports the sum across all domains.
 <table class="tableborder" style="display:none">
 <tr>
 <th>error-success</th>
-<th>dawson-masters-biased</th>
-<th>dawson-masters-epsilon</th>
-<th>dawson-masters-invasion-percolation</th>
-<th>dawson-masters-type</th>
+<th>dawson-masters-HI-biased-epsilon</th>
+<th>dawson-masters-HI-biased-invasion</th>
+<th>dawson-masters-HI-biased-uniform</th>
 </tr>
 <tr>
 <td><a href="#error-blocksworld" onclick="show_table(document.getElementById('error-blocksworld'));">blocksworld</a></td>
-<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
 <td class="right"><span style="color:rgb(127,127,127)">1</span></td>
 <td class="right"><span style="color:rgb(127,127,127)">1</span></td>
 <td class="right"><span style="color:rgb(127,127,127)">1</span></td>
@@ -550,21 +608,18 @@ The bottom row reports the sum across all domains.
 <td class="right"><span style="color:rgb(127,127,127)">2</span></td>
 <td class="right"><span style="color:rgb(127,127,127)">2</span></td>
 <td class="right"><span style="color:rgb(127,127,127)">2</span></td>
-<td class="right"><span style="color:rgb(127,127,127)">2</span></td>
 </tr>
 <tr>
 <td><a href="#error-pegsol" onclick="show_table(document.getElementById('error-pegsol'));">pegsol</a></td>
-<td class="right"><span style="color:rgb(127,127,127)">2</span></td>
-<td class="right"><span style="color:rgb(127,127,127)">2</span></td>
-<td class="right"><span style="color:rgb(127,127,127)">2</span></td>
-<td class="right"><span style="color:rgb(127,127,127)">2</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">1</span></td>
 </tr>
 <tr>
 <td><strong>Sum</strong></td>
-<td class="right"><span style="color:rgb(127,127,127)">5</span></td>
-<td class="right"><span style="color:rgb(127,127,127)">5</span></td>
-<td class="right"><span style="color:rgb(127,127,127)">5</span></td>
-<td class="right"><span style="color:rgb(127,127,127)">5</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">4</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">4</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">4</span></td>
 </tr>
 </table>
 
@@ -577,14 +632,12 @@ The bottom row reports the sum across all domains.
 <table class="tableborder" style="display:none">
 <tr>
 <th>error</th>
-<th>dawson-masters-biased</th>
-<th>dawson-masters-epsilon</th>
-<th>dawson-masters-invasion-percolation</th>
-<th>dawson-masters-type</th>
+<th>dawson-masters-HI-biased-epsilon</th>
+<th>dawson-masters-HI-biased-invasion</th>
+<th>dawson-masters-HI-biased-uniform</th>
 </tr>
 <tr>
 <td>p02.pddl</td>
-<td>success</td>
 <td>success</td>
 <td>success</td>
 <td>success</td>
@@ -600,21 +653,18 @@ The bottom row reports the sum across all domains.
 <table class="tableborder" style="display:none">
 <tr>
 <th>error</th>
-<th>dawson-masters-biased</th>
-<th>dawson-masters-epsilon</th>
-<th>dawson-masters-invasion-percolation</th>
-<th>dawson-masters-type</th>
+<th>dawson-masters-HI-biased-epsilon</th>
+<th>dawson-masters-HI-biased-invasion</th>
+<th>dawson-masters-HI-biased-uniform</th>
 </tr>
 <tr>
 <td>p02.pddl</td>
 <td>success</td>
 <td>success</td>
 <td>success</td>
-<td>success</td>
 </tr>
 <tr>
 <td>p04.pddl</td>
-<td>success</td>
 <td>success</td>
 <td>success</td>
 <td>success</td>
@@ -630,24 +680,21 @@ The bottom row reports the sum across all domains.
 <table class="tableborder" style="display:none">
 <tr>
 <th>error</th>
-<th>dawson-masters-biased</th>
-<th>dawson-masters-epsilon</th>
-<th>dawson-masters-invasion-percolation</th>
-<th>dawson-masters-type</th>
+<th>dawson-masters-HI-biased-epsilon</th>
+<th>dawson-masters-HI-biased-invasion</th>
+<th>dawson-masters-HI-biased-uniform</th>
 </tr>
 <tr>
 <td>p02.pddl</td>
 <td>success</td>
 <td>success</td>
 <td>success</td>
-<td>success</td>
 </tr>
 <tr>
 <td>p04.pddl</td>
-<td>success</td>
-<td>success</td>
-<td>success</td>
-<td>success</td>
+<td>segfault</td>
+<td>segfault</td>
+<td>segfault</td>
 </tr>
 </table>
 
@@ -661,38 +708,33 @@ The bottom row reports the sum across all domains.
 <table class="tableborder" style="display:none">
 <tr>
 <th>expansions</th>
-<th>dawson-masters-biased</th>
-<th>dawson-masters-epsilon</th>
-<th>dawson-masters-invasion-percolation</th>
-<th>dawson-masters-type</th>
+<th>dawson-masters-HI-biased-epsilon</th>
+<th>dawson-masters-HI-biased-invasion</th>
+<th>dawson-masters-HI-biased-uniform</th>
 </tr>
 <tr>
 <td><a href="#expansions-blocksworld" onclick="show_table(document.getElementById('expansions-blocksworld'));">blocksworld</a> (1)</td>
-<td class="right"><span style="color:rgb(0,178,83)">1212.00</span></td>
-<td class="right"><span style="color:rgb(0,178,50)">1133.00</span></td>
-<td class="right"><span style="color:rgb(0,178,0)">1014.00</span></td>
-<td class="right"><span style="color:rgb(0,0,178)">1857.00</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">351.00</span></td>
+<td class="right"><span style="color:rgb(0,178,175)">805.00</span></td>
+<td class="right"><span style="color:rgb(0,0,178)">1273.00</span></td>
 </tr>
 <tr>
 <td><a href="#expansions-gripper" onclick="show_table(document.getElementById('expansions-gripper'));">gripper</a> (2)</td>
-<td class="right"><span style="color:rgb(0,178,0)">128.31</span></td>
-<td class="right"><span style="color:rgb(0,102,178)">621.03</span></td>
-<td class="right"><span style="color:rgb(0,178,15)">157.58</span></td>
-<td class="right"><span style="color:rgb(0,0,178)">819.79</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">191.66</span></td>
+<td class="right"><span style="color:rgb(0,0,178)">1174.34</span></td>
+<td class="right"><span style="color:rgb(0,136,178)">797.60</span></td>
 </tr>
 <tr>
-<td><a href="#expansions-pegsol" onclick="show_table(document.getElementById('expansions-pegsol'));">pegsol</a> (2)</td>
-<td class="right"><span style="color:rgb(0,0,178)">106.43</span></td>
-<td class="right"><span style="color:rgb(0,178,0)">68.13</span></td>
-<td class="right"><span style="color:rgb(0,178,80)">76.73</span></td>
-<td class="right"><span style="color:rgb(0,178,137)">82.83</span></td>
+<td><a href="#expansions-pegsol" onclick="show_table(document.getElementById('expansions-pegsol'));">pegsol</a> (1)</td>
+<td class="right"><span style="color:rgb(0,178,0)">24.00</span></td>
+<td class="right"><span style="color:rgb(0,0,178)">28.00</span></td>
+<td class="right"><span style="color:rgb(0,89,178)">27.00</span></td>
 </tr>
 <tr>
-<td><strong>Geometric mean (5)</strong></td>
-<td class="right"><span style="color:rgb(0,178,31)">254.85</span></td>
-<td class="right"><span style="color:rgb(0,178,174)">363.27</span></td>
-<td class="right"><span style="color:rgb(0,178,0)">230.58</span></td>
-<td class="right"><span style="color:rgb(0,0,178)">501.45</span></td>
+<td><strong>Geometric mean (4)</strong></td>
+<td class="right"><span style="color:rgb(0,178,0)">117.31</span></td>
+<td class="right"><span style="color:rgb(0,6,178)">298.02</span></td>
+<td class="right"><span style="color:rgb(0,0,178)">301.53</span></td>
 </tr>
 </table>
 
@@ -708,17 +750,15 @@ Only tasks where all algorithms have a value for "expansions" are considered. Ea
 <table class="tableborder" style="display:none">
 <tr>
 <th>expansions</th>
-<th>dawson-masters-biased</th>
-<th>dawson-masters-epsilon</th>
-<th>dawson-masters-invasion-percolation</th>
-<th>dawson-masters-type</th>
+<th>dawson-masters-HI-biased-epsilon</th>
+<th>dawson-masters-HI-biased-invasion</th>
+<th>dawson-masters-HI-biased-uniform</th>
 </tr>
 <tr>
 <td>p02.pddl</td>
-<td class="right"><span style="color:rgb(0,178,83)">1212</span></td>
-<td class="right"><span style="color:rgb(0,178,50)">1133</span></td>
-<td class="right"><span style="color:rgb(0,178,0)">1014</span></td>
-<td class="right"><span style="color:rgb(0,0,178)">1857</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">351</span></td>
+<td class="right"><span style="color:rgb(0,178,175)">805</span></td>
+<td class="right"><span style="color:rgb(0,0,178)">1273</span></td>
 </tr>
 </table>
 
@@ -731,24 +771,21 @@ Only tasks where all algorithms have a value for "expansions" are considered. Ea
 <table class="tableborder" style="display:none">
 <tr>
 <th>expansions</th>
-<th>dawson-masters-biased</th>
-<th>dawson-masters-epsilon</th>
-<th>dawson-masters-invasion-percolation</th>
-<th>dawson-masters-type</th>
+<th>dawson-masters-HI-biased-epsilon</th>
+<th>dawson-masters-HI-biased-invasion</th>
+<th>dawson-masters-HI-biased-uniform</th>
 </tr>
 <tr>
 <td>p02.pddl</td>
-<td class="right"><span style="color:rgb(0,178,0)">101</span></td>
-<td class="right"><span style="color:rgb(0,62,178)">517</span></td>
-<td class="right"><span style="color:rgb(0,178,20)">130</span></td>
-<td class="right"><span style="color:rgb(0,0,178)">606</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">155</span></td>
+<td class="right"><span style="color:rgb(0,0,178)">888</span></td>
+<td class="right"><span style="color:rgb(0,126,178)">628</span></td>
 </tr>
 <tr>
 <td>p04.pddl</td>
-<td class="right"><span style="color:rgb(0,178,0)">163</span></td>
-<td class="right"><span style="color:rgb(0,136,178)">746</span></td>
-<td class="right"><span style="color:rgb(0,178,10)">191</span></td>
-<td class="right"><span style="color:rgb(0,0,178)">1109</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">237</span></td>
+<td class="right"><span style="color:rgb(0,0,178)">1553</span></td>
+<td class="right"><span style="color:rgb(0,146,178)">1013</span></td>
 </tr>
 </table>
 
@@ -761,24 +798,21 @@ Only tasks where all algorithms have a value for "expansions" are considered. Ea
 <table class="tableborder" style="display:none">
 <tr>
 <th>expansions</th>
-<th>dawson-masters-biased</th>
-<th>dawson-masters-epsilon</th>
-<th>dawson-masters-invasion-percolation</th>
-<th>dawson-masters-type</th>
+<th>dawson-masters-HI-biased-epsilon</th>
+<th>dawson-masters-HI-biased-invasion</th>
+<th>dawson-masters-HI-biased-uniform</th>
 </tr>
 <tr>
 <td>p02.pddl</td>
-<td class="right"><span style="color:rgb(0,178,54)">24</span></td>
-<td class="right"><span style="color:rgb(0,178,0)">22</span></td>
-<td class="right"><span style="color:rgb(0,164,178)">29</span></td>
-<td class="right"><span style="color:rgb(0,0,178)">35</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">24</span></td>
+<td class="right"><span style="color:rgb(0,0,178)">28</span></td>
+<td class="right"><span style="color:rgb(0,89,178)">27</span></td>
 </tr>
 <tr>
 <td>p04.pddl</td>
-<td class="right"><span style="color:rgb(0,0,178)">472</span></td>
-<td class="right"><span style="color:rgb(0,178,19)">211</span></td>
-<td class="right"><span style="color:rgb(0,178,9)">203</span></td>
-<td class="right"><span style="color:rgb(0,178,0)">196</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">None</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">None</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">None</span></td>
 </tr>
 </table>
 
@@ -792,38 +826,33 @@ Only tasks where all algorithms have a value for "expansions" are considered. Ea
 <table class="tableborder" style="display:none">
 <tr>
 <th>memory</th>
-<th>dawson-masters-biased</th>
-<th>dawson-masters-epsilon</th>
-<th>dawson-masters-invasion-percolation</th>
-<th>dawson-masters-type</th>
+<th>dawson-masters-HI-biased-epsilon</th>
+<th>dawson-masters-HI-biased-invasion</th>
+<th>dawson-masters-HI-biased-uniform</th>
 </tr>
 <tr>
 <td><a href="#memory-blocksworld" onclick="show_table(document.getElementById('memory-blocksworld'));">blocksworld</a> (1)</td>
-<td class="right"><span style="color:rgb(0,178,0)">12668</span></td>
-<td class="right"><span style="color:rgb(0,178,10)">12804</span></td>
-<td class="right"><span style="color:rgb(0,0,178)">17164</span></td>
-<td class="right"><span style="color:rgb(0,178,20)">12932</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">12268</span></td>
+<td class="right"><span style="color:rgb(0,144,178)">12664</span></td>
+<td class="right"><span style="color:rgb(0,0,178)">12932</span></td>
 </tr>
 <tr>
 <td><a href="#memory-gripper" onclick="show_table(document.getElementById('memory-gripper'));">gripper</a> (2)</td>
-<td class="right"><span style="color:rgb(0,178,0)">24648</span></td>
-<td class="right"><span style="color:rgb(0,178,52)">25608</span></td>
-<td class="right"><span style="color:rgb(0,0,178)">31224</span></td>
-<td class="right"><span style="color:rgb(0,178,43)">25456</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">25112</span></td>
+<td class="right"><span style="color:rgb(0,0,178)">29324</span></td>
+<td class="right"><span style="color:rgb(0,178,96)">26256</span></td>
 </tr>
 <tr>
-<td><a href="#memory-pegsol" onclick="show_table(document.getElementById('memory-pegsol'));">pegsol</a> (2)</td>
-<td class="right"><span style="color:rgb(0,178,0)">24512</span></td>
-<td class="right"><span style="color:rgb(0,178,0)">24512</span></td>
-<td class="right"><span style="color:rgb(0,0,178)">24776</span></td>
-<td class="right"><span style="color:rgb(0,178,0)">24512</span></td>
+<td><a href="#memory-pegsol" onclick="show_table(document.getElementById('memory-pegsol'));">pegsol</a> (1)</td>
+<td class="right"><span style="color:rgb(127,127,127)">11996</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">11996</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">11996</span></td>
 </tr>
 <tr>
-<td><strong>Sum (5)</strong></td>
-<td class="right"><span style="color:rgb(0,178,0)">61828</span></td>
-<td class="right"><span style="color:rgb(0,178,34)">62924</span></td>
-<td class="right"><span style="color:rgb(0,0,178)">73164</span></td>
-<td class="right"><span style="color:rgb(0,178,33)">62900</span></td>
+<td><strong>Sum (4)</strong></td>
+<td class="right"><span style="color:rgb(0,178,0)">49376</span></td>
+<td class="right"><span style="color:rgb(0,0,178)">53984</span></td>
+<td class="right"><span style="color:rgb(0,178,140)">51184</span></td>
 </tr>
 </table>
 
@@ -839,17 +868,15 @@ Only tasks where all algorithms have a value for "memory" are considered. Each t
 <table class="tableborder" style="display:none">
 <tr>
 <th>memory</th>
-<th>dawson-masters-biased</th>
-<th>dawson-masters-epsilon</th>
-<th>dawson-masters-invasion-percolation</th>
-<th>dawson-masters-type</th>
+<th>dawson-masters-HI-biased-epsilon</th>
+<th>dawson-masters-HI-biased-invasion</th>
+<th>dawson-masters-HI-biased-uniform</th>
 </tr>
 <tr>
 <td>p02.pddl</td>
-<td class="right"><span style="color:rgb(0,178,0)">12668</span></td>
-<td class="right"><span style="color:rgb(0,178,10)">12804</span></td>
-<td class="right"><span style="color:rgb(0,0,178)">17164</span></td>
-<td class="right"><span style="color:rgb(0,178,20)">12932</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">12268</span></td>
+<td class="right"><span style="color:rgb(0,144,178)">12664</span></td>
+<td class="right"><span style="color:rgb(0,0,178)">12932</span></td>
 </tr>
 </table>
 
@@ -862,24 +889,21 @@ Only tasks where all algorithms have a value for "memory" are considered. Each t
 <table class="tableborder" style="display:none">
 <tr>
 <th>memory</th>
-<th>dawson-masters-biased</th>
-<th>dawson-masters-epsilon</th>
-<th>dawson-masters-invasion-percolation</th>
-<th>dawson-masters-type</th>
+<th>dawson-masters-HI-biased-epsilon</th>
+<th>dawson-masters-HI-biased-invasion</th>
+<th>dawson-masters-HI-biased-uniform</th>
 </tr>
 <tr>
 <td>p02.pddl</td>
-<td class="right"><span style="color:rgb(0,178,0)">12256</span></td>
-<td class="right"><span style="color:rgb(0,178,50)">12556</span></td>
-<td class="right"><span style="color:rgb(0,0,178)">14360</span></td>
-<td class="right"><span style="color:rgb(0,178,48)">12540</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">12260</span></td>
+<td class="right"><span style="color:rgb(0,0,178)">13592</span></td>
+<td class="right"><span style="color:rgb(0,178,109)">12668</span></td>
 </tr>
 <tr>
 <td>p04.pddl</td>
-<td class="right"><span style="color:rgb(0,178,0)">12392</span></td>
-<td class="right"><span style="color:rgb(0,178,52)">13052</span></td>
-<td class="right"><span style="color:rgb(0,0,178)">16864</span></td>
-<td class="right"><span style="color:rgb(0,178,41)">12916</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">12852</span></td>
+<td class="right"><span style="color:rgb(0,0,178)">15732</span></td>
+<td class="right"><span style="color:rgb(0,178,91)">13588</span></td>
 </tr>
 </table>
 
@@ -892,24 +916,21 @@ Only tasks where all algorithms have a value for "memory" are considered. Each t
 <table class="tableborder" style="display:none">
 <tr>
 <th>memory</th>
-<th>dawson-masters-biased</th>
-<th>dawson-masters-epsilon</th>
-<th>dawson-masters-invasion-percolation</th>
-<th>dawson-masters-type</th>
+<th>dawson-masters-HI-biased-epsilon</th>
+<th>dawson-masters-HI-biased-invasion</th>
+<th>dawson-masters-HI-biased-uniform</th>
 </tr>
 <tr>
 <td>p02.pddl</td>
-<td class="right"><span style="color:rgb(127,127,127)">12256</span></td>
-<td class="right"><span style="color:rgb(127,127,127)">12256</span></td>
-<td class="right"><span style="color:rgb(127,127,127)">12256</span></td>
-<td class="right"><span style="color:rgb(127,127,127)">12256</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">11996</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">11996</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">11996</span></td>
 </tr>
 <tr>
 <td>p04.pddl</td>
-<td class="right"><span style="color:rgb(0,178,0)">12256</span></td>
-<td class="right"><span style="color:rgb(0,178,0)">12256</span></td>
-<td class="right"><span style="color:rgb(0,0,178)">12520</span></td>
-<td class="right"><span style="color:rgb(0,178,0)">12256</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">None</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">None</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">None</span></td>
 </tr>
 </table>
 
@@ -923,38 +944,33 @@ Only tasks where all algorithms have a value for "memory" are considered. Each t
 <table class="tableborder" style="display:none">
 <tr>
 <th>total_<wbr>time</th>
-<th>dawson-masters-biased</th>
-<th>dawson-masters-epsilon</th>
-<th>dawson-masters-invasion-percolation</th>
-<th>dawson-masters-type</th>
+<th>dawson-masters-HI-biased-epsilon</th>
+<th>dawson-masters-HI-biased-invasion</th>
+<th>dawson-masters-HI-biased-uniform</th>
 </tr>
 <tr>
 <td><a href="#total_time-blocksworld" onclick="show_table(document.getElementById('total_time-blocksworld'));">blocksworld</a> (1)</td>
-<td class="right"><span style="color:rgb(0,178,0)">0.14</span></td>
-<td class="right"><span style="color:rgb(0,178,109)">0.18</span></td>
-<td class="right"><span style="color:rgb(0,178,0)">0.14</span></td>
-<td class="right"><span style="color:rgb(0,0,178)">0.27</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">0.13</span></td>
+<td class="right"><span style="color:rgb(0,178,157)">1.01</span></td>
+<td class="right"><span style="color:rgb(0,0,178)">2.12</span></td>
 </tr>
 <tr>
 <td><a href="#total_time-gripper" onclick="show_table(document.getElementById('total_time-gripper'));">gripper</a> (2)</td>
-<td class="right"><span style="color:rgb(0,178,0)">0.06</span></td>
-<td class="right"><span style="color:rgb(0,142,178)">0.15</span></td>
-<td class="right"><span style="color:rgb(0,178,23)">0.07</span></td>
-<td class="right"><span style="color:rgb(0,0,178)">0.21</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">1.13</span></td>
+<td class="right"><span style="color:rgb(0,0,178)">11.53</span></td>
+<td class="right"><span style="color:rgb(0,178,99)">4.03</span></td>
 </tr>
 <tr>
-<td><a href="#total_time-pegsol" onclick="show_table(document.getElementById('total_time-pegsol'));">pegsol</a> (2)</td>
-<td class="right"><span style="color:rgb(127,127,127)">0.02</span></td>
-<td class="right"><span style="color:rgb(127,127,127)">0.02</span></td>
-<td class="right"><span style="color:rgb(127,127,127)">0.02</span></td>
-<td class="right"><span style="color:rgb(127,127,127)">0.02</span></td>
+<td><a href="#total_time-pegsol" onclick="show_table(document.getElementById('total_time-pegsol'));">pegsol</a> (1)</td>
+<td class="right"><span style="color:rgb(0,178,0)">0.01</span></td>
+<td class="right"><span style="color:rgb(0,0,178)">0.02</span></td>
+<td class="right"><span style="color:rgb(0,0,178)">0.02</span></td>
 </tr>
 <tr>
-<td><strong>Geometric mean (5)</strong></td>
-<td class="right"><span style="color:rgb(0,178,0)">0.06</span></td>
-<td class="right"><span style="color:rgb(0,178,89)">0.07</span></td>
-<td class="right"><span style="color:rgb(0,178,0)">0.06</span></td>
-<td class="right"><span style="color:rgb(0,0,178)">0.10</span></td>
+<td><strong>Geometric mean (4)</strong></td>
+<td class="right"><span style="color:rgb(0,178,0)">0.13</span></td>
+<td class="right"><span style="color:rgb(0,0,178)">0.56</span></td>
+<td class="right"><span style="color:rgb(0,24,178)">0.53</span></td>
 </tr>
 </table>
 
@@ -970,17 +986,15 @@ Only tasks where all algorithms have a value for "total_time" are considered. Ea
 <table class="tableborder" style="display:none">
 <tr>
 <th>total_<wbr>time</th>
-<th>dawson-masters-biased</th>
-<th>dawson-masters-epsilon</th>
-<th>dawson-masters-invasion-percolation</th>
-<th>dawson-masters-type</th>
+<th>dawson-masters-HI-biased-epsilon</th>
+<th>dawson-masters-HI-biased-invasion</th>
+<th>dawson-masters-HI-biased-uniform</th>
 </tr>
 <tr>
 <td>p02.pddl</td>
-<td class="right"><span style="color:rgb(0,178,0)">0.14</span></td>
-<td class="right"><span style="color:rgb(0,178,109)">0.18</span></td>
-<td class="right"><span style="color:rgb(0,178,0)">0.14</span></td>
-<td class="right"><span style="color:rgb(0,0,178)">0.27</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">0.13</span></td>
+<td class="right"><span style="color:rgb(0,178,157)">1.01</span></td>
+<td class="right"><span style="color:rgb(0,0,178)">2.12</span></td>
 </tr>
 </table>
 
@@ -993,24 +1007,21 @@ Only tasks where all algorithms have a value for "total_time" are considered. Ea
 <table class="tableborder" style="display:none">
 <tr>
 <th>total_<wbr>time</th>
-<th>dawson-masters-biased</th>
-<th>dawson-masters-epsilon</th>
-<th>dawson-masters-invasion-percolation</th>
-<th>dawson-masters-type</th>
+<th>dawson-masters-HI-biased-epsilon</th>
+<th>dawson-masters-HI-biased-invasion</th>
+<th>dawson-masters-HI-biased-uniform</th>
 </tr>
 <tr>
 <td>p02.pddl</td>
-<td class="right"><span style="color:rgb(0,178,0)">0.04</span></td>
-<td class="right"><span style="color:rgb(0,102,178)">0.09</span></td>
-<td class="right"><span style="color:rgb(0,178,50)">0.05</span></td>
-<td class="right"><span style="color:rgb(0,0,178)">0.11</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">0.57</span></td>
+<td class="right"><span style="color:rgb(0,0,178)">5.90</span></td>
+<td class="right"><span style="color:rgb(0,178,109)">2.20</span></td>
 </tr>
 <tr>
 <td>p04.pddl</td>
-<td class="right"><span style="color:rgb(0,178,0)">0.08</span></td>
-<td class="right"><span style="color:rgb(0,178,167)">0.23</span></td>
-<td class="right"><span style="color:rgb(0,178,22)">0.10</span></td>
-<td class="right"><span style="color:rgb(0,0,178)">0.40</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">2.27</span></td>
+<td class="right"><span style="color:rgb(0,0,178)">22.53</span></td>
+<td class="right"><span style="color:rgb(0,178,90)">7.40</span></td>
 </tr>
 </table>
 
@@ -1023,24 +1034,21 @@ Only tasks where all algorithms have a value for "total_time" are considered. Ea
 <table class="tableborder" style="display:none">
 <tr>
 <th>total_<wbr>time</th>
-<th>dawson-masters-biased</th>
-<th>dawson-masters-epsilon</th>
-<th>dawson-masters-invasion-percolation</th>
-<th>dawson-masters-type</th>
+<th>dawson-masters-HI-biased-epsilon</th>
+<th>dawson-masters-HI-biased-invasion</th>
+<th>dawson-masters-HI-biased-uniform</th>
 </tr>
 <tr>
 <td>p02.pddl</td>
-<td class="right"><span style="color:rgb(127,127,127)">0.01</span></td>
-<td class="right"><span style="color:rgb(127,127,127)">0.01</span></td>
-<td class="right"><span style="color:rgb(127,127,127)">0.01</span></td>
-<td class="right"><span style="color:rgb(127,127,127)">0.01</span></td>
+<td class="right"><span style="color:rgb(0,178,0)">0.01</span></td>
+<td class="right"><span style="color:rgb(0,0,178)">0.02</span></td>
+<td class="right"><span style="color:rgb(0,0,178)">0.02</span></td>
 </tr>
 <tr>
 <td>p04.pddl</td>
-<td class="right"><span style="color:rgb(0,0,178)">0.03</span></td>
-<td class="right"><span style="color:rgb(0,178,0)">0.02</span></td>
-<td class="right"><span style="color:rgb(0,178,0)">0.02</span></td>
-<td class="right"><span style="color:rgb(0,178,0)">0.02</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">None</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">None</span></td>
+<td class="right"><span style="color:rgb(127,127,127)">None</span></td>
 </tr>
 </table>
 

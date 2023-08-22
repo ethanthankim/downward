@@ -53,8 +53,8 @@ def main():
     ff = 'ff(transform=adapt_costs(cost_type=one))'
     # ff='ff()'
     CONFIGS = [
-        IssueConfig('type-h', ["--evaluator", f"h={ff}", '--search', 'eager(alt( [single(h), type_based( [h] )] )) '], driver_options=DRIVER_OPTIONS),
-        IssueConfig('type-breadth', ["--evaluator", f"h={ff}", '--search', 'eager(alt( [single(h), type_based_path( [h] )] )) '], driver_options=DRIVER_OPTIONS),
+        # IssueConfig('type-h', ["--evaluator", f"h={ff}", '--search', 'eager(alt( [single(h), type_based( [h] )] )) '], driver_options=DRIVER_OPTIONS),
+        # IssueConfig('type-breadth', ["--evaluator", f"h={ff}", '--search', 'eager(alt( [single(h), type_based_path( [h] )] )) '], driver_options=DRIVER_OPTIONS),
 
         # IssueConfig('invasion-percolation', ["--evaluator", f"h={ff}", "--evaluator", "r=random_edge()", '--search', "eager(alt( [tiebreaking( [h, r] ), single(r)]) )"], driver_options=DRIVER_OPTIONS),
         # IssueConfig('biased', ["--evaluator", f"h={ff}", '--search', 'eager(alt([single(h), softmin_type_based([h, g()], ignore_size=true)]), cost_type=one)'], driver_options=DRIVER_OPTIONS),
@@ -75,6 +75,11 @@ def main():
         # IssueConfig('gbfs', ["--evaluator", "h=ff()", '--search', 'eager(single(h))'], driver_options=DRIVER_OPTIONS),
         # IssueConfig('lwm-intra', ["--evaluator", "h=ff()", '--search', 'eager( alt( [lwm_intra_explore_type(h), single(h)] ) )'], driver_options=DRIVER_OPTIONS),
         # IssueConfig('bts', ["--evaluator", "h=ff()", '--search', 'eager(alt([bts_type(h), single(h)]))'], driver_options=DRIVER_OPTIONS),
+    
+        IssueConfig('HI-biased-uniform', ["--evaluator", f"h={ff}", '--search', 'eager(partition(h, hi_partition(), inter_biased(), intra_uniform() ))'], driver_options=DRIVER_OPTIONS),
+        IssueConfig('HI-biased-invasion', ["--evaluator", f"h={ff}", '--search', 'eager(partition(h, hi_partition(), inter_biased(), intra_custom_evaluator(random_edge(), 0.0) ))'], driver_options=DRIVER_OPTIONS),
+        IssueConfig('HI-biased-epsilon', ["--evaluator", f"h={ff}", '--search', 'eager(partition(h, hi_partition(), inter_biased(), intra_ep_minh() ))'], driver_options=DRIVER_OPTIONS)
+
     ]
 
     ATTRIBUTES = [
