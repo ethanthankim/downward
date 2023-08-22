@@ -18,7 +18,7 @@ NodeKey IntraUniformPolicy::remove_next_state_from_partition(utils::HashMap<Node
     return to_return;
 }
 
-void IntraUniformPolicy::insert(NodeKey inserted, utils::HashMap<NodeKey, PartitionedState> active_states, std::vector<NodeKey> &partition) {
+void IntraUniformPolicy::insert(EvaluationContext &context, NodeKey inserted, utils::HashMap<NodeKey, PartitionedState> active_states, std::vector<NodeKey> &partition) {
     partition.push_back(inserted);
 }
 

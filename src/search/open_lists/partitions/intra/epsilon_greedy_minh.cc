@@ -80,7 +80,7 @@ NodeKey IntraEpsilonGreedyMinHPolicy::remove_next_state_from_partition(utils::Ha
     return to_return;
 }
 
-void IntraEpsilonGreedyMinHPolicy::insert(NodeKey inserted, utils::HashMap<NodeKey, PartitionedState> active_states, std::vector<NodeKey> &partition) {
+void IntraEpsilonGreedyMinHPolicy::insert(EvaluationContext &context, NodeKey inserted, utils::HashMap<NodeKey, PartitionedState> active_states, std::vector<NodeKey> &partition) {
 
     partition.push_back(inserted);
     adjust_heap_up( 

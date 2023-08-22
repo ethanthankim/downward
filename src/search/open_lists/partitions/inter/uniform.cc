@@ -10,7 +10,7 @@ InterUniformPolicy::InterUniformPolicy(const plugins::Options &opts)
 
 
 PartitionKey InterUniformPolicy::get_next_partition(utils::HashMap<NodeKey, PartitionedState> &active_states, utils::HashMap<PartitionKey, Partition> &partition_buckets) { 
-// logic error in how cached variables are set and used -- follow them through...
+
     if ( (partition_buckets.find(cached_parent_type) != partition_buckets.end()) 
         && partition_buckets.at(cached_parent_type).empty()) 
     {

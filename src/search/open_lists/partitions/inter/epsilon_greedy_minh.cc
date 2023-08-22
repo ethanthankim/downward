@@ -131,7 +131,7 @@ PartitionKey InterEpsilonGreedyMinHPolicy::get_next_partition(utils::HashMap<Nod
 }
 
 void InterEpsilonGreedyMinHPolicy::notify_insert(bool new_type, NodeKey inserted, utils::HashMap<NodeKey, PartitionedState> &active_states, utils::HashMap<PartitionKey, Partition> &partition_buckets) {
-    // TODO: create a robust way to check if a type is new or not. Maybe just a flag.
+    
     if (new_type) {
         partition_heap.push_back(active_states.at(inserted).partition);
 

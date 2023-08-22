@@ -182,10 +182,24 @@ fast_downward_plugin(
 )
 
 fast_downward_plugin(
+    NAME PARTITION_SELECTION_BIASED
+    HELP "biased partition selection policy"
+    SOURCES
+        open_lists/partitions/inter/biased_minh
+)
+
+fast_downward_plugin(
     NAME NODE_SELECTION
     HELP "Base class for node selection policies"
     SOURCES
         open_lists/partitions/intra/node_policy
+)
+
+fast_downward_plugin(
+    NAME NODE_SELECTION_CUSTOM
+    HELP "custom evaluator selection policy"
+    SOURCES
+        open_lists/partitions/intra/custom_evaluator
 )
 
 fast_downward_plugin(

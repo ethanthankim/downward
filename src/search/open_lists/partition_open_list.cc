@@ -111,7 +111,7 @@ void PartitionOpenList<Entry>::do_insertion(
     active_states.at(next_id).partition = partition_key;
 
     // notify node selector insert
-    node_selector->insert(next_id, active_states, partition_buckets[partition_key]);
+    node_selector->insert(eval_context, next_id, active_states, partition_buckets[partition_key]);
 
     // then notify partition selector of a change in the partition inserted into
     partition_selector->notify_insert(new_type, next_id, active_states, partition_buckets);
@@ -176,6 +176,7 @@ template<class Entry>
 void PartitionOpenList<Entry>::get_path_dependent_evaluators(
     set<Evaluator *> &evals) {
     evaluator->get_path_dependent_evaluators(evals);
+    node_selector->get_path_dependent_evaluators(evals);
 }
 
 PartitionOpenListFactory::PartitionOpenListFactory(
