@@ -154,6 +154,20 @@ fast_downward_plugin(
 )
 
 fast_downward_plugin(
+    NAME PARTITION_SYSTEMS_H_PARTITION
+    HELP "The H partition system"
+    SOURCES
+        open_lists/partitions/h_partition
+)
+
+fast_downward_plugin(
+    NAME PARTITION_SYSTEMS_LWM_PARTITION
+    HELP "The LWM partition system"
+    SOURCES
+        open_lists/partitions/lwm_partition
+)
+
+fast_downward_plugin(
     NAME PARTITION_SELECTION
     HELP "Base class for partition selection policies"
     SOURCES
@@ -189,6 +203,13 @@ fast_downward_plugin(
 )
 
 fast_downward_plugin(
+    NAME PARTITION_SELECTION_DEPTH
+    HELP "depth partition selection policy"
+    SOURCES
+        open_lists/partitions/inter/epsilon_greedy_depth
+)
+
+fast_downward_plugin(
     NAME NODE_SELECTION
     HELP "Base class for node selection policies"
     SOURCES
@@ -200,6 +221,13 @@ fast_downward_plugin(
     HELP "custom evaluator selection policy"
     SOURCES
         open_lists/partitions/intra/custom_evaluator
+)
+
+fast_downward_plugin(
+    NAME NODE_SELECTION_HRANGE
+    HELP "random h-range selection policy"
+    SOURCES
+        open_lists/partitions/intra/rand_hrange
 )
 
 fast_downward_plugin(

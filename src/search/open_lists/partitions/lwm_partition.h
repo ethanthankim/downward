@@ -5,13 +5,14 @@
 
 #include "../utils/rng.h"
 #include "../utils/rng_options.h"
+#include <limits>
 
 namespace lwm_partition {
 class LWMPartition : public PartitionSystem {
 
     StateID cached_parent_id = StateID::no_state;
     StateID cached_next_state_id = StateID::no_state;
-    utils::HashMap<PartitionKey, int> lwm_values;
+    utils::HashMap<PartitionKey, int> lwm_values = {{-1, INT32_MAX}};
 
 public:
     explicit LWMPartition(const plugins::Options &opts);
