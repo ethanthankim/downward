@@ -11,7 +11,7 @@ const string &PartitionSystem::get_description() const {
     return description;
 }
 
-pair<bool, PartitionKey> PartitionSystem::choose_state_partition(utils::HashMap<NodeKey, PartitionedState> active_states) {
+pair<bool, PartitionKey> PartitionSystem::choose_state_partition(utils::HashMap<NodeKey, PartitionedState> active_states, utils::HashMap<PartitionKey, Partition> partition_buckets) {
     return make_pair(false, 0); // default to trivial case where every node gets put in one partition
 }
 

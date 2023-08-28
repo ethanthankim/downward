@@ -53,13 +53,6 @@ def main():
     ff = 'ff(transform=adapt_costs(cost_type=one))'
     # ff='ff()'
     CONFIGS = [
-        # IssueConfig('type-h', ["--evaluator", f"h={ff}", '--search', 'eager(alt( [single(h), type_based( [h] )] )) '], driver_options=DRIVER_OPTIONS),
-        # IssueConfig('type-breadth', ["--evaluator", f"h={ff}", '--search', 'eager(alt( [single(h), type_based_path( [h] )] )) '], driver_options=DRIVER_OPTIONS),
-
-        # IssueConfig('invasion-percolation', ["--evaluator", f"h={ff}", "--evaluator", "r=random_edge()", '--search', "eager(alt( [tiebreaking( [h, r] ), single(r)]) )"], driver_options=DRIVER_OPTIONS),
-        # IssueConfig('biased', ["--evaluator", f"h={ff}", '--search', 'eager(alt([single(h), softmin_type_based([h, g()], ignore_size=true)]), cost_type=one)'], driver_options=DRIVER_OPTIONS),
-        # IssueConfig('type', ["--evaluator", f"h={ff}", '--search', 'eager(alt( [single(h), type_based( [h, g()] )] )) '], driver_options=DRIVER_OPTIONS),
-        # IssueConfig('epsilon', ["--evaluator", f"h={ff}", '--search', "eager(epsilon_greedy(h))"], driver_options=DRIVER_OPTIONS)
         
         # IssueConfig('HI-pure-inter', ["--evaluator", f"h={ff}", '--search', 'eager(bts_inter_greedy_intra_ep(h, inter_e=0.9, intra_e=0.1))'], driver_options=DRIVER_OPTIONS),
         # IssueConfig('HI-pure-intra', ["--evaluator", f"h={ff}", '--search', 'eager(bts_inter_greedy_intra_ep(h, inter_e=0.1, intra_e=0.9))'], driver_options=DRIVER_OPTIONS),
@@ -69,16 +62,14 @@ def main():
         # IssueConfig('HI-lwm0.5-ep0.5', ["--evaluator", "h=ff()", '--search', 'eager(bts_inter_lwm_intra_ep(h, inter_e=0.5, intra_e=0.5))'], driver_options=DRIVER_OPTIONS),
         # IssueConfig('HI-greedy0.5-ep0.5', ["--evaluator", "h=ff()", '--search', 'eager(bts_inter_greedy_intra_ep(h, inter_e=0.5, intra_e=0.5))'], driver_options=DRIVER_OPTIONS),
         
-        
-        # IssueConfig('lwm-epsilon', ["--evaluator", "h=ff()", '--search', 'eager(alt([single(h), lwm_inter_ep_intra_ep(h, 0.5, 0.5)]))'], driver_options=DRIVER_OPTIONS),
-        # IssueConfig('bts-epsilon', ["--evaluator", "h=ff()", '--search', 'eager(alt([single(h), bts_inter_ep_intra_ep(h, 0.5, 0.5)]))'], driver_options=DRIVER_OPTIONS),
-        # IssueConfig('gbfs', ["--evaluator", "h=ff()", '--search', 'eager(single(h))'], driver_options=DRIVER_OPTIONS),
-        # IssueConfig('lwm-intra', ["--evaluator", "h=ff()", '--search', 'eager( alt( [lwm_intra_explore_type(h), single(h)] ) )'], driver_options=DRIVER_OPTIONS),
-        # IssueConfig('bts', ["--evaluator", "h=ff()", '--search', 'eager(alt([bts_type(h), single(h)]))'], driver_options=DRIVER_OPTIONS),
-    
-        IssueConfig('HI-biased-uniform', ["--evaluator", f"h={ff}", '--search', 'eager(partition(h, hi_partition(), inter_biased(), intra_uniform() ))'], driver_options=DRIVER_OPTIONS),
-        IssueConfig('HI-biased-invasion', ["--evaluator", f"h={ff}", '--search', 'eager(partition(h, hi_partition(), inter_biased(), intra_custom_evaluator(random_edge(), 0.0) ))'], driver_options=DRIVER_OPTIONS),
-        IssueConfig('HI-biased-epsilon', ["--evaluator", f"h={ff}", '--search', 'eager(partition(h, hi_partition(), inter_biased(), intra_ep_minh() ))'], driver_options=DRIVER_OPTIONS)
+        # IssueConfig('HI-biased-uniform', ["--evaluator", f"h={ff}", '--search', 'eager(partition(h, hi_partition(), inter_biased(), intra_uniform() ))'], driver_options=DRIVER_OPTIONS),
+        # IssueConfig('HI-biased-invasion', ["--evaluator", f"h={ff}", '--search', 'eager(partition(h, hi_partition(), inter_biased(), intra_custom_evaluator(random_edge(), 0.0) ))'], driver_options=DRIVER_OPTIONS),
+        # IssueConfig('HI-biased-epsilon', ["--evaluator", f"h={ff}", '--search', 'eager(partition(h, hi_partition(), inter_biased(), intra_ep_minh() ))'], driver_options=DRIVER_OPTIONS)
+
+        IssueConfig('HI', ["--evaluator", "h=ff()", '--search', 'eager(partition(h, hi_partition(), inter_uniform(), intra_uniform() )) '] , driver_options=DRIVER_OPTIONS), 
+        IssueConfig('LWM', ["--evaluator", "h=ff()", '--search', 'eager(partition(h, lwm_partition(), inter_uniform(), intra_uniform() )) '] , driver_options=DRIVER_OPTIONS),
+        IssueConfig('H-Connected', ["--evaluator", "h=ff()", '--search', 'eager(partition(h, h_partition(), inter_uniform(), intra_uniform() )) '] , driver_options=DRIVER_OPTIONS),
+        IssueConfig('H-Plateau', ["--evaluator", "h=ff()", '--search', 'eager(partition(h, plateau_partition(), inter_uniform(), intra_uniform() )) '] , driver_options=DRIVER_OPTIONS)
 
     ]
 

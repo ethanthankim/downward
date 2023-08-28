@@ -11,13 +11,14 @@ class HPartition : public PartitionSystem {
 
     StateID cached_parent_id = StateID::no_state;
     StateID cached_next_state_id = StateID::no_state;
-    utils::HashMap<PartitionKey, int> lwm_values;
 
 public:
     explicit HPartition(const plugins::Options &opts);
     virtual ~HPartition() override = default;
 
-    std::pair<bool, PartitionKey> choose_state_partition(utils::HashMap<NodeKey, PartitionedState> active_states) override;
+    std::pair<bool, PartitionKey> choose_state_partition(
+        utils::HashMap<NodeKey, PartitionedState> active_states,
+        utils::HashMap<PartitionKey, Partition> partition_buckets) override;
     virtual void notify_initial_state(const State &initial_state) override;
     virtual void notify_state_transition(const State &parent_state,
                                          OperatorID op_id,

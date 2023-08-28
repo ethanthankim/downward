@@ -35,7 +35,7 @@ public:
 
     const std::string &get_description() const;
 
-    virtual std::pair<bool, PartitionKey> choose_state_partition(utils::HashMap<NodeKey, PartitionedState> active_states);
+    virtual std::pair<bool, PartitionKey> choose_state_partition(utils::HashMap<NodeKey, PartitionedState> active_states, utils::HashMap<PartitionKey, Partition> partition_buckets);
     virtual void notify_initial_state(const State &initial_state) {};
     virtual void notify_state_transition(const State &parent_state,
                                          OperatorID op_id,

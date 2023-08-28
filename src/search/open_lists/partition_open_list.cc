@@ -105,7 +105,7 @@ void PartitionOpenList<Entry>::do_insertion(
             new_h,
             new_g
         ));
-    pair<bool, PartitionKey> result = partition_system->choose_state_partition(active_states);
+    pair<bool, PartitionKey> result = partition_system->choose_state_partition(active_states, partition_buckets);
     PartitionKey partition_key = result.second;
     bool new_type = result.first;
     active_states.at(next_id).partition = partition_key;

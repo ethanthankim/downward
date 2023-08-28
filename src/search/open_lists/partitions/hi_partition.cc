@@ -20,7 +20,7 @@ void HIPartition::notify_state_transition(const State &parent_state,
     cached_next_state_id = state.get_id();
 };
 
-pair<bool, PartitionKey> HIPartition::choose_state_partition(utils::HashMap<NodeKey, PartitionedState> active_states) {   
+pair<bool, PartitionKey> HIPartition::choose_state_partition(utils::HashMap<NodeKey, PartitionedState> active_states, utils::HashMap<PartitionKey, Partition> partition_buckets) {   
 
     PartitionedState state_to_insert = active_states.at(cached_next_state_id.get_value() );
     PartitionedState parent_state = active_states.at(cached_parent_id.get_value());

@@ -15,7 +15,9 @@ public:
     explicit HIPartition(const plugins::Options &opts);
     virtual ~HIPartition() override = default;
 
-    std::pair<bool, PartitionKey> choose_state_partition(utils::HashMap<NodeKey, PartitionedState> active_states) override;
+    std::pair<bool, PartitionKey> choose_state_partition(
+        utils::HashMap<NodeKey, PartitionedState> active_states,
+        utils::HashMap<PartitionKey, Partition> partition_buckets) override;
     virtual void notify_initial_state(const State &initial_state) override;
     virtual void notify_state_transition(const State &parent_state,
                                          OperatorID op_id,

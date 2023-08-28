@@ -99,7 +99,6 @@ void InterBiasedPolicy::notify_insert(bool new_type, NodeKey inserted, utils::Ha
     }
 }
 
-
 void InterBiasedPolicy::notify_remove(NodeKey removed, utils::HashMap<NodeKey, PartitionedState> &active_states, utils::HashMap<PartitionKey, Partition> &partition_buckets) {
 
     assert(active_states.at(removed).partition == last_chosen_partition_key);

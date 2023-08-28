@@ -161,6 +161,13 @@ fast_downward_plugin(
 )
 
 fast_downward_plugin(
+    NAME PARTITION_SYSTEMS_PLATEAU_PARTITION
+    HELP "The plateau partition system"
+    SOURCES
+        open_lists/partitions/plateau_partition
+)
+
+fast_downward_plugin(
     NAME PARTITION_SYSTEMS_LWM_PARTITION
     HELP "The LWM partition system"
     SOURCES
