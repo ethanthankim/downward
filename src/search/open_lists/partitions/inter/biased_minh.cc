@@ -19,8 +19,10 @@ PartitionKey InterBiasedPolicy::get_next_partition(utils::HashMap<NodeKey, Parti
         && partition_buckets.at(last_chosen_partition_key).empty() ) {
         
         utils::swap_and_pop_from_vector(h_buckets.at(last_chosen_h), last_chosen_partition_i);
-        vector<PartitionKey>& bucket = h_buckets.at(last_chosen_h);
-        if (bucket.empty()) {
+        partition_buckets.erase(last_chosen_partition_key);
+
+        vector<PartitionKey>& h_partitions = h_buckets.at(last_chosen_h);
+        if (h_partitions.empty()) {
             h_buckets.erase(last_chosen_h);
 
             if (ignore_size) {
@@ -30,7 +32,14 @@ PartitionKey InterBiasedPolicy::get_next_partition(utils::HashMap<NodeKey, Parti
                     current_sum -= std::exp(-1.0 * static_cast<double>(last_chosen_h) / tau);
             }
         }
-        partition_buckets.erase(last_chosen_partition_key);
+
+        if (!ignore_size) {
+            if (ignore_weights) {
+                current_sum -= 1;
+            } else {
+                current_sum -= std::exp(-1.0 * static_cast<double>(last_chosen_h) / tau);
+            }
+        }
     }
     
     
@@ -62,14 +71,6 @@ PartitionKey InterBiasedPolicy::get_next_partition(utils::HashMap<NodeKey, Parti
     last_chosen_h = key;
     last_chosen_partition_i = rng->random(partition_keys.size());
     last_chosen_partition_key = partition_keys[last_chosen_partition_i];
-
-    if (!ignore_size) {
-        if (ignore_weights) {
-            current_sum -= 1;
-        } else {
-            current_sum -= std::exp(-1.0 * static_cast<double>(key) / tau);
-        }
-    }
 
     return last_chosen_partition_key;
 }

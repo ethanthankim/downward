@@ -168,6 +168,13 @@ fast_downward_plugin(
 )
 
 fast_downward_plugin(
+    NAME PARTITION_SYSTEMS_RANDOM_PARTITION
+    HELP "The random partition system"
+    SOURCES
+        open_lists/partitions/random_partition
+)
+
+fast_downward_plugin(
     NAME PARTITION_SYSTEMS_LWM_PARTITION
     HELP "The LWM partition system"
     SOURCES
