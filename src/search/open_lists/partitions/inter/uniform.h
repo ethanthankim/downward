@@ -25,7 +25,9 @@ public:
         int node_key,
         bool new_partition,
         EvaluationContext &eval_context) override;
-    virtual void notify_removal(int partition_key, int node_key) {};
+    virtual void notify_removal(int partition_key, int node_key) {
+        partition_sizes[partition_key]-=1;
+    };
     virtual void get_path_dependent_evaluators(std::set<Evaluator *> &evals) {};
     virtual void clear() {
         partition_sizes.clear();

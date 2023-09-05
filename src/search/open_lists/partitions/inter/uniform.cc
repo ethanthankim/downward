@@ -22,7 +22,6 @@ int InterUniformPolicy::get_next_partition() {
             continue;
         }
 
-        partition_sizes[chosen_partition]-=1; // is it sketchy to assume a removal actually happened?
         return chosen_partition;
 
     } 
