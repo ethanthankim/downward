@@ -1,26 +1,46 @@
-#include "biased_minh.h"
+#include "biased_root.h"
 
 using namespace std;
 
-namespace intra_partition_biased {
+namespace inter_biased_root_partition {
 
-IntraBiasedPolicy::IntraBiasedPolicy(const plugins::Options &opts)
-    : NodePolicy(opts),
+InterBiasedRootPolicy::InterBiasedRootPolicy(const plugins::Options &opts)
+    : PartitionPolicy(opts),
     evaluator(opts.get<shared_ptr<Evaluator>>("eval")),
     rng(utils::parse_rng_from_options(opts)),
     tau(opts.get<double>("tau")),
     ignore_size(opts.get<bool>("ignore_size")),
     ignore_weights(opts.get<bool>("ignore_weights")),
     relative_h(opts.get<bool>("relative_h")),
-    relative_h_offset(opts.get<int>("relative_h_offset")) {}
+    relative_h_offset(opts.get<int>("relative_h_offset")),
+    current_sum(0.0) {}
 
-int IntraBiasedPolicy::get_next_node(int partition_key) { 
-    auto &partition = partition_h_buckets.at(partition_key);
 
-    auto &buckets = partition.second;
-    auto &current_sum = partition.first;
+int InterBiasedRootPolicy::get_next_partition() { 
+    //try to remove last partition
+    if (last_chosen_h != -1) {
+        auto &last_bucket = buckets.at(last_chosen_h);
+        if (last_bucket[last_chosen_partition_i].second == 0) {
+            utils::swap_and_pop_from_vector(last_bucket, last_chosen_partition_i);
+            if (last_bucket.empty()) {
+                buckets.erase(last_chosen_h);
+                if (ignore_size) {
+                    if (ignore_weights)
+                        current_sum -= 1;
+                    else if (!relative_h)
+                        current_sum -= std::exp(-1.0 * static_cast<double>(last_chosen_h) / tau);
+                }
+            }
+            if (!ignore_size) {
+                if (ignore_weights)
+                    current_sum -= 1;
+                else if (!relative_h)
+                    current_sum -= std::exp(-1.0 * static_cast<double>(last_chosen_h) / tau);
+            }
+        }
+    }
+    
     int key = buckets.begin()->first;
-
     if (buckets.size() > 1) {
         double r = rng->random();
         if (relative_h) {
@@ -58,73 +78,51 @@ int IntraBiasedPolicy::get_next_node(int partition_key) {
                 }
             }
         }
-
     }
 
-    deque<int> &bucket = buckets[key];
-    assert(!bucket.empty());
-    int result = bucket.front();
-    bucket.pop_front();
-    if (bucket.empty()) {
-        buckets.erase(key);
-        if (ignore_size) {
-            if (ignore_weights)
-                current_sum -= 1;
-            else if (!relative_h)
-                current_sum -= std::exp(-1.0 * static_cast<double>(key) / tau);
-        }
-    }
-    if (!ignore_size) {
-        if (ignore_weights)
-            current_sum -= 1;
-        else if (!relative_h)
-            current_sum -= std::exp(-1.0 * static_cast<double>(key) / tau);
-    }
-    return result;
+    vector<pair<int, int>> &h_bucket = buckets[key];
+    assert(!h_bucket.empty());
+    last_chosen_partition_i = rng->random(h_bucket.size());
+    last_chosen_h = key;
+    pair<int, int> &result = h_bucket[last_chosen_partition_i];
+    result.second-=1;
+    return result.first;    
 }
 
-void IntraBiasedPolicy::notify_insert(
+void InterBiasedRootPolicy::notify_insert(
         int partition_key,
         int node_key,
         bool new_partition,
         EvaluationContext &eval_context) 
 {
     if (new_partition) {
-        partition_h_buckets.emplace(partition_key, make_pair(0, map<int, deque<int>>()));
-    }
-
-    int eval = eval_context.get_evaluator_value_or_infinity(evaluator.get());
-    auto &partition = partition_h_buckets.at(partition_key);
-
-    auto &buckets = partition.second;
-    auto &current_sum = partition.first;
-    if (ignore_size) {
-        if (buckets.find(eval) == buckets.end()) {
+        int key = eval_context.get_evaluator_value(evaluator.get());
+        if (ignore_size) {
+            if (buckets.find(key) == buckets.end()) {
+                if (ignore_weights)
+                    current_sum += 1;
+                else if (!relative_h)
+                    current_sum += std::exp(-1.0 * static_cast<double>(key) / tau);
+            }
+        } else {
             if (ignore_weights)
                 current_sum += 1;
             else if (!relative_h)
-                current_sum += std::exp(-1.0 * static_cast<double>(eval) / tau);
+                current_sum += std::exp(-1.0 * static_cast<double>(key) / tau);
         }
+        buckets[key].push_back(make_pair(partition_key, 1));
     } else {
-        if (ignore_weights)
-            current_sum += 1;
-        else if (!relative_h)
-            current_sum += std::exp(-1.0 * static_cast<double>(eval) / tau);
-
+        buckets.at(last_chosen_h)[last_chosen_partition_i].second +=1;
     }
-
-    buckets[eval].push_back(node_key);
-
 }
 
-
-class IntraBiasedPolicyFeature : public plugins::TypedFeature<NodePolicy, IntraBiasedPolicy> {
+class InterBiasedRootPolicyFeature : public plugins::TypedFeature<PartitionPolicy, InterBiasedRootPolicy> {
 public:
-    IntraBiasedPolicyFeature() : TypedFeature("intra_biased") {
-        document_subcategory("node_policies");
-        document_title("Biased Random node selection");
+    InterBiasedRootPolicyFeature() : TypedFeature("inter_biased_root") {
+        document_subcategory("partition_policies");
+        document_title("Biased root partition selection");
         document_synopsis(
-            "Biased sampling of nodes, favouring low h nodes.");
+            "Choose the next partition biased in favour of low h partition roots.");
         add_option<shared_ptr<Evaluator>>("eval", "evaluator");
         add_option<bool>(
             "pref_only",
@@ -145,9 +143,9 @@ public:
             "relative_h_offset",
             "starting value of relative h-values", "0");
         utils::add_rng_options(*this);
-        add_node_policy_options_to_feature(*this);
+        add_partition_policy_options_to_feature(*this);
     }
 };
 
-static plugins::FeaturePlugin<IntraBiasedPolicyFeature> _plugin;
+static plugins::FeaturePlugin<InterBiasedRootPolicyFeature> _plugin;
 }

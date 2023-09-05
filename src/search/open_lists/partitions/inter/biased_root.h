@@ -3,34 +3,32 @@
 
 #include "partition_policy.h"
 
+#include "../../../evaluator.h"
 #include "../../../utils/rng.h"
 #include "../../../utils/rng_options.h"
 
 #include <map>
 
-namespace inter_biased_partition {
-class InterBiasedPolicy : public PartitionPolicy {
+namespace inter_biased_root_partition {
+class InterBiasedRootPolicy : public PartitionPolicy {
 
     std::shared_ptr<Evaluator> evaluator;
     std::shared_ptr<utils::RandomNumberGenerator> rng;
 
-    int last_chosen_partition_key = -1;
     int last_chosen_partition_i = -1;
     int last_chosen_h = -1;
 
-    std::map<int, std::vector<PartitionKey>> h_buckets;
-    int size;
+    std::map<int, std::vector<std::pair<int, int>>> buckets;
     double tau;
     bool ignore_size;
     bool ignore_weights;
     bool relative_h;
     int relative_h_offset;
-    double epsilon;
     double current_sum;
 
 public:
-    explicit InterBiasedPolicy(const plugins::Options &opts);
-    virtual ~InterBiasedPolicy() override = default;
+    explicit InterBiasedRootPolicy(const plugins::Options &opts);
+    virtual ~InterBiasedRootPolicy() override = default;
 
     virtual int get_next_partition() override;
     virtual void notify_insert(
@@ -39,9 +37,13 @@ public:
         bool new_partition,
         EvaluationContext &eval_context) override;
     virtual void notify_removal(int partition_key, int node_key) {};
-    virtual void get_path_dependent_evaluators(std::set<Evaluator *> &evals) {};
+    virtual void get_path_dependent_evaluators(std::set<Evaluator *> &evals) {
+        evaluator->get_path_dependent_evaluators(evals);
+    };
     virtual void clear() {
-        partition_sizes.clear();
+        last_chosen_partition_i = -1;
+        last_chosen_h = -1;
+        buckets.clear();
     };
 };
 }

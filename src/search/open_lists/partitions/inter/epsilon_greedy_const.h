@@ -8,6 +8,12 @@
 
 #include <map>
 
+
+/**
+ * root h, depth, rand_h_range
+ * 
+ */
+
 namespace inter_eg_depth_partition {
 class InterEpsilonGreedyDepthPolicy : public PartitionPolicy {
 

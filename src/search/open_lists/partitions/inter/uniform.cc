@@ -9,19 +9,33 @@ InterUniformPolicy::InterUniformPolicy(const plugins::Options &opts)
     rng(utils::parse_rng_from_options(opts)) {}
 
 
-PartitionKey InterUniformPolicy::get_next_partition(utils::HashMap<NodeKey, PartitionedState> &active_states, utils::HashMap<PartitionKey, Partition> &partition_buckets) { 
+int InterUniformPolicy::get_next_partition() { 
 
-    if ( (partition_buckets.find(cached_parent_type) != partition_buckets.end()) 
-        && partition_buckets.at(cached_parent_type).empty()) 
-    {
-        partition_buckets.erase(cached_parent_type);
+    int chosen_partition;
+    while(true) {
+        auto it = partition_sizes.begin();
+        std::advance(it, rng->random(partition_sizes.size()));
+        chosen_partition = it->first;
+
+        if (partition_sizes.at(chosen_partition) == 0){
+            partition_sizes.erase(chosen_partition);
+            continue;
+        }
+
+        partition_sizes[chosen_partition]-=1; // is it sketchy to assume a removal actually happened?
+        return chosen_partition;
+
     } 
+    
+}
 
-    auto it = partition_buckets.begin();
-    advance(it, rng->random(partition_buckets.size()));
-    PartitionKey cached_parent_type = it->first;
-
-    return cached_parent_type;
+void InterUniformPolicy::notify_insert(
+        int partition_key,
+        int node_key,
+        bool new_partition,
+        EvaluationContext &eval_context) 
+{
+    partition_sizes[partition_key] += 1;
 }
 
 class InterUniformPolicyFeature : public plugins::TypedFeature<PartitionPolicy, InterUniformPolicy> {
@@ -32,7 +46,7 @@ public:
         document_synopsis(
             "Choose the next partition uniformly at random.");
         utils::add_rng_options(*this);
-        add_partition_options_to_feature(*this);
+        add_partition_policy_options_to_feature(*this);
     }
 };
 

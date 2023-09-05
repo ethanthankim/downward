@@ -29,8 +29,8 @@ public:
     explicit IntraEpsilonGreedyHRangePolicy(const plugins::Options &opts);
     virtual ~IntraEpsilonGreedyHRangePolicy() override = default;
 
-    virtual void insert(EvaluationContext &context, NodeKey inserted, utils::HashMap<NodeKey, PartitionedState> active_states, std::vector<NodeKey> &partition) override;
-    virtual NodeKey remove_next_state_from_partition(utils::HashMap<NodeKey, PartitionedState> &active_states, std::vector<NodeKey> &partition) override;
+    virtual void insert(EvaluationContext &context, NodeKey inserted, utils::HashMap<NodeKey, PartitionedState> active_states, Partition &partition) override;
+    virtual NodeKey remove_next_state_from_partition(utils::HashMap<NodeKey, PartitionedState> &active_states, Partition &partition) override;
 };
 }
 

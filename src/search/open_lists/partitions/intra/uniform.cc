@@ -8,18 +8,27 @@ IntraUniformPolicy::IntraUniformPolicy(const plugins::Options &opts)
     : NodePolicy(opts),
     rng(utils::parse_rng_from_options(opts)) {}
 
-NodeKey IntraUniformPolicy::remove_next_state_from_partition(utils::HashMap<NodeKey, PartitionedState> &active_states, std::vector<NodeKey> &partition) { 
+int IntraUniformPolicy::get_next_node(int partition_key){ 
     
-    active_states.erase(cached_last_removed);
-    int pos = rng->random(partition.size());
+    if (node_partitions.count(last_chosen_partition)>0 && node_partitions.at(last_chosen_partition).size()==0)
+        node_partitions.erase(last_chosen_partition);
 
-    NodeKey to_return = utils::swap_and_pop_from_vector(partition, pos);
-    cached_last_removed = to_return;
-    return to_return;
+    last_chosen_partition = partition_key;
+    vector<int> &partition = node_partitions.at(partition_key);
+    return utils::swap_and_pop_from_vector(partition, rng->random(partition.size()));
 }
 
-void IntraUniformPolicy::insert(EvaluationContext &context, NodeKey inserted, utils::HashMap<NodeKey, PartitionedState> active_states, std::vector<NodeKey> &partition) {
-    partition.push_back(inserted);
+void IntraUniformPolicy::notify_insert(
+    int partition_key,
+    int node_key,
+    bool new_partition,
+    EvaluationContext &eval_context) 
+{
+    if (new_partition) {
+        node_partitions.emplace(partition_key, vector<int>({node_key}));
+    } else {
+        node_partitions.at(partition_key).push_back(node_key);
+    }
 }
 
 class IntraUniformPolicyFeature : public plugins::TypedFeature<NodePolicy, IntraUniformPolicy> {
@@ -30,7 +39,7 @@ public:
         document_synopsis(
             "Uniformly at random choose the next node from the partition");
         utils::add_rng_options(*this);
-        add_partition_options_to_feature(*this);
+        add_node_policy_options_to_feature(*this);
     }
 };
 

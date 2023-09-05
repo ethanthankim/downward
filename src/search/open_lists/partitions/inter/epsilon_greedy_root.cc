@@ -1,16 +1,16 @@
-#include "epsilon_greedy_minh.h"
+#include "epsilon_greedy_root.h"
 
 using namespace std;
 
-namespace inter_eg_minh_partition {
+namespace inter_eg_root_partition {
 
-InterEpsilonGreedyMinHPolicy::InterEpsilonGreedyMinHPolicy(const plugins::Options &opts)
+InterEpsilonGreedyRootPolicy::InterEpsilonGreedyRootPolicy(const plugins::Options &opts)
     : PartitionPolicy(opts),
     rng(utils::parse_rng_from_options(opts)),
     evaluator(opts.get<shared_ptr<Evaluator>>("eval")),
     epsilon(opts.get<double>("epsilon")) {}
 
-int InterEpsilonGreedyMinHPolicy::remove_last_chosen_partition() 
+int InterEpsilonGreedyRootPolicy::remove_last_chosen_partition() 
 {
     int loc = last_chosen_partition_index;
     int tmp_part = partition_heap.back().partition;
@@ -27,7 +27,7 @@ int InterEpsilonGreedyMinHPolicy::remove_last_chosen_partition()
     return to_return.partition;
 }
 
-void InterEpsilonGreedyMinHPolicy::adjust_heap(int pos) {
+void InterEpsilonGreedyRootPolicy::adjust_heap(int pos) {
     assert(utils::in_bounds(pos, partition_heap));
     
     if (pos != 0) {
@@ -40,7 +40,7 @@ void InterEpsilonGreedyMinHPolicy::adjust_heap(int pos) {
     adjust_heap_down(pos);
 }
 
-void InterEpsilonGreedyMinHPolicy::adjust_heap_up(int pos) 
+void InterEpsilonGreedyRootPolicy::adjust_heap_up(int pos) 
 {
     assert(utils::in_bounds(pos, partition_heap));
     while (pos != 0) {
@@ -55,7 +55,7 @@ void InterEpsilonGreedyMinHPolicy::adjust_heap_up(int pos)
     }
 }
 
-void InterEpsilonGreedyMinHPolicy::adjust_heap_down(int loc)
+void InterEpsilonGreedyRootPolicy::adjust_heap_down(int loc)
 {
     int left_child_loc = loc * 2 + 1;
     int right_child_loc = loc * 2 + 2;
@@ -77,16 +77,13 @@ void InterEpsilonGreedyMinHPolicy::adjust_heap_down(int loc)
 }
 
 
-int InterEpsilonGreedyMinHPolicy::get_next_partition() { 
+int InterEpsilonGreedyRootPolicy::get_next_partition() { 
 
     // might need to remove newly emptied partition
     if (last_chosen_partition_index != -1) { 
         PartitionNode &removed_from = partition_heap[last_chosen_partition_index];
-        if (removed_from.state_hs.at(removed_node_h) == 0) {
-            removed_from.state_hs.erase(removed_node_h);
-            if (partition_heap.at(last_chosen_partition_index).state_hs.empty()) {
-                remove_last_chosen_partition();
-            }
+        if (partition_heap[last_chosen_partition_index].size == 0) {
+            remove_last_chosen_partition();
         }
     }
 
@@ -102,7 +99,7 @@ int InterEpsilonGreedyMinHPolicy::get_next_partition() {
 
 }
 
-void InterEpsilonGreedyMinHPolicy::notify_insert(
+void InterEpsilonGreedyRootPolicy::notify_insert(
     int partition_key,
     int node_key,
     bool new_partition,
@@ -110,35 +107,33 @@ void InterEpsilonGreedyMinHPolicy::notify_insert(
 {
     // handle new partitioned node
     int eval = eval_context.get_evaluator_value_or_infinity(evaluator.get());
-    node_hs.emplace(node_key, eval);
     int pos;
 
     if (new_partition) {
         partition_heap.push_back(PartitionNode(
             partition_key, 
-            map<int, int>{make_pair(eval, 1)}
+            1,
+            eval
         ));
         pos = partition_heap.size()-1;
     } else {
         PartitionNode &inserted = partition_heap[last_chosen_partition_index];
-        inserted.state_hs[eval] += 1;
+        inserted.size += 1;
         pos = last_chosen_partition_index;
     }
     adjust_heap(pos);
 
 }
 
-void InterEpsilonGreedyMinHPolicy::notify_removal(int partition_key, int node_key) {
-    removed_node_h = node_hs.at(node_key);
-    partition_heap[last_chosen_partition_index].state_hs.at(removed_node_h) -= 1;
-    node_hs.erase(node_key);
+void InterEpsilonGreedyRootPolicy::notify_removal(int partition_key, int node_key) {
+    partition_heap[last_chosen_partition_index].size -= 1;
 }
 
-class InterEpsilonGreedyMinHPolicyFeature : public plugins::TypedFeature<PartitionPolicy, InterEpsilonGreedyMinHPolicy> {
+class InterEpsilonGreedyRootPolicyFeature : public plugins::TypedFeature<PartitionPolicy, InterEpsilonGreedyRootPolicy> {
 public:
-    InterEpsilonGreedyMinHPolicyFeature() : TypedFeature("inter_ep_minh") {
+    InterEpsilonGreedyRootPolicyFeature() : TypedFeature("inter_ep_root") {
         document_subcategory("partition_policies");
-        document_title("Epsilon Greedy Min-h partition selection");
+        document_title("Epsilon Greedy Root partition selection");
         document_synopsis(
             "With probability epsilon, choose the best next partition, otherwise"
             "choose a paritition uniformly at random.");
@@ -153,5 +148,5 @@ public:
     }
 };
 
-static plugins::FeaturePlugin<InterEpsilonGreedyMinHPolicyFeature> _plugin;
+static plugins::FeaturePlugin<InterEpsilonGreedyRootPolicyFeature> _plugin;
 }

@@ -1,7 +1,6 @@
 #ifndef NODE_POLICY_H
 #define NODE_POLICY_H
 
-#include "../partition_system.h"
 #include "../../../plugins/plugin.h"
 #include "../../../utils/logging.h"
 #include "../../../utils/hash.h"
@@ -22,9 +21,14 @@ public:
 
     const std::string &get_description() const;
 
-    virtual void insert(EvaluationContext &context, NodeKey inserted, utils::HashMap<NodeKey, PartitionedState> active_states, std::vector<NodeKey> &partition) = 0;
-    virtual NodeKey remove_next_state_from_partition(utils::HashMap<NodeKey, PartitionedState> &active_states, std::vector<NodeKey> &partition) = 0;
-    virtual void get_path_dependent_evaluators(std::set<Evaluator *> &evals) {};
+    virtual void notify_insert(
+        int partition_key,
+        int node_key,
+        bool new_partition,
+        EvaluationContext &eval_context) = 0;
+    virtual int get_next_node(int partition_key) = 0;
+    virtual void get_path_dependent_evaluators(std::set<Evaluator *> &evals) = 0;
+    virtual void clear() = 0;
 
 };
 

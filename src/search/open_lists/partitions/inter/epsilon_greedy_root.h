@@ -9,8 +9,8 @@
 
 #include <map>
 
-namespace inter_eg_minh_partition {
-class InterEpsilonGreedyMinHPolicy : public PartitionPolicy {
+namespace inter_eg_root_partition {
+class InterEpsilonGreedyRootPolicy : public PartitionPolicy {
 
     std::shared_ptr<Evaluator> evaluator;
     std::shared_ptr<utils::RandomNumberGenerator> rng;
@@ -18,29 +18,23 @@ class InterEpsilonGreedyMinHPolicy : public PartitionPolicy {
 
     struct PartitionNode {
         int partition;
-        std::map<int, int> state_hs;
-        PartitionNode(int partition, std::map<int, int> state_hs)
-            : partition(partition), state_hs(state_hs) {
+        int size;
+        int h;
+        PartitionNode(int partition, int size, int h)
+            : partition(partition), size(size), h(h) {
         }
         bool operator>(const PartitionNode &other) const {
-            if (state_hs.empty()) return false;
-            if (other.state_hs.empty()) return true;
-            return state_hs.begin()->first > other.state_hs.begin()->first;
+            return h > other.h;
         }
         bool operator<(const PartitionNode &other) const {
-            if (state_hs.empty()) return true;
-            if (other.state_hs.empty()) return false;
-            return state_hs.begin()->first <= other.state_hs.begin()->first;
+            return h <= other.h;
         }
     };
 
     std::vector<PartitionNode> partition_heap;
-    utils::HashMap<int, int> node_hs; 
-    // std::map<int, int> node_hs;
 
     int last_chosen_partition_index = -1;
     int last_chosen_partition = -1;
-    int removed_node_h = -1;
 
 private: 
     void adjust_heap_down(int loc); 
@@ -52,8 +46,8 @@ private:
     bool compare_parent_type_bigger();
 
 public:
-    explicit InterEpsilonGreedyMinHPolicy(const plugins::Options &opts);
-    virtual ~InterEpsilonGreedyMinHPolicy() override = default;
+    explicit InterEpsilonGreedyRootPolicy(const plugins::Options &opts);
+    virtual ~InterEpsilonGreedyRootPolicy() override = default;
 
     virtual int get_next_partition() override;
     virtual void notify_insert(
@@ -66,12 +60,10 @@ public:
         evaluator->get_path_dependent_evaluators(evals);
     };
     virtual void clear() {
-        node_hs.clear();
         partition_heap.clear();
 
         last_chosen_partition_index = -1;
         last_chosen_partition = -1;
-        removed_node_h = -1;
     };
 };
 }

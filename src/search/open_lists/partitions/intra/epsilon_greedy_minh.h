@@ -3,34 +3,51 @@
 
 #include "node_policy.h"
 
+#include "../../../evaluator.h"
 #include "../../../utils/rng.h"
 #include "../../../utils/rng_options.h"
 
-#include <map>
 
 namespace intra_partition_eg_minh {
 class IntraEpsilonGreedyMinHPolicy : public NodePolicy {
 
+    std::shared_ptr<Evaluator> evaluator;
     std::shared_ptr<utils::RandomNumberGenerator> rng;
     double epsilon;
- 
-    NodeKey cached_last_removed = -1;
-
-private:
-    bool compare_parent_node_smaller(NodeKey parent, NodeKey child, utils::HashMap<NodeKey, PartitionedState> & active_states);
-    bool compare_parent_node_bigger(NodeKey parent, NodeKey child, utils::HashMap<NodeKey, PartitionedState> & active_states);
-    void adjust_to_top(std::vector<NodeKey> &heap, int pos);
-    void adjust_heap_down(std::vector<NodeKey> &heap, int loc, utils::HashMap<NodeKey, PartitionedState> &active_states);
-    void adjust_heap_up(std::vector<NodeKey> &heap, int pos, utils::HashMap<NodeKey, PartitionedState> &active_states);
-    NodeKey random_access_heap_pop(std::vector<NodeKey> &heap, int loc, utils::HashMap<NodeKey, PartitionedState> &active_states);
+    
+    struct HeapNode {
+        int id;
+        int h;
+        HeapNode(int id, int h)
+            : id(id), h(h) {
+        }
+        bool operator>(const HeapNode &other) const {
+            return std::make_pair(h, id) > std::make_pair(other.h, other.id);
+        }
+    };
+    utils::HashMap<int, std::vector<HeapNode>> partition_heaps;
+    int cached_last_removed = -1;
 
 public:
     explicit IntraEpsilonGreedyMinHPolicy(const plugins::Options &opts);
     virtual ~IntraEpsilonGreedyMinHPolicy() override = default;
 
-    virtual void insert(EvaluationContext &context, NodeKey inserted, utils::HashMap<NodeKey, PartitionedState> active_states, std::vector<NodeKey> &partition) override;
-    virtual NodeKey remove_next_state_from_partition(utils::HashMap<NodeKey, PartitionedState> &active_states, std::vector<NodeKey> &partition) override;
+    virtual void notify_insert(
+        int partition_key,
+        int node_key,
+        bool new_partition,
+        EvaluationContext &eval_context
+    ) override;
+    virtual int get_next_node(int partition_key) override;
+    virtual void get_path_dependent_evaluators(std::set<Evaluator *> &evals) {
+        evaluator->get_path_dependent_evaluators(evals);
+    };
+    virtual void clear() {
+        cached_last_removed = -1;
+        partition_heaps.clear();
+    };
 };
+
 }
 
 #endif

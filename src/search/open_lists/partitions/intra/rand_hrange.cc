@@ -66,30 +66,32 @@ NodeKey IntraEpsilonGreedyHRangePolicy::random_access_heap_pop(std::vector<NodeK
     return to_return;
 }
 
-NodeKey IntraEpsilonGreedyHRangePolicy::remove_next_state_from_partition(utils::HashMap<NodeKey, PartitionedState> &active_states, std::vector<NodeKey> &partition) { 
+NodeKey IntraEpsilonGreedyHRangePolicy::remove_next_state_from_partition(utils::HashMap<NodeKey, PartitionedState> &active_states, Partition &partition) { 
     
     active_states.erase(cached_last_removed);
     
     int pos = 0;
     if (rng->random() < epsilon) {
-        pos = rng->random(partition.size());
+        pos = rng->random(partition.second.size());
     }
 
-    NodeKey to_return = random_access_heap_pop(partition, pos);
+    NodeKey to_return = random_access_heap_pop(partition.second, pos);
     cached_last_removed = to_return;
+    partition.first = active_states.at(partition.second[0]).h;
     return to_return;
 }
 
-void IntraEpsilonGreedyHRangePolicy::insert(EvaluationContext &context, NodeKey inserted, utils::HashMap<NodeKey, PartitionedState> active_states, std::vector<NodeKey> &partition) {
+void IntraEpsilonGreedyHRangePolicy::insert(EvaluationContext &context, NodeKey inserted, utils::HashMap<NodeKey, PartitionedState> active_states, Partition &partition) {
 
-    partition.push_back(inserted);
+    partition.second.push_back(inserted);
     rand_hs.emplace(inserted, 
         active_states.at(inserted).h > 0 ? rng->random(active_states.at(inserted).h) : 0
     );
     adjust_heap_up( 
-        partition,
-        partition.size()-1
+        partition.second,
+        partition.second.size()-1
     );
+    partition.first = active_states.at(partition.second[0]).h;
 }
 
 class IntraEpsilonGreedyHRangePolicyFeature : public plugins::TypedFeature<NodePolicy, IntraEpsilonGreedyHRangePolicy> {
