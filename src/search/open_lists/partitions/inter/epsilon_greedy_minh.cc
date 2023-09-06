@@ -45,7 +45,7 @@ void InterEpsilonGreedyMinHPolicy::adjust_heap_up(int pos)
     assert(utils::in_bounds(pos, partition_heap));
     while (pos != 0) {
         size_t parent_pos = (pos - 1) / 2;
-        if ( partition_heap[parent_pos] < partition_heap[pos] ) break;
+        if ( partition_heap[parent_pos] <= partition_heap[pos] ) break;
 
         swap(partition_heap[pos], partition_heap[parent_pos]);
         if (last_chosen_partition_index == pos) last_chosen_partition_index = parent_pos;
@@ -86,6 +86,8 @@ int InterEpsilonGreedyMinHPolicy::get_next_partition() {
             removed_from.state_hs.erase(removed_node_h);
             if (partition_heap.at(last_chosen_partition_index).state_hs.empty()) {
                 remove_last_chosen_partition();
+            } else {
+                adjust_heap(last_chosen_partition_index);
             }
         }
     }
@@ -98,6 +100,11 @@ int InterEpsilonGreedyMinHPolicy::get_next_partition() {
 
     last_chosen_partition_index=pos;
     last_chosen_partition = part_node.partition;
+
+    // log << "[get_next_partition] id: " << part_node.partition 
+    //     << " , h: " << (*part_node.state_hs.begin()).first
+    //     << " , percent: " << rand/total << endl;
+    counter+=1;
     return part_node.partition;
 
 }
@@ -119,12 +126,17 @@ void InterEpsilonGreedyMinHPolicy::notify_insert(
             map<int, int>{make_pair(eval, 1)}
         ));
         pos = partition_heap.size()-1;
+        // log << "[notify_insert] NEW PARTITION. id: " << partition_key << " , eval: " << eval << endl; 
     } else {
         PartitionNode &inserted = partition_heap[last_chosen_partition_index];
         inserted.state_hs[eval] += 1;
         pos = last_chosen_partition_index;
     }
     adjust_heap(pos);
+
+    // log << "[notify_insert] partition id: " << partition_key  
+    //     << " , node id: " << node_key
+    //     << " , h: " << eval << endl;
 
 }
 

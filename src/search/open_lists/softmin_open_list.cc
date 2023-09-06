@@ -33,6 +33,8 @@ class SoftminOpenList : public OpenList<Entry> {
 
     shared_ptr<Evaluator> evaluator;
 
+    std::vector<int> counts = {0,0,0,0,0,0,0,0,0,0};
+
 protected:
     virtual void do_insertion(EvaluationContext &eval_context,
                               const Entry &entry) override;
@@ -73,6 +75,10 @@ void SoftminOpenList<Entry>::do_insertion(
     EvaluationContext &eval_context, const Entry &entry) {
     int key = eval_context.get_evaluator_value(evaluator.get());
 
+    // if (size % 500 == 0) {
+    //     cout << counts << endl;
+    // }
+
     if (ignore_size) {
         if (buckets.find(key) == buckets.end()) {
             if (ignore_weights)
@@ -97,6 +103,7 @@ Entry SoftminOpenList<Entry>::remove_min() {
     assert(size > 0);
     int key = buckets.begin()->first;
 
+    // int count_i = 0;
     if (buckets.size() > 1) {
         double r = rng->random();
         if (r <= epsilon) {
@@ -133,10 +140,15 @@ Entry SoftminOpenList<Entry>::remove_min() {
                         key = it.first;
                         break;
                     }
+                    // count_i +=1;
                 }
             }
         }
     }
+
+    // if (count_i < counts.size()) { // REMOVE
+    //     counts[count_i]+=1;
+    // }
 
     Bucket &bucket = buckets[key];
     assert(!bucket.empty());

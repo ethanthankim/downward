@@ -26,6 +26,8 @@ class InterBiasedRootPolicy : public PartitionPolicy {
     int relative_h_offset;
     double current_sum;
 
+    // std::vector<int> counts = {0,0,0,0,0,0,0,0,0,0};
+
 public:
     explicit InterBiasedRootPolicy(const plugins::Options &opts);
     virtual ~InterBiasedRootPolicy() override = default;

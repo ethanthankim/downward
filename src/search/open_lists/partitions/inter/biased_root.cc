@@ -40,6 +40,7 @@ int InterBiasedRootPolicy::get_next_partition() {
         }
     }
     
+    // int count_i = 0; // REMOVE
     int key = buckets.begin()->first;
     if (buckets.size() > 1) {
         double r = rng->random();
@@ -76,9 +77,14 @@ int InterBiasedRootPolicy::get_next_partition() {
                     key = it.first;
                     break;
                 }
+                // count_i+=1; // REMOVE
             }
         }
     }
+
+    // if (count_i < counts.size()) { // REMOVE
+    //     counts[count_i]+=1;
+    // }
 
     vector<pair<int, int>> &h_bucket = buckets[key];
     assert(!h_bucket.empty());
@@ -95,6 +101,10 @@ void InterBiasedRootPolicy::notify_insert(
         bool new_partition,
         EvaluationContext &eval_context) 
 {
+    // if (node_key % 500 == 0) {
+    //     cout << counts << endl;
+    // }
+
     if (new_partition) {
         int key = eval_context.get_evaluator_value(evaluator.get());
         if (ignore_size) {

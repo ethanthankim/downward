@@ -16,6 +16,8 @@ class InterEpsilonGreedyMinHPolicy : public PartitionPolicy {
     std::shared_ptr<utils::RandomNumberGenerator> rng;
     double epsilon;
 
+    int counter = 0;
+
     struct PartitionNode {
         int partition;
         std::map<int, int> state_hs;
@@ -28,6 +30,11 @@ class InterEpsilonGreedyMinHPolicy : public PartitionPolicy {
             return state_hs.begin()->first > other.state_hs.begin()->first;
         }
         bool operator<(const PartitionNode &other) const {
+            if (state_hs.empty()) return true;
+            if (other.state_hs.empty()) return false;
+            return state_hs.begin()->first < other.state_hs.begin()->first;
+        }
+        bool operator<=(const PartitionNode &other) const {
             if (state_hs.empty()) return true;
             if (other.state_hs.empty()) return false;
             return state_hs.begin()->first <= other.state_hs.begin()->first;

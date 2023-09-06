@@ -22,6 +22,7 @@ int InterUniformPolicy::get_next_partition() {
             continue;
         }
 
+        // log << "[get_next_partition] selected partition: " << chosen_partition << endl;
         return chosen_partition;
 
     } 
@@ -34,7 +35,11 @@ void InterUniformPolicy::notify_insert(
         bool new_partition,
         EvaluationContext &eval_context) 
 {
+    // if (new_partition)
+        // log << "[partition notify_insert] new partition: " << partition_key  << endl;
     partition_sizes[partition_key] += 1;
+    // log << "[partition notify_insert] node inserted: " << node_key  << endl;
+    // log << "[partition notify_insert] partition size: " << partition_key << " - " << partition_sizes[partition_key] << endl;
 }
 
 class InterUniformPolicyFeature : public plugins::TypedFeature<PartitionPolicy, InterUniformPolicy> {

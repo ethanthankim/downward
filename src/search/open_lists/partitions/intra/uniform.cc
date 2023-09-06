@@ -15,7 +15,9 @@ int IntraUniformPolicy::get_next_node(int partition_key){
 
     last_chosen_partition = partition_key;
     vector<int> &partition = node_partitions.at(partition_key);
-    return utils::swap_and_pop_from_vector(partition, rng->random(partition.size()));
+    auto ret = utils::swap_and_pop_from_vector(partition, rng->random(partition.size()));
+    // log << "[get_next_node] selected node: " << ret << endl;
+    return ret;
 }
 
 void IntraUniformPolicy::notify_insert(
@@ -25,10 +27,13 @@ void IntraUniformPolicy::notify_insert(
     EvaluationContext &eval_context) 
 {
     if (new_partition) {
+        // log << "[node notify_insert] new partition: " << partition_key  << endl;
         node_partitions.emplace(partition_key, vector<int>({node_key}));
     } else {
         node_partitions.at(partition_key).push_back(node_key);
     }
+    // log << "[node notify_insert] node inserted: " << node_key  << endl;
+    // log << "[node notify_insert] partition size: " << partition_key << " - " << node_partitions.at(partition_key).size() << endl;
 }
 
 class IntraUniformPolicyFeature : public plugins::TypedFeature<NodePolicy, IntraUniformPolicy> {
