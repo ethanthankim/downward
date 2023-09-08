@@ -66,9 +66,17 @@ def main():
         # IssueConfig('HI-biased-invasion', ["--evaluator", f"h={ff}", '--search', 'eager(partition(h, hi_partition(), inter_biased(), intra_custom_evaluator(random_edge(), 0.0) ))'], driver_options=DRIVER_OPTIONS),
         # IssueConfig('HI-biased-epsilon', ["--evaluator", f"h={ff}", '--search', 'eager(partition(h, hi_partition(), inter_biased(), intra_ep_minh() ))'], driver_options=DRIVER_OPTIONS)
 
-        IssueConfig('HI', ["--evaluator", "h=ff()", '--search', 'eager(hi_partition(h, inter_uniform(), intra_uniform() )) '] , driver_options=DRIVER_OPTIONS), 
-        IssueConfig('LWM', ["--evaluator", "h=ff()", '--search', 'eager(lwm_partition(h, inter_uniform(), intra_uniform() )) '] , driver_options=DRIVER_OPTIONS),
-        IssueConfig('H', ["--evaluator", "h=ff()", '--search', 'eager(h_partition(h, inter_uniform(), intra_uniform() )) '] , driver_options=DRIVER_OPTIONS)
+        # IssueConfig('HI', ["--evaluator", "h=ff()", '--search', 'eager(hi_partition(h, inter_uniform(), intra_uniform() )) '] , driver_options=DRIVER_OPTIONS), 
+        # IssueConfig('LWM', ["--evaluator", "h=ff()", '--search', 'eager(lwm_partition(h, inter_uniform(), intra_uniform() )) '] , driver_options=DRIVER_OPTIONS),
+        # IssueConfig('H', ["--evaluator", "h=ff()", '--search', 'eager(h_partition(h, inter_uniform(), intra_uniform() )) '] , driver_options=DRIVER_OPTIONS)
+
+        IssueConfig('LWM-05', ["--evaluator", "h=ff()", '--search', 'eager(lwm_partition(h, inter_ep_minh(h, 0.05), intra_uniform() )) '] , driver_options=DRIVER_OPTIONS), 
+        IssueConfig('LWM-10', ["--evaluator", "h=ff()", '--search', 'eager(lwm_partition(h, inter_ep_minh(h, 0.1), intra_uniform() )) '] , driver_options=DRIVER_OPTIONS), 
+        IssueConfig('LWM-20', ["--evaluator", "h=ff()", '--search', 'eager(lwm_partition(h, inter_ep_minh(h, 0.2), intra_uniform() )) '] , driver_options=DRIVER_OPTIONS), 
+        IssueConfig('LWM-30', ["--evaluator", "h=ff()", '--search', 'eager(lwm_partition(h, inter_ep_minh(h, 0.3), intra_uniform() )) '] , driver_options=DRIVER_OPTIONS), 
+        IssueConfig('LWM-50', ["--evaluator", "h=ff()", '--search', 'eager(lwm_partition(h, inter_ep_minh(h, 0.5), intra_uniform() )) '] , driver_options=DRIVER_OPTIONS), 
+        IssueConfig('LWM-75', ["--evaluator", "h=ff()", '--search', 'eager(lwm_partition(h, inter_ep_minh(h, 0.75), intra_uniform() )) '] , driver_options=DRIVER_OPTIONS), 
+        
 
     ]
 
