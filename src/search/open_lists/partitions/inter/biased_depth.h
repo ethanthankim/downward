@@ -17,7 +17,7 @@ class InterBiasedDepthPolicy : public PartitionPolicy {
     int last_chosen_partition_i = -1;
     int last_chosen_depth = -1;
 
-    std::map<int, std::vector<std::pair<int, int>>> buckets;
+    std::map<int, std::vector<std::pair<int, int>>, std::greater<int>> buckets;
     double tau;
     bool ignore_size;
     bool ignore_weights;

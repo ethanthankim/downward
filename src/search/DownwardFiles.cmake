@@ -189,6 +189,13 @@ fast_downward_plugin(
 )
 
 fast_downward_plugin(
+    NAME PARTITION_SELECTION_BIASED_MINH
+    HELP "biased depth partition selection policy"
+    SOURCES
+        open_lists/partitions/inter/biased_minh
+)
+
+fast_downward_plugin(
     NAME NODE_SELECTION
     HELP "Base class for node selection policies"
     SOURCES
@@ -457,6 +464,14 @@ fast_downward_plugin(
     HELP "The random edge evaluator"
     SOURCES
         evaluators/random_edge_evaluator
+    DEPENDS EVALUATORS_SUBCATEGORY
+)
+
+fast_downward_plugin(
+    NAME RANDOM_RANGE_EVALUATOR
+    HELP "The random range evaluator"
+    SOURCES
+        evaluators/random_range_evaluator
     DEPENDS EVALUATORS_SUBCATEGORY
 )
 

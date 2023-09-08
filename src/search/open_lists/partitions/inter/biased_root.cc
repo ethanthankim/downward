@@ -17,7 +17,7 @@ InterBiasedRootPolicy::InterBiasedRootPolicy(const plugins::Options &opts)
 
 
 int InterBiasedRootPolicy::get_next_partition() { 
-    //try to remove last partition
+    // try to remove last partition
     if (last_chosen_h != -1) {
         auto &last_bucket = buckets.at(last_chosen_h);
         if (last_bucket[last_chosen_partition_i].second == 0) {
@@ -40,7 +40,6 @@ int InterBiasedRootPolicy::get_next_partition() {
         }
     }
     
-    // int count_i = 0; // REMOVE
     int key = buckets.begin()->first;
     if (buckets.size() > 1) {
         double r = rng->random();
@@ -77,7 +76,6 @@ int InterBiasedRootPolicy::get_next_partition() {
                     key = it.first;
                     break;
                 }
-                // count_i+=1; // REMOVE
             }
         }
     }

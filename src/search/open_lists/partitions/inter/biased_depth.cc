@@ -14,7 +14,6 @@ InterBiasedDepthPolicy::InterBiasedDepthPolicy(const plugins::Options &opts)
     relative_h_offset(opts.get<int>("relative_h_offset")),
     current_sum(0.0) {}
 
-
 int InterBiasedDepthPolicy::get_next_partition() { 
     //try to remove last partition
     if (last_chosen_depth != -1) {
@@ -39,6 +38,7 @@ int InterBiasedDepthPolicy::get_next_partition() {
         }
     }
     
+    int count_i = 0;
     int key = buckets.begin()->first;
     if (buckets.size() > 1) {
         double r = rng->random();
@@ -75,6 +75,7 @@ int InterBiasedDepthPolicy::get_next_partition() {
                     key = it.first;
                     break;
                 }
+                count_i+=1; 
             }
         }
     }

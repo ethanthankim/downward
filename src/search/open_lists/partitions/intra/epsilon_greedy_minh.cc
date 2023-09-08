@@ -34,10 +34,6 @@ int IntraEpsilonGreedyMinHPolicy::get_next_node(int partition_key) {
     pop_heap(heap.begin(), heap.end(), greater<HeapNode>());
     HeapNode heap_node = heap.back();
     heap.pop_back();
-
-    // log << "[get_next_node] partition id: " << partition_key
-    //     << " , node key: " << heap_node.id
-    //     << " , node eval: " << log_eval << endl;
     return heap_node.id;
 }
 
