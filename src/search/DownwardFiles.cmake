@@ -245,6 +245,13 @@ fast_downward_plugin(
 )
 
 fast_downward_plugin(
+    NAME PARTITION_aus_OPEN_LIST
+    HELP "Partition open list"
+    SOURCES
+        open_lists/partition_aus_open_list
+)
+
+fast_downward_plugin(
     NAME PARTITION_LWM_OPEN_LIST
     HELP "Partition open list"
     SOURCES
@@ -452,10 +459,10 @@ fast_downward_plugin(
 )
 
 fast_downward_plugin(
-    NAME PROGRESS_RATE_EVALUATOR
-    HELP "The progress rate evaluator"
+    NAME PROGRESS_EVALUATOR
+    HELP "The progress evaluator"
     SOURCES
-        evaluators/progress_rate_evaluator
+        evaluators/progress_evaluator
     DEPENDS EVALUATORS_SUBCATEGORY
 )
 

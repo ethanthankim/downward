@@ -81,7 +81,6 @@ int InterBiasedMinHPolicy::get_next_partition() {
         }
     }
 
-    int selected_i = 0;
     int key = h_buckets.begin()->first;
     if (h_buckets.size() > 1) {
         double r = rng->random();
