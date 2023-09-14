@@ -1,1 +1,0 @@
-../../../../../../../benchmarks-test/hiking-sat14-strips/domain.pddl

@@ -1,1 +1,0 @@
-../../../../../../../benchmarks-test/openstacks-sat14-strips/domain_p190_1.pddl

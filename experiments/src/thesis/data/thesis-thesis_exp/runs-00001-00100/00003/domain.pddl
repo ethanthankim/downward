@@ -1,1 +1,0 @@
-../../../../../../../benchmarks-test/parking-sat11-strips/domain.pddl
