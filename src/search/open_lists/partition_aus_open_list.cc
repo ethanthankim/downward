@@ -82,7 +82,7 @@ PartitionAusOpenListFactory::create_edge_open_list() {
 
 class PartitionAusOpenListFeature : public plugins::TypedFeature<OpenListFactory, PartitionAusOpenListFactory> {
 public:
-    PartitionAusOpenListFeature() : TypedFeature("h_partition") {
+    PartitionAusOpenListFeature() : TypedFeature("aus_partition") {
         document_title("Partition Low Water-mark Open List");
         document_synopsis("A configurable open list that selects nodes by first"
          "choosing a node parition and then choosing a node from within it."
