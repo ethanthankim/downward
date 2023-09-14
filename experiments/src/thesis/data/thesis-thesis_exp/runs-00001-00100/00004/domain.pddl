@@ -1,1 +1,1 @@
-../../../../../../../../benchmarks-test/pegsol/domain.pddl
+../../../../../../../benchmarks-test/elevators-sat11-strips/domain.pddl

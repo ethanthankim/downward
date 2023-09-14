@@ -1,1 +1,1 @@
-../../../../../../../../benchmarks-test/blocksworld/domain.pddl
+../../../../../../../benchmarks-test/parking-sat11-strips/domain.pddl

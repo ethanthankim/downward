@@ -1,1 +1,1 @@
-../../../../../../../../benchmarks-test/blocksworld/p02.pddl
+../../../../../../../benchmarks-test/parking-sat11-strips/pfile12-047.pddl

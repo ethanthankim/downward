@@ -1,1 +1,1 @@
-../../../../../../../../benchmarks-test/gripper/p02.pddl
+../../../../../../../benchmarks-test/openstacks-sat14-strips/p190_1.pddl

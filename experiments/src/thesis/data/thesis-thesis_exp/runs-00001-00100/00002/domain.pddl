@@ -1,1 +1,1 @@
-../../../../../../../../benchmarks-test/gripper/domain.pddl
+../../../../../../../benchmarks-test/hiking-sat14-strips/domain.pddl
