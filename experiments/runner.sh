@@ -1,4 +1,4 @@
 #!/bin/bash
 
 echo "y
-o" | ./src/thesis/explore.py --all --benchmark-dir ../benchmarks-$1
+o" | ./src/thesis/explore.py --all --benchmark-dir ../benchmarks-$1 # &> "run.log"
