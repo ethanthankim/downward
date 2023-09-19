@@ -1,5 +1,6 @@
 #! /usr/bin/env python3
 
+from datetime import datetime
 import experiment_setup.common_setup as setup
 from experiment_setup.common_setup import IssueConfig, IssueExperiment
 
@@ -52,32 +53,19 @@ def main():
 
     ff = 'ff(transform=adapt_costs(cost_type=one))'
     # ff='ff()'
+    FF_RANDOM_SEED = int(datetime.now().timestamp())
     CONFIGS = [
         
-        # IssueConfig('HI-pure-inter', ["--evaluator", f"h={ff}", '--search', 'eager(bts_inter_greedy_intra_ep(h, inter_e=0.9, intra_e=0.1))'], driver_options=DRIVER_OPTIONS),
-        # IssueConfig('HI-pure-intra', ["--evaluator", f"h={ff}", '--search', 'eager(bts_inter_greedy_intra_ep(h, inter_e=0.1, intra_e=0.9))'], driver_options=DRIVER_OPTIONS),
-        # IssueConfig('HI-alt-uniform', ["--evaluator", f"h={ff}", '--search', 'eager(bts_inter_greedy_intra_ep(h, inter_e=1.0, intra_e=1.0))'], driver_options=DRIVER_OPTIONS),
-        # IssueConfig('HI-combined', ["--evaluator", f"h={ff}", '--search', 'eager(bts_inter_greedy_intra_ep(h, inter_e=0.5, intra_e=0.5))'], driver_options=DRIVER_OPTIONS),
-        
-        # IssueConfig('HI-lwm0.5-ep0.5', ["--evaluator", "h=ff()", '--search', 'eager(bts_inter_lwm_intra_ep(h, inter_e=0.5, intra_e=0.5))'], driver_options=DRIVER_OPTIONS),
-        # IssueConfig('HI-greedy0.5-ep0.5', ["--evaluator", "h=ff()", '--search', 'eager(bts_inter_greedy_intra_ep(h, inter_e=0.5, intra_e=0.5))'], driver_options=DRIVER_OPTIONS),
-        
-        # IssueConfig('HI-biased-uniform', ["--evaluator", f"h={ff}", '--search', 'eager(partition(h, hi_partition(), inter_biased(), intra_uniform() ))'], driver_options=DRIVER_OPTIONS),
-        # IssueConfig('HI-biased-invasion', ["--evaluator", f"h={ff}", '--search', 'eager(partition(h, hi_partition(), inter_biased(), intra_custom_evaluator(random_edge(), 0.0) ))'], driver_options=DRIVER_OPTIONS),
-        # IssueConfig('HI-biased-epsilon', ["--evaluator", f"h={ff}", '--search', 'eager(partition(h, hi_partition(), inter_biased(), intra_ep_minh() ))'], driver_options=DRIVER_OPTIONS)
+        IssueConfig('HI', ["--evaluator", f"h={ff}", '--search', f'eager(hi_partition(h, inter_uniform(random_seed={FF_RANDOM_SEED}), intra_uniform(random_seed={FF_RANDOM_SEED}) )) '] , driver_options=DRIVER_OPTIONS), 
+        IssueConfig('LWM', ["--evaluator", f"h={ff}", '--search', f'eager(lwm_partition(h, inter_uniform(random_seed={FF_RANDOM_SEED}), intra_uniform(random_seed={FF_RANDOM_SEED}) )) '] , driver_options=DRIVER_OPTIONS),
+        IssueConfig('H', ["--evaluator", f"h={ff}", '--search', f'eager(h_partition(h, inter_uniform(random_seed={FF_RANDOM_SEED}), intra_uniform(random_seed={FF_RANDOM_SEED}) )) '] , driver_options=DRIVER_OPTIONS)
 
-        # IssueConfig('HI', ["--evaluator", "h=ff()", '--search', 'eager(hi_partition(h, inter_uniform(), intra_uniform() )) '] , driver_options=DRIVER_OPTIONS), 
-        # IssueConfig('LWM', ["--evaluator", "h=ff()", '--search', 'eager(lwm_partition(h, inter_uniform(), intra_uniform() )) '] , driver_options=DRIVER_OPTIONS),
-        # IssueConfig('H', ["--evaluator", "h=ff()", '--search', 'eager(h_partition(h, inter_uniform(), intra_uniform() )) '] , driver_options=DRIVER_OPTIONS)
-
-        IssueConfig('LWM-05', ["--evaluator", f"h={ff}", '--search', 'eager(lwm_partition(h, inter_ep_minh(h, 0.05), intra_uniform() )) '] , driver_options=DRIVER_OPTIONS), 
-        IssueConfig('LWM-10', ["--evaluator", f"h={ff}", '--search', 'eager(lwm_partition(h, inter_ep_minh(h, 0.1), intra_uniform() )) '] , driver_options=DRIVER_OPTIONS), 
-        IssueConfig('LWM-20', ["--evaluator", f"h={ff}", '--search', 'eager(lwm_partition(h, inter_ep_minh(h, 0.2), intra_uniform() )) '] , driver_options=DRIVER_OPTIONS), 
-        IssueConfig('LWM-30', ["--evaluator", f"h={ff}", '--search', 'eager(lwm_partition(h, inter_ep_minh(h, 0.3), intra_uniform() )) '] , driver_options=DRIVER_OPTIONS), 
-        IssueConfig('LWM-50', ["--evaluator", f"h={ff}", '--search', 'eager(lwm_partition(h, inter_ep_minh(h, 0.5), intra_uniform() )) '] , driver_options=DRIVER_OPTIONS), 
-        IssueConfig('LWM-75', ["--evaluator", f"h={ff}", '--search', 'eager(lwm_partition(h, inter_ep_minh(h, 0.75), intra_uniform() )) '] , driver_options=DRIVER_OPTIONS), 
-        
-
+        # IssueConfig('LWM-05', ["--evaluator", f"h={ff}", '--search', f'eager(lwm_partition(h, inter_ep_minh(h, 0.05, random_seed={FF_RANDOM_SEED}), intra_uniform(random_seed={FF_RANDOM_SEED}) )) '] , driver_options=DRIVER_OPTIONS), 
+        # IssueConfig('LWM-10', ["--evaluator", f"h={ff}", '--search', f'eager(lwm_partition(h, inter_ep_minh(h, 0.1, random_seed={FF_RANDOM_SEED}), intra_uniform(random_seed={FF_RANDOM_SEED}) )) '] , driver_options=DRIVER_OPTIONS), 
+        # IssueConfig('LWM-20', ["--evaluator", f"h={ff}", '--search', f'eager(lwm_partition(h, inter_ep_minh(h, 0.2, random_seed={FF_RANDOM_SEED}), intra_uniform(random_seed={FF_RANDOM_SEED}) )) '] , driver_options=DRIVER_OPTIONS), 
+        # IssueConfig('LWM-30', ["--evaluator", f"h={ff}", '--search', f'eager(lwm_partition(h, inter_ep_minh(h, 0.3, random_seed={FF_RANDOM_SEED}), intra_uniform(random_seed={FF_RANDOM_SEED}) )) '] , driver_options=DRIVER_OPTIONS), 
+        # IssueConfig('LWM-50', ["--evaluator", f"h={ff}", '--search', f'eager(lwm_partition(h, inter_ep_minh(h, 0.25, random_seed={FF_RANDOM_SEED}), intra_uniform(random_seed={FF_RANDOM_SEED}) )) '] , driver_options=DRIVER_OPTIONS), 
+        # IssueConfig('LWM-75', ["--evaluator", f"h={ff}", '--search', f'eager(lwm_partition(h, inter_ep_minh(h, 0.75, random_seed={FF_RANDOM_SEED}), intra_uniform(random_seed={FF_RANDOM_SEED}) )) '] , driver_options=DRIVER_OPTIONS), 
     ]
 
     ATTRIBUTES = [
@@ -111,7 +99,6 @@ def main():
     # exp.add_comparison_table_step(attributes=["expansions", "total_time"])
 
     exp.run_steps()
-
 
 
 if __name__ == "__main__":

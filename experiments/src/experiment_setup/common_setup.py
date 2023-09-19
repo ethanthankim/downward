@@ -47,6 +47,7 @@ def parse_args():
         dest="time_limit",
         help="the overall time limit for each search algorithm."
     )
+    
     return ARGPARSER.parse_args()
 
 ARGS = parse_args()
@@ -143,10 +144,12 @@ def get_experiment_name():
 
     Derived from the absolute filename of the main script, e.g.
     "/ham/spam/eggs.py" => "spam-eggs"."""
+    from datetime import datetime
     script = os.path.abspath(get_script())
     script_dir = os.path.basename(os.path.dirname(script))
     script_base = os.path.splitext(os.path.basename(script))[0]
-    return "%s-%s" % (script_dir, script_base)
+    timestamp = datetime.utcnow().strftime('%Y-%m-%d %H.%M.%S')
+    return "%s-%s_%s" % (script_dir, script_base, timestamp)
 
 
 def get_data_dir():
