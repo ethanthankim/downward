@@ -148,8 +148,7 @@ def get_experiment_name():
     script = os.path.abspath(get_script())
     script_dir = os.path.basename(os.path.dirname(script))
     script_base = os.path.splitext(os.path.basename(script))[0]
-    timestamp = datetime.utcnow().strftime('%Y-%m-%d %H.%M.%S')
-    return "%s-%s_%s" % (script_dir, script_base, timestamp)
+    return "%s-%s" % (script_dir, script_base)
 
 
 def get_data_dir():
