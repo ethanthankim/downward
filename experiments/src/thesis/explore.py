@@ -71,7 +71,7 @@ def main():
         # IssueConfig('[h,g]', ["--evaluator", f"h={ff}", '--search', f'eager(type_based([h,g()], random_seed={FF_RANDOM_SEED} )) '] , driver_options=DRIVER_OPTIONS),
         IssueConfig('[h]', ["--evaluator", f"h={ff}", '--search', f'eager(type_based([h], random_seed={FF_RANDOM_SEED} )) '] , driver_options=DRIVER_OPTIONS),
         IssueConfig('[h]-path', ["--evaluator", f"h={ff}", '--search', f'eager(type_based_path([h], random_seed={FF_RANDOM_SEED} )) '] , driver_options=DRIVER_OPTIONS)
-    
+
         # IssueConfig('Softmin-Type', ["--evaluator", f"h={ff}", '--search', f'eager(alt([single(h), softmin_type_based([h, g()], ignore_size=true, random_seed={FF_RANDOM_SEED})]), cost_type=one)'] , driver_options=DRIVER_OPTIONS),
         # IssueConfig('LWM-0.2929/0.2929', ["--evaluator", f"h={ff}", '--search', f'eager(lwm_partition(h, inter_ep_minh(h, 0.2929, random_seed={FF_RANDOM_SEED}), intra_ep_minh(h, 0.2929, random_seed={FF_RANDOM_SEED}) )) '] , driver_options=DRIVER_OPTIONS),
         

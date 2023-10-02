@@ -56,8 +56,8 @@ public:
 
 template<class Entry>
 void TypeBasedPathOpenList<Entry>::notify_initial_state(const State &initial_state) {
-    eval_cache = vector<int>{INT32_MAX};
-    parent_type = 0;
+    eval_cache = vector<int>{INT32_MAX, -1};
+    parent_type = *(eval_cache.end()-1);
 }
 
 template<class Entry>
@@ -65,7 +65,7 @@ void TypeBasedPathOpenList<Entry>::notify_state_transition(
     const State &parent_state, OperatorID op_id, const State &state) {
     
     eval_cache = state_eval_cache[parent_state];
-    parent_type = parent_state.get_id().get_value();
+    parent_type = *(eval_cache.end()-1);
 
 }
 
