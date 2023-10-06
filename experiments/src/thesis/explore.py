@@ -52,7 +52,10 @@ def main():
             # additional options later.
             "--always"]
 
-    ff = 'ff(transform=adapt_costs(cost_type=one))'
+    normal_ff = "ff()"
+    unit_ff = "ff(transform=adapt_costs(cost_type=one))"
+    unit_cost = 'cost_type=one'
+    real_cost = 'cost_type=normal'
     # ff='ff()'
     FF_RANDOM_SEED = int(datetime.now().timestamp())
     CONFIGS = [
@@ -72,11 +75,11 @@ def main():
         # IssueConfig('[h]', ["--evaluator", f"h={ff}", '--search', f'eager(type_based([h], random_seed={FF_RANDOM_SEED} )) '] , driver_options=DRIVER_OPTIONS),
         # IssueConfig('[h]-path', ["--evaluator", f"h={ff}", '--search', f'eager(type_based_path([h], random_seed={FF_RANDOM_SEED} )) '] , driver_options=DRIVER_OPTIONS)
 
-        IssueConfig('Softmin-Type', ["--evaluator", f"h={ff}", '--search', f'eager(alt([single(h), softmin_type_based([h, g()], ignore_size=true, random_seed={FF_RANDOM_SEED})]), cost_type=one)'] , driver_options=DRIVER_OPTIONS),
-        IssueConfig('LWM-0.2929/0.2929', ["--evaluator", f"h={ff}", '--search', f'eager(lwm_partition(h, inter_ep_minh(h, 0.2929, random_seed={FF_RANDOM_SEED}), intra_ep_minh(h, 0.2929, random_seed={FF_RANDOM_SEED}) )) '] , driver_options=DRIVER_OPTIONS),
-        IssueConfig('HI-0.2929/0.2929', ["--evaluator", f"h={ff}", '--search', f'eager(hi_partition(h, inter_ep_minh(h, 0.2929, random_seed={FF_RANDOM_SEED}), intra_ep_minh(h, 0.2929, random_seed={FF_RANDOM_SEED}) )) '] , driver_options=DRIVER_OPTIONS),
-        IssueConfig('Asai', ['--evaluator', f"h={ff}", '--evaluator', f'r=random_edge(random_seed={FF_RANDOM_SEED})', '--search', 'eager(alt( [tiebreaking( [h, r] ), single(r)]) )']),
-        IssueConfig('Fan-Type', ['--evaluator', f"h={ff}", '--search', f'eager(alt( [ single(h), type_based([h, g()], random_seed={FF_RANDOM_SEED}) ] )) ']),
+        IssueConfig('Softmin-Type', ["--evaluator", f"h={unit_ff}", '--search', f'eager(alt([single(h), softmin_type_based([h, g()], ignore_size=true, random_seed={FF_RANDOM_SEED})]), {unit_cost})'] , driver_options=DRIVER_OPTIONS),
+        IssueConfig('LWM-unit-0.2929/0.2929', ["--evaluator", f"h={unit_ff}", '--search', f'eager(lwm_partition(h, inter_ep_minh(h, 0.2929, random_seed={FF_RANDOM_SEED}), intra_ep_minh(h, 0.2929, random_seed={FF_RANDOM_SEED}) ), {unit_cost}) '] , driver_options=DRIVER_OPTIONS),
+        IssueConfig('LWM-real-0.2929/0.2929', ["--evaluator", f"h={normal_ff}", '--search', f'eager(hi_partition(h, inter_ep_minh(h, 0.2929, random_seed={FF_RANDOM_SEED}), intra_ep_minh(h, 0.2929, random_seed={FF_RANDOM_SEED}) ), {real_cost}) '] , driver_options=DRIVER_OPTIONS),
+        IssueConfig('Asai', ['--evaluator', f"h={unit_ff}", '--evaluator', f'r=random_edge(random_seed={FF_RANDOM_SEED})', '--search', f'eager(alt( [tiebreaking( [h, r] ), single(r)]), {unit_cost} )'], driver_options=DRIVER_OPTIONS),
+        IssueConfig('Fan-Type', ['--evaluator', f"h={unit_ff}", '--search', f'eager(alt( [ single(h), type_based([h, g()], random_seed={FF_RANDOM_SEED}) ] ), {unit_cost}) '], driver_options=DRIVER_OPTIONS),
         
 
     ]
