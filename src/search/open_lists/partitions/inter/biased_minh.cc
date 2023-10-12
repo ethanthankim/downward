@@ -82,6 +82,7 @@ int InterBiasedMinHPolicy::get_next_partition() {
     }
 
     int key = h_buckets.begin()->first;
+    // int count_i = 0;
     if (h_buckets.size() > 1) {
         double r = rng->random();
         if (relative_h) {
@@ -123,9 +124,14 @@ int InterBiasedMinHPolicy::get_next_partition() {
                     key = value;
                     break;
                 }
+                // count_i+=1;
             }
         }
     }
+
+    // if (count_i < counts.size()) { // REMOVE
+    //     counts[count_i]+=1;
+    // }
 
     vector<PartitionNode> &partitions = h_buckets[key];
     assert(!partitions.empty());
@@ -143,6 +149,10 @@ void InterBiasedMinHPolicy::notify_insert(
         bool new_partition,
         EvaluationContext &eval_context) 
 {
+    // if (node_key % 500 == 0) {
+    //     cout << counts << endl;
+    // }
+
     int key = eval_context.get_evaluator_value(evaluator.get());
     if (new_partition) {
         auto new_partition = PartitionNode(

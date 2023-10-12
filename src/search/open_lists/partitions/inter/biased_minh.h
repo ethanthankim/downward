@@ -35,6 +35,8 @@ class InterBiasedMinHPolicy : public PartitionPolicy {
     int relative_h_offset;
     double current_sum;
 
+    // std::vector<int> counts = {0,0,0,0,0,0,0,0,0,0};
+
 private:
     bool maybe_move_last_partition();
     void remove_last_partition();
