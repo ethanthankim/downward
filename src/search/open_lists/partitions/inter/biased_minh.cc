@@ -15,6 +15,40 @@ InterBiasedMinHPolicy::InterBiasedMinHPolicy(const plugins::Options &opts)
     relative_h_offset(opts.get<int>("relative_h_offset")),
     current_sum(0.0) {}
 
+void InterBiasedMinHPolicy::verify_heap() {
+
+    bool valid = true;
+    for (auto &b : h_buckets) {
+        int mini = b.first;
+        int i = 0;
+        for (auto &p: b.second) {
+            auto &p_ids = partition_to_id_pair.at(p.partition);
+            if (p.h_counts.begin()->first != mini) {
+                valid = false;
+            } 
+            if (p_ids.first != mini) {
+                valid = false;
+            }
+            if (p_ids.second != i) {
+                valid = false;
+            }
+
+            if (!valid) {
+                cout << "Ahhh the heap isn't valid... mini:" <<  mini 
+                    << ", p.h_counts.begin()->first:" << p.h_counts.begin()->first
+                    << ", first:" 
+                    << p_ids.first 
+                    << ", second:" << p_ids.second 
+                    << ", i:" << i;
+                exit(1);
+            }
+            i+=1;
+        }
+    }
+
+}
+
+
 void InterBiasedMinHPolicy::insert_partition(int new_h, PartitionNode &partition) {
     bool h_absent = h_buckets.find(new_h) == h_buckets.end();
     if (ignore_size) {
@@ -31,57 +65,63 @@ void InterBiasedMinHPolicy::insert_partition(int new_h, PartitionNode &partition
             current_sum += std::exp(-1.0 * static_cast<double>(new_h) / tau);
     }
     h_buckets[new_h].push_back(partition);
+    partition_to_id_pair.emplace(partition.partition, make_pair(new_h, h_buckets[new_h].size()-1)) ;
 }
 
-void InterBiasedMinHPolicy::remove_last_partition() {
-    utils::swap_and_pop_from_vector(h_buckets.at(last_chosen_key), last_chosen_partition_i);
-    if (h_buckets.at(last_chosen_key).empty()) {
-        h_buckets.erase(last_chosen_key);
+void InterBiasedMinHPolicy::modify_partition(int partition_key, int h) {
+    auto partition_ids = partition_to_id_pair.at(partition_key); 
+    h_buckets.at(partition_ids.first)[partition_ids.second].inc_h_count(h);
+}
+
+InterBiasedMinHPolicy::PartitionNode InterBiasedMinHPolicy::remove_partition(int partition_key) {
+    auto partition_ids = partition_to_id_pair.at(partition_key); 
+    auto partition = utils::swap_and_pop_from_vector(h_buckets.at(partition_ids.first), partition_ids.second);
+
+    auto& p_from_back = h_buckets.at(partition_ids.first)[partition_ids.second];
+    partition_to_id_pair.at(p_from_back.partition).second = partition_ids.second;
+
+    if (h_buckets.at(partition_ids.first).empty()) {
+        h_buckets.erase(partition_ids.first);
         if (ignore_size) {
             if (ignore_weights)
                 current_sum -= 1;
             else if (!relative_h)
-                current_sum -= std::exp(-1.0 * static_cast<double>(last_chosen_key) / tau);
+                current_sum -= std::exp(-1.0 * static_cast<double>(partition_ids.first) / tau);
         }
     }
     if (!ignore_size) {
         if (ignore_weights)
             current_sum -= 1;
         else if (!relative_h)
-            current_sum -= std::exp(-1.0 * static_cast<double>(last_chosen_key) / tau);
+            current_sum -= std::exp(-1.0 * static_cast<double>(partition_ids.first) / tau);
     }
+
+    partition_to_id_pair.erase(partition_key);
+    return partition;
 }
 
-bool InterBiasedMinHPolicy::maybe_move_last_partition() {
+bool InterBiasedMinHPolicy::maybe_move_partition(int partition_key) {
 
-    if (h_buckets.at(last_chosen_key)[last_chosen_partition_i].state_hs.at(last_chosen_h) == 0)
-        h_buckets.at(last_chosen_key)[last_chosen_partition_i].state_hs.erase(last_chosen_h);
-
-    auto last_partition = h_buckets.at(last_chosen_key)[last_chosen_partition_i];
-    int new_h = last_partition.state_hs.begin()->first;
-    if (new_h != last_chosen_key) {
-
-        remove_last_partition();
-        insert_partition(new_h, last_partition);
+    auto& partition_ids = partition_to_id_pair.at(partition_key); 
+    int true_min_h = h_buckets.at(partition_ids.first)[partition_ids.second].h_counts.begin()->first;
+    if (true_min_h != partition_ids.first) {
+        auto partition = remove_partition(partition_key);
+        insert_partition(true_min_h, partition);
 
         return true;
-    }  
+
+    } 
     return false;
+
 }
 
 int InterBiasedMinHPolicy::get_next_partition() { 
 
-    if (last_chosen_key != -1) { // gross
-        auto last_partition_dfn = h_buckets.at(last_chosen_key)[last_chosen_partition_i];
-        if (last_partition_dfn.state_hs.begin()->second == 0 
-                && last_partition_dfn.state_hs.size() == 1) { 
-            remove_last_partition();
-        } else {
-            maybe_move_last_partition();
-        }
-    }
+    total_gets+=1;
+    if (total_gets % 100 == 0) verify_heap();
 
-    int key = h_buckets.begin()->first;
+
+    int selected_h = h_buckets.begin()->first;
     // int count_i = 0;
     if (h_buckets.size() > 1) {
         double r = rng->random();
@@ -102,7 +142,7 @@ int InterBiasedMinHPolicy::get_next_partition() {
                 p_sum += p;
                 ++i;
                 if (r <= p_sum) {
-                    key = it.first;
+                    selected_h = it.first;
                     break;
                 }
             }
@@ -121,7 +161,7 @@ int InterBiasedMinHPolicy::get_next_partition() {
 
                 p_sum += p;
                 if (r <= p_sum) {
-                    key = value;
+                    selected_h = value;
                     break;
                 }
                 // count_i+=1;
@@ -129,18 +169,12 @@ int InterBiasedMinHPolicy::get_next_partition() {
         }
     }
 
-    // if (count_i < counts.size()) { // REMOVE
-    //     counts[count_i]+=1;
-    // }
-
-    vector<PartitionNode> &partitions = h_buckets[key];
+    vector<PartitionNode> &partitions = h_buckets[selected_h];
     assert(!partitions.empty());
 
-    last_chosen_key = key;
-    last_chosen_partition_i = rng->random(partitions.size());
-    last_chosen_partition_key = partitions[last_chosen_partition_i].partition;
+    auto partition_index = rng->random(partitions.size());
+    return partitions[partition_index].partition;
 
-    return last_chosen_partition_key;
 }
 
 void InterBiasedMinHPolicy::notify_insert(
@@ -149,30 +183,33 @@ void InterBiasedMinHPolicy::notify_insert(
         bool new_partition,
         EvaluationContext &eval_context) 
 {
-    // if (node_key % 500 == 0) {
-    //     cout << counts << endl;
-    // }
-
-    int key = eval_context.get_evaluator_value(evaluator.get());
-    if (new_partition) {
+    int h = eval_context.get_evaluator_value(evaluator.get());
+    node_hs.emplace(node_key, h);
+    if (new_partition || partition_to_id_pair.count(partition_key)==0) {
         auto new_partition = PartitionNode(
             partition_key,
-            map<int, int>{{key, 1}}
+            map<int, int>{{h, 1}}
         );
-        insert_partition(key, new_partition);
+        insert_partition(h, new_partition);
     } else {
-        auto &counts = h_buckets.at(last_chosen_key)[last_chosen_partition_i].state_hs;
-        counts[key] += 1;
+        modify_partition(partition_key, h);
     }
-    node_hs.emplace(node_key, key);
+    maybe_move_partition(partition_key);
 }
 
 void InterBiasedMinHPolicy::notify_removal(int partition_key, int node_key) {
+    auto& partition_ids = partition_to_id_pair.at(partition_key);
 
-    last_chosen_h = node_hs[node_key];
-    auto &last_partition_dfn = h_buckets.at(last_chosen_key)[last_chosen_partition_i];
-    last_partition_dfn.state_hs.at(last_chosen_h) -= 1;
+    int removed_h = node_hs[node_key];
+    auto &last_partition_dfn = h_buckets.at(partition_ids.first)[partition_ids.second];
     node_hs.erase(node_key);
+
+    last_partition_dfn.dec_h_count(removed_h);
+    if (last_partition_dfn.h_counts.empty()) {
+        remove_partition(partition_key);
+    } else {
+        maybe_move_partition(partition_key);
+    }
 
 }
 

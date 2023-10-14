@@ -101,10 +101,6 @@ int InterEpsilonGreedyMinHPolicy::get_next_partition() {
     last_chosen_partition_index=pos;
     last_chosen_partition = part_node.partition;
 
-    // log << "[get_next_partition] id: " << part_node.partition 
-    //     << " , h: " << (*part_node.state_hs.begin()).first
-    //     << " , percent: " << rand/total << endl;
-    counter+=1;
     return part_node.partition;
 
 }
