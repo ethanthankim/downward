@@ -26,7 +26,6 @@ class IntraEpsilonGreedyMinHPolicy : public NodePolicy {
         }
     };
     utils::HashMap<int, std::vector<HeapNode>> partition_heaps;
-    int cached_last_removed = -1;
 
 public:
     explicit IntraEpsilonGreedyMinHPolicy(const plugins::Options &opts);
@@ -43,7 +42,6 @@ public:
         evaluator->get_path_dependent_evaluators(evals);
     };
     virtual void clear() {
-        cached_last_removed = -1;
         partition_heaps.clear();
     };
 };
