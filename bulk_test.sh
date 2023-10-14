@@ -1,14 +1,14 @@
-# echo "testing barman"
-# ./fast-downward.py benchmarks-test/barman-sat14-strips/domain.pddl benchmarks-test/barman-sat14-strips/p4-11-4-14.pddl --evaluator "hff=ff()" --search "eager(hi_partition(hff, inter_biased_minh(hff, ignore_size=true, random_seed=2), intra_ep_minh(hff, 0.2, random_seed=4) ))" > barman.txt 2>&1
+echo "testing barman"
+./fast-downward.py benchmarks-test/barman-sat14-strips/domain.pddl benchmarks-test/barman-sat14-strips/p4-11-4-14.pddl --evaluator "hff=ff()" --search "eager(hi_partition(hff, inter_biased_minh(hff, ignore_size=true, random_seed=2), intra_ep_minh(hff, 0.2, random_seed=4) ))" > barman.txt 2>&1
 
 # echo "testing elevators"
 # ./fast-downward.py benchmarks-test/elevators-sat11-strips/domain.pddl benchmarks-test/elevators-sat11-strips/p19.pddl --evaluator "hff=ff()" --search "eager(hi_partition(hff, inter_biased_minh(hff, ignore_size=true, random_seed=2), intra_ep_minh(hff, 0.2, random_seed=4) ))"
 
-# echo "testing pegsol"
-# ./fast-downward.py benchmarks-test/pegsol-sat11-strips/domain.pddl benchmarks-test/pegsol-sat11-strips/p13.pddl --evaluator "hff=ff()" --search "eager(hi_partition(hff, inter_biased_minh(hff, ignore_size=true, random_seed=2), intra_ep_minh(hff, 0.2, random_seed=4) ))"> pegsol.txt 2>&1
+echo "testing pegsol"
+./fast-downward.py benchmarks-test/pegsol-sat11-strips/domain.pddl benchmarks-test/pegsol-sat11-strips/p13.pddl --evaluator "hff=ff()" --search "eager(hi_partition(hff, inter_biased_minh(hff, ignore_size=true, random_seed=2), intra_ep_minh(hff, 0.2, random_seed=4) ))"> pegsol.txt 2>&1
 
-# echo "testing sokoban"
-# ./fast-downward.py benchmarks-test/sokoban-sat11-strips/domain.pddl benchmarks-test/sokoban-sat11-strips/p07.pddl --evaluator "hff=ff()" --search "eager(hi_partition(hff, inter_biased_minh(hff, ignore_size=true, random_seed=2), intra_ep_minh(hff, 0.2, random_seed=4) ))"> sokoban.txt 2>&1
+echo "testing sokoban"
+./fast-downward.py benchmarks-test/sokoban-sat11-strips/domain.pddl benchmarks-test/sokoban-sat11-strips/p07.pddl --evaluator "hff=ff()" --search "eager(hi_partition(hff, inter_biased_minh(hff, ignore_size=true, random_seed=2), intra_ep_minh(hff, 0.2, random_seed=4) ))"> sokoban.txt 2>&1
 
 # echo "testing tetris"
 # ./fast-downward.py benchmarks-test/tetris-sat14-strips/domain.pddl benchmarks-test/tetris-sat14-strips/p033.pddl --evaluator "hff=ff()" --search "eager(hi_partition(hff, inter_biased_minh(hff, ignore_size=true, random_seed=2), intra_ep_minh(hff, 0.2, random_seed=4) ))"> tetris.txt 2>&1

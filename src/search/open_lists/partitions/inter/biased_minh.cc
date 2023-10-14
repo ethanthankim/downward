@@ -15,38 +15,38 @@ InterBiasedMinHPolicy::InterBiasedMinHPolicy(const plugins::Options &opts)
     relative_h_offset(opts.get<int>("relative_h_offset")),
     current_sum(0.0) {}
 
-void InterBiasedMinHPolicy::verify_heap() {
+// void InterBiasedMinHPolicy::verify_heap() {
 
-    bool valid = true;
-    for (auto &b : h_buckets) {
-        int mini = b.first;
-        int i = 0;
-        for (auto &p: b.second) {
-            auto &p_ids = partition_to_id_pair.at(p.partition);
-            if (p.h_counts.begin()->first != mini) {
-                valid = false;
-            } 
-            if (p_ids.first != mini) {
-                valid = false;
-            }
-            if (p_ids.second != i) {
-                valid = false;
-            }
+//     bool valid = true;
+//     for (auto &b : h_buckets) {
+//         int mini = b.first;
+//         int i = 0;
+//         for (auto &p: b.second) {
+//             auto &p_ids = partition_to_id_pair.at(p.partition);
+//             if (p.h_counts.begin()->first != mini) {
+//                 valid = false;
+//             } 
+//             if (p_ids.first != mini) {
+//                 valid = false;
+//             }
+//             if (p_ids.second != i) {
+//                 valid = false;
+//             }
 
-            if (!valid) {
-                cout << "Ahhh the heap isn't valid... mini:" <<  mini 
-                    << ", p.h_counts.begin()->first:" << p.h_counts.begin()->first
-                    << ", first:" 
-                    << p_ids.first 
-                    << ", second:" << p_ids.second 
-                    << ", i:" << i;
-                exit(1);
-            }
-            i+=1;
-        }
-    }
+//             if (!valid) {
+//                 cout << "Ahhh the heap isn't valid... mini:" <<  mini 
+//                     << ", p.h_counts.begin()->first:" << p.h_counts.begin()->first
+//                     << ", first:" 
+//                     << p_ids.first 
+//                     << ", second:" << p_ids.second 
+//                     << ", i:" << i;
+//                 exit(1);
+//             }
+//             i+=1;
+//         }
+//     }
 
-}
+// }
 
 
 void InterBiasedMinHPolicy::insert_partition(int new_h, PartitionNode &partition) {
@@ -117,8 +117,8 @@ bool InterBiasedMinHPolicy::maybe_move_partition(int partition_key) {
 
 int InterBiasedMinHPolicy::get_next_partition() { 
 
-    total_gets+=1;
-    if (total_gets % 100 == 0) verify_heap();
+    // total_gets+=1;
+    // if (total_gets % 100 == 0) verify_heap();
 
 
     int selected_h = h_buckets.begin()->first;
@@ -168,6 +168,14 @@ int InterBiasedMinHPolicy::get_next_partition() {
             }
         }
     }
+
+    // if (count_i < counts.size()) {
+    //     counts[count_i] += 1;
+    // }
+
+    // if (total_gets % 100 == 0) {
+    //     cout << counts << endl;
+    // }
 
     vector<PartitionNode> &partitions = h_buckets[selected_h];
     assert(!partitions.empty());

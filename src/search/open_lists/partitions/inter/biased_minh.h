@@ -43,10 +43,10 @@ class InterBiasedMinHPolicy : public PartitionPolicy {
     double current_sum;
 
     // std::vector<int> counts = {0,0,0,0,0,0,0,0,0,0};
-    int total_gets = 0;
+    // int total_gets = 0;
 
 private:
-    void verify_heap();
+    // void verify_heap();
 
     bool maybe_move_partition(int partition_key);
     PartitionNode remove_partition(int partition_key);
