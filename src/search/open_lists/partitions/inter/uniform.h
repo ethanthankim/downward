@@ -32,6 +32,7 @@ public:
     virtual void clear() {
         partition_sizes.clear();
     };
+    virtual void notify_partition_transition(int parent_part, int child_part) {};
 };
 }
 

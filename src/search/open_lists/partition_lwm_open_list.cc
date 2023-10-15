@@ -32,6 +32,7 @@ class PartitionLWMOpenList : public PartitionOpenList<Entry> {
 
     int last_removed = StateID::no_state.get_value();
     int parent_lwm;
+    int parent_partition_key = -1;
 
 protected:
     virtual void do_insertion(
@@ -64,8 +65,8 @@ void PartitionLWMOpenList<Entry>::notify_state_transition(const State &parent_st
     cached_next_state_id = state.get_id();
     cached_parent_id = parent_state.get_id();
 
-    int parent_partition = this->partitioned_nodes.at(this->cached_parent_id.get_value()).first.partition;
-    parent_lwm = lwm_values[parent_partition];
+    parent_partition_key = this->partitioned_nodes.at(this->cached_parent_id.get_value()).first.partition;
+    parent_lwm = lwm_values[parent_partition_key];
 }
 
 template<class Entry>
@@ -80,9 +81,11 @@ void PartitionLWMOpenList<Entry>::do_insertion(
         lwm_values[partition_key] = new_h;
         new_type = true;
     } else {
-        partition_key = this->partitioned_nodes.at(this->cached_parent_id.get_value()).first.partition;
+        partition_key = parent_partition_key;
         new_type = false;
     }
+
+    this->partition_selector->notify_partition_transition(parent_partition_key, partition_key);
 
     PartitionOpenList<Entry>::partition_insert(eval_context, new_h, entry, partition_key, new_type);
 }

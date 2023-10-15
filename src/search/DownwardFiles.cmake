@@ -160,19 +160,19 @@ fast_downward_plugin(
         open_lists/partitions/inter/uniform
 )
 
-fast_downward_plugin(
-    NAME PARTITION_SELECTION_EPSILON_GREEDY
-    HELP "epsilon greedy partition selection policy"
-    SOURCES
-        open_lists/partitions/inter/epsilon_greedy_minh
-)
+# fast_downward_plugin(
+#     NAME PARTITION_SELECTION_EPSILON_GREEDY
+#     HELP "epsilon greedy partition selection policy"
+#     SOURCES
+#         open_lists/partitions/inter/epsilon_greedy_minh
+# )
 
-fast_downward_plugin(
-    NAME PARTITION_SELECTION_EPSILON_GREEDY_ROOT
-    HELP "epsilon greedy root partition selection policy"
-    SOURCES
-        open_lists/partitions/inter/epsilon_greedy_root
-)
+# fast_downward_plugin(
+#     NAME PARTITION_SELECTION_EPSILON_GREEDY_ROOT
+#     HELP "epsilon greedy root partition selection policy"
+#     SOURCES
+#         open_lists/partitions/inter/epsilon_greedy_root
+# )
 
 fast_downward_plugin(
     NAME PARTITION_SELECTION_BIASED_ROOT

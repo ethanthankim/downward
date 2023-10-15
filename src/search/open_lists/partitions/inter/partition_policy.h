@@ -30,6 +30,7 @@ public:
         EvaluationContext &eval_context
     ) = 0;
     virtual void notify_removal(int partition_key, int node_key) = 0;
+    virtual void notify_partition_transition(int parent_part, int child_part) = 0;
     virtual void get_path_dependent_evaluators(std::set<Evaluator *> &evals) = 0;
     virtual void clear() = 0;
 };

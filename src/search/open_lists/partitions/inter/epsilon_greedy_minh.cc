@@ -47,9 +47,7 @@ void InterEpsilonGreedyMinHPolicy::adjust_heap_up(int pos)
         size_t parent_pos = (pos - 1) / 2;
         if ( partition_heap[parent_pos] <= partition_heap[pos] ) break;
 
-        swap(partition_heap[pos], partition_heap[parent_pos]);
-        if (last_chosen_partition_index == pos) last_chosen_partition_index = parent_pos;
-        else if (last_chosen_partition_index == parent_pos) last_chosen_partition_index = pos;
+        swap(partition_heap[pos], partition_heap[parent_pos]);       
         pos = parent_pos;
 
     }
@@ -69,8 +67,6 @@ void InterEpsilonGreedyMinHPolicy::adjust_heap_down(int loc)
 
     if(minimum != loc) {
         swap(partition_heap[loc], partition_heap[minimum]);
-        if (last_chosen_partition_index == loc) last_chosen_partition_index = minimum;
-        else if (last_chosen_partition_index == minimum) last_chosen_partition_index = loc;
         adjust_heap_down(minimum);
     }
 
@@ -79,27 +75,11 @@ void InterEpsilonGreedyMinHPolicy::adjust_heap_down(int loc)
 
 int InterEpsilonGreedyMinHPolicy::get_next_partition() { 
 
-    // might need to remove newly emptied partition
-    if (last_chosen_partition_index != -1) { 
-        PartitionNode &removed_from = partition_heap[last_chosen_partition_index];
-        if (removed_from.state_hs.at(removed_node_h) == 0) {
-            removed_from.state_hs.erase(removed_node_h);
-            if (partition_heap.at(last_chosen_partition_index).state_hs.empty()) {
-                remove_last_chosen_partition();
-            } else {
-                adjust_heap(last_chosen_partition_index);
-            }
-        }
-    }
-
     int pos = 0;
     if (rng->random() < epsilon) {
         pos = rng->random(partition_heap.size());
     }
     PartitionNode &part_node = partition_heap[pos];
-
-    last_chosen_partition_index=pos;
-    last_chosen_partition = part_node.partition;
 
     return part_node.partition;
 

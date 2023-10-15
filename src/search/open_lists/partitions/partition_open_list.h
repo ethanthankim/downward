@@ -27,7 +27,12 @@ template<class Entry>
 class PartitionOpenList : public OpenList<Entry> {
 
 protected:
-    void partition_insert(EvaluationContext & eval_context, int eval, Entry entry, int partition_key, bool new_partition);
+    void partition_insert(
+        EvaluationContext & eval_context, 
+        int eval, 
+        Entry entry, 
+        int partition_key, 
+        bool new_partition);
 
 public:
     std::shared_ptr<Evaluator> evaluator;

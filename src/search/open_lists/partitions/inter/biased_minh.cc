@@ -180,8 +180,7 @@ int InterBiasedMinHPolicy::get_next_partition() {
     vector<PartitionNode> &partitions = h_buckets[selected_h];
     assert(!partitions.empty());
 
-    auto partition_index = rng->random(partitions.size());
-    return partitions[partition_index].partition;
+    return  rng->choose(partitions)->partition;
 
 }
 

@@ -45,10 +45,6 @@ class InterEpsilonGreedyMinHPolicy : public PartitionPolicy {
     utils::HashMap<int, int> node_hs; 
     // std::map<int, int> node_hs;
 
-    int last_chosen_partition_index = -1;
-    int last_chosen_partition = -1;
-    int removed_node_h = -1;
-
 private: 
     void adjust_heap_down(int loc); 
     void adjust_heap_up(int loc);   
@@ -76,10 +72,8 @@ public:
         node_hs.clear();
         partition_heap.clear();
 
-        last_chosen_partition_index = -1;
-        last_chosen_partition = -1;
-        removed_node_h = -1;
     };
+    virtual void notify_partition_transition(int parent_part, int child_part) {};
 };
 }
 

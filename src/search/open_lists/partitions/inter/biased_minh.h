@@ -20,11 +20,11 @@ class InterBiasedMinHPolicy : public PartitionPolicy {
         PartitionNode(int partition, std::map<int, int> h_counts)
             : partition(partition), h_counts(h_counts) {
         }
-        void inc_h_count(int h) 
+        inline void inc_h_count(int h) 
         { 
             h_counts[h] += 1;
         }
-        void dec_h_count(int h) 
+        inline void dec_h_count(int h) 
         { 
             h_counts[h] -= 1;
             if (h_counts[h] <= 0) {
@@ -34,7 +34,7 @@ class InterBiasedMinHPolicy : public PartitionPolicy {
     };
     std::map<int, std::vector<PartitionNode>> h_buckets;
     utils::HashMap<int, int> node_hs;
-    utils::HashMap<int, std::pair<int, int>> partition_to_id_pair;
+    utils::HashMap<int, std::pair<int, int>> partition_to_id_pair; // the pair of values needed to get partition  from h_buckets
     double tau;
     bool ignore_size;
     bool ignore_weights;
@@ -68,7 +68,9 @@ public:
     virtual void clear() {
         h_buckets.clear();
         node_hs.clear();
+        current_sum = 0.0;
     };
+    virtual void notify_partition_transition(int parent_part, int child_part) {};
 };
 }
 
