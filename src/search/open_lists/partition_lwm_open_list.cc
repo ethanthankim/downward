@@ -27,23 +27,45 @@ class PartitionLWMOpenList : public PartitionOpenList<Entry> {
 
     utils::HashMap<int, int> lwm_values;
 
+    StateID cached_next_state_id = StateID::no_state;
+    StateID cached_parent_id = StateID::no_state;
+
+    int last_removed = StateID::no_state.get_value();
+    int parent_lwm;
+
 protected:
     virtual void do_insertion(
         EvaluationContext &eval_context, const Entry &entry) override;
+    virtual void clear() override;
 
 public:
+    Entry remove_min() override;
     explicit PartitionLWMOpenList(const plugins::Options &opts);
     virtual ~PartitionLWMOpenList() override = default;
 
-    void notify_initial_state(const State &initial_state) override;
-
+    virtual void notify_initial_state(const State &initial_state) override;
+    virtual void notify_state_transition(const State &parent_state,
+                                         OperatorID op_id,
+                                         const State &state) override;
 
 };
 
 template<class Entry>
 void PartitionLWMOpenList<Entry>::notify_initial_state(const State &initial_state) {
-    PartitionOpenList<Entry>::notify_initial_state(initial_state);
-    lwm_values[this->cached_parent_id.get_value()] = numeric_limits<int>::max();
+    cached_next_state_id = initial_state.get_id();
+    parent_lwm = numeric_limits<int>::max();
+}
+
+template<class Entry>
+void PartitionLWMOpenList<Entry>::notify_state_transition(const State &parent_state,
+                                        OperatorID op_id,
+                                        const State &state)
+{
+    cached_next_state_id = state.get_id();
+    cached_parent_id = parent_state.get_id();
+
+    int parent_partition = this->partitioned_nodes.at(this->cached_parent_id.get_value()).first.partition;
+    parent_lwm = lwm_values[parent_partition];
 }
 
 template<class Entry>
@@ -51,19 +73,42 @@ void PartitionLWMOpenList<Entry>::do_insertion(
     EvaluationContext &eval_context, const Entry &entry) {
     
     int new_h = eval_context.get_evaluator_value_or_infinity(this->evaluator.get());
-    int parent_partition = this->partitioned_nodes.at(this->cached_parent_id.get_value()).partition;
     int partition_key;
     bool new_type;
-    if ( (new_h < lwm_values[parent_partition])) {
+    if ( (new_h < parent_lwm)) {
         partition_key = this->cached_next_state_id.get_value();
         lwm_values[partition_key] = new_h;
         new_type = true;
     } else {
-        partition_key = this->partitioned_nodes.at(this->cached_parent_id.get_value()).partition;
+        partition_key = this->partitioned_nodes.at(this->cached_parent_id.get_value()).first.partition;
         new_type = false;
     }
 
     PartitionOpenList<Entry>::partition_insert(eval_context, new_h, entry, partition_key, new_type);
+}
+
+template<class Entry>
+Entry PartitionLWMOpenList<Entry>::remove_min() {
+
+    if (last_removed != StateID::no_state.get_value()) {
+        this->partition_selector->notify_removal(this->partitioned_nodes.at(last_removed).first.partition, last_removed);
+        this->partitioned_nodes.erase(last_removed);
+    }
+
+    int chosen_partition = this->partition_selector->get_next_partition();
+    int chosen_node = this->node_selector->get_next_node(chosen_partition);
+
+    Entry result = this->partitioned_nodes.at(chosen_node).second;
+    last_removed = chosen_node;
+    return result;
+
+}
+
+
+template<class Entry>
+void PartitionLWMOpenList<Entry>::clear() {
+    PartitionOpenList<Entry>::clear();
+    lwm_values.clear();
 }
 
 template<class Entry>

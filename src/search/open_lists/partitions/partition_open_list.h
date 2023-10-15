@@ -30,17 +30,11 @@ protected:
     void partition_insert(EvaluationContext & eval_context, int eval, Entry entry, int partition_key, bool new_partition);
 
 public:
+    std::shared_ptr<Evaluator> evaluator;
     std::shared_ptr<PartitionPolicy> partition_selector;
     std::shared_ptr<NodePolicy> node_selector;
-    std::shared_ptr<Evaluator> evaluator;
 
-    utils::HashMap<int, PartitionedNode> partitioned_nodes; // Entry should really be member of PartitionedState
-    utils::HashMap<int, Entry> entries; 
-
-    StateID cached_next_state_id = StateID::no_state;
-    StateID cached_parent_id = StateID::no_state;
-    int last_chosen_node = StateID::no_state.get_value();
-    int last_chosen_partition = -1;
+    utils::HashMap<int, std::pair<PartitionedNode, Entry>> partitioned_nodes;
 
     explicit PartitionOpenList(
         const std::shared_ptr<Evaluator>& evaluator,
@@ -74,25 +68,12 @@ PartitionOpenList<Entry>::PartitionOpenList(
             partition_selector(partition_policy) {}
 
 template<class Entry>
-void PartitionOpenList<Entry>::notify_initial_state(const State &initial_state) {
-    cached_next_state_id = initial_state.get_id();
-    partitioned_nodes.emplace(
-        cached_parent_id.get_value(),
-        PartitionedNode(
-            cached_parent_id.get_value(),
-            std::numeric_limits<int>::max()
-        )
-    );
-}
+void PartitionOpenList<Entry>::notify_initial_state(const State &initial_state) {}
 
 template<class Entry>
 void PartitionOpenList<Entry>::notify_state_transition(const State &parent_state,
                                         OperatorID op_id,
-                                        const State &state)
-{
-    cached_next_state_id = state.get_id();
-    cached_parent_id = parent_state.get_id();
-}
+                                        const State &state) {}
 
 template<class Entry>
 void PartitionOpenList<Entry>::partition_insert(
@@ -104,17 +85,15 @@ void PartitionOpenList<Entry>::partition_insert(
     ) 
 {
     int node_key = eval_context.get_state().get_id().get_value();
-    partitioned_nodes.emplace( 
+    partitioned_nodes.emplace(
         node_key,
-        PartitionedNode(
-            partition_key,
-            eval
+        std::make_pair(
+            PartitionedNode(
+                partition_key,
+                eval
+            ),
+            entry
         )
-    );
-
-    entries.emplace(
-        node_key,
-        entry
     );
 
     partition_selector->notify_insert(partition_key, node_key, new_partition, eval_context);
@@ -124,16 +103,12 @@ void PartitionOpenList<Entry>::partition_insert(
 template<class Entry>
 Entry PartitionOpenList<Entry>::remove_min() {
 
-    partitioned_nodes.erase(last_chosen_node);
-    entries.erase(last_chosen_node);
-
     int chosen_partition = partition_selector->get_next_partition();
     int chosen_node = node_selector->get_next_node(chosen_partition);
     partition_selector->notify_removal(chosen_partition, chosen_node);
 
-    Entry result = entries.at(chosen_node);
-    last_chosen_node = chosen_node;
-    last_chosen_partition = chosen_partition;
+    Entry result = partitioned_nodes.at(chosen_node).second;
+    partitioned_nodes.erase(chosen_node);
 
     return result;
 

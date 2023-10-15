@@ -19,9 +19,16 @@ class IntraBiasedPolicy : public NodePolicy {
     bool ignore_size;
     bool ignore_weights;
     bool relative_h;
-    int relative_h_offset;
-    utils::HashMap<int, std::pair<double, std::map<int, std::deque<int>>>> partition_h_buckets;
-    int cached_last_removed = -1;
+    int relative_h_offset; // i think per partition to, but i dont care.
+
+    struct BiasedPartition {
+        double current_sum;
+        std::map<int, std::vector<int>> h_buckets;
+        BiasedPartition(int current_sum, std::map<int, std::vector<int>> h_buckets)
+            : current_sum(current_sum), h_buckets(h_buckets) {
+        }
+    };
+    utils::HashMap<int, BiasedPartition> part_id_to_part;
     
 public:
     explicit IntraBiasedPolicy(const plugins::Options &opts);
@@ -38,8 +45,7 @@ public:
         evaluator->get_path_dependent_evaluators(evals);
     };
     virtual void clear() {
-        cached_last_removed = -1;
-        partition_h_buckets.clear();
+        part_id_to_part.clear();
     };
 };
 }

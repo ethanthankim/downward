@@ -25,35 +25,78 @@ namespace partition_hi_open_list {
 template<class Entry>
 class PartitionHIOpenList : public PartitionOpenList<Entry> {
 
+    StateID cached_next_state_id = StateID::no_state;
+    StateID cached_parent_id = StateID::no_state;
+    int last_removed = StateID::no_state.get_value();
+
+    int parent_h;
+
 protected:
     virtual void do_insertion(
         EvaluationContext &eval_context, const Entry &entry) override;
 
 public:
+    Entry remove_min() override;
     explicit PartitionHIOpenList(const plugins::Options &opts);
     virtual ~PartitionHIOpenList() override = default;
 
+    virtual void notify_initial_state(const State &initial_state) override;
+    virtual void notify_state_transition(const State &parent_state,
+                                         OperatorID op_id,
+                                         const State &state) override;
+
 
 };
+
+template<class Entry>
+void PartitionHIOpenList<Entry>::notify_initial_state(const State &initial_state) {
+    cached_next_state_id = initial_state.get_id();
+    parent_h = numeric_limits<int>::max();
+}
+
+template<class Entry>
+void PartitionHIOpenList<Entry>::notify_state_transition(const State &parent_state,
+                                        OperatorID op_id,
+                                        const State &state)
+{
+    cached_next_state_id = state.get_id();
+    cached_parent_id = parent_state.get_id();
+    parent_h = this->partitioned_nodes.at(cached_parent_id.get_value()).first.eval;
+}
 
 template<class Entry>
 void PartitionHIOpenList<Entry>::do_insertion(
     EvaluationContext &eval_context, const Entry &entry) {
     
     int new_h = eval_context.get_evaluator_value_or_infinity(this->evaluator.get());
-    int parent_h = this->partitioned_nodes.at(this->cached_parent_id.get_value()).eval;
     int partition_key;
     bool new_type;
     if ( (new_h < parent_h)) {
         partition_key = this->cached_next_state_id.get_value();
         new_type = true;
     } else {
-        partition_key = this->partitioned_nodes.at(this->cached_parent_id.get_value()).partition;
+        partition_key = this->partitioned_nodes.at(this->cached_parent_id.get_value()).first.partition;
         new_type = false;
     }
 
     PartitionOpenList<Entry>::partition_insert(eval_context, new_h, entry, partition_key, new_type);
-    
+
+}
+
+template<class Entry>
+Entry PartitionHIOpenList<Entry>::remove_min() {
+
+    if (last_removed != StateID::no_state.get_value()) {
+        this->partition_selector->notify_removal(this->partitioned_nodes.at(last_removed).first.partition, last_removed);
+        this->partitioned_nodes.erase(last_removed);
+    }
+
+    int chosen_partition = this->partition_selector->get_next_partition();
+    int chosen_node = this->node_selector->get_next_node(chosen_partition);
+
+    Entry result = this->partitioned_nodes.at(chosen_node).second;
+    last_removed = chosen_node;
+    return result;
 
 }
 

@@ -15,11 +15,10 @@ IntraBiasedPolicy::IntraBiasedPolicy(const plugins::Options &opts)
     relative_h_offset(opts.get<int>("relative_h_offset")) {}
 
 int IntraBiasedPolicy::get_next_node(int partition_key) { 
-    auto &partition = partition_h_buckets.at(partition_key);
+    auto &partition = part_id_to_part.at(partition_key);
 
-    auto &buckets = partition.second;
-    auto &current_sum = partition.first;
-    int key = buckets.begin()->first;
+    auto &buckets = partition.h_buckets;
+    int h = buckets.begin()->first;
 
     if (buckets.size() > 1) {
         double r = rng->random();
@@ -40,12 +39,12 @@ int IntraBiasedPolicy::get_next_node(int partition_key) {
                 p_sum += p;
                 ++i;
                 if (r <= p_sum) {
-                    key = it.first;
+                    h = it.first;
                     break;
                 }
             }
         } else {
-            double total_sum = current_sum;
+            double total_sum = partition.current_sum;
             double p_sum = 0.0;
             for (auto it : buckets) {
                 double p = 1.0 / total_sum;
@@ -53,7 +52,7 @@ int IntraBiasedPolicy::get_next_node(int partition_key) {
                 if (!ignore_size) p *= static_cast<double>(it.second.size());
                 p_sum += p;
                 if (r <= p_sum) {
-                    key = it.first;
+                    h = it.first;
                     break;
                 }
             }
@@ -61,24 +60,28 @@ int IntraBiasedPolicy::get_next_node(int partition_key) {
 
     }
 
-    deque<int> &bucket = buckets[key];
+    vector<int> &bucket = buckets[h];
     assert(!bucket.empty());
-    int result = bucket.front();
-    bucket.pop_front();
+
+    int r = rng->random(bucket.size());
+    int result = bucket[r];
+    std::swap(bucket[r], bucket.back());
+    bucket.pop_back();
+
     if (bucket.empty()) {
-        buckets.erase(key);
+        buckets.erase(h);
         if (ignore_size) {
             if (ignore_weights)
-                current_sum -= 1;
+                partition.current_sum -= 1;
             else if (!relative_h)
-                current_sum -= std::exp(-1.0 * static_cast<double>(key) / tau);
+                partition.current_sum -= std::exp(-1.0 * static_cast<double>(h) / tau);
         }
     }
     if (!ignore_size) {
         if (ignore_weights)
-            current_sum -= 1;
+            partition.current_sum -= 1;
         else if (!relative_h)
-            current_sum -= std::exp(-1.0 * static_cast<double>(key) / tau);
+            partition.current_sum -= std::exp(-1.0 * static_cast<double>(h) / tau);
     }
     return result;
 }
@@ -90,26 +93,25 @@ void IntraBiasedPolicy::notify_insert(
         EvaluationContext &eval_context) 
 {
     if (new_partition) {
-        partition_h_buckets.emplace(partition_key, make_pair(0, map<int, deque<int>>()));
+        part_id_to_part.emplace(partition_key, BiasedPartition(0, map<int, vector<int>>()));
     }
 
     int eval = eval_context.get_evaluator_value_or_infinity(evaluator.get());
-    auto &partition = partition_h_buckets.at(partition_key);
+    auto &partition = part_id_to_part.at(partition_key);
 
-    auto &buckets = partition.second;
-    auto &current_sum = partition.first;
+    auto &buckets = partition.h_buckets;
     if (ignore_size) {
         if (buckets.find(eval) == buckets.end()) {
             if (ignore_weights)
-                current_sum += 1;
+                partition.current_sum += 1;
             else if (!relative_h)
-                current_sum += std::exp(-1.0 * static_cast<double>(eval) / tau);
+                partition.current_sum += std::exp(-1.0 * static_cast<double>(eval) / tau);
         }
     } else {
         if (ignore_weights)
-            current_sum += 1;
+            partition.current_sum += 1;
         else if (!relative_h)
-            current_sum += std::exp(-1.0 * static_cast<double>(eval) / tau);
+            partition.current_sum += std::exp(-1.0 * static_cast<double>(eval) / tau);
 
     }
 
