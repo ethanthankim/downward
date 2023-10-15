@@ -63,11 +63,7 @@ int IntraBiasedPolicy::get_next_node(int partition_key) {
     vector<int> &bucket = buckets[h];
     assert(!bucket.empty());
 
-    int r = rng->random(bucket.size());
-    int result = bucket[r];
-    std::swap(bucket[r], bucket.back());
-    bucket.pop_back();
-
+    int result = utils::swap_and_pop_from_vector(bucket, rng->random(bucket.size()));
     if (bucket.empty()) {
         buckets.erase(h);
         if (ignore_size) {
