@@ -61,7 +61,7 @@ void PartitionAusOpenList<Entry>::notify_state_transition(const State &parent_st
 {
     cached_next_state_id = state.get_id();
     cached_parent_id = parent_state.get_id();
-    parent_h = this->partitioned_nodes.at(this->cached_parent_id.get_value()).first.eval;
+    parent_h = this->partitioned_nodes.at(cached_parent_id.get_value()).first.eval;
 }
 
 
@@ -70,7 +70,6 @@ void PartitionAusOpenList<Entry>::do_insertion(
     EvaluationContext &eval_context, const Entry &entry) {
     
     int new_h = eval_context.get_evaluator_value_or_infinity(this->evaluator.get());
-    int parent_h = this->partitioned_nodes.at(this->cached_parent_id.get_value()).first.eval;
     int partition_key;
     bool new_type;
     if ( (new_h < parent_h)) {

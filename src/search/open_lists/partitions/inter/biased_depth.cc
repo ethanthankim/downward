@@ -142,7 +142,7 @@ void InterBiasedDepthPolicy::notify_insert(
         EvaluationContext &eval_context) 
 {
     node_to_part.emplace(node_key, partition_key);
-    if (new_partition) {
+    if (new_partition || partition_to_id_pair.count(partition_key)==0) {
         auto new_partition = PartitionNode(partition_key, 1);
         insert_partition(cached_parent_depth + 1, new_partition);
     } else {

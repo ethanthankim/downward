@@ -143,7 +143,7 @@ void InterBiasedRootPolicy::notify_insert(
 
     int h = eval_context.get_evaluator_value(evaluator.get());
     node_to_part.emplace(node_key, partition_key);
-    if (new_partition) {
+    if (new_partition || partition_to_id_pair.count(partition_key)==0) {
         auto new_partition = PartitionNode(partition_key, 1);
         insert_partition(h, new_partition);
     } else {
