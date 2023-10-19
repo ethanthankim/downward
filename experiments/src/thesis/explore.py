@@ -88,9 +88,10 @@ def main():
         # IssueConfig('HI-unit-biased-minh/0.2', ["--evaluator", f"h={unit_ff}", '--search', f'eager(hi_partition(h, inter_biased_minh(h, ignore_size=true, random_seed={FF_RANDOM_SEED}), intra_ep_minh(h, 0.2, random_seed={FF_RANDOM_SEED}) ), {unit_cost}) '] , driver_options=DRIVER_OPTIONS),
         # IssueConfig('HI-unit-biased-root/biased', ["--evaluator", f"h={unit_ff}", '--search', f'eager(hi_partition(h, inter_biased_root(h, ignore_size=true, random_seed={FF_RANDOM_SEED}), intra_biased_minh(h, ignore_size=true, random_seed={FF_RANDOM_SEED}) ), {unit_cost}) '] , driver_options=DRIVER_OPTIONS)
 
-        IssueConfig('LWM-bias/bias', ["--evaluator", f"h={unit_ff}", '--search', f'eager(lwm_partition(hff, inter_biased_root(hff, tau=1, ignore_size=true, random_seed={FF_RANDOM_SEED}), intra_biased(hff, ignore_size=true, random_seed={FF_RANDOM_SEED})), {unit_cost}) '] , driver_options=DRIVER_OPTIONS),
-        # IssueConfig('AUS-uniform/bias', ["--evaluator", f"h={unit_ff}", '--search', f'eager(aus_partition(h, inter_uniform(), intra_biased(h, ignore_size=true, random_seed={FF_RANDOM_SEED}))), {unit_cost}) '] , driver_options=DRIVER_OPTIONS)
-    ]
+        # IssueConfig('HI-bias/bias', ["--evaluator", f"h={unit_ff}", '--search', f'eager(hi_partition(h, inter_biased_depth(ignore_size=true, random_seed={FF_RANDOM_SEED}), intra_biased(h, ignore_size=true, random_seed={FF_RANDOM_SEED})), {unit_cost}) '] , driver_options=DRIVER_OPTIONS),
+        IssueConfig('LWM-bias/bias', ["--evaluator", f"h={unit_ff}", '--search', f'eager(lwm_partition(h, inter_biased_depth(ignore_size=true, random_seed={FF_RANDOM_SEED}), intra_biased(h, ignore_size=true, random_seed={FF_RANDOM_SEED})), {unit_cost}) '] , driver_options=DRIVER_OPTIONS)
+    
+    ]       
 
     ATTRIBUTES = [
         "error",
