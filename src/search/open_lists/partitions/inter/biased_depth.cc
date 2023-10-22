@@ -7,9 +7,12 @@ namespace inter_biased_depth_partition {
 InterBiasedDepthPolicy::InterBiasedDepthPolicy(const plugins::Options &opts)
     : PartitionPolicy(opts),
     rng(utils::parse_rng_from_options(opts)),
-    tau(opts.get<double>("tau")),
+    tau(opts.get<double>("tau")/2),
+    tau_limit(opts.get<double>("tau")),
     ignore_size(opts.get<bool>("ignore_size")),
-    current_sum(0.0) {}
+    current_sum(0.0),
+    node_count(2.0),
+    success_count(1.0) {}
 
 // void InterBiasedDepthPolicy::verify_heap() {
 
@@ -118,6 +121,18 @@ void InterBiasedDepthPolicy::notify_insert(
         auto partition_ids = partition_to_id_pair.at(partition_key); 
         h_buckets.at(partition_ids.first)[partition_ids.second].inc_size();
     }
+    
+    double sr = success_count / node_count;
+    if (new_partition && tau > (sr+0.0001)) {
+        tau = (tau-sr);
+        success_count+=1;
+    } else if (tau < tau_limit) {
+        double fr = 1-(sr); 
+        tau += fr;
+    }
+    node_count+=1;
+
+
 }
 
 InterBiasedDepthPolicy::PartitionNode InterBiasedDepthPolicy::remove_partition(int partition_key) {

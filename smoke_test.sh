@@ -18,7 +18,9 @@ grep Expanded "$FOLDER/sokoban.txt"
 echo
 
 # echo "testing tetris"
-# ./fast-downward.py benchmarks-test/tetris-sat14-strips/domain.pddl benchmarks-test/tetris-sat14-strips/p033.pddl --evaluator "$H" --search "eager($1, cost_type=one)"> bulk_test/tetris.txt 2>&1
+# ./fast-downward.py benchmarks-test/tetris-sat14-strips/domain.pddl benchmarks-test/tetris-sat14-strips/p033.pddl --evaluator "$H" --search "eager($1, cost_type=one)"> $FOLDER/tetris.txt 2>&1
+# grep Expanded "$FOLDER/tetris.txt"
+# echo
 
 # echo "testing transport"
 # ./fast-downward.py benchmarks-test/transport-sat11-strips/domain.pddl benchmarks-test/transport-sat11-strips/p18.pddl --evaluator "$H" --search "eager($1, cost_type=one)"> bulk_test/transport.txt 2>&1

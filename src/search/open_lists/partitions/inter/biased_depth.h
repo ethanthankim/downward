@@ -40,8 +40,11 @@ class InterBiasedDepthPolicy : public PartitionPolicy {
     // std::vector<int> counts = {0,0,0,0,0,0,0,0,0,0};
 
     double tau;
+    double tau_limit;
     bool ignore_size;
     double current_sum;
+    double node_count;
+    double success_count;
 
 public:
     explicit InterBiasedDepthPolicy(const plugins::Options &opts);
