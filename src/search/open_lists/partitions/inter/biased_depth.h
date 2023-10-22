@@ -41,9 +41,6 @@ class InterBiasedDepthPolicy : public PartitionPolicy {
 
     double tau;
     bool ignore_size;
-    bool ignore_weights;
-    bool relative_h;
-    int relative_h_offset;
     double current_sum;
 
 public:

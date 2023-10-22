@@ -36,9 +36,6 @@ class InterBiasedRootPolicy : public PartitionPolicy {
     utils::HashMap<int, std::pair<int, int>> partition_to_id_pair; // the pair of values needed to get partition  from h_buckets
     double tau;
     bool ignore_size;
-    bool ignore_weights;
-    bool relative_h;
-    int relative_h_offset;
     double current_sum;
 
     // int total_gets = 0;

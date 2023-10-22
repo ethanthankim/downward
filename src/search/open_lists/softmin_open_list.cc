@@ -33,7 +33,7 @@ class SoftminOpenList : public OpenList<Entry> {
 
     shared_ptr<Evaluator> evaluator;
 
-    std::vector<int> counts = {0,0,0,0,0,0,0,0,0,0};
+    // std::vector<int> counts = {0,0,0,0,0,0,0,0,0,0};
 
 protected:
     virtual void do_insertion(EvaluationContext &eval_context,

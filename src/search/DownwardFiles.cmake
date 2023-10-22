@@ -259,6 +259,13 @@ fast_downward_plugin(
 )
 
 fast_downward_plugin(
+    NAME PARTITION_BIAS_DEPTH_BIAS_H_OPEN_LIST
+    HELP "Partition biased depth and h open list"
+    SOURCES
+        open_lists/partition_bias_depth_bias_h
+)
+
+fast_downward_plugin(
     NAME ALTERNATION_OPEN_LIST
     HELP "Open list that alternates between underlying open lists in a round-robin manner"
     SOURCES

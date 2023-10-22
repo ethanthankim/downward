@@ -10,9 +10,6 @@ InterBiasedRootPolicy::InterBiasedRootPolicy(const plugins::Options &opts)
     rng(utils::parse_rng_from_options(opts)),
     tau(opts.get<double>("tau")),
     ignore_size(opts.get<bool>("ignore_size")),
-    ignore_weights(opts.get<bool>("ignore_weights")),
-    relative_h(opts.get<bool>("relative_h")),
-    relative_h_offset(opts.get<int>("relative_h_offset")),
     current_sum(0.0) {}
 
 
@@ -53,16 +50,10 @@ void InterBiasedRootPolicy::insert_partition(int new_h, PartitionNode &partition
     bool h_absent = h_buckets.find(new_h) == h_buckets.end();
     if (ignore_size) {
         if (h_absent) {
-            if (ignore_weights)
-                current_sum += 1;
-            else if (!relative_h)
-                current_sum += std::exp(-1.0 * static_cast<double>(new_h) / tau);
+            current_sum += std::exp(-1.0 * static_cast<double>(new_h) / tau);
         }
     } else {
-        if (ignore_weights)
-            current_sum += 1;
-        else if (!relative_h)
-            current_sum += std::exp(-1.0 * static_cast<double>(new_h) / tau);
+        current_sum += std::exp(-1.0 * static_cast<double>(new_h) / tau);
     }
     h_buckets[new_h].push_back(partition);
     partition_to_id_pair.emplace(partition.partition, make_pair(new_h, h_buckets[new_h].size()-1)) ;
@@ -79,42 +70,20 @@ int InterBiasedRootPolicy::get_next_partition() {
     // int count_i = 0;
     if (h_buckets.size() > 1) {
         double r = rng->random();
-        if (relative_h) {
-            double total_sum = 0;
-            int i = relative_h_offset;
-            for (auto it : h_buckets) {
-                double s = std::exp(-1.0 * static_cast<double>(i) / tau);
-                if (!ignore_size) s *= static_cast<double>(it.second.size());
-                total_sum += s;
-                ++i;
+        double total_sum = current_sum;
+        double p_sum = 0.0;
+        for (auto it : h_buckets) {
+            double p = 1.0 / total_sum;
+            p *= std::exp(-1.0 * static_cast<double>(it.first) / tau);
+            if (!ignore_size) p *= static_cast<double>(it.second.size());
+            p_sum += p;
+            if (r <= p_sum) {
+                selected_h = it.first;
+                break;
             }
-            double p_sum = 0.0;
-            i = relative_h_offset;
-            for (auto it : h_buckets) {
-                double p = std::exp(-1.0 * static_cast<double>(i) / tau) / total_sum;
-                if (!ignore_size) p *= static_cast<double>(it.second.size());
-                p_sum += p;
-                ++i;
-                if (r <= p_sum) {
-                    selected_h = it.first;
-                    break;
-                }
-            }
-        } else {
-            double total_sum = current_sum;
-            double p_sum = 0.0;
-            for (auto it : h_buckets) {
-                double p = 1.0 / total_sum;
-                if (!ignore_weights) p *= std::exp(-1.0 * static_cast<double>(it.first) / tau);
-                if (!ignore_size) p *= static_cast<double>(it.second.size());
-                p_sum += p;
-                if (r <= p_sum) {
-                    selected_h = it.first;
-                    break;
-                }
-                // count_i+=1;
-            }
+            // count_i+=1;
         }
+        
     }
 
     // if (count_i < counts.size()) { // REMOVE
@@ -162,17 +131,11 @@ InterBiasedRootPolicy::PartitionNode InterBiasedRootPolicy::remove_partition(int
     if (h_buckets.at(partition_ids.first).empty()) {
         h_buckets.erase(partition_ids.first);
         if (ignore_size) {
-            if (ignore_weights)
-                current_sum -= 1;
-            else if (!relative_h)
-                current_sum -= std::exp(-1.0 * static_cast<double>(partition_ids.first) / tau);
+            current_sum -= std::exp(-1.0 * static_cast<double>(partition_ids.first) / tau);
         }
     }
     if (!ignore_size) {
-        if (ignore_weights)
-            current_sum -= 1;
-        else if (!relative_h)
-            current_sum -= std::exp(-1.0 * static_cast<double>(partition_ids.first) / tau);
+        current_sum -= std::exp(-1.0 * static_cast<double>(partition_ids.first) / tau);
     }
 
     partition_to_id_pair.erase(partition_key);
@@ -206,15 +169,6 @@ public:
         add_option<bool>(
             "ignore_size",
             "ignore bucket sizes", "false");
-        add_option<bool>(
-            "ignore_weights",
-            "ignore weights of buckets", "false");
-        add_option<bool>(
-            "relative_h",
-            "use relative positions of h-values", "false");
-        add_option<int>(
-            "relative_h_offset",
-            "starting value of relative h-values", "0");
         utils::add_rng_options(*this);
         add_partition_policy_options_to_feature(*this);
     }

@@ -45,7 +45,7 @@ public:
         document_subcategory("evaluators_basic");
         document_title("Progress rate evaluator");
         document_synopsis(
-            "Return the rate of progress from initial state to source node.");
+            "Return type HI type of the node.");
         add_option<shared_ptr<Evaluator>>("eval", "evaluator");
         add_evaluator_options_to_feature(*this);
     }
