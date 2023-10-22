@@ -1,5 +1,5 @@
-#ifndef PARTITION_POLICIES_BIASED_DEPTH_H
-#define PARTITION_POLICIES_BIASED_DEPTH_H
+#ifndef PARTITION_POLICIES_BIASED_PROGRESS_H
+#define PARTITION_POLICIES_BIASED_PROGRESS_H
 
 #include "partition_policy.h"
 
@@ -9,8 +9,8 @@
 
 #include <map>
 
-namespace inter_biased_depth_partition {
-class InterBiasedDepthPolicy : public PartitionPolicy {
+namespace inter_biased_progress_partition {
+class InterBiasedProgressPolicy : public PartitionPolicy {
 
     std::shared_ptr<utils::RandomNumberGenerator> rng;
 
@@ -30,7 +30,7 @@ class InterBiasedDepthPolicy : public PartitionPolicy {
         }
     };
     std::map< int, std::vector<PartitionNode>, std::greater<int> > h_buckets;
-    // utils::HashMap<int, int> node_to_part;
+    utils::HashMap<int, int> node_to_prog;
     utils::HashMap<int, std::pair<int, int>> partition_to_id_pair; // the pair of values needed to get partition  from h_buckets
 
     int cached_parent_part = -1;
@@ -47,8 +47,8 @@ class InterBiasedDepthPolicy : public PartitionPolicy {
     double success_count;
 
 public:
-    explicit InterBiasedDepthPolicy(const plugins::Options &opts);
-    virtual ~InterBiasedDepthPolicy() override = default;
+    explicit InterBiasedProgressPolicy(const plugins::Options &opts);
+    virtual ~InterBiasedProgressPolicy() override = default;
 
     PartitionNode remove_partition(int partition_key);
     void insert_partition(int new_h, PartitionNode &partition);

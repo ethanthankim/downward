@@ -1,10 +1,10 @@
-#include "biased_depth.h"
+#include "biased_progress.h"
 
 using namespace std;
 
-namespace inter_biased_depth_partition {
+namespace inter_biased_progress_partition {
 
-InterBiasedDepthPolicy::InterBiasedDepthPolicy(const plugins::Options &opts)
+InterBiasedProgressPolicy::InterBiasedProgressPolicy(const plugins::Options &opts)
     : PartitionPolicy(opts),
     rng(utils::parse_rng_from_options(opts)),
     tau(opts.get<double>("tau")/2),
@@ -14,7 +14,7 @@ InterBiasedDepthPolicy::InterBiasedDepthPolicy(const plugins::Options &opts)
     node_count(2.0),
     success_count(1.0) {}
 
-// void InterBiasedDepthPolicy::verify_heap() {
+// void InterBiasedProgressPolicy::verify_heap() {
 
 //     bool valid = true;
 //     for (auto &b : h_buckets) {
@@ -47,13 +47,13 @@ InterBiasedDepthPolicy::InterBiasedDepthPolicy(const plugins::Options &opts)
 
 // }
 
-void InterBiasedDepthPolicy::notify_partition_transition(int parent_part, int child_part) {
+void InterBiasedProgressPolicy::notify_partition_transition(int parent_part, int child_part) {
     if (parent_part == -1) return;
     cached_parent_part = parent_part;
     cached_parent_depth = partition_to_id_pair.at(cached_parent_part).first;
 }
 
-void InterBiasedDepthPolicy::insert_partition(int new_h, PartitionNode &partition) {
+void InterBiasedProgressPolicy::insert_partition(int new_h, PartitionNode &partition) {
     bool h_absent = h_buckets.find(new_h) == h_buckets.end();
     if (ignore_size) {
         if (h_absent) {
@@ -66,7 +66,7 @@ void InterBiasedDepthPolicy::insert_partition(int new_h, PartitionNode &partitio
     partition_to_id_pair.emplace(partition.partition, make_pair(new_h, h_buckets[new_h].size()-1)) ;
 }
 
-int InterBiasedDepthPolicy::get_next_partition() {
+int InterBiasedProgressPolicy::get_next_partition() {
     // int count_i = 0;
     // total_gets+=1;
     // if (total_gets % 100 == 0) {
@@ -107,18 +107,19 @@ int InterBiasedDepthPolicy::get_next_partition() {
     return  rng->choose(partitions)->partition;
 }
 
-void InterBiasedDepthPolicy::notify_insert(
+void InterBiasedProgressPolicy::notify_insert(
         int partition_key,
         int node_key,
         bool new_partition,
         EvaluationContext &eval_context) 
 {
-    // node_to_part.emplace(node_key, partition_key);
     if (new_partition || partition_to_id_pair.count(partition_key)==0) {
         auto new_partition = PartitionNode(partition_key, 1);
+        node_to_prog.emplace(node_key, cached_parent_depth + 1);
         insert_partition(cached_parent_depth + 1, new_partition);
     } else {
         auto partition_ids = partition_to_id_pair.at(partition_key); 
+        node_to_prog.emplace(node_key, max(cached_parent_depth - 1, 0));
         h_buckets.at(partition_ids.first)[partition_ids.second].inc_size();
     }
     
@@ -135,7 +136,7 @@ void InterBiasedDepthPolicy::notify_insert(
 
 }
 
-InterBiasedDepthPolicy::PartitionNode InterBiasedDepthPolicy::remove_partition(int partition_key) {
+InterBiasedProgressPolicy::PartitionNode InterBiasedProgressPolicy::remove_partition(int partition_key) {
     auto partition_ids = partition_to_id_pair.at(partition_key); 
     auto partition = utils::swap_and_pop_from_vector(h_buckets.at(partition_ids.first), partition_ids.second);
 
@@ -156,20 +157,20 @@ InterBiasedDepthPolicy::PartitionNode InterBiasedDepthPolicy::remove_partition(i
     return partition;
 }
 
-void InterBiasedDepthPolicy::notify_removal(int partition_key, int node_key) {
+void InterBiasedProgressPolicy::notify_removal(int partition_key, int node_key) {
     auto& partition_ids = partition_to_id_pair.at(partition_key);
     auto &last_partition_dfn = h_buckets.at(partition_ids.first)[partition_ids.second];
     last_partition_dfn.dec_size();
     if (last_partition_dfn.size == 0) {
         remove_partition(partition_key);
     }
-    // node_to_part.erase(node_key);
+    node_to_prog.erase(node_key);
 }
 
 
-class InterBiasedDepthPolicyFeature : public plugins::TypedFeature<PartitionPolicy, InterBiasedDepthPolicy> {
+class InterBiasedProgressPolicyFeature : public plugins::TypedFeature<PartitionPolicy, InterBiasedProgressPolicy> {
 public:
-    InterBiasedDepthPolicyFeature() : TypedFeature("inter_biased_depth") {
+    InterBiasedProgressPolicyFeature() : TypedFeature("inter_biased_depth") {
         document_subcategory("partition_policies");
         document_title("Biased depth partition selection");
         document_synopsis(
@@ -188,5 +189,5 @@ public:
     }
 };
 
-static plugins::FeaturePlugin<InterBiasedDepthPolicyFeature> _plugin;
+static plugins::FeaturePlugin<InterBiasedProgressPolicyFeature> _plugin;
 }
