@@ -11,8 +11,6 @@
 
 namespace inter_eg_minh_partition {
 class InterEpsilonGreedyMinHPolicy : public PartitionPolicy {
-
-    std::shared_ptr<Evaluator> evaluator;
     std::shared_ptr<utils::RandomNumberGenerator> rng;
     double epsilon;
 
@@ -63,17 +61,14 @@ public:
         int partition_key,
         int node_key,
         bool new_partition,
-        EvaluationContext &eval_context) override;
+        int eval) override;
     virtual void notify_removal(int partition_key, int node_key) override;
-    virtual void get_path_dependent_evaluators(std::set<Evaluator *> &evals) {
-        evaluator->get_path_dependent_evaluators(evals);
-    };
     virtual void clear() {
         node_hs.clear();
         partition_heap.clear();
 
     };
-    virtual void notify_partition_transition(int parent_part, int child_part) {};
+    virtual void notify_partition_transition(int parent_part, int parent_node, int child_part, int child_node) {};
 };
 }
 

@@ -188,6 +188,13 @@ fast_downward_plugin(
         open_lists/partitions/inter/biased_depth
 )
 
+# fast_downward_plugin(
+#     NAME PARTITION_SELECTION_BIASED_PROGRESS
+#     HELP "biased progress partition selection policy"
+#     SOURCES
+#         open_lists/partitions/inter/biased_progress
+# )
+
 fast_downward_plugin(
     NAME PARTITION_SELECTION_BIASED_MINH
     HELP "biased depth partition selection policy"
@@ -238,18 +245,33 @@ fast_downward_plugin(
 )
 
 fast_downward_plugin(
-    NAME PARTITION_H_OPEN_LIST
+    NAME PARTITION_HIB_OPEN_LIST
     HELP "Partition open list"
     SOURCES
-        open_lists/partition_h_open_list
+        open_lists/partition_hib_open_list
 )
 
 fast_downward_plugin(
-    NAME PARTITION_aus_OPEN_LIST
+    NAME PARTITION_LWMB_OPEN_LIST
     HELP "Partition open list"
     SOURCES
-        open_lists/partition_aus_open_list
+        open_lists/partition_lwmb_open_list
 )
+
+
+# fast_downward_plugin(
+#     NAME PARTITION_H_OPEN_LIST
+#     HELP "Partition open list"
+#     SOURCES
+#         open_lists/partition_h_open_list
+# )
+
+# fast_downward_plugin(
+#     NAME PARTITION_aus_OPEN_LIST
+#     HELP "Partition open list"
+#     SOURCES
+#         open_lists/partition_aus_open_list
+# )
 
 fast_downward_plugin(
     NAME PARTITION_LWM_OPEN_LIST
@@ -258,12 +280,12 @@ fast_downward_plugin(
         open_lists/partition_lwm_open_list
 )
 
-fast_downward_plugin(
-    NAME PARTITION_BIAS_DEPTH_BIAS_H_OPEN_LIST
-    HELP "Partition biased depth and h open list"
-    SOURCES
-        open_lists/partition_bias_depth_bias_h
-)
+# fast_downward_plugin(
+#     NAME PARTITION_BIAS_DEPTH_BIAS_H_OPEN_LIST
+#     HELP "Partition biased depth and h open list"
+#     SOURCES
+#         open_lists/partition_bias_depth_bias_h
+# )
 
 fast_downward_plugin(
     NAME ALTERNATION_OPEN_LIST

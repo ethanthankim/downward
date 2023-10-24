@@ -7,7 +7,6 @@ namespace inter_eg_minh_partition {
 InterEpsilonGreedyMinHPolicy::InterEpsilonGreedyMinHPolicy(const plugins::Options &opts)
     : PartitionPolicy(opts),
     rng(utils::parse_rng_from_options(opts)),
-    evaluator(opts.get<shared_ptr<Evaluator>>("eval")),
     epsilon(opts.get<double>("epsilon")) {}
 
 int InterEpsilonGreedyMinHPolicy::remove_last_chosen_partition() 
@@ -89,10 +88,9 @@ void InterEpsilonGreedyMinHPolicy::notify_insert(
     int partition_key,
     int node_key,
     bool new_partition,
-    EvaluationContext &eval_context) 
+    int eval) 
 {
     // handle new partitioned node
-    int eval = eval_context.get_evaluator_value_or_infinity(evaluator.get());
     node_hs.emplace(node_key, eval);
     int pos;
 
@@ -130,7 +128,6 @@ public:
         document_synopsis(
             "With probability epsilon, choose the best next partition, otherwise"
             "choose a paritition uniformly at random.");
-        add_option<shared_ptr<Evaluator>>("eval", "evaluator");
         add_option<double>(
             "epsilon",
             "probability for choosing the next entry randomly",

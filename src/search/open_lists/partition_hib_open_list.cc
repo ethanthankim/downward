@@ -1,4 +1,4 @@
-#include "partition_hi_open_list.h"
+#include "partition_hib_open_list.h"
 
 #include "partitions/partition_open_list.h"
 #include "partitions/inter/partition_policy.h"
@@ -21,9 +21,9 @@
 using namespace std;
 using namespace partition_open_list;
 
-namespace partition_hi_open_list {
+namespace partition_hib_open_list {
 template<class Entry>
-class PartitionHIOpenList : public PartitionOpenList<Entry> {
+class PartitionHIBOpenList : public PartitionOpenList<Entry> {
 
     StateID cached_next_state_id = StateID::no_state;
     StateID cached_parent_id = StateID::no_state;
@@ -32,31 +32,46 @@ class PartitionHIOpenList : public PartitionOpenList<Entry> {
     int parent_h;
     int parent_partition_key = -1;
 
+    struct CachedInfo {
+        int id;
+        int eval;
+        int partition_key;
+        bool new_type;
+        Entry entry;
+        CachedInfo(const int id, int eval, int partition_key, bool new_type, const Entry& entry)
+            : id(id), eval(eval), partition_key(partition_key), new_type(new_type), entry(entry) {
+        }
+    };
+    vector<CachedInfo> successors;
+    int type_counter;
+
 protected:
     virtual void do_insertion(
         EvaluationContext &eval_context, const Entry &entry) override;
 
 public:
     Entry remove_min() override;
-    explicit PartitionHIOpenList(const plugins::Options &opts);
-    virtual ~PartitionHIOpenList() override = default;
+    explicit PartitionHIBOpenList(const plugins::Options &opts);
+    virtual ~PartitionHIBOpenList() override = default;
 
     virtual void notify_initial_state(const State &initial_state) override;
     virtual void notify_state_transition(const State &parent_state,
                                          OperatorID op_id,
                                          const State &state) override;
 
+    virtual bool empty() const override;
+
 
 };
 
 template<class Entry>
-void PartitionHIOpenList<Entry>::notify_initial_state(const State &initial_state) {
+void PartitionHIBOpenList<Entry>::notify_initial_state(const State &initial_state) {
     cached_next_state_id = initial_state.get_id();
     parent_h = numeric_limits<int>::max();
 }
 
 template<class Entry>
-void PartitionHIOpenList<Entry>::notify_state_transition(const State &parent_state,
+void PartitionHIBOpenList<Entry>::notify_state_transition(const State &parent_state,
                                         OperatorID op_id,
                                         const State &state)
 {
@@ -68,31 +83,49 @@ void PartitionHIOpenList<Entry>::notify_state_transition(const State &parent_sta
 }
 
 template<class Entry>
-void PartitionHIOpenList<Entry>::do_insertion(
+void PartitionHIBOpenList<Entry>::do_insertion(
     EvaluationContext &eval_context, const Entry &entry) {
-    
-    int new_h = eval_context.get_evaluator_value_or_infinity(this->evaluator.get());
-    int partition_key;
-    bool new_type;
-    if ( (new_h < parent_h) ) {
-        partition_key = this->cached_next_state_id.get_value();
-        new_type = true;
-    } else {
-        partition_key = parent_partition_key;
-        new_type = false;
-    }
-    this->partition_selector->notify_partition_transition(
-        parent_partition_key, 
-        cached_parent_id.get_value(), 
-        partition_key, 
-        this->cached_next_state_id.get_value());
 
-    PartitionOpenList<Entry>::partition_insert(this->cached_next_state_id.get_value(), new_h, entry, partition_key, new_type);
+    int new_h = eval_context.get_evaluator_value_or_infinity(this->evaluator.get());
+    if ( (new_h < parent_h) ) {
+        successors.push_back(
+            CachedInfo(
+                this->cached_next_state_id.get_value(),
+                new_h,
+                type_counter,
+                true,
+                entry
+            )
+        );
+    } else {
+        successors.push_back(
+            CachedInfo(
+                this->cached_next_state_id.get_value(),
+                new_h,
+                parent_partition_key,
+                false,
+                entry
+            )
+        );
+    }
 
 }
 
 template<class Entry>
-Entry PartitionHIOpenList<Entry>::remove_min() {
+Entry PartitionHIBOpenList<Entry>::remove_min() {
+
+    bool _first_new_ = true;
+    for(CachedInfo info : successors) {
+        this->partition_selector->notify_partition_transition(
+            parent_partition_key, 
+            cached_parent_id.get_value(), 
+            info.partition_key, 
+            info.id);
+        PartitionOpenList<Entry>::partition_insert(info.id, info.eval, info.entry, info.partition_key, info.new_type ? _first_new_ : info.new_type);
+        if (info.new_type) _first_new_ = false;
+    }
+    if (!_first_new_) type_counter+=1;   // if this happens, a new type was in the cache
+    successors.clear();
 
     if (last_removed != StateID::no_state.get_value()) {
         this->partition_selector->notify_removal(this->partitioned_nodes.at(last_removed).first.partition, last_removed);
@@ -109,33 +142,40 @@ Entry PartitionHIOpenList<Entry>::remove_min() {
 }
 
 template<class Entry>
-PartitionHIOpenList<Entry>::PartitionHIOpenList(const plugins::Options &opts)
+bool PartitionHIBOpenList<Entry>::empty() const {
+    return this->partitioned_nodes.empty() && successors.empty();
+}
+
+
+template<class Entry>
+PartitionHIBOpenList<Entry>::PartitionHIBOpenList(const plugins::Options &opts)
     : PartitionOpenList<Entry>(
         opts.get<shared_ptr<Evaluator>>("eval"),
         opts.get<shared_ptr<PartitionPolicy>>("partition_policy"),
         opts.get<shared_ptr<NodePolicy>>("node_policy")
-    ) {}
+    ),
+    type_counter(0) {}
 
 
-PartitionHIOpenListFactory::PartitionHIOpenListFactory(
+PartitionHIBOpenListFactory::PartitionHIBOpenListFactory(
     const plugins::Options &options)
     : options(options) {
 }
 
 unique_ptr<StateOpenList>
-PartitionHIOpenListFactory::create_state_open_list() {
-    return utils::make_unique_ptr<PartitionHIOpenList<StateOpenListEntry>>(options);
+PartitionHIBOpenListFactory::create_state_open_list() {
+    return utils::make_unique_ptr<PartitionHIBOpenList<StateOpenListEntry>>(options);
 }
 
 unique_ptr<EdgeOpenList>
-PartitionHIOpenListFactory::create_edge_open_list() {
-    return utils::make_unique_ptr<PartitionHIOpenList<EdgeOpenListEntry>>(options);
+PartitionHIBOpenListFactory::create_edge_open_list() {
+    return utils::make_unique_ptr<PartitionHIBOpenList<EdgeOpenListEntry>>(options);
 }
 
-class PartitionHIOpenListFeature : public plugins::TypedFeature<OpenListFactory, PartitionHIOpenListFactory> {
+class PartitionHIBOpenListFeature : public plugins::TypedFeature<OpenListFactory, PartitionHIBOpenListFactory> {
 public:
-    PartitionHIOpenListFeature() : TypedFeature("hi_partition") {
-        document_title("Partition Low Water-mark Open List");
+    PartitionHIBOpenListFeature() : TypedFeature("hib_partition") {
+        document_title("Partition Heuristic Improvement Bench Open List");
         document_synopsis("A configurable open list that selects nodes by first"
          "choosing a node parition and then choosing a node from within it."
          "The policies for insertion (choosing a partition to insert into or"
@@ -147,5 +187,5 @@ public:
     }
 };
 
-static plugins::FeaturePlugin<PartitionHIOpenListFeature> _plugin;
+static plugins::FeaturePlugin<PartitionHIBOpenListFeature> _plugin;
 }

@@ -40,11 +40,11 @@ class InterBiasedProgressPolicy : public PartitionPolicy {
     // std::vector<int> counts = {0,0,0,0,0,0,0,0,0,0};
 
     double tau;
-    double tau_limit;
+    // double tau_limit;
     bool ignore_size;
     double current_sum;
-    double node_count;
-    double success_count;
+    // double node_count;
+    // double success_count;
 
 public:
     explicit InterBiasedProgressPolicy(const plugins::Options &opts);
@@ -60,15 +60,15 @@ public:
         int partition_key,
         int node_key,
         bool new_partition,
-        EvaluationContext &eval_context) override;
+        int eval) override;
     virtual void notify_removal(int partition_key, int node_key);
     virtual void get_path_dependent_evaluators(std::set<Evaluator *> &evals) {};
     virtual void clear() {
         h_buckets.clear();
-        // node_to_part.clear();
+        node_to_prog.clear();
         partition_to_id_pair.clear();
     };
-    virtual void notify_partition_transition(int parent_part, int child_part) override;
+    virtual void notify_partition_transition(int parent_part, int parent_node, int child_part, int child_node) override;
 };
 }
 

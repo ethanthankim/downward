@@ -1,12 +1,14 @@
 #include "biased_minh.h"
 
+#include "../utils/collections.h"
+#include "../utils/hash.h"
+
 using namespace std;
 
 namespace inter_biased_minh_partition {
 
 InterBiasedMinHPolicy::InterBiasedMinHPolicy(const plugins::Options &opts)
     : PartitionPolicy(opts),
-    evaluator(opts.get<shared_ptr<Evaluator>>("eval")),
     rng(utils::parse_rng_from_options(opts)),
     tau(opts.get<double>("tau")),
     ignore_size(opts.get<bool>("ignore_size")),
@@ -188,18 +190,17 @@ void InterBiasedMinHPolicy::notify_insert(
         int partition_key,
         int node_key,
         bool new_partition,
-        EvaluationContext &eval_context) 
+        int eval) 
 {
-    int h = eval_context.get_evaluator_value(evaluator.get());
-    node_hs.emplace(node_key, h);
+    node_hs.emplace(node_key, eval);
     if (new_partition || partition_to_id_pair.count(partition_key)==0) {
         auto new_partition = PartitionNode(
             partition_key,
-            map<int, int>{{h, 1}}
+            map<int, int>{{eval, 1}}
         );
-        insert_partition(h, new_partition);
+        insert_partition(eval, new_partition);
     } else {
-        modify_partition(partition_key, h);
+        modify_partition(partition_key, eval);
     }
     maybe_move_partition(partition_key);
 }
@@ -227,7 +228,6 @@ public:
         document_title("Biased partition selection");
         document_synopsis(
             "Choose the next partition biased in favour of low h.");
-        add_option<shared_ptr<Evaluator>>("eval", "evaluator");
         add_option<double>(
             "tau",
             "temperature parameter of softmin", "1.0");

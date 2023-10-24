@@ -79,6 +79,11 @@ void PartitionAusOpenList<Entry>::do_insertion(
         partition_key = 0;
         new_type = false;
     }
+    // this->partition_selector->notify_partition_transition(
+    //     parent_partition_key, 
+    //     cached_parent_id.get_value(), 
+    //     partition_key, 
+    //     eval_context.get_state().get_id().get_value());
 
     PartitionOpenList<Entry>::partition_insert(eval_context, new_h, entry, partition_key, new_type);
     

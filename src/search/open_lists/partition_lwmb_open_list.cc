@@ -1,4 +1,4 @@
-#include "partition_lwm_open_list.h"
+#include "partition_lwmb_open_list.h"
 
 #include "partitions/partition_open_list.h"
 #include "partitions/inter/partition_policy.h"
@@ -21,44 +21,61 @@
 using namespace std;
 using namespace partition_open_list;
 
-namespace partition_lwm_open_list {
+namespace partition_lwmb_open_list {
 template<class Entry>
-class PartitionLWMOpenList : public PartitionOpenList<Entry> {
+class PartitionLWMBOpenList : public PartitionOpenList<Entry> {
 
     utils::HashMap<int, int> lwm_values;
 
     StateID cached_next_state_id = StateID::no_state;
     StateID cached_parent_id = StateID::no_state;
     int last_removed = StateID::no_state.get_value();
-    
+
     int parent_lwm;
     int parent_partition_key = -1;
+
+    struct CachedInfo {
+        int id;
+        int eval;
+        int partition_key;
+        bool new_type;
+        Entry entry;
+        CachedInfo(const int id, int eval, int partition_key, bool new_type, const Entry& entry)
+            : id(id), eval(eval), partition_key(partition_key), new_type(new_type), entry(entry) {
+        }
+    };
+    vector<CachedInfo> successors;
+    int type_counter;
 
 protected:
     virtual void do_insertion(
         EvaluationContext &eval_context, const Entry &entry) override;
+
     virtual void clear() override;
 
 public:
     Entry remove_min() override;
-    explicit PartitionLWMOpenList(const plugins::Options &opts);
-    virtual ~PartitionLWMOpenList() override = default;
+    explicit PartitionLWMBOpenList(const plugins::Options &opts);
+    virtual ~PartitionLWMBOpenList() override = default;
 
     virtual void notify_initial_state(const State &initial_state) override;
     virtual void notify_state_transition(const State &parent_state,
                                          OperatorID op_id,
                                          const State &state) override;
 
+    virtual bool empty() const override;
+
+
 };
 
 template<class Entry>
-void PartitionLWMOpenList<Entry>::notify_initial_state(const State &initial_state) {
+void PartitionLWMBOpenList<Entry>::notify_initial_state(const State &initial_state) {
     cached_next_state_id = initial_state.get_id();
     parent_lwm = numeric_limits<int>::max();
 }
 
 template<class Entry>
-void PartitionLWMOpenList<Entry>::notify_state_transition(const State &parent_state,
+void PartitionLWMBOpenList<Entry>::notify_state_transition(const State &parent_state,
                                         OperatorID op_id,
                                         const State &state)
 {
@@ -70,31 +87,50 @@ void PartitionLWMOpenList<Entry>::notify_state_transition(const State &parent_st
 }
 
 template<class Entry>
-void PartitionLWMOpenList<Entry>::do_insertion(
+void PartitionLWMBOpenList<Entry>::do_insertion(
     EvaluationContext &eval_context, const Entry &entry) {
-    
-    int new_h = eval_context.get_evaluator_value_or_infinity(this->evaluator.get());
-    int partition_key;
-    bool new_type;
-    if ( (new_h < parent_lwm)) {
-        partition_key = this->cached_next_state_id.get_value();
-        lwm_values[partition_key] = new_h;
-        new_type = true;
-    } else {
-        partition_key = parent_partition_key;
-        new_type = false;
-    }
-    this->partition_selector->notify_partition_transition(
-        parent_partition_key, 
-        cached_parent_id.get_value(), 
-        partition_key, 
-        this->cached_next_state_id.get_value());
 
-    PartitionOpenList<Entry>::partition_insert(this->cached_next_state_id.get_value(), new_h, entry, partition_key, new_type);
+    int new_h = eval_context.get_evaluator_value_or_infinity(this->evaluator.get());
+    if ( (new_h < parent_lwm) ) {
+        lwm_values[type_counter] = new_h;
+        successors.push_back(
+            CachedInfo(
+                this->cached_next_state_id.get_value(),
+                new_h,
+                type_counter,
+                true,
+                entry
+            )
+        );
+    } else {
+        successors.push_back(
+            CachedInfo(
+                this->cached_next_state_id.get_value(),
+                new_h,
+                parent_partition_key,
+                false,
+                entry
+            )
+        );
+    }
+
 }
 
 template<class Entry>
-Entry PartitionLWMOpenList<Entry>::remove_min() {
+Entry PartitionLWMBOpenList<Entry>::remove_min() {
+
+    bool _first_new_ = true;
+    for(CachedInfo info : successors) {
+        this->partition_selector->notify_partition_transition(
+            parent_partition_key, 
+            cached_parent_id.get_value(), 
+            info.partition_key, 
+            info.id);
+        PartitionOpenList<Entry>::partition_insert(info.id, info.eval, info.entry, info.partition_key, info.new_type ? _first_new_ : info.new_type);
+        if (info.new_type) _first_new_ = false;
+    }
+    if (!_first_new_) type_counter+=1;   // if this happens, a new type was in the cache
+    successors.clear();
 
     if (last_removed != StateID::no_state.get_value()) {
         this->partition_selector->notify_removal(this->partitioned_nodes.at(last_removed).first.partition, last_removed);
@@ -110,41 +146,47 @@ Entry PartitionLWMOpenList<Entry>::remove_min() {
 
 }
 
+template<class Entry>
+bool PartitionLWMBOpenList<Entry>::empty() const {
+    return this->partitioned_nodes.empty() && successors.empty();
+}
 
 template<class Entry>
-void PartitionLWMOpenList<Entry>::clear() {
+void PartitionLWMBOpenList<Entry>::clear() {
     PartitionOpenList<Entry>::clear();
     lwm_values.clear();
 }
 
+
 template<class Entry>
-PartitionLWMOpenList<Entry>::PartitionLWMOpenList(const plugins::Options &opts)
+PartitionLWMBOpenList<Entry>::PartitionLWMBOpenList(const plugins::Options &opts)
     : PartitionOpenList<Entry>(
         opts.get<shared_ptr<Evaluator>>("eval"),
         opts.get<shared_ptr<PartitionPolicy>>("partition_policy"),
         opts.get<shared_ptr<NodePolicy>>("node_policy")
-    ) {}
+    ),
+    type_counter(0) {}
 
 
-PartitionLWMOpenListFactory::PartitionLWMOpenListFactory(
+PartitionLWMBOpenListFactory::PartitionLWMBOpenListFactory(
     const plugins::Options &options)
     : options(options) {
 }
 
 unique_ptr<StateOpenList>
-PartitionLWMOpenListFactory::create_state_open_list() {
-    return utils::make_unique_ptr<PartitionLWMOpenList<StateOpenListEntry>>(options);
+PartitionLWMBOpenListFactory::create_state_open_list() {
+    return utils::make_unique_ptr<PartitionLWMBOpenList<StateOpenListEntry>>(options);
 }
 
 unique_ptr<EdgeOpenList>
-PartitionLWMOpenListFactory::create_edge_open_list() {
-    return utils::make_unique_ptr<PartitionLWMOpenList<EdgeOpenListEntry>>(options);
+PartitionLWMBOpenListFactory::create_edge_open_list() {
+    return utils::make_unique_ptr<PartitionLWMBOpenList<EdgeOpenListEntry>>(options);
 }
 
-class PartitionLWMOpenListFeature : public plugins::TypedFeature<OpenListFactory, PartitionLWMOpenListFactory> {
+class PartitionLWMBOpenListFeature : public plugins::TypedFeature<OpenListFactory, PartitionLWMBOpenListFactory> {
 public:
-    PartitionLWMOpenListFeature() : TypedFeature("lwm_partition") {
-        document_title("Partition Heuristic Improvement Open List");
+    PartitionLWMBOpenListFeature() : TypedFeature("lwmb_partition") {
+        document_title("Partition Heuristic Improvement Bench Open List");
         document_synopsis("A configurable open list that selects nodes by first"
          "choosing a node parition and then choosing a node from within it."
          "The policies for insertion (choosing a partition to insert into or"
@@ -156,5 +198,5 @@ public:
     }
 };
 
-static plugins::FeaturePlugin<PartitionLWMOpenListFeature> _plugin;
+static plugins::FeaturePlugin<PartitionLWMBOpenListFeature> _plugin;
 }

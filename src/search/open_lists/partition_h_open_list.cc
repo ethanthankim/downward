@@ -81,9 +81,13 @@ void PartitionHOpenList<Entry>::do_insertion(
         partition_key = parent_partition_key;
         new_type = false;
     }
-    this->partition_selector->notify_partition_transition(parent_partition_key, partition_key);
+    this->partition_selector->notify_partition_transition(
+        parent_partition_key, 
+        cached_parent_id.get_value(), 
+        partition_key, 
+        this->cached_next_state_id.get_value());
 
-    PartitionOpenList<Entry>::partition_insert(eval_context, new_h, entry, partition_key, new_type);
+    PartitionOpenList<Entry>::partition_insert(this->cached_next_state_id.get_value(), new_h, entry, partition_key, new_type);
     
 }
 

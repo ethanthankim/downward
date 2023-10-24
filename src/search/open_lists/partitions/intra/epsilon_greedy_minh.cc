@@ -19,7 +19,6 @@ static void adjust_heap_up(vector<HeapNode> &heap, size_t pos) {
 
 IntraEpsilonGreedyMinHPolicy::IntraEpsilonGreedyMinHPolicy(const plugins::Options &opts)
     : NodePolicy(opts),
-    evaluator(opts.get<shared_ptr<Evaluator>>("eval")),
     rng(utils::parse_rng_from_options(opts)),
     epsilon(opts.get<double>("epsilon")) {}
 
@@ -41,14 +40,14 @@ void IntraEpsilonGreedyMinHPolicy::notify_insert(
         int partition_key,
         int node_key,
         bool new_partition,
-        EvaluationContext &eval_context) 
+        int eval) 
 {
     if (new_partition) {
         partition_heaps.emplace(partition_key, vector<HeapNode>());
     }
 
     auto &heap = partition_heaps.at(partition_key);
-    heap.push_back( HeapNode(node_key, eval_context.get_evaluator_value(evaluator.get())) );   
+    heap.push_back( HeapNode(node_key, eval) );   
     push_heap(heap.begin(), heap.end(), greater<HeapNode>());
 }
 
@@ -60,7 +59,6 @@ public:
         document_synopsis(
             "With probability epsilon, choose the best next node, otherwise"
             "choose a node uniformly at random.");
-        add_option<shared_ptr<Evaluator>>("eval", "evaluator");
         add_option<double>(
             "epsilon",
             "probability for choosing the next entry randomly",

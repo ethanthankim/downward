@@ -33,7 +33,7 @@ void InterUniformPolicy::notify_insert(
         int partition_key,
         int node_key,
         bool new_partition,
-        EvaluationContext &eval_context) 
+        int eval) 
 {
     // if (new_partition)
         // log << "[partition notify_insert] new partition: " << partition_key  << endl;

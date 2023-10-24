@@ -28,7 +28,7 @@ class PartitionOpenList : public OpenList<Entry> {
 
 protected:
     void partition_insert(
-        EvaluationContext & eval_context, 
+        int node_key, 
         int eval, 
         Entry entry, 
         int partition_key, 
@@ -82,14 +82,13 @@ void PartitionOpenList<Entry>::notify_state_transition(const State &parent_state
 
 template<class Entry>
 void PartitionOpenList<Entry>::partition_insert(
-        EvaluationContext &eval_context, 
+        int node_key, 
         int eval,
         Entry entry, 
         int partition_key,
         bool new_partition
     ) 
 {
-    int node_key = eval_context.get_state().get_id().get_value();
     partitioned_nodes.emplace(
         node_key,
         std::make_pair(
@@ -101,8 +100,8 @@ void PartitionOpenList<Entry>::partition_insert(
         )
     );
 
-    partition_selector->notify_insert(partition_key, node_key, new_partition, eval_context);
-    node_selector->notify_insert(partition_key, node_key, new_partition, eval_context);
+    partition_selector->notify_insert(partition_key, node_key, new_partition, eval);
+    node_selector->notify_insert(partition_key, node_key, new_partition, eval);
 }
 
 template<class Entry>
@@ -122,8 +121,6 @@ Entry PartitionOpenList<Entry>::remove_min() {
 template<class Entry>
 void PartitionOpenList<Entry>::get_path_dependent_evaluators(std::set<Evaluator *> &evals) {
     evaluator->get_path_dependent_evaluators(evals);
-    partition_selector->get_path_dependent_evaluators(evals);
-    node_selector->get_path_dependent_evaluators(evals);
 }
 
 template<class Entry>

@@ -25,9 +25,8 @@ public:
         int partition_key,
         int node_key,
         bool new_partition,
-        EvaluationContext &eval_context) = 0;
+        int eval) = 0;
     virtual int get_next_node(int partition_key) = 0;
-    virtual void get_path_dependent_evaluators(std::set<Evaluator *> &evals) = 0;
     virtual void clear() = 0;
 
 };

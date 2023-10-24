@@ -140,7 +140,7 @@ Entry SoftminOpenList<Entry>::remove_min() {
                         key = it.first;
                         break;
                     }
-                    // count_i +=1;
+                    // count_i+=1;
                 }
             }
         }

@@ -10,8 +10,6 @@
 
 namespace inter_biased_minh_partition {
 class InterBiasedMinHPolicy : public PartitionPolicy {
-
-    std::shared_ptr<Evaluator> evaluator;
     std::shared_ptr<utils::RandomNumberGenerator> rng;
 
     struct PartitionNode {
@@ -62,15 +60,14 @@ public:
         int partition_key,
         int node_key,
         bool new_partition,
-        EvaluationContext &eval_context) override;
+        int eval) override;
     virtual void notify_removal(int partition_key, int node_key) override;
-    virtual void get_path_dependent_evaluators(std::set<Evaluator *> &evals) {};
     virtual void clear() {
         h_buckets.clear();
         node_hs.clear();
         current_sum = 0.0;
     };
-    virtual void notify_partition_transition(int parent_part, int child_part) {};
+    virtual void notify_partition_transition(int parent_part, int parent_node, int child_part, int child_node) {};
 };
 }
 

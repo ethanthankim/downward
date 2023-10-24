@@ -1,5 +1,8 @@
 #include "biased_depth.h"
 
+#include "../utils/collections.h"
+#include "../utils/hash.h"
+
 using namespace std;
 
 namespace inter_biased_depth_partition {
@@ -7,7 +10,7 @@ namespace inter_biased_depth_partition {
 InterBiasedDepthPolicy::InterBiasedDepthPolicy(const plugins::Options &opts)
     : PartitionPolicy(opts),
     rng(utils::parse_rng_from_options(opts)),
-    tau(opts.get<double>("tau")/2),
+    tau(opts.get<double>("tau")),
     // tau_limit(opts.get<double>("tau")),
     ignore_size(opts.get<bool>("ignore_size")),
     current_sum(0.0) {}
@@ -47,7 +50,7 @@ InterBiasedDepthPolicy::InterBiasedDepthPolicy(const plugins::Options &opts)
 
 // }
 
-void InterBiasedDepthPolicy::notify_partition_transition(int parent_part, int child_part) {
+void InterBiasedDepthPolicy::notify_partition_transition(int parent_part, int parent_node, int child_part, int child_node) {
     if (parent_part == -1) return;
     cached_parent_part = parent_part;
     cached_parent_depth = partition_to_id_pair.at(cached_parent_part).first;
@@ -111,7 +114,7 @@ void InterBiasedDepthPolicy::notify_insert(
         int partition_key,
         int node_key,
         bool new_partition,
-        EvaluationContext &eval_context) 
+        int eval) 
 {
     // node_to_part.emplace(node_key, partition_key);
     if (new_partition || partition_to_id_pair.count(partition_key)==0) {

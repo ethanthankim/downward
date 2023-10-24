@@ -13,7 +13,6 @@
 namespace intra_partition_biased {
 class IntraBiasedPolicy : public NodePolicy {
 
-    std::shared_ptr<Evaluator> evaluator;
     std::shared_ptr<utils::RandomNumberGenerator> rng;
     double tau;
     bool ignore_size;
@@ -29,6 +28,9 @@ class IntraBiasedPolicy : public NodePolicy {
         }
     };
     utils::HashMap<int, BiasedPartition> part_id_to_part;
+
+    // int total_gets=0;
+    // std::vector<int> counts = {0,0,0,0,0,0,0,0,0,0};
     
 public:
     explicit IntraBiasedPolicy(const plugins::Options &opts);
@@ -38,12 +40,9 @@ public:
         int partition_key,
         int node_key,
         bool new_partition,
-        EvaluationContext &eval_context
+        int eval
     ) override;
     virtual int get_next_node(int partition_key) override;
-    virtual void get_path_dependent_evaluators(std::set<Evaluator *> &evals) {
-        evaluator->get_path_dependent_evaluators(evals);
-    };
     virtual void clear() {
         part_id_to_part.clear();
     };
