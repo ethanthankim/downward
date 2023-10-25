@@ -14,8 +14,8 @@ IntraBiasedPolicy::IntraBiasedPolicy(const plugins::Options &opts)
     relative_h_offset(opts.get<int>("relative_h_offset")) {}
 
 int IntraBiasedPolicy::get_next_node(int partition_key) { 
-    int count_i = 0;
-    total_gets+=1;
+    // int count_i = 0;
+    // total_gets+=1;
 
     auto &partition = part_id_to_part.at(partition_key);
 
@@ -57,21 +57,21 @@ int IntraBiasedPolicy::get_next_node(int partition_key) {
                     h = it.first;
                     break;
                 }
-                count_i+=1; 
+                // count_i+=1; 
             }
         }
 
     }
 
 
-    if (count_i < counts.size() && count_i < buckets.size()) {
-        counts[count_i] += 1;
-    }
+    // if (count_i < counts.size() && count_i < buckets.size()) {
+    //     counts[count_i] += 1;
+    // }
 
-    if (total_gets % 100 == 0) {
-        cout << counts << endl;
-        cout << buckets.begin()->first << " --> " << (++buckets.begin())->first << endl;
-    }
+    // if (total_gets % 100 == 0) {
+    //     cout << counts << endl;
+    //     cout << buckets.begin()->first << " --> " << (++buckets.begin())->first << endl;
+    // }
 
     vector<int> &bucket = buckets[h];
     assert(!bucket.empty());

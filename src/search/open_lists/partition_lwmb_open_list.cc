@@ -37,14 +37,14 @@ class PartitionLWMBOpenList : public PartitionOpenList<Entry> {
     struct CachedInfo {
         int id;
         int eval;
-        int partition_key;
         bool new_type;
         Entry entry;
-        CachedInfo(const int id, int eval, int partition_key, bool new_type, const Entry& entry)
-            : id(id), eval(eval), partition_key(partition_key), new_type(new_type), entry(entry) {
+        CachedInfo(const int id, int eval, bool new_type, const Entry& entry)
+            : id(id), eval(eval), new_type(new_type), entry(entry) {
         }
     };
     vector<CachedInfo> successors;
+    utils::HashMap<int, int> h_to_type;
     int type_counter;
 
 protected:
@@ -92,13 +92,17 @@ void PartitionLWMBOpenList<Entry>::do_insertion(
 
     int new_h = eval_context.get_evaluator_value_or_infinity(this->evaluator.get());
     if ( (new_h < parent_lwm) ) {
-        lwm_values[type_counter] = new_h;
+        bool is_new = false;
+        if (h_to_type.count(new_h) == 0) {
+            lwm_values[type_counter] = new_h;
+            h_to_type.emplace(new_h, type_counter++);
+            is_new = true;
+        }
         successors.push_back(
             CachedInfo(
                 this->cached_next_state_id.get_value(),
                 new_h,
-                type_counter,
-                true,
+                is_new,
                 entry
             )
         );
@@ -107,11 +111,11 @@ void PartitionLWMBOpenList<Entry>::do_insertion(
             CachedInfo(
                 this->cached_next_state_id.get_value(),
                 new_h,
-                parent_partition_key,
                 false,
                 entry
             )
         );
+        h_to_type.emplace(new_h, parent_partition_key);
     }
 
 }
@@ -119,18 +123,17 @@ void PartitionLWMBOpenList<Entry>::do_insertion(
 template<class Entry>
 Entry PartitionLWMBOpenList<Entry>::remove_min() {
 
-    bool _first_new_ = true;
     for(CachedInfo info : successors) {
+        int part_key = h_to_type.at(info.eval);
         this->partition_selector->notify_partition_transition(
             parent_partition_key, 
             cached_parent_id.get_value(), 
-            info.partition_key, 
+            part_key, 
             info.id);
-        PartitionOpenList<Entry>::partition_insert(info.id, info.eval, info.entry, info.partition_key, info.new_type ? _first_new_ : info.new_type);
-        if (info.new_type) _first_new_ = false;
+        PartitionOpenList<Entry>::partition_insert(info.id, info.eval, info.entry, part_key, info.new_type);
     }
-    if (!_first_new_) type_counter+=1;   // if this happens, a new type was in the cache
     successors.clear();
+    h_to_type.clear();
 
     if (last_removed != StateID::no_state.get_value()) {
         this->partition_selector->notify_removal(this->partitioned_nodes.at(last_removed).first.partition, last_removed);

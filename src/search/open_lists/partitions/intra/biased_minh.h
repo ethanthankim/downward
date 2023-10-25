@@ -29,8 +29,8 @@ class IntraBiasedPolicy : public NodePolicy {
     };
     utils::HashMap<int, BiasedPartition> part_id_to_part;
 
-    int total_gets=0;
-    std::vector<int> counts = {0,0,0,0,0,0,0,0,0,0};
+    // int total_gets=0;
+    // std::vector<int> counts = {0,0,0,0,0,0,0,0,0,0};
     
 public:
     explicit IntraBiasedPolicy(const plugins::Options &opts);
