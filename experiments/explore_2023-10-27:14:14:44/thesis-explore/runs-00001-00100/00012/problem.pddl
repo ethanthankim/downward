@@ -1,0 +1,1 @@
+../../../../../../../benchmarks-tiny/pegsol/p04.pddl

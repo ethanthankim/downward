@@ -25,29 +25,19 @@ namespace partition_lwmb_open_list {
 template<class Entry>
 class PartitionLWMBOpenList : public PartitionOpenList<Entry> {
 
-    utils::HashMap<int, int> lwm_values;
-
-    StateID cached_next_state_id = StateID::no_state;
-    StateID cached_parent_id = StateID::no_state;
+    bool start_new_expansion = true;
+    StateID curr_expanding = StateID::no_state;
+    StateID child_of_curr_expanding = StateID::no_state;
     int last_removed = StateID::no_state.get_value();
+    int curr_expanding_lwm;
+    int curr_expanding_part_key = -1;
 
-    int parent_lwm;
-    int parent_partition_key = -1;
-
-    struct CachedInfo {
-        int id;
-        int eval;
-        bool new_type;
-        Entry entry;
-        CachedInfo(const int id, int eval, bool new_type, const Entry& entry)
-            : id(id), eval(eval), new_type(new_type), entry(entry) {
-        }
-    };
-    vector<CachedInfo> successors;
+    utils::HashMap<int, int> lwm_values;
     utils::HashMap<int, int> h_to_type;
     int type_counter;
 
 protected:
+    // virtual bool new_expansion();
     virtual void do_insertion(
         EvaluationContext &eval_context, const Entry &entry) override;
 
@@ -70,8 +60,8 @@ public:
 
 template<class Entry>
 void PartitionLWMBOpenList<Entry>::notify_initial_state(const State &initial_state) {
-    cached_next_state_id = initial_state.get_id();
-    parent_lwm = numeric_limits<int>::max();
+    child_of_curr_expanding = initial_state.get_id();
+    curr_expanding_lwm = numeric_limits<int>::max();
 }
 
 template<class Entry>
@@ -79,61 +69,65 @@ void PartitionLWMBOpenList<Entry>::notify_state_transition(const State &parent_s
                                         OperatorID op_id,
                                         const State &state)
 {
-    cached_next_state_id = state.get_id();
-    cached_parent_id = parent_state.get_id();
+    if (parent_state.get_id() != curr_expanding) {
+        start_new_expansion = true;
+        curr_expanding = parent_state.get_id();
+    } else {
+        start_new_expansion = false;
+    }
 
-    parent_partition_key = this->partitioned_nodes.at(this->cached_parent_id.get_value()).first.partition;
-    parent_lwm = lwm_values[parent_partition_key];
+    child_of_curr_expanding = state.get_id();
+    curr_expanding_part_key = this->partitioned_nodes.at(curr_expanding.get_value()).first.partition;
+    curr_expanding_lwm = lwm_values[curr_expanding_part_key];
 }
+
+// template<class Entry>
+// bool PartitionLWMBOpenList<Entry>::new_expansion() {
+//     if (start_new_expansion) {
+//         start_new_expansion = false;
+//         return true;
+//     }
+//     return start_new_expansion;
+// }
 
 template<class Entry>
 void PartitionLWMBOpenList<Entry>::do_insertion(
     EvaluationContext &eval_context, const Entry &entry) {
 
+    if (start_new_expansion) {
+        h_to_type.clear();
+    }
+
     int new_h = eval_context.get_evaluator_value_or_infinity(this->evaluator.get());
-    if ( (new_h < parent_lwm) ) {
-        bool is_new = false;
+    bool is_new_part = false;
+    int partition_key;
+    if ( (new_h < curr_expanding_lwm) ) {
         if (h_to_type.count(new_h) == 0) {
             lwm_values[type_counter] = new_h;
-            h_to_type.emplace(new_h, type_counter++);
-            is_new = true;
+            h_to_type.emplace(new_h, type_counter);
+            partition_key = type_counter++;
+            is_new_part = true;
+        } else {
+            partition_key = h_to_type.at(new_h);
         }
-        successors.push_back(
-            CachedInfo(
-                this->cached_next_state_id.get_value(),
-                new_h,
-                is_new,
-                entry
-            )
-        );
     } else {
-        successors.push_back(
-            CachedInfo(
-                this->cached_next_state_id.get_value(),
-                new_h,
-                false,
-                entry
-            )
-        );
-        h_to_type.emplace(new_h, parent_partition_key);
+        h_to_type.emplace(new_h, curr_expanding_part_key);
+        partition_key = curr_expanding_part_key;
     }
+
+    this->partition_selector->notify_partition_transition(
+        curr_expanding_part_key, 
+        curr_expanding.get_value(), 
+        partition_key, 
+        child_of_curr_expanding.get_value());
+
+    PartitionOpenList<Entry>::partition_insert(child_of_curr_expanding.get_value(), new_h, entry, partition_key, is_new_part);
+
 
 }
 
 template<class Entry>
 Entry PartitionLWMBOpenList<Entry>::remove_min() {
-
-    for(CachedInfo info : successors) {
-        int part_key = h_to_type.at(info.eval);
-        this->partition_selector->notify_partition_transition(
-            parent_partition_key, 
-            cached_parent_id.get_value(), 
-            part_key, 
-            info.id);
-        PartitionOpenList<Entry>::partition_insert(info.id, info.eval, info.entry, part_key, info.new_type);
-    }
-    successors.clear();
-    h_to_type.clear();
 
     if (last_removed != StateID::no_state.get_value()) {
         this->partition_selector->notify_removal(this->partitioned_nodes.at(last_removed).first.partition, last_removed);
@@ -151,7 +145,7 @@ Entry PartitionLWMBOpenList<Entry>::remove_min() {
 
 template<class Entry>
 bool PartitionLWMBOpenList<Entry>::empty() const {
-    return this->partitioned_nodes.empty() && successors.empty();
+    return this->partitioned_nodes.empty();
 }
 
 template<class Entry>
