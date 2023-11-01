@@ -103,6 +103,11 @@ void PartitionLWMBOpenList<Entry>::do_insertion(
     int partition_key;
     if ( (new_h < curr_expanding_lwm) ) {
         if (h_to_type.count(new_h) == 0) {
+
+            if (type_counter % 100 == 0) {
+                cout << "Type count: " << type_counter << endl;
+            }
+
             lwm_values[type_counter] = new_h;
             h_to_type.emplace(new_h, type_counter);
             partition_key = type_counter++;
@@ -111,7 +116,6 @@ void PartitionLWMBOpenList<Entry>::do_insertion(
             partition_key = h_to_type.at(new_h);
         }
     } else {
-        h_to_type.emplace(new_h, curr_expanding_part_key);
         partition_key = curr_expanding_part_key;
     }
 

@@ -30,13 +30,12 @@ class InterBiasedDepthPolicy : public PartitionPolicy {
         }
     };
     std::map< int, std::vector<PartitionNode>, std::greater<int> > h_buckets;
-    // utils::HashMap<int, int> node_to_part;
     utils::HashMap<int, std::pair<int, int>> partition_to_id_pair; // the pair of values needed to get partition  from h_buckets
 
     int cached_parent_part = -1;
     int cached_parent_depth = -1;
 
-    // int total_gets=0;
+    int total_gets=0;
     // std::vector<int> counts = {0,0,0,0,0,0,0,0,0,0};
 
     double tau;

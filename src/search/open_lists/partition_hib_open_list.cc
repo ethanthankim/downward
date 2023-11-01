@@ -25,24 +25,14 @@ namespace partition_hib_open_list {
 template<class Entry>
 class PartitionHIBOpenList : public PartitionOpenList<Entry> {
 
-    StateID cached_next_state_id = StateID::no_state;
-    StateID cached_parent_id = StateID::no_state;
+    bool start_new_expansion = true;
+    StateID curr_expanding = StateID::no_state;
+    StateID child_of_curr_expanding = StateID::no_state;
     int last_removed = StateID::no_state.get_value();
+    int curr_expanding_h;
+    int curr_expanding_part_key = -1;
 
-    int parent_h;
-    int parent_partition_key = -1;
-
-    struct CachedInfo {
-        int id;
-        int eval;
-        int partition_key;
-        bool new_type;
-        Entry entry;
-        CachedInfo(const int id, int eval, int partition_key, bool new_type, const Entry& entry)
-            : id(id), eval(eval), partition_key(partition_key), new_type(new_type), entry(entry) {
-        }
-    };
-    vector<CachedInfo> successors;
+    bool first_success_in_succ = true;
     int type_counter;
 
 protected:
@@ -66,8 +56,8 @@ public:
 
 template<class Entry>
 void PartitionHIBOpenList<Entry>::notify_initial_state(const State &initial_state) {
-    cached_next_state_id = initial_state.get_id();
-    parent_h = numeric_limits<int>::max();
+    child_of_curr_expanding = initial_state.get_id();
+    curr_expanding_h = numeric_limits<int>::max();
 }
 
 template<class Entry>
@@ -75,57 +65,61 @@ void PartitionHIBOpenList<Entry>::notify_state_transition(const State &parent_st
                                         OperatorID op_id,
                                         const State &state)
 {
-    cached_next_state_id = state.get_id();
-    cached_parent_id = parent_state.get_id();
+    if (parent_state.get_id() != curr_expanding) {
+        start_new_expansion = true;
+        curr_expanding = parent_state.get_id();
+    } else {
+        start_new_expansion = false;
+    }
 
-    parent_partition_key = this->partitioned_nodes.at(this->cached_parent_id.get_value()).first.partition;
-    parent_h = this->partitioned_nodes.at(cached_parent_id.get_value()).first.eval;
+    child_of_curr_expanding = state.get_id();
+    curr_expanding_part_key = this->partitioned_nodes.at(curr_expanding.get_value()).first.partition;
+    curr_expanding_h = this->partitioned_nodes.at(curr_expanding.get_value()).first.eval;
 }
 
 template<class Entry>
 void PartitionHIBOpenList<Entry>::do_insertion(
     EvaluationContext &eval_context, const Entry &entry) {
+    
+    if (start_new_expansion) {
+        first_success_in_succ = true;
+    }
 
     int new_h = eval_context.get_evaluator_value_or_infinity(this->evaluator.get());
-    if ( (new_h < parent_h) ) {
-        successors.push_back(
-            CachedInfo(
-                this->cached_next_state_id.get_value(),
-                new_h,
-                type_counter,
-                true,
-                entry
-            )
-        );
+    bool is_new_part = false;
+    int partition_key;
+    if ( (new_h < curr_expanding_h) ) {
+        if (first_success_in_succ) {
+
+            // if (type_counter % 500 == 0) {
+            //     cout << "Type count: " << type_counter << endl;
+            // }
+
+            partition_key = type_counter++;
+            is_new_part = true;
+            first_success_in_succ = false;
+        } else {
+            partition_key = type_counter-1;
+        }
     } else {
-        successors.push_back(
-            CachedInfo(
-                this->cached_next_state_id.get_value(),
-                new_h,
-                parent_partition_key,
-                false,
-                entry
-            )
-        );
+        partition_key = curr_expanding_part_key;
     }
+    this->partition_selector->notify_partition_transition(
+            curr_expanding_part_key, 
+            curr_expanding.get_value(), 
+            partition_key, 
+            child_of_curr_expanding.get_value());
+    PartitionOpenList<Entry>::partition_insert(
+        child_of_curr_expanding.get_value(), 
+        new_h, 
+        entry, 
+        partition_key, 
+        is_new_part);
 
 }
 
 template<class Entry>
 Entry PartitionHIBOpenList<Entry>::remove_min() {
-
-    bool _first_new_ = true;
-    for(CachedInfo info : successors) {
-        this->partition_selector->notify_partition_transition(
-            parent_partition_key, 
-            cached_parent_id.get_value(), 
-            info.partition_key, 
-            info.id);
-        PartitionOpenList<Entry>::partition_insert(info.id, info.eval, info.entry, info.partition_key, info.new_type ? _first_new_ : info.new_type);
-        if (info.new_type) _first_new_ = false;
-    }
-    if (!_first_new_) type_counter+=1;   // if this happens, a new type was in the cache
-    successors.clear();
 
     if (last_removed != StateID::no_state.get_value()) {
         this->partition_selector->notify_removal(this->partitioned_nodes.at(last_removed).first.partition, last_removed);
@@ -143,7 +137,7 @@ Entry PartitionHIBOpenList<Entry>::remove_min() {
 
 template<class Entry>
 bool PartitionHIBOpenList<Entry>::empty() const {
-    return this->partitioned_nodes.empty() && successors.empty();
+    return this->partitioned_nodes.empty();
 }
 
 
