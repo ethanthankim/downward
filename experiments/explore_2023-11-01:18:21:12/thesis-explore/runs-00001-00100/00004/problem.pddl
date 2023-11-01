@@ -1,1 +1,0 @@
-../../../../../../../benchmarks-tiny/blocksworld/p05.pddl
