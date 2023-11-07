@@ -18,6 +18,9 @@
 #include <unordered_map>
 #include <vector>
 
+
+// #include <fstream>
+
 using namespace std;
 using namespace partition_open_list;
 
@@ -116,6 +119,10 @@ void PartitionHIBOpenList<Entry>::do_insertion(
         is_new_part);
     state_to_id[eval_context.get_state()] = id;
 
+    // ofstream myfile;
+    // myfile.open ("/home/dawson/Documents/Masters/Thesis/search/thesis/benches/media/_ht.txt", std::ios_base::app);
+    // myfile << "NODE:" << curr_expanding << ":" << id << ":" << partition_key <<endl;
+    // myfile.close();
     // cout << "NODE:" << curr_expanding << ":" << id << ":" << partition_key <<endl;
 
 }

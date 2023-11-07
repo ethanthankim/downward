@@ -18,6 +18,8 @@
 #include <unordered_map>
 #include <vector>
 
+
+
 using namespace std;
 using namespace partition_open_list;
 
@@ -126,6 +128,11 @@ void PartitionLWMBOpenList<Entry>::do_insertion(
         partition_key);
     int id = PartitionOpenList<Entry>::partition_insert(new_h, entry, partition_key, is_new_part);
     state_to_id[eval_context.get_state()] = id;
+
+    // ofstream myfile;
+    // myfile.open ("/home/dawson/Documents/Masters/Thesis/search/thesis/benches/media/_lt.txt", std::ios_base::app);
+    // myfile << "NODE:" << curr_expanding << ":" << id << ":" << partition_key <<endl;
+    // myfile.close();
 
     // cout << "NODE:" << curr_expanding << ":" << id << ":" << partition_key <<endl;
 }
