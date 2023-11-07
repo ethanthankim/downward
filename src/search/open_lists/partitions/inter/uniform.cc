@@ -22,7 +22,6 @@ int InterUniformPolicy::get_next_partition() {
             continue;
         }
 
-        // log << "[get_next_partition] selected partition: " << chosen_partition << endl;
         return chosen_partition;
 
     } 
