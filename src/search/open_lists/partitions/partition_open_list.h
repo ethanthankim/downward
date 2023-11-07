@@ -27,8 +27,7 @@ template<class Entry>
 class PartitionOpenList : public OpenList<Entry> {
 
 protected:
-    void partition_insert(
-        int node_key, 
+    int partition_insert(
         int eval, 
         Entry entry, 
         int partition_key, 
@@ -39,6 +38,7 @@ public:
     std::shared_ptr<PartitionPolicy> partition_selector;
     std::shared_ptr<NodePolicy> node_selector;
 
+    int next_node_key; 
     utils::HashMap<int, std::pair<PartitionedNode, Entry>> partitioned_nodes;
 
     explicit PartitionOpenList(
@@ -70,7 +70,8 @@ PartitionOpenList<Entry>::PartitionOpenList(
         const std::shared_ptr<NodePolicy>& node_policy)
             : evaluator(evaluator),
             node_selector(node_policy),
-            partition_selector(partition_policy) {}
+            partition_selector(partition_policy),
+            next_node_key(0) {}
 
 template<class Entry>
 void PartitionOpenList<Entry>::notify_initial_state(const State &initial_state) {}
@@ -81,8 +82,7 @@ void PartitionOpenList<Entry>::notify_state_transition(const State &parent_state
                                         const State &state) {}
 
 template<class Entry>
-void PartitionOpenList<Entry>::partition_insert(
-        int node_key, 
+int PartitionOpenList<Entry>::partition_insert(
         int eval,
         Entry entry, 
         int partition_key,
@@ -90,7 +90,7 @@ void PartitionOpenList<Entry>::partition_insert(
     ) 
 {
     partitioned_nodes.emplace(
-        node_key,
+        next_node_key,
         std::make_pair(
             PartitionedNode(
                 partition_key,
@@ -100,8 +100,11 @@ void PartitionOpenList<Entry>::partition_insert(
         )
     );
 
-    partition_selector->notify_insert(partition_key, node_key, new_partition, eval);
-    node_selector->notify_insert(partition_key, node_key, new_partition, eval);
+    partition_selector->notify_insert(partition_key, next_node_key, new_partition, eval);
+    node_selector->notify_insert(partition_key, next_node_key, new_partition, eval);
+    next_node_key+=1;
+
+    return next_node_key-1;
 }
 
 template<class Entry>

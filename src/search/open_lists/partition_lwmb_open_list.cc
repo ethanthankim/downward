@@ -26,15 +26,18 @@ template<class Entry>
 class PartitionLWMBOpenList : public PartitionOpenList<Entry> {
 
     bool start_new_expansion = true;
-    StateID curr_expanding = StateID::no_state;
-    StateID child_of_curr_expanding = StateID::no_state;
-    int last_removed = StateID::no_state.get_value();
+
+    int curr_expanding = -1;
+
+    int last_removed = -1;
     int curr_expanding_lwm;
     int curr_expanding_part_key = -1;
 
     utils::HashMap<int, int> lwm_values;
     utils::HashMap<int, int> h_to_type;
     int type_counter;
+
+    PerStateInformation<int> state_to_id;
 
 protected:
     // virtual bool new_expansion();
@@ -60,7 +63,6 @@ public:
 
 template<class Entry>
 void PartitionLWMBOpenList<Entry>::notify_initial_state(const State &initial_state) {
-    child_of_curr_expanding = initial_state.get_id();
     curr_expanding_lwm = numeric_limits<int>::max();
 }
 
@@ -69,15 +71,15 @@ void PartitionLWMBOpenList<Entry>::notify_state_transition(const State &parent_s
                                         OperatorID op_id,
                                         const State &state)
 {
-    if (parent_state.get_id() != curr_expanding) {
+    int parent_id = state_to_id[parent_state];
+    if (parent_id != curr_expanding) {
         start_new_expansion = true;
-        curr_expanding = parent_state.get_id();
+        curr_expanding = parent_id;
     } else {
         start_new_expansion = false;
     }
 
-    child_of_curr_expanding = state.get_id();
-    curr_expanding_part_key = this->partitioned_nodes.at(curr_expanding.get_value()).first.partition;
+    curr_expanding_part_key = this->partitioned_nodes.at(curr_expanding).first.partition;
     curr_expanding_lwm = lwm_values[curr_expanding_part_key];
 }
 
@@ -104,9 +106,9 @@ void PartitionLWMBOpenList<Entry>::do_insertion(
     if ( (new_h < curr_expanding_lwm) ) {
         if (h_to_type.count(new_h) == 0) {
 
-            if (type_counter % 100 == 0) {
-                cout << "Type count: " << type_counter << endl;
-            }
+            // if (type_counter % 100 == 0) {
+            //     cout << "Type count: " << type_counter << endl;
+            // }
 
             lwm_values[type_counter] = new_h;
             h_to_type.emplace(new_h, type_counter);
@@ -121,19 +123,17 @@ void PartitionLWMBOpenList<Entry>::do_insertion(
 
     this->partition_selector->notify_partition_transition(
         curr_expanding_part_key, 
-        curr_expanding.get_value(), 
-        partition_key, 
-        child_of_curr_expanding.get_value());
+        partition_key);
+    int id = PartitionOpenList<Entry>::partition_insert(new_h, entry, partition_key, is_new_part);
+    state_to_id[eval_context.get_state()] = id;
 
-    PartitionOpenList<Entry>::partition_insert(child_of_curr_expanding.get_value(), new_h, entry, partition_key, is_new_part);
-
-
+    // cout << "NODE:" << curr_expanding << ":" << id << ":" << partition_key <<endl;
 }
 
 template<class Entry>
 Entry PartitionLWMBOpenList<Entry>::remove_min() {
 
-    if (last_removed != StateID::no_state.get_value()) {
+    if (last_removed != -1) {
         this->partition_selector->notify_removal(this->partitioned_nodes.at(last_removed).first.partition, last_removed);
         this->partitioned_nodes.erase(last_removed);
     }

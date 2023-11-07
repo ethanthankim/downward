@@ -51,7 +51,7 @@ InterBiasedProgressPolicy::InterBiasedProgressPolicy(const plugins::Options &opt
 
 // }
 
-void InterBiasedProgressPolicy::notify_partition_transition(int parent_part, int parent_node, int child_part, int child_node) {
+void InterBiasedProgressPolicy::notify_partition_transition(int parent_part, int child_part) {
     if (parent_part == -1) return;
     cached_parent_part = parent_part;
     cached_parent_depth = node_to_prog.at(parent_node);

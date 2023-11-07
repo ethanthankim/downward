@@ -237,12 +237,12 @@ fast_downward_plugin(
         open_lists/partitions/intra/epsilon_greedy_minh
 )
 
-fast_downward_plugin(
-    NAME PARTITION_HI_OPEN_LIST
-    HELP "Partition open list"
-    SOURCES
-        open_lists/partition_hi_open_list
-)
+# fast_downward_plugin(
+#     NAME PARTITION_HI_OPEN_LIST
+#     HELP "Partition open list"
+#     SOURCES
+#         open_lists/partition_hi_open_list
+# )
 
 fast_downward_plugin(
     NAME PARTITION_HIB_OPEN_LIST
@@ -273,12 +273,12 @@ fast_downward_plugin(
 #         open_lists/partition_aus_open_list
 # )
 
-fast_downward_plugin(
-    NAME PARTITION_LWM_OPEN_LIST
-    HELP "Partition open list"
-    SOURCES
-        open_lists/partition_lwm_open_list
-)
+# fast_downward_plugin(
+#     NAME PARTITION_LWM_OPEN_LIST
+#     HELP "Partition open list"
+#     SOURCES
+#         open_lists/partition_lwm_open_list
+# )
 
 # fast_downward_plugin(
 #     NAME PARTITION_BIAS_DEPTH_BIAS_H_OPEN_LIST
@@ -329,40 +329,40 @@ fast_downward_plugin(
         open_lists/type_based_open_list
 )
 
-fast_downward_plugin(
-    NAME TYPE_BASED_PATH_OPEN_LIST
-    HELP "Type-based open list"
-    SOURCES
-        open_lists/type_based_path_open_list
-)
+# fast_downward_plugin(
+#     NAME TYPE_BASED_PATH_OPEN_LIST
+#     HELP "Type-based open list"
+#     SOURCES
+#         open_lists/type_based_path_open_list
+# )
 
-fast_downward_plugin(
-    NAME TYPE_BASED_PATH_OPEN_LIST
-    HELP "Type-based open list"
-    SOURCES
-        open_lists/type_based_path_open_list
-)
+# fast_downward_plugin(
+#     NAME TYPE_BASED_PATH_OPEN_LIST
+#     HELP "Type-based open list"
+#     SOURCES
+#         open_lists/type_based_path_open_list
+# )
 
-fast_downward_plugin(
-    NAME TYPE_HI_INTER_BIASED_INTRA_ANY_OPEN_LIST
-    HELP "HI entry state based type system open list with intra-bench exploration"
-    SOURCES
-        open_lists/hi/hi_inter_biased_intra_any
-)
+# fast_downward_plugin(
+#     NAME TYPE_HI_INTER_BIASED_INTRA_ANY_OPEN_LIST
+#     HELP "HI entry state based type system open list with intra-bench exploration"
+#     SOURCES
+#         open_lists/hi/hi_inter_biased_intra_any
+# )
 
-fast_downward_plugin(
-    NAME TYPE_HI_INTER_GREEDY_INTRA_EPSILON_OPEN_LIST
-    HELP "BTS entry state based type system open list with intra-bench exploration"
-    SOURCES
-        open_lists/hi/hi_inter_eg-minh_intra_eg-minh
-)
+# fast_downward_plugin(
+#     NAME TYPE_HI_INTER_GREEDY_INTRA_EPSILON_OPEN_LIST
+#     HELP "BTS entry state based type system open list with intra-bench exploration"
+#     SOURCES
+#         open_lists/hi/hi_inter_eg-minh_intra_eg-minh
+# )
 
-fast_downward_plugin(
-    NAME TYPE_HI_INTER_LWM_INTRA_EPSILON_OPEN_LIST
-    HELP "BTS entry state based type system open list with intra-bench exploration"
-    SOURCES
-        open_lists/hi/hi_inter_eg-lwm_intra_eg-minh
-)
+# fast_downward_plugin(
+#     NAME TYPE_HI_INTER_LWM_INTRA_EPSILON_OPEN_LIST
+#     HELP "BTS entry state based type system open list with intra-bench exploration"
+#     SOURCES
+#         open_lists/hi/hi_inter_eg-lwm_intra_eg-minh
+# )
 
 fast_downward_plugin(
     NAME LINEAR_WEIGHTED_OPEN_LIST
@@ -487,13 +487,13 @@ fast_downward_plugin(
     DEPENDS EVALUATORS_SUBCATEGORY
 )
 
-fast_downward_plugin(
-    NAME PROGRESS_EVALUATOR
-    HELP "The progress evaluator"
-    SOURCES
-        evaluators/progress_evaluator
-    DEPENDS EVALUATORS_SUBCATEGORY
-)
+# fast_downward_plugin(
+#     NAME PROGRESS_EVALUATOR
+#     HELP "The progress evaluator"
+#     SOURCES
+#         evaluators/progress_evaluator
+#     DEPENDS EVALUATORS_SUBCATEGORY
+# )
 
 fast_downward_plugin(
     NAME RANDOM_EDGE_EVALUATOR
@@ -511,13 +511,13 @@ fast_downward_plugin(
     DEPENDS EVALUATORS_SUBCATEGORY
 )
 
-fast_downward_plugin(
-    NAME VELOCITY_EVALUATOR
-    HELP "The velocity evaluator"
-    SOURCES
-        evaluators/velocity_evaluator
-    DEPENDS EVALUATORS_SUBCATEGORY
-)
+# fast_downward_plugin(
+#     NAME VELOCITY_EVALUATOR
+#     HELP "The velocity evaluator"
+#     SOURCES
+#         evaluators/velocity_evaluator
+#     DEPENDS EVALUATORS_SUBCATEGORY
+# )
 
 fast_downward_plugin(
     NAME G_EVALUATOR

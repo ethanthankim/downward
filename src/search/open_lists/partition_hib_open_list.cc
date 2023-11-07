@@ -26,13 +26,16 @@ template<class Entry>
 class PartitionHIBOpenList : public PartitionOpenList<Entry> {
 
     bool start_new_expansion = true;
-    StateID curr_expanding = StateID::no_state;
-    StateID child_of_curr_expanding = StateID::no_state;
-    int last_removed = StateID::no_state.get_value();
+
+    int curr_expanding = -1;
+
+    int last_removed = -1;
     int curr_expanding_h;
     int curr_expanding_part_key = -1;
 
     bool first_success_in_succ = true;
+
+    PerStateInformation<int> state_to_id;
     int type_counter;
 
 protected:
@@ -56,7 +59,6 @@ public:
 
 template<class Entry>
 void PartitionHIBOpenList<Entry>::notify_initial_state(const State &initial_state) {
-    child_of_curr_expanding = initial_state.get_id();
     curr_expanding_h = numeric_limits<int>::max();
 }
 
@@ -65,16 +67,16 @@ void PartitionHIBOpenList<Entry>::notify_state_transition(const State &parent_st
                                         OperatorID op_id,
                                         const State &state)
 {
-    if (parent_state.get_id() != curr_expanding) {
+    int parent_id = state_to_id[parent_state];
+    if (parent_id != curr_expanding) {
         start_new_expansion = true;
-        curr_expanding = parent_state.get_id();
+        curr_expanding = parent_id;
     } else {
         start_new_expansion = false;
     }
 
-    child_of_curr_expanding = state.get_id();
-    curr_expanding_part_key = this->partitioned_nodes.at(curr_expanding.get_value()).first.partition;
-    curr_expanding_h = this->partitioned_nodes.at(curr_expanding.get_value()).first.eval;
+    curr_expanding_part_key = this->partitioned_nodes.at(curr_expanding).first.partition;
+    curr_expanding_h = this->partitioned_nodes.at(curr_expanding).first.eval;
 }
 
 template<class Entry>
@@ -99,29 +101,29 @@ void PartitionHIBOpenList<Entry>::do_insertion(
             is_new_part = true;
             first_success_in_succ = false;
         } else {
-            partition_key = type_counter-1;
+            partition_key = type_counter-1; // look up, type_counter must have been incremented once.
         }
     } else {
         partition_key = curr_expanding_part_key;
     }
     this->partition_selector->notify_partition_transition(
             curr_expanding_part_key, 
-            curr_expanding.get_value(), 
-            partition_key, 
-            child_of_curr_expanding.get_value());
-    PartitionOpenList<Entry>::partition_insert(
-        child_of_curr_expanding.get_value(), 
+            partition_key);
+    int id = PartitionOpenList<Entry>::partition_insert( 
         new_h, 
         entry, 
         partition_key, 
         is_new_part);
+    state_to_id[eval_context.get_state()] = id;
+
+    // cout << "NODE:" << curr_expanding << ":" << id << ":" << partition_key <<endl;
 
 }
 
 template<class Entry>
 Entry PartitionHIBOpenList<Entry>::remove_min() {
 
-    if (last_removed != StateID::no_state.get_value()) {
+    if (last_removed != -1) {
         this->partition_selector->notify_removal(this->partitioned_nodes.at(last_removed).first.partition, last_removed);
         this->partitioned_nodes.erase(last_removed);
     }

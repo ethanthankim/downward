@@ -62,7 +62,7 @@ public:
         last_chosen_partition = -1;
     };
     virtual void notify_initial_partition(int part) {};
-    virtual void notify_partition_transition(int parent_part, int parent_node, int child_part, int child_node) {};
+    virtual void notify_partition_transition(int parent_part, int child_part) {};
 };
 }
 

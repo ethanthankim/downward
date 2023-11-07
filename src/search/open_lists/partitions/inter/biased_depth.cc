@@ -50,7 +50,7 @@ InterBiasedDepthPolicy::InterBiasedDepthPolicy(const plugins::Options &opts)
 
 // }
 
-void InterBiasedDepthPolicy::notify_partition_transition(int parent_part, int parent_node, int child_part, int child_node) {
+void InterBiasedDepthPolicy::notify_partition_transition(int parent_part, int child_part) {
     if (parent_part == -1) return;
     cached_parent_part = parent_part;
     cached_parent_depth = partition_to_id_pair.at(cached_parent_part).first;
@@ -95,13 +95,22 @@ int InterBiasedDepthPolicy::get_next_partition() {
         }
     }
 
-    // if (count_i < counts.size()) {
+    // if (count_i < counts.size() && count_i < h_buckets.size()) {
     //     counts[count_i] += 1;
     // }
 
-    // if (total_gets % 100 == 0) {
-    //     cout << counts << endl;
-    //     cout << h_buckets.begin()->first << " --> " << (++h_buckets.begin())->first << endl;
+    // if (total_gets % 200 == 0) {
+    //     double total;
+    //      std::for_each(counts.begin(), counts.end(), [&] (int n) {
+    //         total += n;
+    //     });
+
+    //     double first_prob = counts[0] / total;
+    //     double second_prob = counts[1] / total;
+    //     double third_prob = counts[3] / total;
+
+    //     cout << first_prob << " - " << second_prob << " - " << third_prob << endl;
+    //     // cout << h_buckets.begin()->first << " --> " << (++h_buckets.begin())->first << endl;
     // }
 
     vector<PartitionNode> &partitions = h_buckets[selected_h];

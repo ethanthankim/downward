@@ -68,7 +68,7 @@ public:
         node_to_prog.clear();
         partition_to_id_pair.clear();
     };
-    virtual void notify_partition_transition(int parent_part, int parent_node, int child_part, int child_node) override;
+    virtual void notify_partition_transition(int parent_part, int child_part) override;
 };
 }
 

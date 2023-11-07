@@ -29,7 +29,7 @@ public:
         int eval
     ) = 0;
     virtual void notify_removal(int partition_key, int node_key) = 0;
-    virtual void notify_partition_transition(int parent_part, int parent_node, int child_part, int child_node) = 0;
+    virtual void notify_partition_transition(int parent_part, int child_part) = 0;
     virtual void clear() = 0;
 };
 

@@ -36,9 +36,9 @@ public:
         return !(*this == other);
     }
 
-    int get_value() const {
-        return value;
-    }
+    // int get_value() const {
+    //     return value;
+    // }
 };
 
 
