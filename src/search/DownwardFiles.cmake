@@ -643,13 +643,30 @@ fast_downward_plugin(
 )
 
 fast_downward_plugin(
-    NAME EAGER_ANYTIME_SEARCH
-    HELP "Eager anytime search algorithm"
+    NAME MONTE_CARLO_SEARCH
+    HELP "Monte carlo search algorithm"
     SOURCES
-        search_engines/eager_search_anytime
+        search_engines/monte_carlo_search
     DEPENDS NULL_PRUNING_METHOD ORDERED_SET SUCCESSOR_GENERATOR
     DEPENDENCY_ONLY
 )
+
+fast_downward_plugin(
+    NAME PLUGIN_MONTE_CARLO
+    HELP "monte carlo search"
+    SOURCES
+        search_engines/plugin_monte_carlo
+    DEPENDS MONTE_CARLO_SEARCH SEARCH_COMMON
+)
+
+# fast_downward_plugin(
+#     NAME EAGER_ANYTIME_SEARCH
+#     HELP "Eager anytime search algorithm"
+#     SOURCES
+#         search_engines/eager_search_anytime
+#     DEPENDS NULL_PRUNING_METHOD ORDERED_SET SUCCESSOR_GENERATOR
+#     DEPENDENCY_ONLY
+# )
 
 fast_downward_plugin(
     NAME PLUGIN_ASTAR
@@ -667,13 +684,13 @@ fast_downward_plugin(
     DEPENDS EAGER_SEARCH SEARCH_COMMON
 )
 
-fast_downward_plugin(
-    NAME PLUGIN_EAGER_ANYTIME
-    HELP "Eager (i.e., normal) anytime best-first search"
-    SOURCES
-        search_engines/plugin_eager_anytime
-    DEPENDS EAGER_ANYTIME_SEARCH SEARCH_COMMON
-)
+# fast_downward_plugin(
+#     NAME PLUGIN_EAGER_ANYTIME
+#     HELP "Eager (i.e., normal) anytime best-first search"
+#     SOURCES
+#         search_engines/plugin_eager_anytime
+#     DEPENDS EAGER_ANYTIME_SEARCH SEARCH_COMMON
+# )
 
 fast_downward_plugin(
     NAME PLUGIN_EAGER_GREEDY

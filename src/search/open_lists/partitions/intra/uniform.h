@@ -9,13 +9,11 @@
 #include <memory>
 #include <map>
 
-namespace intra_partition_uniform {
+namespace intra_uniform_partition {
 class IntraUniformPolicy : public NodePolicy {
 
     std::shared_ptr<utils::RandomNumberGenerator> rng;
     utils::HashMap<int, std::vector<int>> node_partitions;
-
-    int last_chosen_partition = -1;
     
 public:
     explicit IntraUniformPolicy(const plugins::Options &opts);
@@ -29,7 +27,6 @@ public:
     virtual int get_next_node(int partition_key) override;
     virtual void get_path_dependent_evaluators(std::set<Evaluator *> &evals) {};
     virtual void clear() {
-        last_chosen_partition=-1;
         node_partitions.clear();
     };
 };

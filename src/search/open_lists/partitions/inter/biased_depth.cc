@@ -133,17 +133,6 @@ void InterBiasedDepthPolicy::notify_insert(
         auto partition_ids = partition_to_id_pair.at(partition_key); 
         h_buckets.at(partition_ids.first)[partition_ids.second].inc_size();
     }
-    
-    // double sr = success_count / node_count;
-    // if (new_partition && tau > (sr+0.0001)) {
-    //     tau = (tau-sr);
-    //     success_count+=1;
-    // } else if (tau < tau_limit) {
-    //     double fr = 1-(sr); 
-    //     tau += fr;
-    // }
-    // node_count+=1;
-
 
 }
 
