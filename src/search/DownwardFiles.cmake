@@ -245,6 +245,13 @@ fast_downward_plugin(
 # )
 
 fast_downward_plugin(
+    NAME PARTITION_HIB_BASE_OPEN_LIST
+    HELP "Partition HIB open list"
+    SOURCES
+        open_lists/partition_hib
+)
+
+fast_downward_plugin(
     NAME PARTITION_HIB_OPEN_LIST
     HELP "Partition open list"
     SOURCES

@@ -56,12 +56,12 @@ def main():
     unit_ff = "ff(transform=adapt_costs(cost_type=one))"
     unit_cost = 'cost_type=one'
     real_cost = 'cost_type=normal'
-    # ff='ff()'
+
     FF_RANDOM_SEED = int(datetime.now().timestamp())
     CONFIGS = [
                
-        IssueConfig('HIB-alt|uni/uni', ["--evaluator", f"h={unit_ff}", '--search', f'eager(alt( [ single(h), hib_partition(h, inter_uniform(random_seed={FF_RANDOM_SEED}), intra_uniform(random_seed={FF_RANDOM_SEED})) ] ), {unit_cost}) '] , driver_options=DRIVER_OPTIONS),
-        IssueConfig('LWMB-alt|uni/uni', ["--evaluator", f"h={unit_ff}", '--search', f'eager(alt( [ single(h), lwmb_partition(h, inter_uniform(random_seed={FF_RANDOM_SEED}), intra_uniform(random_seed={FF_RANDOM_SEED})) ] ), {unit_cost}) '] , driver_options=DRIVER_OPTIONS),
+        IssueConfig('HIB-alt|uni/uni', ["--evaluator", f"h={unit_ff}", '--search', f'eager(alt( [ single(h), hib(h, random_seed={FF_RANDOM_SEED}) ] ), {unit_cost}) '] , driver_options=DRIVER_OPTIONS),
+        # IssueConfig('LWMB-alt|uni/uni', ["--evaluator", f"h={unit_ff}", '--search', f'eager(alt( [ single(h), lwmb_partition(h, inter_uniform(random_seed={FF_RANDOM_SEED}), intra_uniform(random_seed={FF_RANDOM_SEED})) ] ), {unit_cost}) '] , driver_options=DRIVER_OPTIONS),
 
     ]       
 

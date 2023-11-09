@@ -103,7 +103,7 @@ Entry PartitionLWMOpenList<Entry>::remove_min() {
 
     int chosen_partition = this->partition_selector->get_next_partition();
     int chosen_node = this->node_selector->get_next_node(chosen_partition);
-
+    
     Entry result = this->partitioned_nodes.at(chosen_node).second;
     last_removed = chosen_node;
     return result;

@@ -15,14 +15,13 @@ int InterUniformPolicy::get_next_partition() {
     while(true) {
         auto it = partition_sizes.begin();
         std::advance(it, rng->random(partition_sizes.size()));
-        chosen_partition = it->first;
 
-        if (partition_sizes.at(chosen_partition) == 0){
-            partition_sizes.erase(chosen_partition);
+        if (it->second == 0){
+            partition_sizes.erase(it);
             continue;
         }
 
-        return chosen_partition;
+        return it->first;
 
     } 
     
