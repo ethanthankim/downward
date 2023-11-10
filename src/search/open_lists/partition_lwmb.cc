@@ -26,6 +26,19 @@ class PartitionLWMBBaseOpenList : public OpenList<Entry> {
 
     vector<pair<int, vector<Entry>>> keys_and_partitions;
     utils::HashMap<int, int> key_to_partition_index;
+    struct StateInfo {
+        int id;
+        int lwm;
+        int part_key;
+        StateInfo(int id, int lwm, int part_key) : id(id), lwm(lwm), part_key(part_key) {};
+        StateInfo() {};
+    };
+    PerStateInformation<StateInfo> state_to_info;
+    
+    StateInfo curr_expanding_state_info;
+    utils::HashMap<int, int> h_to_type;
+
+    int next_id = 0;
     int type_counter = 0;
 
 protected:
@@ -52,7 +65,7 @@ public:
 
 template<class Entry>
 void PartitionLWMBBaseOpenList<Entry>::notify_initial_state(const State &initial_state) {
-    
+    curr_expanding_state_info = StateInfo(-1, numeric_limits<int>::max(), -1); //type_counter starts at -1
 }
 
 template<class Entry>
@@ -60,6 +73,11 @@ void PartitionLWMBBaseOpenList<Entry>::notify_state_transition(const State &pare
                                         OperatorID op_id,
                                         const State &state)
 {
+    StateInfo parent_info = state_to_info[parent_state];
+    if (parent_info.id != curr_expanding_state_info.id) {
+        curr_expanding_state_info = parent_info;
+        h_to_type.clear();
+    }
 
 }
 
@@ -67,13 +85,49 @@ template<class Entry>
 void PartitionLWMBBaseOpenList<Entry>::do_insertion(
     EvaluationContext &eval_context, const Entry &entry) {
     
-    
+    int new_h = eval_context.get_evaluator_value_or_infinity(this->evaluator.get());
+    int new_lwm;
+    int partition_key;
+    if ( (new_h < curr_expanding_state_info.lwm) ) {
+        if (h_to_type.count(new_h) == 0) {
+            partition_key = type_counter++;
+            h_to_type.emplace(new_h, partition_key);
+        } else {
+            partition_key = h_to_type.at(new_h);
+        } 
+        new_lwm = new_h;
+    } else {
+        partition_key = curr_expanding_state_info.part_key;
+        new_lwm = curr_expanding_state_info.lwm;
+    }
+
+    if (key_to_partition_index.find(partition_key) == key_to_partition_index.end()) { // add empty and removed partition back (can happen with path dependent systems)
+        key_to_partition_index[partition_key] = keys_and_partitions.size();
+        keys_and_partitions.push_back(make_pair(partition_key, vector<Entry>{}));
+    }
+
+    int partition_index = key_to_partition_index.at(partition_key);
+    keys_and_partitions[partition_index].second.push_back(entry);
+    state_to_info[eval_context.get_state()] = StateInfo(next_id++, new_lwm, partition_key);
 }
 
 template<class Entry>
 Entry PartitionLWMBBaseOpenList<Entry>::remove_min() {
 
-   
+    size_t bucket_index = rng->random(keys_and_partitions.size());
+    pair<int, vector<Entry>> &key_and_partition = keys_and_partitions[bucket_index];
+    const int &min_key = key_and_partition.first;
+    vector<Entry> &bucket = key_and_partition.second;
+    int pos = rng->random(bucket.size());
+    Entry result = utils::swap_and_pop_from_vector(bucket, pos);
+
+    if (bucket.empty()) {
+        // Swap the empty bucket with the last bucket, then delete it.
+        key_to_partition_index[keys_and_partitions.back().first] = bucket_index;
+        key_to_partition_index.erase(min_key);
+        utils::swap_and_pop_from_vector(keys_and_partitions, bucket_index);
+    }
+    return result;
 
 }
 
@@ -128,8 +182,8 @@ PartitionLWMBBaseOpenListFactory::create_edge_open_list() {
 
 class PartitionLWMBBaseOpenListFeature : public plugins::TypedFeature<OpenListFactory, PartitionLWMBBaseOpenListFactory> {
 public:
-    PartitionLWMBBaseOpenListFeature() : TypedFeature("bias_depth_bias_h") {
-        document_title("Partition Heuristic Improvement Open List");
+    PartitionLWMBBaseOpenListFeature() : TypedFeature("lwmb") {
+        document_title("Partition LWM Open List");
         document_synopsis("A configurable open list that selects nodes by first"
          "choosing a node parition and then choosing a node from within it."
          "The policies for insertion (choosing a partition to insert into or"

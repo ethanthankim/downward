@@ -37,7 +37,6 @@ class PartitionHIBBaseOpenList : public OpenList<Entry> {
     
     StateInfo curr_expanding_state_info;
     bool first_success_in_succ = true;
-    int last_removed = -1;
 
     int next_id = 0;
     int type_counter = 0;

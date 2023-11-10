@@ -230,12 +230,12 @@ fast_downward_plugin(
         open_lists/partitions/intra/biased_minh
 )
 
-fast_downward_plugin(
-    NAME NODE_SELECTION_EPSILON_GREEDY
-    HELP "epsilon greedy node selection policy"
-    SOURCES
-        open_lists/partitions/intra/epsilon_greedy_minh
-)
+# fast_downward_plugin(
+#     NAME NODE_SELECTION_EPSILON_GREEDY
+#     HELP "epsilon greedy node selection policy"
+#     SOURCES
+#         open_lists/partitions/intra/epsilon_greedy_minh
+# )
 
 # fast_downward_plugin(
 #     NAME PARTITION_HI_OPEN_LIST
@@ -243,6 +243,13 @@ fast_downward_plugin(
 #     SOURCES
 #         open_lists/partition_hi_open_list
 # )
+
+fast_downward_plugin(
+    NAME PARTITION_LWMB_BASE_OPEN_LIST
+    HELP "Partition LWMB open list"
+    SOURCES
+        open_lists/partition_lwmb
+)
 
 fast_downward_plugin(
     NAME PARTITION_HIB_BASE_OPEN_LIST
