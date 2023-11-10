@@ -27,10 +27,8 @@ namespace partition_lwmb_open_list {
 template<class Entry>
 class PartitionLWMBOpenList : public PartitionOpenList<Entry> {
 
-    bool start_new_expansion = true;
 
     int curr_expanding = -1;
-
     int last_removed = -1;
     int curr_expanding_lwm;
     int curr_expanding_part_key = -1;
@@ -75,10 +73,8 @@ void PartitionLWMBOpenList<Entry>::notify_state_transition(const State &parent_s
 {
     int parent_id = state_to_id[parent_state];
     if (parent_id != curr_expanding) {
-        start_new_expansion = true;
         curr_expanding = parent_id;
-    } else {
-        start_new_expansion = false;
+        h_to_type.clear();
     }
 
     curr_expanding_part_key = this->partitioned_nodes.at(curr_expanding).first.partition;
@@ -97,10 +93,6 @@ void PartitionLWMBOpenList<Entry>::notify_state_transition(const State &parent_s
 template<class Entry>
 void PartitionLWMBOpenList<Entry>::do_insertion(
     EvaluationContext &eval_context, const Entry &entry) {
-
-    if (start_new_expansion) {
-        h_to_type.clear();
-    }
 
     int new_h = eval_context.get_evaluator_value_or_infinity(this->evaluator.get());
     bool is_new_part = false;

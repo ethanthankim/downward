@@ -16,6 +16,10 @@
 #include <optional.hh>
 #include <set>
 
+
+
+#include <chrono>
+
 using namespace std;
 
 namespace eager_search {
@@ -114,12 +118,15 @@ void EagerSearch::print_statistics() const {
 }
 
 SearchStatus EagerSearch::step() {
+
+
     tl::optional<SearchNode> node;
     while (true) {
         if (open_list->empty()) {
             log << "Completely explored state space -- no solution!" << endl;
             return FAILED;
         }
+
         StateID id = open_list->remove_min();
         State s = state_registry.lookup_state(id);
         node.emplace(search_space.get_node(s));
@@ -237,7 +244,6 @@ SearchStatus EagerSearch::step() {
                 continue;
             }
             succ_node.open(*node, op, get_adjusted_cost(op));
-
             open_list->insert(succ_eval_context, succ_state.get_id());
             if (search_progress.check_progress(succ_eval_context)) {
                 statistics.print_checkpoint_line(succ_node.get_g());

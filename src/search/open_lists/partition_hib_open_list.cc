@@ -28,10 +28,7 @@ namespace partition_hib_open_list {
 template<class Entry>
 class PartitionHIBOpenList : public PartitionOpenList<Entry> {
 
-    bool start_new_expansion = true;
-
     int curr_expanding = -1;
-
     int last_removed = -1;
     int curr_expanding_h;
     int curr_expanding_part_key = -1;
@@ -72,10 +69,8 @@ void PartitionHIBOpenList<Entry>::notify_state_transition(const State &parent_st
 {
     int parent_id = state_to_id[parent_state];
     if (parent_id != curr_expanding) {
-        start_new_expansion = true;
         curr_expanding = parent_id;
-    } else {
-        start_new_expansion = false;
+        first_success_in_succ = true;
     }
 
     curr_expanding_part_key = this->partitioned_nodes.at(curr_expanding).first.partition;
@@ -85,10 +80,6 @@ void PartitionHIBOpenList<Entry>::notify_state_transition(const State &parent_st
 template<class Entry>
 void PartitionHIBOpenList<Entry>::do_insertion(
     EvaluationContext &eval_context, const Entry &entry) {
-    
-    if (start_new_expansion) {
-        first_success_in_succ = true;
-    }
 
     int new_h = eval_context.get_evaluator_value_or_infinity(this->evaluator.get());
     bool is_new_part = false;
@@ -104,7 +95,7 @@ void PartitionHIBOpenList<Entry>::do_insertion(
             is_new_part = true;
             first_success_in_succ = false;
         } else {
-            partition_key = type_counter-1; // look up, type_counter must have been incremented once.
+            partition_key = type_counter-1; // type_counter must have been incremented once.
         }
     } else {
         partition_key = curr_expanding_part_key;
@@ -123,14 +114,13 @@ void PartitionHIBOpenList<Entry>::do_insertion(
     // myfile.open ("/home/dawson/Documents/Masters/Thesis/search/thesis/benches/media/_ht.txt", std::ios_base::app);
     // myfile << "NODE:" << curr_expanding << ":" << id << ":" << partition_key <<endl;
     // myfile.close();
-    // cout << "NODE:" << curr_expanding << ":" << id << ":" << partition_key <<endl;
 
 }
 
 template<class Entry>
 Entry PartitionHIBOpenList<Entry>::remove_min() {
 
-    if (last_removed != -1) {
+    if (last_removed != -1) { // idk if this matters anymore, but too lazy to change
         this->partition_selector->notify_removal(this->partitioned_nodes.at(last_removed).first.partition, last_removed);
         this->partitioned_nodes.erase(last_removed);
     }

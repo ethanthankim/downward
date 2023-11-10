@@ -35,8 +35,6 @@ class PartitionHIBBaseOpenList : public OpenList<Entry> {
     };
     PerStateInformation<StateInfo> state_to_info;
     
-    bool start_new_expansion = true;
-
     StateInfo curr_expanding_state_info;
     bool first_success_in_succ = true;
     int last_removed = -1;
@@ -79,19 +77,13 @@ void PartitionHIBBaseOpenList<Entry>::notify_state_transition(const State &paren
     StateInfo parent_info = state_to_info[parent_state];
     if (parent_info.id != curr_expanding_state_info.id) {
         curr_expanding_state_info = parent_info;
-        start_new_expansion = true;
-    } else {
-        start_new_expansion = false;
+        first_success_in_succ = true;
     }
 }
 
 template<class Entry>
 void PartitionHIBBaseOpenList<Entry>::do_insertion(
     EvaluationContext &eval_context, const Entry &entry) {
-    
-    if (start_new_expansion) {
-        first_success_in_succ = true;
-    }
 
     int new_h = eval_context.get_evaluator_value_or_infinity(this->evaluator.get());
     int partition_key;
@@ -100,7 +92,7 @@ void PartitionHIBBaseOpenList<Entry>::do_insertion(
             partition_key = type_counter++;
             first_success_in_succ = false;
         } else {
-            partition_key = type_counter-1; // look up, type_counter must have been incremented once.
+            partition_key = type_counter-1; // type_counter must have been incremented once.
         } 
     } else {
         partition_key = curr_expanding_state_info.part_key;
