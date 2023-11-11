@@ -228,7 +228,7 @@ void PartitionBiasDepthBiasHOpenList<Entry>::do_insertion(
             partition_key = type_counter++;
             first_success_in_succ = false;
             new_depth = curr_expanding_state_info.part_depth+1;
-            current_sum += std::exp(-1.0 * static_cast<double>(new_depth) / inter_tau);
+            current_sum += std::exp(static_cast<double>(new_depth) / inter_tau);
         } else {
             partition_key = type_counter-1; // type_counter must have been incremented once.
             new_depth = curr_expanding_state_info.part_depth+1;
@@ -283,7 +283,7 @@ Entry PartitionBiasDepthBiasHOpenList<Entry>::remove_min() {
         double p_sum = 0.0;
         for (auto it : partitions) {
             double p = 1.0 / total_sum;
-            p *= std::exp(-1.0 * static_cast<double>(it.first) / inter_tau);
+            p *= std::exp(static_cast<double>(it.first) / inter_tau);
             p *= static_cast<double>(it.second.size());
             // cout << p <<endl;
             p_sum += p;
@@ -324,7 +324,7 @@ Entry PartitionBiasDepthBiasHOpenList<Entry>::remove_min() {
         if (h_partitions.empty()) {
             partitions.erase(selected_depth);
         }
-        current_sum -= std::exp(-1.0 * static_cast<double>(selected_depth) / inter_tau);
+        current_sum -= std::exp(static_cast<double>(selected_depth) / inter_tau);
     }
 
     return result;

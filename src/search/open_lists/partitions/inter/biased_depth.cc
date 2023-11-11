@@ -11,11 +11,8 @@ InterBiasedDepthPolicy::InterBiasedDepthPolicy(const plugins::Options &opts)
     : PartitionPolicy(opts),
     rng(utils::parse_rng_from_options(opts)),
     tau(opts.get<double>("tau")),
-    // tau_limit(opts.get<double>("tau")),
     ignore_size(opts.get<bool>("ignore_size")),
     current_sum(0.0) {}
-    // node_count(2.0),
-    // success_count(1.0) {}
 
 // void InterBiasedDepthPolicy::verify_heap() {
 
