@@ -142,6 +142,7 @@ Entry SoftminOpenList<Entry>::remove_min() {
                     }
                     // count_i+=1;
                 }
+                // cout << p_sum << endl;
             }
         }
     }

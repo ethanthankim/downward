@@ -18,6 +18,7 @@
 #include <unordered_map>
 #include <vector>
 
+#include <chrono>
 
 // #include <fstream>
 
@@ -130,6 +131,7 @@ Entry PartitionHIBOpenList<Entry>::remove_min() {
 
     Entry result = this->partitioned_nodes.at(chosen_node).second;
     last_removed = chosen_node;
+
     return result;
 
 }
