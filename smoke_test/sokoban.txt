@@ -5,35 +5,35 @@ INFO     Running translator.
 INFO     translator stdin: None
 INFO     translator time limit: None
 INFO     translator memory limit: None
-INFO     translator command line string: /home/dawson/Documents/Masters/Thesis/search/code/downward-projects/downward/experiments/.venv/bin/python3 /home/dawson/Documents/Masters/Thesis/search/code/downward-projects/downward/builds/release/bin/translate/translate.py benchmarks-test/sokoban-sat11-strips/domain.pddl benchmarks-test/sokoban-sat11-strips/p07.pddl --sas-file output.sas
+INFO     translator command line string: /usr/bin/python3 /home/dawson/Documents/Masters/Thesis/search/code/downward-projects/downward/builds/release/bin/translate/translate.py benchmarks-test/sokoban-sat11-strips/domain.pddl benchmarks-test/sokoban-sat11-strips/p07.pddl --sas-file output.sas
 Parsing...
 Parsing: [0.000s CPU, 0.003s wall-clock]
 Normalizing task... [0.000s CPU, 0.000s wall-clock]
 Instantiating...
-Generating Datalog program... [0.000s CPU, 0.001s wall-clock]
+Generating Datalog program... [0.000s CPU, 0.002s wall-clock]
 Normalizing Datalog program...
-Normalizing Datalog program: [0.000s CPU, 0.002s wall-clock]
+Normalizing Datalog program: [0.010s CPU, 0.003s wall-clock]
 Preparing model... [0.000s CPU, 0.002s wall-clock]
 Generated 38 rules.
-Computing model... [0.040s CPU, 0.023s wall-clock]
+Computing model... [0.020s CPU, 0.024s wall-clock]
 924 relevant atoms
 1432 auxiliary atoms
 2356 final queue length
 3131 total queue pushes
-Completing instantiation... [0.020s CPU, 0.029s wall-clock]
-Instantiating: [0.060s CPU, 0.059s wall-clock]
+Completing instantiation... [0.020s CPU, 0.020s wall-clock]
+Instantiating: [0.050s CPU, 0.053s wall-clock]
 Computing fact groups...
 Finding invariants...
 7 initial candidates
-Finding invariants: [0.010s CPU, 0.011s wall-clock]
-Checking invariant weight... [0.010s CPU, 0.001s wall-clock]
-Instantiating groups... [0.000s CPU, 0.007s wall-clock]
+Finding invariants: [0.010s CPU, 0.007s wall-clock]
+Checking invariant weight... [0.000s CPU, 0.000s wall-clock]
+Instantiating groups... [0.000s CPU, 0.003s wall-clock]
 Collecting mutex groups... [0.000s CPU, 0.000s wall-clock]
 Choosing groups...
 47 uncovered facts
-Choosing groups: [0.000s CPU, 0.001s wall-clock]
+Choosing groups: [0.010s CPU, 0.003s wall-clock]
 Building translation key... [0.000s CPU, 0.001s wall-clock]
-Computing fact groups: [0.030s CPU, 0.023s wall-clock]
+Computing fact groups: [0.020s CPU, 0.016s wall-clock]
 Building STRIPS to SAS dictionary... [0.000s CPU, 0.000s wall-clock]
 Building dictionary for full mutex groups... [0.000s CPU, 0.000s wall-clock]
 Building mutex information...
@@ -44,14 +44,14 @@ Simplifying axioms... [0.000s CPU, 0.000s wall-clock]
 Translator axioms removed by simplifying: 0
 Computing negative axioms... [0.000s CPU, 0.000s wall-clock]
 Processing axioms: [0.000s CPU, 0.001s wall-clock]
-Translating task: [0.030s CPU, 0.035s wall-clock]
+Translating task: [0.020s CPU, 0.015s wall-clock]
 492 effect conditions simplified
 0 implied preconditions added
 Detecting unreachable propositions...
 0 operators removed
 0 axioms removed
 42 propositions removed
-Detecting unreachable propositions: [0.010s CPU, 0.012s wall-clock]
+Detecting unreachable propositions: [0.000s CPU, 0.007s wall-clock]
 Reordering and filtering variables...
 35 of 35 variables necessary.
 24 of 30 mutex groups necessary.
@@ -67,74 +67,68 @@ Translator total mutex groups size: 168
 Translator operators: 312
 Translator axioms: 0
 Translator task size: 3002
-Translator peak memory: 28956 KB
-Writing output... [0.010s CPU, 0.006s wall-clock]
-Done! [0.150s CPU, 0.144s wall-clock]
+Translator peak memory: 29324 KB
+Writing output... [0.000s CPU, 0.006s wall-clock]
+Done! [0.100s CPU, 0.107s wall-clock]
 translate exit code: 0
 
 INFO     Running search (release).
 INFO     search stdin: output.sas
 INFO     search time limit: None
 INFO     search memory limit: None
-INFO     search command line string: /home/dawson/Documents/Masters/Thesis/search/code/downward-projects/downward/builds/release/bin/downward --evaluator 'hff=ff(transform=adapt_costs(cost_type=one))' --search 'eager(alt( [ single(hff), bias_depth_bias_h(hff, inter_tau=1, intra_ignore_size=true, random_seed=10632854) ] ), cost_type=one)' --internal-plan-file sas_plan < output.sas
-[t=0.0054901s, 11556 KB] reading input...
-[t=0.00761905s, 11688 KB] done reading input!
-[t=0.00985838s, 12080 KB] Simplifying 1416 unary operators... done! [1416 unary operators]
-[t=0.0107559s, 12080 KB] time to simplify: 0.000964995s
-[t=0.0108946s, 12080 KB] Initializing additive heuristic...
-[t=0.0109264s, 12080 KB] Initializing FF heuristic...
-[t=0.011012s, 12080 KB] Building successor generator...done!
-[t=0.0112834s, 12080 KB] peak memory difference for successor generator creation: 0 KB
-[t=0.0113083s, 12080 KB] time for successor generation creation: 0.000189364s
-[t=0.0113457s, 12080 KB] Variables: 35
-[t=0.0113717s, 12080 KB] FactPairs: 202
-[t=0.0113961s, 12080 KB] Bytes per state: 8
-[t=0.0114436s, 12080 KB] Conducting best first search without reopening closed nodes, (real) bound = 2147483647
-[t=0.0115187s, 12216 KB] New best heuristic value for ff(transform=adapt_costs(cost_type=one)): 25
-[t=0.0115592s, 12216 KB] g=0, 1 evaluated, 0 expanded
-[t=0.0116066s, 12216 KB] Initial heuristic value for ff(transform=adapt_costs(cost_type=one)): 25
-[t=0.0116362s, 12216 KB] pruning method: none
-[t=0.0116609s, 12216 KB] Start Timestep: 1699680117568 millisecond(s).
-[t=0.0147831s, 12216 KB] New best heuristic value for ff(transform=adapt_costs(cost_type=one)): 24
-[t=0.0148299s, 12216 KB] g=10, 129 evaluated, 103 expanded
-[t=0.0148851s, 12216 KB] New best heuristic value for ff(transform=adapt_costs(cost_type=one)): 23
-[t=0.0149128s, 12216 KB] g=11, 130 evaluated, 104 expanded
-[t=0.0149684s, 12216 KB] New best heuristic value for ff(transform=adapt_costs(cost_type=one)): 21
-[t=0.0149973s, 12216 KB] g=12, 131 evaluated, 105 expanded
-[t=0.0151041s, 12216 KB] New best heuristic value for ff(transform=adapt_costs(cost_type=one)): 19
-[t=0.0151371s, 12216 KB] g=13, 134 evaluated, 106 expanded
-[t=0.0153132s, 12216 KB] New best heuristic value for ff(transform=adapt_costs(cost_type=one)): 18
-[t=0.0153493s, 12216 KB] g=15, 141 evaluated, 109 expanded
-[t=0.96658s, 13164 KB] New best heuristic value for ff(transform=adapt_costs(cost_type=one)): 17
-[t=0.966672s, 13164 KB] g=60, 10775 evaluated, 7698 expanded
-[t=1.32622s, 13296 KB] New best heuristic value for ff(transform=adapt_costs(cost_type=one)): 16
-[t=1.32632s, 13296 KB] g=87, 12861 evaluated, 9192 expanded
-[t=1.32677s, 13296 KB] New best heuristic value for ff(transform=adapt_costs(cost_type=one)): 13
-[t=1.32681s, 13296 KB] g=88, 12864 evaluated, 9193 expanded
-[t=1.32726s, 13296 KB] New best heuristic value for ff(transform=adapt_costs(cost_type=one)): 12
-[t=1.3273s, 13296 KB] g=89, 12866 evaluated, 9195 expanded
-[t=1.33115s, 13428 KB] New best heuristic value for ff(transform=adapt_costs(cost_type=one)): 10
-[t=1.33119s, 13428 KB] g=93, 12898 evaluated, 9212 expanded
-[t=1.33163s, 13428 KB] New best heuristic value for ff(transform=adapt_costs(cost_type=one)): 9
-[t=1.33166s, 13428 KB] g=94, 12900 evaluated, 9214 expanded
-[t=1.34604s, 13428 KB] New best heuristic value for ff(transform=adapt_costs(cost_type=one)): 8
-[t=1.34612s, 13428 KB] g=99, 13002 evaluated, 9276 expanded
-[t=1.34744s, 13428 KB] New best heuristic value for ff(transform=adapt_costs(cost_type=one)): 7
-[t=1.34749s, 13428 KB] g=102, 13012 evaluated, 9282 expanded
-[t=1.3479s, 13428 KB] New best heuristic value for ff(transform=adapt_costs(cost_type=one)): 6
-[t=1.34794s, 13428 KB] g=103, 13013 evaluated, 9283 expanded
-[t=1.34835s, 13428 KB] New best heuristic value for ff(transform=adapt_costs(cost_type=one)): 4
-[t=1.34841s, 13428 KB] g=104, 13016 evaluated, 9285 expanded
-[t=1.34888s, 13428 KB] New best heuristic value for ff(transform=adapt_costs(cost_type=one)): 3
-[t=1.34893s, 13428 KB] g=105, 13019 evaluated, 9287 expanded
-[t=1.34936s, 13428 KB] New best heuristic value for ff(transform=adapt_costs(cost_type=one)): 2
-[t=1.34942s, 13428 KB] g=106, 13025 evaluated, 9289 expanded
-[t=1.34998s, 13428 KB] New best heuristic value for ff(transform=adapt_costs(cost_type=one)): 1
-[t=1.35004s, 13428 KB] g=107, 13026 evaluated, 9290 expanded
-[t=1.35057s, 13428 KB] New best heuristic value for ff(transform=adapt_costs(cost_type=one)): 0
-[t=1.35063s, 13428 KB] g=108, 13029 evaluated, 9291 expanded
-[t=1.35113s, 13428 KB] Solution found!
-[t=1.35119s, 13428 KB] Actual search time: 1.33952s
+INFO     search command line string: /home/dawson/Documents/Masters/Thesis/search/code/downward-projects/downward/builds/release/bin/downward --evaluator 'hff=ff(transform=adapt_costs(cost_type=one))' --search 'eager(alt( [ single(hff), hib_partition(hff, inter_biased_depth(tau=1, random_seed=11236), intra_biased(tau=1, ignore_size=true, random_seed=457)) ] ), cost_type=one)' --internal-plan-file sas_plan < output.sas
+[t=0.00257087s, 11556 KB] reading input...
+[t=0.00561712s, 11688 KB] done reading input!
+[t=0.00859744s, 12084 KB] Simplifying 1416 unary operators... done! [1416 unary operators]
+[t=0.00962376s, 12084 KB] time to simplify: 0.00111513s
+[t=0.00977786s, 12084 KB] Initializing additive heuristic...
+[t=0.00980778s, 12084 KB] Initializing FF heuristic...
+[t=0.00990978s, 12084 KB] Building successor generator...done!
+[t=0.0101507s, 12084 KB] peak memory difference for successor generator creation: 0 KB
+[t=0.0101739s, 12084 KB] time for successor generation creation: 0.000167988s
+[t=0.0102077s, 12084 KB] Variables: 35
+[t=0.0102305s, 12084 KB] FactPairs: 202
+[t=0.0102518s, 12084 KB] Bytes per state: 8
+[t=0.0102977s, 12084 KB] Conducting best first search without reopening closed nodes, (real) bound = 2147483647
+[t=0.0103664s, 12220 KB] New best heuristic value for ff(transform=adapt_costs(cost_type=one)): 25
+[t=0.0104078s, 12220 KB] g=0, 1 evaluated, 0 expanded
+[t=0.0104524s, 12220 KB] Initial heuristic value for ff(transform=adapt_costs(cost_type=one)): 25
+[t=0.0104786s, 12220 KB] pruning method: none
+[t=0.0105015s, 12220 KB] Start Timestep: 1699715853925 millisecond(s).
+[t=0.0129382s, 12220 KB] New best heuristic value for ff(transform=adapt_costs(cost_type=one)): 24
+[t=0.0130291s, 12220 KB] g=10, 100 evaluated, 88 expanded
+[t=0.0131133s, 12220 KB] New best heuristic value for ff(transform=adapt_costs(cost_type=one)): 23
+[t=0.0131546s, 12220 KB] g=11, 101 evaluated, 89 expanded
+[t=0.0132349s, 12220 KB] New best heuristic value for ff(transform=adapt_costs(cost_type=one)): 21
+[t=0.0132656s, 12220 KB] g=12, 102 evaluated, 90 expanded
+[t=0.013364s, 12220 KB] New best heuristic value for ff(transform=adapt_costs(cost_type=one)): 19
+[t=0.0133963s, 12220 KB] g=13, 105 evaluated, 91 expanded
+[t=0.0136194s, 12220 KB] New best heuristic value for ff(transform=adapt_costs(cost_type=one)): 18
+[t=0.0136572s, 12220 KB] g=15, 111 evaluated, 94 expanded
+[t=1.25349s, 15212 KB] New best heuristic value for ff(transform=adapt_costs(cost_type=one)): 17
+[t=1.25368s, 15212 KB] g=89, 41194 evaluated, 34439 expanded
+[t=1.25398s, 15212 KB] New best heuristic value for ff(transform=adapt_costs(cost_type=one)): 16
+[t=1.25402s, 15212 KB] g=90, 41197 evaluated, 34441 expanded
+[t=1.25452s, 15212 KB] New best heuristic value for ff(transform=adapt_costs(cost_type=one)): 12
+[t=1.25456s, 15212 KB] g=97, 41219 evaluated, 34454 expanded
+[t=1.25465s, 15212 KB] New best heuristic value for ff(transform=adapt_costs(cost_type=one)): 10
+[t=1.25469s, 15212 KB] g=98, 41220 evaluated, 34455 expanded
+[t=1.25486s, 15212 KB] New best heuristic value for ff(transform=adapt_costs(cost_type=one)): 8
+[t=1.25489s, 15212 KB] g=99, 41224 evaluated, 34456 expanded
+[t=1.25498s, 15212 KB] New best heuristic value for ff(transform=adapt_costs(cost_type=one)): 6
+[t=1.25502s, 15212 KB] g=100, 41226 evaluated, 34457 expanded
+[t=1.25511s, 15212 KB] New best heuristic value for ff(transform=adapt_costs(cost_type=one)): 4
+[t=1.25514s, 15212 KB] g=101, 41228 evaluated, 34458 expanded
+[t=1.25525s, 15212 KB] New best heuristic value for ff(transform=adapt_costs(cost_type=one)): 3
+[t=1.25529s, 15212 KB] g=102, 41231 evaluated, 34459 expanded
+[t=1.25543s, 15212 KB] New best heuristic value for ff(transform=adapt_costs(cost_type=one)): 2
+[t=1.25547s, 15212 KB] g=103, 41236 evaluated, 34460 expanded
+[t=1.25553s, 15212 KB] New best heuristic value for ff(transform=adapt_costs(cost_type=one)): 1
+[t=1.25559s, 15212 KB] g=104, 41237 evaluated, 34461 expanded
+[t=1.2557s, 15212 KB] New best heuristic value for ff(transform=adapt_costs(cost_type=one)): 0
+[t=1.25574s, 15212 KB] g=105, 41240 evaluated, 34462 expanded
+[t=1.25579s, 15212 KB] Solution found!
+[t=1.25583s, 15212 KB] Actual search time: 1.24529s
 move player-01 pos-06-08 pos-05-08 dir-left (0)
 move player-01 pos-05-08 pos-04-08 dir-left (0)
 move player-01 pos-04-08 pos-04-07 dir-up (0)
@@ -162,33 +156,19 @@ move player-01 pos-04-09 pos-05-09 dir-right (0)
 move player-01 pos-05-09 pos-06-09 dir-right (0)
 move player-01 pos-06-09 pos-06-08 dir-up (0)
 push-to-nongoal player-01 stone-05 pos-06-08 pos-05-08 pos-04-08 dir-left (1)
+move player-01 pos-05-08 pos-05-09 dir-down (0)
+move player-01 pos-05-09 pos-04-09 dir-left (0)
+push-to-nongoal player-01 stone-05 pos-04-09 pos-04-08 pos-04-07 dir-up (1)
+move player-01 pos-04-08 pos-05-08 dir-right (0)
 move player-01 pos-05-08 pos-05-07 dir-up (0)
-move player-01 pos-05-07 pos-05-06 dir-up (0)
-move player-01 pos-05-06 pos-04-06 dir-left (0)
+push-to-goal player-01 stone-05 pos-05-07 pos-04-07 pos-03-07 dir-left (1)
+move player-01 pos-04-07 pos-04-06 dir-up (0)
 move player-01 pos-04-06 pos-04-05 dir-up (0)
 move player-01 pos-04-05 pos-03-05 dir-left (0)
 move player-01 pos-03-05 pos-03-04 dir-up (0)
 move player-01 pos-03-04 pos-03-03 dir-up (0)
 move player-01 pos-03-03 pos-04-03 dir-right (0)
 push-to-nongoal player-01 stone-02 pos-04-03 pos-04-04 pos-04-05 dir-down (1)
-move player-01 pos-04-04 pos-03-04 dir-left (0)
-move player-01 pos-03-04 pos-03-05 dir-down (0)
-push-to-goal player-01 stone-04 pos-03-05 pos-03-06 pos-03-07 dir-down (1)
-move player-01 pos-03-06 pos-04-06 dir-right (0)
-move player-01 pos-04-06 pos-04-07 dir-down (0)
-move player-01 pos-04-07 pos-05-07 dir-right (0)
-move player-01 pos-05-07 pos-05-08 dir-down (0)
-move player-01 pos-05-08 pos-05-09 dir-down (0)
-move player-01 pos-05-09 pos-04-09 dir-left (0)
-push-to-nongoal player-01 stone-05 pos-04-09 pos-04-08 pos-04-07 dir-up (1)
-push-to-nongoal player-01 stone-05 pos-04-08 pos-04-07 pos-04-06 dir-up (1)
-move player-01 pos-04-07 pos-04-08 dir-down (0)
-move player-01 pos-04-08 pos-03-08 dir-left (0)
-push-to-goal player-01 stone-04 pos-03-08 pos-03-07 pos-03-06 dir-up (1)
-push-to-goal player-01 stone-04 pos-03-07 pos-03-06 pos-03-05 dir-up (1)
-push-to-goal player-01 stone-04 pos-03-06 pos-03-05 pos-03-04 dir-up (1)
-push-to-goal player-01 stone-04 pos-03-05 pos-03-04 pos-03-03 dir-up (1)
-move player-01 pos-03-04 pos-04-04 dir-right (0)
 move player-01 pos-04-04 pos-05-04 dir-right (0)
 push-to-nongoal player-01 stone-03 pos-05-04 pos-05-05 pos-05-06 dir-down (1)
 push-to-nongoal player-01 stone-03 pos-05-05 pos-05-06 pos-05-07 dir-down (1)
@@ -201,19 +181,33 @@ move player-01 pos-05-09 pos-06-09 dir-right (0)
 move player-01 pos-06-09 pos-06-08 dir-up (0)
 push-to-nongoal player-01 stone-03 pos-06-08 pos-05-08 pos-04-08 dir-left (1)
 move player-01 pos-05-08 pos-05-07 dir-up (0)
-move player-01 pos-05-07 pos-05-06 dir-up (0)
-push-to-goal player-01 stone-05 pos-05-06 pos-04-06 pos-03-06 dir-left (1)
-move player-01 pos-04-06 pos-05-06 dir-right (0)
+move player-01 pos-05-07 pos-04-07 dir-left (0)
+move player-01 pos-04-07 pos-04-06 dir-up (0)
+push-to-nongoal player-01 stone-02 pos-04-06 pos-04-05 pos-04-04 dir-up (1)
+move player-01 pos-04-05 pos-05-05 dir-right (0)
+move player-01 pos-05-05 pos-05-06 dir-down (0)
 move player-01 pos-05-06 pos-05-07 dir-down (0)
 move player-01 pos-05-07 pos-05-08 dir-down (0)
 move player-01 pos-05-08 pos-05-09 dir-down (0)
 move player-01 pos-05-09 pos-04-09 dir-left (0)
 push-to-nongoal player-01 stone-03 pos-04-09 pos-04-08 pos-04-07 dir-up (1)
-push-to-nongoal player-01 stone-03 pos-04-08 pos-04-07 pos-04-06 dir-up (1)
-move player-01 pos-04-07 pos-05-07 dir-right (0)
+move player-01 pos-04-08 pos-05-08 dir-right (0)
+move player-01 pos-05-08 pos-05-07 dir-up (0)
 move player-01 pos-05-07 pos-05-06 dir-up (0)
 move player-01 pos-05-06 pos-05-05 dir-up (0)
-push-to-goal player-01 stone-02 pos-05-05 pos-04-05 pos-03-05 dir-left (1)
+move player-01 pos-05-05 pos-05-04 dir-up (0)
+push-to-goal player-01 stone-02 pos-05-04 pos-04-04 pos-03-04 dir-left (1)
+move player-01 pos-04-04 pos-05-04 dir-right (0)
+move player-01 pos-05-04 pos-05-05 dir-down (0)
+move player-01 pos-05-05 pos-05-06 dir-down (0)
+move player-01 pos-05-06 pos-05-07 dir-down (0)
+move player-01 pos-05-07 pos-05-08 dir-down (0)
+move player-01 pos-05-08 pos-04-08 dir-left (0)
+push-to-nongoal player-01 stone-03 pos-04-08 pos-04-07 pos-04-06 dir-up (1)
+push-to-nongoal player-01 stone-03 pos-04-07 pos-04-06 pos-04-05 dir-up (1)
+move player-01 pos-04-06 pos-05-06 dir-right (0)
+move player-01 pos-05-06 pos-05-05 dir-up (0)
+push-to-goal player-01 stone-03 pos-05-05 pos-04-05 pos-03-05 dir-left (1)
 move player-01 pos-04-05 pos-04-04 dir-up (0)
 move player-01 pos-04-04 pos-04-03 dir-up (0)
 move player-01 pos-04-03 pos-04-02 dir-up (0)
@@ -233,31 +227,30 @@ push-to-nongoal player-01 stone-01 pos-06-08 pos-05-08 pos-04-08 dir-left (1)
 move player-01 pos-05-08 pos-05-09 dir-down (0)
 move player-01 pos-05-09 pos-04-09 dir-left (0)
 push-to-nongoal player-01 stone-01 pos-04-09 pos-04-08 pos-04-07 dir-up (1)
-move player-01 pos-04-08 pos-05-08 dir-right (0)
-move player-01 pos-05-08 pos-05-07 dir-up (0)
-push-to-goal player-01 stone-01 pos-05-07 pos-04-07 pos-03-07 dir-left (1)
-push-to-nongoal player-01 stone-03 pos-04-07 pos-04-06 pos-04-05 dir-up (1)
-push-to-nongoal player-01 stone-03 pos-04-06 pos-04-05 pos-04-04 dir-up (1)
-move player-01 pos-04-05 pos-05-05 dir-right (0)
-move player-01 pos-05-05 pos-05-04 dir-up (0)
-push-to-goal player-01 stone-03 pos-05-04 pos-04-04 pos-03-04 dir-left (1)
-[t=1.35123s, 13428 KB] Plan length: 106 step(s).
-[t=1.35123s, 13428 KB] Plan cost: 33
-[t=1.35123s, 13428 KB] Timestamp: 1699680118908 millisecond(s).
-[t=1.35123s, 13428 KB] Expanded 9293 state(s).
-[t=1.35123s, 13428 KB] Reopened 0 state(s).
-[t=1.35123s, 13428 KB] Evaluated 13031 state(s).
-[t=1.35123s, 13428 KB] Evaluations: 13031
-[t=1.35123s, 13428 KB] Generated 26643 state(s).
-[t=1.35123s, 13428 KB] Dead ends: 1908 state(s).
-[t=1.35123s, 13428 KB] Number of registered states: 13031
-[t=1.35123s, 13428 KB] Int hash set load factor: 13031/16384 = 0.795349
-[t=1.35123s, 13428 KB] Int hash set resizes: 14
-[t=1.35123s, 13428 KB] Search time: 1.33978s
-[t=1.35123s, 13428 KB] Total time: 1.35123s
+push-to-nongoal player-01 stone-01 pos-04-08 pos-04-07 pos-04-06 dir-up (1)
+push-to-nongoal player-01 stone-01 pos-04-07 pos-04-06 pos-04-05 dir-up (1)
+push-to-nongoal player-01 stone-01 pos-04-06 pos-04-05 pos-04-04 dir-up (1)
+push-to-nongoal player-01 stone-01 pos-04-05 pos-04-04 pos-04-03 dir-up (1)
+move player-01 pos-04-04 pos-05-04 dir-right (0)
+move player-01 pos-05-04 pos-05-03 dir-up (0)
+push-to-goal player-01 stone-01 pos-05-03 pos-04-03 pos-03-03 dir-left (1)
+[t=1.25587s, 15212 KB] Plan length: 105 step(s).
+[t=1.25587s, 15212 KB] Plan cost: 31
+[t=1.25587s, 15212 KB] Timestamp: 1699715855172 millisecond(s).
+[t=1.25587s, 15212 KB] Expanded 34463 state(s).
+[t=1.25587s, 15212 KB] Reopened 0 state(s).
+[t=1.25587s, 15212 KB] Evaluated 41240 state(s).
+[t=1.25587s, 15212 KB] Evaluations: 41240
+[t=1.25587s, 15212 KB] Generated 97959 state(s).
+[t=1.25587s, 15212 KB] Dead ends: 6647 state(s).
+[t=1.25587s, 15212 KB] Number of registered states: 41240
+[t=1.25587s, 15212 KB] Int hash set load factor: 41240/65536 = 0.629272
+[t=1.25587s, 15212 KB] Int hash set resizes: 16
+[t=1.25587s, 15212 KB] Search time: 1.24557s
+[t=1.25587s, 15212 KB] Total time: 1.25587s
 Solution found.
-Peak memory: 13428 KB
+Peak memory: 15212 KB
 Remove intermediate file output.sas
 search exit code: 0
 
-INFO     Planner time: 1.60s
+INFO     Planner time: 1.52s
