@@ -294,12 +294,12 @@ fast_downward_plugin(
 #         open_lists/partition_lwm_open_list
 # )
 
-# fast_downward_plugin(
-#     NAME PARTITION_BIAS_DEPTH_BIAS_H_OPEN_LIST
-#     HELP "Partition biased depth and h open list"
-#     SOURCES
-#         open_lists/partition_bias_depth_bias_h
-# )
+fast_downward_plugin(
+    NAME PARTITION_BIAS_DEPTH_BIAS_H_OPEN_LIST
+    HELP "Partition biased depth and h open list"
+    SOURCES
+        open_lists/partition_bias_depth_bias_h
+)
 
 fast_downward_plugin(
     NAME ALTERNATION_OPEN_LIST

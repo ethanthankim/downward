@@ -35,8 +35,8 @@ class InterBiasedDepthPolicy : public PartitionPolicy {
     int cached_parent_part = -1;
     int cached_parent_depth = -1;
 
-    // int total_gets=0;
-    // std::vector<int> counts = {0,0,0,0,0,0,0,0,0,0};
+    int total_gets=0;
+    std::vector<int> counts = {0,0,0,0,0,0,0,0,0,0};
 
     double tau;
     // double tau_limit;

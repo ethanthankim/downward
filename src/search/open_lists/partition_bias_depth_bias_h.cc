@@ -38,12 +38,19 @@ class PartitionBiasDepthBiasHOpenList : public OpenList<Entry> {
 
         void insert(int h, Entry entry, double tau, bool ignore_size, bool ignore_weights) {
             
-            if (!ignore_size) {
-                if (ignore_weights) {
-                    current_sum += 1;
-                } else {
-                    current_sum += std::exp(-1.0 * static_cast<double>(h) / tau);
+            if (ignore_size) {
+                if (buckets.find(h) == buckets.end()) {
+                    if (ignore_weights)
+                        current_sum += 1;
+                    else
+                        current_sum += std::exp(-1.0 * static_cast<double>(h) / tau);
                 }
+            } else {
+                if (ignore_weights)
+                    current_sum += 1;
+                else
+                    current_sum += std::exp(-1.0 * static_cast<double>(h) / tau);
+
             }
 
             buckets[h].push_back(entry);
@@ -97,7 +104,7 @@ class PartitionBiasDepthBiasHOpenList : public OpenList<Entry> {
         int depth;
         int index;
         PartitionLoc(int depth, int index)
-            : order_value(depth), index(index) {
+            : depth(depth), index(index) {
         }
         PartitionLoc() : depth(0), index(0) {}
         inline void set_index(int new_index) {
@@ -109,8 +116,9 @@ class PartitionBiasDepthBiasHOpenList : public OpenList<Entry> {
         int id;
         int part_key;
         int h;
-        StateInfo(int id, int part_key, int h) : part_key(part_key), h(h) {}
-        StateInfo() : id(id), part_key(0), h(0) {}
+        int part_depth;
+        StateInfo(int id, int part_key, int h, int part_depth) : id(id), part_key(part_key), h(h), part_depth(part_depth) {}
+        StateInfo() : id(-1), part_key(0), h(0) {}
     };
     PerStateInformation<StateInfo> state_to_info;
 
@@ -128,14 +136,14 @@ class PartitionBiasDepthBiasHOpenList : public OpenList<Entry> {
     int type_counter;
     int next_id;
 
-    int last_removed_from = -1;
-    int last_depth = -1;
+
+    // // std::vector<int> counts = {0,0,0,0,0,0,0,0,0,0};
+    // int first_count = 0;
+    // int second_count = 0;
+    // int third_count = 0;
 
 protected:
-    // virtual inline int get_hi_type(int new_h);
-    virtual inline BiasedPartition& get_partition_to_insert_into(int new_h);
-    virtual inline int add_partition(PartitionLoc& partition_loc, int part_id);
-    virtual inline StateInfo add_and_get_node_info(EvaluationContext &eval_context);
+    // void verify_heap();
     virtual void do_insertion(
         EvaluationContext &eval_context, const Entry &entry) override;
 
@@ -157,10 +165,42 @@ public:
 
 };
 
+// template<class Entry>
+// void PartitionBiasDepthBiasHOpenList<Entry>::verify_heap() {
+
+//     bool valid = true;
+//     for (auto &b : partitions) {
+//         int depth = b.first;
+//         int i = 0;
+//         for (auto &p: b.second) {
+//             PartitionLoc &p_loc = partition_locs.at(p.partition_id);
+//             if (p_loc.depth != depth) {
+//                 valid = false;
+//             }
+//             if (p_loc.index != i) {
+//                 valid = false;
+//             }
+//             if (p.empty()) {
+//                 valid = false;
+//             }
+//             if (p.current_sum < 0) {
+//                 valid = false;
+//             }
+
+//             if (!valid) {
+//                 cout << "Ahhh the heap isn't valid..." << endl; 
+//                 exit(1);
+//             }
+//             i+=1;
+//         }
+//     }
+
+// }
+
 template<class Entry>
 void PartitionBiasDepthBiasHOpenList<Entry>::notify_initial_state(const State &initial_state) {
     // cached_next_state_id = initial_state.get_id();
-    curr_expanding_state_info = StateInfo(-1, numeric_limits<int>::max(), -1);
+    curr_expanding_state_info = StateInfo(-1, -1, numeric_limits<int>::max(), -1);
     curr_expand_type_loc = PartitionLoc(-1, -1);
 }
 
@@ -176,81 +216,38 @@ void PartitionBiasDepthBiasHOpenList<Entry>::notify_state_transition(const State
     }
 }
 
-// template<class Entry>
-// inline int PartitionBiasDepthBiasHOpenList<Entry>::get_hi_type(int new_h) {
-
-//     if (new_h < parent_node_info.h)
-//         return type_counter++;
-//     else 
-//         return parent_node_info.type;
-// }
-
-template<class Entry>
-inline PartitionBiasDepthBiasHOpenList<Entry>::BiasedPartition& 
-PartitionBiasDepthBiasHOpenList<Entry>::get_partition_to_insert_into(int part_id) {
-
-    PartitionLoc part_loc;
-    if (partition_locs.find(part_id) == partition_locs.end()) {
-        part_loc = PartitionLoc(parent_type.order_value+1, 0); // +1 is for depth
-        part_loc.index = add_partition(part_loc, part_id);
-        partition_locs.emplace(part_id, part_loc);
-    } else {
-        part_loc = partition_locs.at(part_id);
-    }
-
-    return partitions.at(part_loc.order_value)[part_loc.index]; 
-}
-
-template<class Entry>
-inline int PartitionBiasDepthBiasHOpenList<Entry>::add_partition(PartitionLoc& part_loc, int part_id) {
-    if (partitions.find(part_loc.order_value) == partitions.end()) {
-        vector<BiasedPartition> fuck_cpp = {BiasedPartition(part_id)};
-        partitions.emplace(part_loc.order_value, fuck_cpp);
-        current_sum += std::exp(static_cast<double>(part_loc.order_value) / inter_tau);
-    } else {
-        partitions.at(part_loc.order_value).push_back(BiasedPartition(part_id));
-    }
-    return partitions.at(part_loc.order_value).size()-1;
-}
-
-template<class Entry>
-inline PartitionBiasDepthBiasHOpenList<Entry>::StateInfo
-PartitionBiasDepthBiasHOpenList<Entry>::add_and_get_node_info(EvaluationContext &eval_context) {
-    int h = eval_context.get_evaluator_value_or_infinity(this->evaluator.get());
-    StateInfo new_node(get_hi_type(h), min(h, parent_node_info.h));
-    node_infos[eval_context.get_state()] = new_node;
-    return new_node;
-}
-
 template<class Entry>
 void PartitionBiasDepthBiasHOpenList<Entry>::do_insertion(
     EvaluationContext &eval_context, const Entry &entry) {
     
     int new_h = eval_context.get_evaluator_value_or_infinity(this->evaluator.get());
+    int new_depth;
     int partition_key;
-    PartitionLoc partition_loc;
     if ( (new_h < curr_expanding_state_info.h) ) {
         if (first_success_in_succ) {
             partition_key = type_counter++;
             first_success_in_succ = false;
-
-            int new_depth = curr_expand_type_loc.depth+1;
-            partition_loc = PartitionLoc(new_depth, partitions[new_depth].size()); // will auto add vector if empty
-            partitions.at(partition_loc.depth).push_back(BiasedPartition(partition_key, 0));
-            partition_locs.emplace(partition_key, partition_loc);
+            new_depth = curr_expanding_state_info.part_depth+1;
+            current_sum += std::exp(-1.0 * static_cast<double>(new_depth) / inter_tau);
         } else {
             partition_key = type_counter-1; // type_counter must have been incremented once.
-            partition_loc = partition_locs.at(partition_key);
+            new_depth = curr_expanding_state_info.part_depth+1;
         } 
     } else {
-        partition_loc = curr_expand_type_loc;
         partition_key = curr_expanding_state_info.part_key;
+        new_depth = curr_expanding_state_info.part_depth;
     }
+
+    if (partition_locs.find(partition_key) == partition_locs.end()) { // add empty and removed partition back (can happen with path dependent systems)
+        partitions[new_depth].push_back(BiasedPartition(partition_key));
+        partition_locs.emplace(partition_key, PartitionLoc(new_depth, partitions[new_depth].size()-1));
+    }
+    PartitionLoc partition_loc = partition_locs[partition_key];
 
     BiasedPartition &b_part = partitions.at(partition_loc.depth)[partition_loc.index];
     b_part.insert(new_h, entry, intra_tau, intra_ignore_size, intra_ignore_weights);
 
-    state_to_info[eval_context.get_state()] = StateInfo(next_id++, partition_key, new_h);
+    state_to_info[eval_context.get_state()] = StateInfo(next_id++, partition_key, new_h, new_depth);
 }
 
 template<class Entry>
@@ -273,6 +270,11 @@ Entry PartitionBiasDepthBiasHOpenList<Entry>::remove_min() {
     //     }
     // }
 
+    // if (next_id % 100 == 0) {
+    //     cout << "verify" << endl;
+    //     verify_heap();
+    // }
+
     int selected_depth = partitions.begin()->first;
     if (partitions.size() > 1) {
         double r = rng->random();
@@ -281,7 +283,9 @@ Entry PartitionBiasDepthBiasHOpenList<Entry>::remove_min() {
         double p_sum = 0.0;
         for (auto it : partitions) {
             double p = 1.0 / total_sum;
-            p *= std::exp(static_cast<double>(it.first) / inter_tau);
+            p *= std::exp(-1.0 * static_cast<double>(it.first) / inter_tau);
+            p *= static_cast<double>(it.second.size());
+            // cout << p <<endl;
             p_sum += p;
             if (r <= p_sum) {
                 selected_depth = it.first;
@@ -289,6 +293,21 @@ Entry PartitionBiasDepthBiasHOpenList<Entry>::remove_min() {
             }
         }
     }
+
+    // int i=0;
+    // for (auto it : partitions) {
+    //     if (selected_depth == it.first) {
+    //         if (i==0) first_count +=1;
+    //         if (i==1) first_count +=1;
+    //         if (i==2) first_count +=1;
+    //     } 
+    //     i+=1;
+    // }
+
+    // if (next_id % 200 == 0) {
+    //     cout << first_count << " : " << second_count << " : " << third_count << endl;
+    // }
+
 
     vector<BiasedPartition> &h_partitions = partitions[selected_depth];
     assert(!h_partitions.empty());
@@ -298,13 +317,15 @@ Entry PartitionBiasDepthBiasHOpenList<Entry>::remove_min() {
     Entry result = partition.remove_min(intra_tau, intra_ignore_size, intra_ignore_weights, rng);
 
     if (partition.empty()) {
+        int temp = h_partitions.back().partition_id;
+        partition_locs[temp].index = part_i;
         partition_locs.erase(partition.partition_id);
         utils::swap_and_pop_from_vector(h_partitions, part_i);
         if (h_partitions.empty()) {
             partitions.erase(selected_depth);
         }
+        current_sum -= std::exp(-1.0 * static_cast<double>(selected_depth) / inter_tau);
     }
-    current_sum -= std::exp(static_cast<double>(selected_depth) / inter_tau);
 
     return result;
 
