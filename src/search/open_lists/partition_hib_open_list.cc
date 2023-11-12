@@ -121,7 +121,7 @@ void PartitionHIBOpenList<Entry>::do_insertion(
 template<class Entry>
 Entry PartitionHIBOpenList<Entry>::remove_min() {
 
-    if (last_removed != -1) { // idk if this matters anymore, but too lazy to change
+    if (last_removed != -1) {
         this->partition_selector->notify_removal(this->partitioned_nodes.at(last_removed).first.partition, last_removed);
         this->partitioned_nodes.erase(last_removed);
     }

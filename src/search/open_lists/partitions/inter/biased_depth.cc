@@ -132,6 +132,7 @@ void InterBiasedDepthPolicy::notify_insert(
         h_buckets.at(partition_ids.first)[partition_ids.second].inc_size();
     }
 
+
 }
 
 InterBiasedDepthPolicy::PartitionNode InterBiasedDepthPolicy::remove_partition(int partition_key) {
