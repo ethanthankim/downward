@@ -60,7 +60,7 @@ def main():
     FF_RANDOM_SEED = int(datetime.now().timestamp())
     CONFIGS = [
                
-        IssueConfig('HIB-alt|bias/bias', ["--evaluator", f"h={unit_ff}", '--search', f'eager(alt( [ single(h), hib_partition(h, inter_uniform(random_seed={FF_RANDOM_SEED}), intra_biased(tau=1, ignore_size=true, random_seed={FF_RANDOM_SEED})) ] ), {unit_cost}) '] , driver_options=DRIVER_OPTIONS),
+        IssueConfig('LWMB-alt|minh/uni', ["--evaluator", f"h={unit_ff}", '--search', f'eager(alt( [ single(h), lwmb_partition(h, inter_biased_minh(random_seed={FF_RANDOM_SEED}), intra_uniform(random_seed={FF_RANDOM_SEED})) ] ), {unit_cost}) '] , driver_options=DRIVER_OPTIONS),
         # IssueConfig('LWMB-alt|uni/uni', ["--evaluator", f"h={unit_ff}", '--search', f'eager(alt( [ single(h), lwmb_partition(h, inter_uniform(random_seed={FF_RANDOM_SEED}), intra_uniform(random_seed={FF_RANDOM_SEED})) ] ), {unit_cost}) '] , driver_options=DRIVER_OPTIONS),
 
     ]
