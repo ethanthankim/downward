@@ -14,7 +14,7 @@ public:
         document_synopsis("");
 
         add_option<shared_ptr<Evaluator>>("eval", "evaluator");
-        add_option<double>("c", "exploration paramter");
+        add_option<double>("c", "exploration paramter", "1.414");
         mc_search::add_options_to_feature(*this);
         utils::add_rng_options(*this); 
     }

@@ -4,6 +4,7 @@
 #include "../evaluator.h"
 #include "../open_list_factory.h"
 #include "../pruning_method.h"
+#include "../task_utils/task_properties.h"
 
 #include "../algorithms/ordered_set.h"
 #include "../plugins/options.h"
@@ -35,12 +36,11 @@ void MonteCarloSearch::print_statistics() const {
 int MonteCarloSearch::selection() {
 
     int current_id = root_id;
-    auto &current = monte_carlo_tree.at(current_id);
 
     // selection should incorporate some bias using h
-    while(!current.is_leaf) {
-        current_id = current.max_uct_child(monte_carlo_tree, explore_param);
-        current = monte_carlo_tree.at(current_id); // this should be an f(n) = uct(n) + wh(n) sort of thing where w is a parameter to weight heurisitc (careful to prioroitize LOWER h)
+    while(monte_carlo_tree.at(current_id).is_fully_expanded) {
+        current_id = monte_carlo_tree.at(current_id)
+                        .max_uct_child(monte_carlo_tree, explore_param);
     }
 
     return current_id;
@@ -50,8 +50,10 @@ int MonteCarloSearch::selection() {
 SearchStatus MonteCarloSearch::expansion(int selected_id) {
 
     int to_expand_id = selected_id;
+    MCTS_node &expanded = monte_carlo_tree.at(to_expand_id);
     State parent_s = state_registry.lookup_state(monte_carlo_tree.at(to_expand_id).state);
     SearchNode node = search_space.get_node(parent_s);
+    node.close();
     // const State &s = node.get_state();
     
     if (check_goal_and_set_plan(parent_s))
@@ -61,7 +63,7 @@ SearchStatus MonteCarloSearch::expansion(int selected_id) {
     int parent_g = node.get_g();
     EvaluationContext parent_eval_context(
         parent_s, parent_g, false, &statistics);
-    monte_carlo_tree.at(selected_id).eval = parent_eval_context.get_evaluator_value(evaluator.get());
+    expanded.eval = parent_eval_context.get_evaluator_value(evaluator.get());
 
     // get successors of to_expand state
     vector<OperatorID> applicable_ops;
@@ -87,12 +89,13 @@ SearchStatus MonteCarloSearch::expansion(int selected_id) {
             
             succ_node.open(node, op, get_adjusted_cost(op));
             
-            monte_carlo_tree.at(selected_id).children_ids.push_back(next_id);
+            expanded.children_ids.push_back(next_id);
             monte_carlo_tree.emplace( next_id,
                 MCTS_node(
                     next_id,
                     selected_id,
-                    true,
+                    false,
+                    0,
                     0,
                     0,
                     succ_state.get_id(),
@@ -102,82 +105,73 @@ SearchStatus MonteCarloSearch::expansion(int selected_id) {
             next_id+=1;
             
         } else if (succ_node.get_g() > node.get_g() + get_adjusted_cost(op)) {
-            // We found a new cheapest path to an open or closed state.
-            // if (reopen_closed_nodes) {
-            //     if (succ_node.is_closed()) {
-            //         /*
-            //           TODO: It would be nice if we had a way to test
-            //           that reopening is expected behaviour, i.e., exit
-            //           with an error when this is something where
-            //           reopening should not occur (e.g. A* with a
-            //           consistent heuristic).
-            //         */
-            //         statistics.inc_reopened();
-            //     }
-            //     succ_node.reopen(*node, op, get_adjusted_cost(op));
+            // We found a new cheapest path to an open or closed state
 
-            //     EvaluationContext succ_eval_context(
-            //         succ_state, succ_node.get_g(), is_preferred, &statistics);
-
-            //     /*
-            //       Note: our old code used to retrieve the h value from
-            //       the search node here. Our new code recomputes it as
-            //       necessary, thus avoiding the incredible ugliness of
-            //       the old "set_evaluator_value" approach, which also
-            //       did not generalize properly to settings with more
-            //       than one evaluator.
-
-            //       Reopening should not happen all that frequently, so
-            //       the performance impact of this is hopefully not that
-            //       large. In the medium term, we want the evaluators to
-            //       remember evaluator values for states themselves if
-            //       desired by the user, so that such recomputations
-            //       will just involve a look-up by the Evaluator object
-            //       rather than a recomputation of the evaluator value
-            //       from scratch.
-            //     */
-            //     open_list->insert(succ_eval_context, succ_state.get_id());
-            // } else {
-                // If we do not reopen closed nodes, we just update the parent pointers.
-                // Note that this could cause an incompatibility between
-                // the g-value and the actual path that is traced back.
-                succ_node.update_parent(node, op, get_adjusted_cost(op));
-            // }
+            int mct_tree_id = mct_id[succ_node.get_state()];
+            MCTS_node &mc_node = monte_carlo_tree.at(mct_tree_id);
+            mc_node.parent_id = selected_id;
+            succ_node.update_parent(node, op, get_adjusted_cost(op));
         }
     }
 
-    monte_carlo_tree.at(selected_id).is_leaf = false;
+    if (expanded.next_child_i >= expanded.children_ids.size())
+        expanded.is_fully_expanded = true;
+
     return IN_PROGRESS;
 }
 
 RolloutScores MonteCarloSearch::rollout(int expanded_id, int curr_id) {
 
     MCTS_node &expanded = monte_carlo_tree.at(expanded_id);
+    cout << expanded.eval << endl;
     MCTS_node &curr = monte_carlo_tree.at(curr_id);
     OperatorID curr_op_id = curr.gen_op_id;
     State last_s = state_registry.lookup_state(expanded.state);
     OperatorProxy curr_op = task_proxy.get_operators()[curr_op_id];
     State curr_s = state_registry.lookup_state(curr.state);
+    
+    vector<MC_RolloutAction> rollout_stack = {};
 
     int g_budget = expanded.eval;
-    int last_eval = expanded.eval;
     int curr_eval;
     do {   
 
-        if (check_goal_and_set_plan(curr_s)) {
-            // this is gonna be anytime algo, so solving should just be a win
-            return SOLVE;
-        }
-
         SearchNode node = search_space.get_node(curr_s);
         int edge_cost = get_adjusted_cost(curr_op);
-        int curr_g = node.get_g() + edge_cost;
+        // int curr_g = node.get_g() + edge_cost;
         EvaluationContext curr_eval_context(
-            curr_s, curr_g, false, &statistics);
+            curr_s, 0, false, &statistics);
+        rollout_stack.push_back(MC_RolloutAction(edge_cost, curr_op_id, curr_s.get_id()));
+
+        if (task_properties::is_goal_state(task_proxy, curr_s)) {
+            // this is gonna be anytime algo, so solving should just be a win
+            vector<MC_RolloutAction>::iterator parent = rollout_stack.begin(); 
+            vector<MC_RolloutAction>::iterator curr = rollout_stack.begin();
+
+            for (curr = curr+1; curr != rollout_stack.end(); curr++) {
+                State parent_s = state_registry.lookup_state(parent->gen_state_id);
+                SearchNode p_node = search_space.get_node(parent_s);
+
+                State path_s = state_registry.lookup_state(curr->gen_state_id);
+                SearchNode c_node = search_space.get_node(path_s);
+                OperatorProxy curr_op = task_proxy.get_operators()[curr->gen_op_id];
+                c_node.open(p_node, curr_op, curr->edge_cost);
+                parent = curr;
+
+            }
+
+            log << "Solution found!" << endl;
+            Plan plan;
+            search_space.trace_path(curr_s, plan);
+            set_plan(plan);
+
+            return SOLVE;
+        }
+        
         evaluator->notify_state_transition(last_s, curr_op_id, curr_s);
         curr_eval = curr_eval_context.get_evaluator_value(evaluator.get());
 
-        if (curr_eval < last_eval) { // this is a design choice--define "progress" or "win"
+        if (curr_eval < expanded.eval) { // this is a design choice--define "progress" or "win"
             // return early -- set win, immediate success
 
             // potentail optimization: 
@@ -194,10 +188,9 @@ RolloutScores MonteCarloSearch::rollout(int expanded_id, int curr_id) {
         }
 
         curr_op_id = *(rng->choose(applicable_ops));
-        OperatorProxy op = task_proxy.get_operators()[curr_op_id];
+        curr_op = task_proxy.get_operators()[curr_op_id];
         last_s = curr_s;
-        curr_s = state_registry.get_successor_state(last_s, op);
-        last_eval = curr_eval;
+        curr_s = state_registry.get_successor_state(last_s, curr_op);
 
         // only decrease this for brand new states
         //  never seen in a rollout either
@@ -211,31 +204,35 @@ RolloutScores MonteCarloSearch::rollout(int expanded_id, int curr_id) {
 void MonteCarloSearch::backpropogation(int to_back_prop_id, int score) {
     MCTS_node &to_back_prop = monte_carlo_tree.at(to_back_prop_id);
 
-    to_back_prop.is_leaf = true; 
-    to_back_prop.num_sims = 1;
-    to_back_prop.num_wins = score;
+    int sim_count = 1; // if the score is bigger than 1 (the problem was solved), count it as two victories
+    int outcome = score > 0 ? 1 : 0;
+    to_back_prop.num_sims = sim_count;
+    to_back_prop.num_wins = outcome;
 
     int parent_id = to_back_prop.parent_id;
     while (parent_id != -1) { // initial state's parent is -1
         MCTS_node &node = monte_carlo_tree.at(parent_id);
-        node.num_sims+=1;
-        node.num_wins+=score;
+        node.num_sims+=sim_count;
+        node.num_wins+=outcome;
         parent_id = node.parent_id;
     }
 }
 
 SearchStatus MonteCarloSearch::step() {
     
-
     int select_id = selection();
     if (expansion(select_id) == SOLVED) {
         return SOLVED;
     }
 
     MCTS_node &selected = monte_carlo_tree.at(select_id);
-    int rollout_id = selected.children_ids[rng->random(selected.children_ids.size())];
-    int outcome = rollout(select_id, rollout_id);
-    backpropogation(rollout_id, outcome > 0 ? 1 : 0);
+    int rollout_id = selected.children_ids[selected.next_child_i++];
+    int score = rollout(select_id, rollout_id);
+    if (score == SOLVE) {
+        return SOLVED;
+    }
+    backpropogation(rollout_id, score);
+    
     return IN_PROGRESS;
 }
 
@@ -273,7 +270,8 @@ void MonteCarloSearch::initialize() {
             MCTS_node(
                 next_id,
                 -1,
-                true,
+                false,
+                0,
                 0,
                 0,
                 initial_state.get_id(),

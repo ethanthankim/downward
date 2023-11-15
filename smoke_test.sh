@@ -1,5 +1,5 @@
-H="hff=ff(transform=adapt_costs(cost_type=one))"
-# H="hff=ff()"
+H="h=ff(transform=adapt_costs(cost_type=one))"
+# H="h=ff()"
 FOLDER="smoke_test"
 COST="one"
 # COST="normal"

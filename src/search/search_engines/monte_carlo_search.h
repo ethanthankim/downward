@@ -25,13 +25,22 @@ class MonteCarloSearch : public SearchEngine {
     std::shared_ptr<utils::RandomNumberGenerator> rng;
     double explore_param;
 
+    struct MC_RolloutAction {
+        int edge_cost;
+        OperatorID gen_op_id;
+        StateID gen_state_id;
+        MC_RolloutAction(int edge_cost, OperatorID gen_op_id, StateID gen_state_id) :
+            edge_cost(edge_cost), gen_op_id(gen_op_id), gen_state_id(gen_state_id) {}
+    };
     struct MCTS_node {
         int node_id;
         int parent_id;
-        bool is_leaf;
+        bool is_fully_expanded;
+        int next_child_i;
         int num_sims;
         int num_wins;
         int eval;
+        int g;
         StateID state;
         OperatorID gen_op_id;
         std::vector<int> children_ids;
@@ -39,13 +48,14 @@ class MonteCarloSearch : public SearchEngine {
         MCTS_node(
             int node_id,
             int parent_id,
-            bool is_leaf,
+            bool is_fully_expanded,
+            int next_child_i,
             int num_sims,
             int num_wins,
             StateID state,
             OperatorID gen_op_id
-        ) : node_id(node_id), parent_id(parent_id), is_leaf(is_leaf), num_sims(num_sims), num_wins(num_wins), 
-             state(state), gen_op_id(gen_op_id) {}
+        ) : node_id(node_id), parent_id(parent_id), is_fully_expanded(is_fully_expanded), next_child_i(next_child_i), 
+            num_sims(num_sims), num_wins(num_wins), state(state), gen_op_id(gen_op_id) {}
 
         inline double uct(const double ex_param) const {
             if (num_sims == 0) return std::numeric_limits<double>::max();
