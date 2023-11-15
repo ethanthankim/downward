@@ -143,10 +143,18 @@ int InterBiasedMinHPolicy::get_next_partition() {
             }
             // count_i+=1;
         }
+        // cout << p_sum << endl;
     }
 
-    // if (count_i < counts.size()) {
-    //     counts[count_i] += 1;
+    // h_counts[selected_h]+=1;
+    // if (total_gets % 200 == 0) {
+    //     cout << "h_counts:"<<endl;
+    //     for (auto it = h_counts.begin(); it != h_counts.end(); it++) {
+    //         if (it->second != 0) {
+    //             cout << it->first << " : " << it->second <<endl;
+    //         }
+    //     }
+    //     cout << "\n";
     // }
 
     // if (total_gets % 100 == 0) {

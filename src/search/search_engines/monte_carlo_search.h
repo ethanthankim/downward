@@ -15,7 +15,7 @@ namespace plugins {
 class Feature;
 }
 
-enum RolloutScores {LOSE, WIN, SOLVE};
+enum RolloutScores {LOSE = -1, TIE, WIN, SOLVE};
 
 namespace mc_search {
 class MonteCarloSearch : public SearchEngine {
@@ -31,6 +31,22 @@ class MonteCarloSearch : public SearchEngine {
         StateID gen_state_id;
         MC_RolloutAction(int edge_cost, OperatorID gen_op_id, StateID gen_state_id) :
             edge_cost(edge_cost), gen_op_id(gen_op_id), gen_state_id(gen_state_id) {}
+    };
+    struct MCTS_State {
+        bool is_fully_expanded;
+        int next_child_i;
+        int num_sims;
+        int num_wins;
+        std::vector<int> children_ids;
+        MCTS_State(
+            bool is_fully_expanded,
+            int next_child_i,
+            int num_sims,
+            int num_wins
+        ) : is_fully_expanded(is_fully_expanded), next_child_i(next_child_i), 
+            num_sims(num_sims), num_wins(num_wins) {}
+        MCTS_State() : is_fully_expanded(false), next_child_i(0), num_sims(0),
+            num_wins(0), children_ids() {}
     };
     struct MCTS_node {
         int node_id;
@@ -77,6 +93,7 @@ class MonteCarloSearch : public SearchEngine {
             return max_id;
         };
     };
+    PerStateInformation<MCTS_State> mc_tree_data;
     PerStateInformation<int> mct_id;  // change int to pointer later
     utils::HashMap<int, MCTS_node> monte_carlo_tree; // and make this a pointer tree
     int root_id = 0;

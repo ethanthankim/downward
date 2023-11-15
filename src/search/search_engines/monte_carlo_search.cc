@@ -53,7 +53,7 @@ SearchStatus MonteCarloSearch::expansion(int selected_id) {
     MCTS_node &expanded = monte_carlo_tree.at(to_expand_id);
     State parent_s = state_registry.lookup_state(monte_carlo_tree.at(to_expand_id).state);
     SearchNode node = search_space.get_node(parent_s);
-    node.close();
+    // node.close();    // nodes should only be cosed when pruned toward optimal
     // const State &s = node.get_state();
     
     if (check_goal_and_set_plan(parent_s))
@@ -110,11 +110,13 @@ SearchStatus MonteCarloSearch::expansion(int selected_id) {
             int mct_tree_id = mct_id[succ_node.get_state()];
             MCTS_node &mc_node = monte_carlo_tree.at(mct_tree_id);
             mc_node.parent_id = selected_id;
+
             succ_node.update_parent(node, op, get_adjusted_cost(op));
+            
         }
     }
 
-    if (expanded.next_child_i >= expanded.children_ids.size())
+    if (expanded.next_child_i >= expanded.children_ids.size()-1)
         expanded.is_fully_expanded = true;
 
     return IN_PROGRESS;
@@ -123,12 +125,13 @@ SearchStatus MonteCarloSearch::expansion(int selected_id) {
 RolloutScores MonteCarloSearch::rollout(int expanded_id, int curr_id) {
 
     MCTS_node &expanded = monte_carlo_tree.at(expanded_id);
-    cout << expanded.eval << endl;
+    // cout << expanded.eval << endl;
     MCTS_node &curr = monte_carlo_tree.at(curr_id);
     OperatorID curr_op_id = curr.gen_op_id;
     State last_s = state_registry.lookup_state(expanded.state);
     OperatorProxy curr_op = task_proxy.get_operators()[curr_op_id];
     State curr_s = state_registry.lookup_state(curr.state);
+    StateID last_id(curr_s.get_id());
     
     vector<MC_RolloutAction> rollout_stack = {};
 
@@ -169,7 +172,7 @@ RolloutScores MonteCarloSearch::rollout(int expanded_id, int curr_id) {
         }
         
         evaluator->notify_state_transition(last_s, curr_op_id, curr_s);
-        curr_eval = curr_eval_context.get_evaluator_value(evaluator.get());
+        curr_eval = curr_eval_context.get_evaluator_value_or_infinity(evaluator.get());
 
         if (curr_eval < expanded.eval) { // this is a design choice--define "progress" or "win"
             // return early -- set win, immediate success
@@ -187,10 +190,19 @@ RolloutScores MonteCarloSearch::rollout(int expanded_id, int curr_id) {
             return LOSE;
         }
 
-        curr_op_id = *(rng->choose(applicable_ops));
-        curr_op = task_proxy.get_operators()[curr_op_id];
-        last_s = curr_s;
-        curr_s = state_registry.get_successor_state(last_s, curr_op);
+        State keep_curr = curr_s; 
+         // simple parent pruning. in future, use heuristic here to avoid 'invariants' (and pursue goals?)
+        for(auto it = applicable_ops.begin(); it != applicable_ops.end(); it++) {
+            curr_op_id = *it;
+            curr_op = task_proxy.get_operators()[curr_op_id];
+            curr_s = state_registry.get_successor_state(keep_curr, curr_op);
+        }
+        
+        if (curr_s == last_s) {
+             // also deadend--only path is back;
+            return LOSE;
+        }
+        last_s = keep_curr;
 
         // only decrease this for brand new states
         //  never seen in a rollout either

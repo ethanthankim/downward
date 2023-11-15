@@ -39,6 +39,7 @@ class InterBiasedMinHPolicy : public PartitionPolicy {
     double current_sum;
 
     // std::vector<int> counts = {0,0,0,0,0,0,0,0,0,0};
+    // std::map<int, int> h_counts;
     // int total_gets = 0;
 
 private:
