@@ -4,18 +4,16 @@
 #include "../evaluator.h"
 #include "../per_state_information.h"
 
-namespace hi_binary_evaluator {
-class HIBinEvaluator : public Evaluator {
+namespace lwm_evaluator {
+class LWMEvaluator : public Evaluator {
     std::shared_ptr<Evaluator> evaluator;
 
-    using Type = int;
-    using H = int;
-    PerStateInformation<std::pair<H, Type>> eval_cache;
-    std::pair<H, Type> parent_cache;
+    PerStateInformation<int> h_cache;
+    int parent_h;
 
 public:
-    explicit HIBinEvaluator(const plugins::Options &opts);
-    virtual ~HIBinEvaluator() override = default;
+    explicit LWMEvaluator(const plugins::Options &opts);
+    virtual ~LWMEvaluator() override = default;
 
     virtual EvaluationResult compute_result(
         EvaluationContext &eval_context) override;

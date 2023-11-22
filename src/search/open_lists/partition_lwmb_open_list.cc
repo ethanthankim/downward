@@ -18,7 +18,7 @@
 #include <unordered_map>
 #include <vector>
 
-
+#include <fstream>
 
 using namespace std;
 using namespace partition_open_list;

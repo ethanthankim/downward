@@ -517,13 +517,13 @@ fast_downward_plugin(
     DEPENDS EVALUATORS_SUBCATEGORY
 )
 
-fast_downward_plugin(
-    NAME RANDOM_RANGE_EVALUATOR
-    HELP "The random range evaluator"
-    SOURCES
-        evaluators/random_range_evaluator
-    DEPENDS EVALUATORS_SUBCATEGORY
-)
+# fast_downward_plugin(
+#     NAME RANDOM_RANGE_EVALUATOR
+#     HELP "The random range evaluator"
+#     SOURCES
+#         evaluators/random_range_evaluator
+#     DEPENDS EVALUATORS_SUBCATEGORY
+# )
 
 # fast_downward_plugin(
 #     NAME VELOCITY_EVALUATOR
@@ -538,6 +538,14 @@ fast_downward_plugin(
     HELP "The g-evaluator"
     SOURCES
         evaluators/g_evaluator
+    DEPENDS EVALUATORS_SUBCATEGORY
+)
+
+fast_downward_plugin(
+    NAME LWM_EVALUATOR
+    HELP "The lwm evaluator"
+    SOURCES
+        evaluators/lwm_evaluator
     DEPENDS EVALUATORS_SUBCATEGORY
 )
 
@@ -656,21 +664,38 @@ fast_downward_plugin(
     DEPENDENCY_ONLY
 )
 
+# fast_downward_plugin(
+#     NAME MONTE_CARLO_SEARCH
+#     HELP "Monte carlo search algorithm"
+#     SOURCES
+#         search_engines/monte_carlo_search
+#     DEPENDS NULL_PRUNING_METHOD ORDERED_SET SUCCESSOR_GENERATOR
+#     DEPENDENCY_ONLY
+# )
+
+# fast_downward_plugin(
+#     NAME PLUGIN_MONTE_CARLO
+#     HELP "monte carlo search"
+#     SOURCES
+#         search_engines/plugin_monte_carlo
+#     DEPENDS MONTE_CARLO_SEARCH SEARCH_COMMON
+# )
+
 fast_downward_plugin(
-    NAME MONTE_CARLO_SEARCH
-    HELP "Monte carlo search algorithm"
+    NAME NEW_SEARCH
+    HELP "new search algorithm"
     SOURCES
-        search_engines/monte_carlo_search
+        search_engines/new_search
     DEPENDS NULL_PRUNING_METHOD ORDERED_SET SUCCESSOR_GENERATOR
     DEPENDENCY_ONLY
 )
 
 fast_downward_plugin(
-    NAME PLUGIN_MONTE_CARLO
-    HELP "monte carlo search"
+    NAME PLUGIN_NEW_SEARCH
+    HELP "new search"
     SOURCES
-        search_engines/plugin_monte_carlo
-    DEPENDS MONTE_CARLO_SEARCH SEARCH_COMMON
+        search_engines/plugin_new_search
+    DEPENDS NEW_SEARCH SEARCH_COMMON
 )
 
 # fast_downward_plugin(
