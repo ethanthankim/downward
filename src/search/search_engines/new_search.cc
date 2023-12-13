@@ -29,17 +29,18 @@ NewSearch::NewSearch(const plugins::Options &opts)
       reopen_closed_nodes(opts.get<bool>("reopen_closed")),
       rng(utils::parse_rng_from_options(opts)),
       evaluator(opts.get<shared_ptr<Evaluator>>("eval")),
-      open_list(opts.get<shared_ptr<OpenListFactory>>("open")->
-                create_state_open_list()) {}
+      tau(opts.get<double>("tau")),
+      r_limit(opts.get<int>("r_limit")),
+      current_sum(0.0) {}
 
 void NewSearch::initialize() {
     log << "Conducting new search"
         << (reopen_closed_nodes ? " with" : " without")
         << " reopening closed nodes, (real) bound = " << bound
         << endl;
-    assert(open_list);
+    // assert(open_list);
 
-    set<Evaluator *> evals;
+    // set<Evaluator *> evals;
 
 
     /*
@@ -84,20 +85,18 @@ void NewSearch::initialize() {
       operator.
     */
     EvaluationContext eval_context(initial_state, 0, true, &statistics);
+    int init_eval = eval_context.get_evaluator_value_or_infinity(evaluator.get());
+    if (init_eval != numeric_limits<int>::max()) {
+        budget = 2*init_eval;
+        statistics.inc_evaluated_states();
 
-    statistics.inc_evaluated_states();
-
-    if (open_list->is_dead_end(eval_context)) {
-        log << "Initial state is a dead end." << endl;
-    } else {
         if (search_progress.check_progress(eval_context))
             statistics.print_checkpoint_line(0);
         start_f_value_statistics(eval_context);
         SearchNode node = search_space.get_node(initial_state);
         node.open_initial();
 
-        open_list->notify_initial_state(initial_state);
-        open_list->insert(eval_context, initial_state.get_id());
+        types[init_eval].push_back(initial_state.get_id());
     }
 
     print_initial_evaluator_values(eval_context);
@@ -138,7 +137,11 @@ OperatorID NewSearch::random_next_action(State s) {
     return curr_op_id;
 }
 
-SearchStatus NewSearch::iterated_rollout(State rollout_state) {
+SearchStatus NewSearch::iterated_rollout(State rollout_state, int limit) {
+
+    if (limit <= 0) {
+        return IN_PROGRESS;
+    }
 
     SearchNode rollout_node = search_space.get_node(rollout_state);
     OperatorProxy roll_op = task_proxy.get_operators()[rollout_node.get_info().creating_operator];
@@ -148,6 +151,7 @@ SearchStatus NewSearch::iterated_rollout(State rollout_state) {
     int rollout_eval = rollout_eval_ctx.get_evaluator_value_or_infinity(evaluator.get());
     int last_eval = rollout_eval;
     State last_state = rollout_state;
+    int rollout_depth = state_depth[rollout_state];
 
     OperatorID next_op = random_next_action(rollout_state);
     if (next_op == OperatorID::no_operator) {
@@ -162,7 +166,7 @@ SearchStatus NewSearch::iterated_rollout(State rollout_state) {
     
     statistics.inc_generated();
 
-    int rollout_budget = 2*rollout_eval + 4; // idk
+    int rollout_budget = budget; // idk
     bool found_hi = false;
     do {
         if (check_goal_and_set_plan(curr_state)) {
@@ -175,13 +179,29 @@ SearchStatus NewSearch::iterated_rollout(State rollout_state) {
 
         bool keep_open = false;
         if (curr_eval < last_eval && !found_hi) {
-            open_list->notify_state_transition(last_state, next_op, curr_state);
-            open_list->insert(curr_eval_ctx, curr_state.get_id());
+
+            state_depth[curr_state] = rollout_eval;
+            types[rollout_eval].push_back(curr_state.get_id());
+
+            current_sum += std::exp(-1.0*static_cast<double>(rollout_eval) / tau);
+
+            // open_list->notify_state_transition(last_state, next_op, curr_state);
+            // open_list->insert(curr_eval_ctx, curr_state.get_id());
             keep_open == true;
             found_hi = true;
-        }
+        } 
         if (curr_eval < rollout_eval) {
-            return iterated_rollout(curr_state);
+
+            if (!keep_open) {
+                state_depth[curr_state] = curr_eval;//rollout_depth+1;
+                types[state_depth[curr_state]].push_back(curr_state.get_id());
+
+                current_sum += std::exp(-1.0*static_cast<double>(state_depth[curr_state]) / tau);
+            }
+            // open_list->notify_state_transition(last_state, next_op, curr_state);
+            // open_list->insert(curr_eval_ctx, curr_state.get_id());
+            rollout_budget = budget;
+            // return iterated_rollout(curr_state, limit);
         }
 
         next_op = random_next_action(rollout_state);
@@ -204,7 +224,7 @@ SearchStatus NewSearch::iterated_rollout(State rollout_state) {
 
         if (search_progress.check_progress(curr_eval_ctx)) {
             statistics.print_checkpoint_line(succ_node.get_g());
-            reward_progress();
+            // reward_progress();
         }
 
     rollout_budget-=1;
@@ -217,12 +237,38 @@ SearchStatus NewSearch::step() {
 
     tl::optional<SearchNode> node;
     while (true) {
-        if (open_list->empty()) {
+        if (types.empty()) {
             log << "Completely explored state space -- no solution!" << endl;
             return FAILED;
         }
 
-        StateID id = open_list->remove_min();
+        int selected_depth = types.begin()->first;
+        if (types.size() > 1) {
+            double r = rng->random();
+            
+            double total_sum = current_sum;
+            double p_sum = 0.0;
+            for (auto it : types) {
+                double p = 1.0 / total_sum;
+                p *= std::exp(-1.0*static_cast<double>(it.first) / tau); //remove -1.0 *
+                p *= static_cast<double>(it.second.size());
+                p_sum += p;
+                if (r <= p_sum) {
+                    selected_depth = it.first;
+                    break;
+                }
+            }
+        }
+
+        vector<StateID> &states = types.at(selected_depth);
+        int chosen_i = rng->random(states.size());
+        StateID id = states[chosen_i];
+        utils::swap_and_pop_from_vector(states, chosen_i);
+        if (states.empty()){
+            types.erase(selected_depth);
+            current_sum -= std::exp(-1.0*static_cast<double>(selected_depth) / tau);
+        }
+
         State s = state_registry.lookup_state(id);
         node.emplace(search_space.get_node(s));
 
@@ -250,12 +296,8 @@ SearchStatus NewSearch::step() {
 
     // This evaluates the expanded state (again) to get preferred ops
     EvaluationContext eval_context(s, node->get_g(), false, &statistics, true);
-    // ordered_set::OrderedSet<OperatorID> preferred_operators;
-    // for (const shared_ptr<Evaluator> &preferred_operator_evaluator : preferred_operator_evaluators) {
-    //     collect_preferred_operators(eval_context,
-    //                                 preferred_operator_evaluator.get(),
-    //                                 preferred_operators);
-    // }
+    int parent_eval = eval_context.get_evaluator_value_or_infinity(evaluator.get());
+    // int parent_depth = state_depth[s];
 
     for (OperatorID op_id : applicable_ops) {
         OperatorProxy op = task_proxy.get_operators()[op_id];
@@ -274,7 +316,7 @@ SearchStatus NewSearch::step() {
         // }
 
         // notify path dependent openlist of transition
-        open_list->notify_state_transition(s, op_id, succ_state);
+        // open_list->notify_state_transition(s, op_id, succ_state);
 
         // Previously encountered dead end. Don't re-evaluate.
         if (succ_node.is_dead_end())
@@ -295,16 +337,28 @@ SearchStatus NewSearch::step() {
             //     continue;
             // }
             succ_node.open(*node, op, get_adjusted_cost(op));
-            open_list->insert(succ_eval_context, succ_state.get_id());
+
+            int eval = succ_eval_context.get_evaluator_value_or_infinity(evaluator.get());
+            if (eval < parent_eval) {
+                state_depth[succ_state] = eval;
+                current_sum += std::exp(-1.0*static_cast<double>(state_depth[succ_state]) / tau);
+                types[state_depth[succ_state]].push_back(succ_state.get_id());
+            } else {
+                state_depth[succ_state] = parent_eval;
+                types[parent_eval].push_back(succ_state.get_id());
+            }
+
+
+            // open_list->insert(succ_eval_context, succ_state.get_id());
             if (search_progress.check_progress(succ_eval_context)) {
                 statistics.print_checkpoint_line(succ_node.get_g());
-                reward_progress();
+                // reward_progress();
             }
 
             if (check_goal_and_set_plan(succ_state)) {
                 return SOLVED;
             }
-            if (iterated_rollout(succ_state) == SOLVED) {
+            if (iterated_rollout(succ_state, r_limit) == SOLVED) {
                 return SOLVED;
             }
 
@@ -325,8 +379,19 @@ SearchStatus NewSearch::step() {
 
                 EvaluationContext succ_eval_context(
                     succ_state, succ_node.get_g(), false, &statistics);
-                open_list->insert(succ_eval_context, succ_state.get_id());
-                if (iterated_rollout(succ_state) == SOLVED) {
+                
+                int eval = succ_eval_context.get_evaluator_value_or_infinity(evaluator.get());
+                if (eval < parent_eval) {
+                    state_depth[succ_state] = eval;
+                    current_sum += std::exp(-1.0*static_cast<double>(eval) / tau);
+                    types[eval].push_back(succ_state.get_id());
+                } else {
+                    state_depth[succ_state] = parent_eval;
+                    types[parent_eval].push_back(succ_state.get_id());
+                }
+
+                // open_list->insert(succ_eval_context, succ_state.get_id());
+                if (iterated_rollout(succ_state, r_limit) == SOLVED) {
                     return SOLVED;
                 }
             } else {
@@ -337,6 +402,7 @@ SearchStatus NewSearch::step() {
             }
         }
     }
+    next_type+=1;
 
     return IN_PROGRESS;
 }
@@ -344,7 +410,7 @@ SearchStatus NewSearch::step() {
 void NewSearch::reward_progress() {
     // Boost the "preferred operator" open lists somewhat whenever
     // one of the heuristics finds a state with a new best h value.
-    open_list->boost_preferred();
+    // open_list->boost_preferred();
 }
 
 void NewSearch::dump_search_space() const {

@@ -7,6 +7,7 @@
 
 #include <memory>
 #include <vector>
+#include <map>
 
 class Evaluator;
 class PruningMethod;
@@ -21,7 +22,25 @@ class NewSearch : public SearchEngine {
 
     std::shared_ptr<Evaluator> evaluator;
     std::shared_ptr<utils::RandomNumberGenerator> rng;
-    std::unique_ptr<StateOpenList> open_list;
+    // std::unique_ptr<StateOpenList> open_list;
+
+    // struct StateType {
+    //     int type;
+    //     int eval;
+    //     StateType(int type, int eval) : 
+    //         type(type), eval(eval) {}
+    //     StateType() : type(0), eval(std::numeric_limits<int>::max()) {}
+    // };
+    // PerStateInformation<StateType> state_info;
+    // std::map<int, utils::HashMap<int, std::vector<StateID>>, std::greater<int>> types;
+    
+    PerStateInformation<int> state_depth;
+    std::map<int, std::vector<StateID>> types;
+    int next_type = 0;
+    double tau;
+    int r_limit;
+    double current_sum;
+    int budget;
     // std::shared_ptr<Evaluator> f_evaluator;
 
     // std::vector<Evaluator *> path_dependent_evaluators;
@@ -37,7 +56,7 @@ class NewSearch : public SearchEngine {
 protected:
     virtual void initialize() override;
     OperatorID random_next_action(State s);
-    SearchStatus iterated_rollout(State rollout_root);
+    SearchStatus iterated_rollout(State rollout_root, int r_limit);
     virtual SearchStatus step() override;
 
 public:

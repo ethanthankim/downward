@@ -175,10 +175,10 @@ fast_downward_plugin(
 # )
 
 fast_downward_plugin(
-    NAME PARTITION_SELECTION_BIASED_ROOT
-    HELP "biased root partition selection policy"
+    NAME PARTITION_SELECTION_BIASED_LEVEL
+    HELP "biased level partition selection policy"
     SOURCES
-        open_lists/partitions/inter/biased_root
+        open_lists/partitions/inter/biased_level
 )
 
 fast_downward_plugin(
@@ -230,12 +230,12 @@ fast_downward_plugin(
         open_lists/partitions/intra/biased_minh
 )
 
-# fast_downward_plugin(
-#     NAME NODE_SELECTION_EPSILON_GREEDY
-#     HELP "epsilon greedy node selection policy"
-#     SOURCES
-#         open_lists/partitions/intra/epsilon_greedy_minh
-# )
+fast_downward_plugin(
+    NAME NODE_SELECTION_EPSILON_GREEDY
+    HELP "epsilon greedy node selection policy"
+    SOURCES
+        open_lists/partitions/intra/epsilon_greedy_minh
+)
 
 # fast_downward_plugin(
 #     NAME PARTITION_HI_OPEN_LIST
