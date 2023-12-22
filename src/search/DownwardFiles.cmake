@@ -237,6 +237,13 @@ fast_downward_plugin(
         open_lists/partitions/intra/epsilon_greedy_minh
 )
 
+fast_downward_plugin(
+    NAME NODE_SELECTION_RANDOM_MIN
+    HELP "random min node selection policy"
+    SOURCES
+        open_lists/partitions/intra/random_min
+)
+
 # fast_downward_plugin(
 #     NAME PARTITION_HI_OPEN_LIST
 #     HELP "Partition open list"

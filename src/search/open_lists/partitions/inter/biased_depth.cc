@@ -169,7 +169,7 @@ void InterBiasedDepthPolicy::notify_removal(int partition_key, int node_key) {
 
 class InterBiasedDepthPolicyFeature : public plugins::TypedFeature<PartitionPolicy, InterBiasedDepthPolicy> {
 public:
-    InterBiasedDepthPolicyFeature() : TypedFeature("inter_biased_depth") {
+    InterBiasedDepthPolicyFeature() : TypedFeature("biased_depth") {
         document_subcategory("partition_policies");
         document_title("Biased depth partition selection");
         document_synopsis(
