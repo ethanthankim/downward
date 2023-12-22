@@ -27,7 +27,7 @@ namespace partition_lwmb_open_list {
 template<class Entry>
 class PartitionLWMBOpenList : public PartitionOpenList<Entry> {
 
-
+    bool first_gen = true;
     int curr_expanding = -1;
     int last_removed = -1;
     int curr_expanding_lwm;
@@ -63,6 +63,7 @@ public:
 
 template<class Entry>
 void PartitionLWMBOpenList<Entry>::notify_initial_state(const State &initial_state) {
+    first_gen = true;
     curr_expanding_lwm = numeric_limits<int>::max();
 }
 
@@ -75,6 +76,9 @@ void PartitionLWMBOpenList<Entry>::notify_state_transition(const State &parent_s
     if (parent_id != curr_expanding) {
         curr_expanding = parent_id;
         h_to_type.clear();
+        first_gen = true;
+    } else {
+        first_gen = false;
     }
 
     curr_expanding_part_key = this->partitioned_nodes.at(curr_expanding).first.partition;
@@ -117,7 +121,8 @@ void PartitionLWMBOpenList<Entry>::do_insertion(
 
     this->partition_selector->notify_partition_transition(
         curr_expanding_part_key, 
-        partition_key);
+        partition_key,
+        first_gen);
     int id = PartitionOpenList<Entry>::partition_insert(new_h, entry, partition_key, is_new_part);
     state_to_id[eval_context.get_state()] = id;
 

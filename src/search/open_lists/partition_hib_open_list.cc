@@ -35,6 +35,7 @@ class PartitionHIBOpenList : public PartitionOpenList<Entry> {
     int curr_expanding_part_key = -1;
 
     bool first_success_in_succ = true;
+    bool first_gen = true;
 
     PerStateInformation<int> state_to_id;
     int type_counter;
@@ -60,6 +61,7 @@ public:
 
 template<class Entry>
 void PartitionHIBOpenList<Entry>::notify_initial_state(const State &initial_state) {
+    first_gen = true;
     curr_expanding_h = numeric_limits<int>::max();
 }
 
@@ -72,6 +74,9 @@ void PartitionHIBOpenList<Entry>::notify_state_transition(const State &parent_st
     if (parent_id != curr_expanding) {
         curr_expanding = parent_id;
         first_success_in_succ = true;
+        first_gen = true;
+    } else {
+        first_gen = false;
     }
 
     curr_expanding_part_key = this->partitioned_nodes.at(curr_expanding).first.partition;
@@ -103,7 +108,8 @@ void PartitionHIBOpenList<Entry>::do_insertion(
     }
     this->partition_selector->notify_partition_transition(
             curr_expanding_part_key, 
-            partition_key);
+            partition_key, 
+            first_gen);
     int id = PartitionOpenList<Entry>::partition_insert( 
         new_h, 
         entry, 

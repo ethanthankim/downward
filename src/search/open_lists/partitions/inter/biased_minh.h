@@ -66,7 +66,7 @@ public:
         node_hs.clear();
         current_sum = 0.0;
     };
-    virtual void notify_partition_transition(int parent_part, int child_part) {};
+    virtual void notify_partition_transition(int parent_part, int child_part, bool first_gen) {};
 };
 }
 
