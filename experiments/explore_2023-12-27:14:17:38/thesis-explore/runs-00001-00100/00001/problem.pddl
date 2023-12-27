@@ -1,1 +1,0 @@
-../../../../../../../benchmarks-tiny/gripper/p02.pddl
