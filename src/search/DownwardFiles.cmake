@@ -238,6 +238,13 @@ fast_downward_plugin(
 )
 
 fast_downward_plugin(
+    NAME NODE_SELECTION_EPSILON_UNIFORM
+    HELP "epsilon uniform node selection policy"
+    SOURCES
+        open_lists/partitions/intra/epsilon_uniform
+)
+
+fast_downward_plugin(
     NAME NODE_SELECTION_RANDOM_MIN
     HELP "random min node selection policy"
     SOURCES

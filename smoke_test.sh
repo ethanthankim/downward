@@ -18,11 +18,17 @@ grep Expanded "$FOLDER/sokoban.txt"
 grep -i "Plan valid" "$FOLDER/sokoban.txt"
 echo
 
-echo "testing tidybot"
-./fast-downward.py --validate benchmarks-test/tidybot-sat11-strips/domain.pddl benchmarks-test/tidybot-sat11-strips/p14.pddl $EVALS --search "eager($1, cost_type=$COST)"> $FOLDER/tidybot.txt 2>&1
-grep Expanded "$FOLDER/tidybot.txt"
-grep -i "Plan valid" "$FOLDER/tidybot.txt"
-echo
+# echo "testing parcprinter"
+# ./fast-downward.py --validate benchmarks-test/parcprinter-sat11-strips/p12-domain.pddl benchmarks-test/parcprinter-sat11-strips/p12.pddl $EVALS --search "eager($1, cost_type=$COST)"> $FOLDER/tidybot.txt 2>&1
+# grep Expanded "$FOLDER/parcprinter.txt"
+# grep -i "Plan valid" "$FOLDER/parcprinter.txt"
+# echo
+
+# echo "testing scanalyzer"
+# ./fast-downward.py --validate benchmarks-test/scanalyzer-sat11-strips/domain.pddl benchmarks-test/scanalyzer-sat11-strips/p20.pddl $EVALS --search "eager($1, cost_type=$COST)"> $FOLDER/tidybot.txt 2>&1
+# grep Expanded "$FOLDER/scanalyzer.txt"
+# grep -i "Plan valid" "$FOLDER/scanalyzer.txt"
+# echo
 
 echo "testing floortile"
 ./fast-downward.py --validate benchmarks-test/floortile-sat11-strips/domain.pddl benchmarks-test/floortile-sat11-strips/seq-p01-002.pddl $EVALS --search "eager($1, cost_type=$COST)"> $FOLDER/floortile.txt 2>&1

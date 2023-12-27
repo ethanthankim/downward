@@ -137,7 +137,7 @@ void InterBiasedLevelPolicy::notify_insert(
         int part_i = partition_index_in_cache(partition_key);
         if (part_i < new_partition_with_level_cache.size()) {
             new_partition_with_level_cache[part_i].inc_size();
-            if (eval < partition_levels.at(partition_key)) { // new lowest level
+            if (eval > partition_levels.at(partition_key)) { // new lowest level
                 partition_levels[part_i] = eval;
             }
         } else {
