@@ -67,7 +67,7 @@ public:
         // node_to_part.clear();
         partition_to_id_pair.clear();
     };
-    virtual void notify_partition_transition(int parent_part, int child_part, bool first_gen) override;
+    virtual void notify_partition_transition(int parent_part, int parent_eval, int child_part, bool first_gen) override;
 };
 }
 

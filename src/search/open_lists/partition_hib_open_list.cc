@@ -108,6 +108,7 @@ void PartitionHIBOpenList<Entry>::do_insertion(
     }
     this->partition_selector->notify_partition_transition(
             curr_expanding_part_key, 
+            curr_expanding_h,
             partition_key, 
             first_gen);
     int id = PartitionOpenList<Entry>::partition_insert( 

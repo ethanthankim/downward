@@ -47,15 +47,10 @@ InterBiasedLevelPolicy::InterBiasedLevelPolicy(const plugins::Options &opts)
 
 // }
 
-void InterBiasedLevelPolicy::notify_partition_transition(int parent_part, int child_part, bool first_gen) {
+void InterBiasedLevelPolicy::notify_partition_transition(int parent_part, int parent_eval, int child_part, bool first_gen) {
     if (parent_part == -1) return;
-
-    if (first_gen) { // new expansion started
-        for ( PartitionNode to_insert : new_partition_with_level_cache) {
-            insert_partition(partition_levels[to_insert.partition], to_insert);
-        }
-        new_partition_with_level_cache.clear();
-    }
+    cached_parent_part = parent_part;
+    chached_parent_eval = parent_eval;
 }
 
 void InterBiasedLevelPolicy::insert_partition(int new_h, PartitionNode &partition) {
@@ -129,26 +124,12 @@ void InterBiasedLevelPolicy::notify_insert(
         int eval) 
 {
     // node_to_part.emplace(node_key, partition_key);
-    if (new_partition) {
-        auto next_partition = PartitionNode(partition_key, 1);
-        new_partition_with_level_cache.push_back(next_partition);
-        partition_levels[partition_key] = eval;
+    if (new_partition || partition_to_id_pair.count(partition_key)==0) {
+        auto new_partition = PartitionNode(partition_key, 1);
+        insert_partition(chached_parent_eval, new_partition);
     } else {
-        int part_i = partition_index_in_cache(partition_key);
-        if (part_i < new_partition_with_level_cache.size()) {
-            new_partition_with_level_cache[part_i].inc_size();
-            if (eval > partition_levels.at(partition_key)) { // new lowest level
-                partition_levels[part_i] = eval;
-            }
-        } else {
-            if (partition_to_id_pair.count(partition_key)==0) {
-                auto next_partition = PartitionNode(partition_key, 1);
-                insert_partition(partition_levels.at(partition_key), next_partition);
-            } else {
-                auto partition_ids = partition_to_id_pair.at(partition_key); 
-                h_buckets.at(partition_ids.first)[partition_ids.second].inc_size();
-            }
-        }
+        auto partition_ids = partition_to_id_pair.at(partition_key); 
+        h_buckets.at(partition_ids.first)[partition_ids.second].inc_size();
     }
 
 }

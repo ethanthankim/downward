@@ -47,7 +47,7 @@ InterBiasedDepthPolicy::InterBiasedDepthPolicy(const plugins::Options &opts)
 
 // }
 
-void InterBiasedDepthPolicy::notify_partition_transition(int parent_part, int child_part, bool first_gen) {
+void InterBiasedDepthPolicy::notify_partition_transition(int parent_part, int parent_eval, int child_part, bool first_gen) {
     if (parent_part == -1) return;
     cached_parent_part = parent_part;
     cached_parent_depth = partition_to_id_pair.at(cached_parent_part).first;

@@ -32,7 +32,7 @@ public:
         partition_keys_and_sizes.clear();
         key_to_partition_index.clear();
     };
-    virtual void notify_partition_transition(int parent_part, int child_part, bool first_gen) {};
+    virtual void notify_partition_transition(int parent_part, int parent_eval, int child_part, bool first_gen) {};
 };
 }
 

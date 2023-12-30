@@ -1,6 +1,7 @@
 #include "random_min.h"
 
-#define RANDOM_BOUND 1000
+#include <climits>
+#define RANDOM_BOUND INT_MAX
 
 
 using namespace std;

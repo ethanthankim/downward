@@ -121,6 +121,7 @@ void PartitionLWMBOpenList<Entry>::do_insertion(
 
     this->partition_selector->notify_partition_transition(
         curr_expanding_part_key, 
+        curr_expanding_lwm,
         partition_key,
         first_gen);
     int id = PartitionOpenList<Entry>::partition_insert(new_h, entry, partition_key, is_new_part);

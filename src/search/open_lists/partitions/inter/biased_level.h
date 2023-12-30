@@ -32,27 +32,14 @@ class InterBiasedLevelPolicy : public PartitionPolicy {
     std::map< int, std::vector<PartitionNode>, std::less<int> > h_buckets;
     utils::HashMap<int, std::pair<int, int>> partition_to_id_pair; // the pair of values needed to get partition  from h_buckets
 
-
-    utils::HashMap<int, int> partition_levels; 
-    int curr_parent;
-    std::vector<PartitionNode> new_partition_with_level_cache;
+    int cached_parent_part;
+    int chached_parent_eval;
     // int total_gets=0;
     // std::vector<int> counts = {0,0,0,0,0,0,0,0,0,0};
 
     double tau;
     bool ignore_size;
     double current_sum;
-
-private:
-    inline int partition_index_in_cache(int partition_key) {
-        int i=0;
-        for (auto p : new_partition_with_level_cache) {
-            if (p.partition == partition_key) return i;
-            i+=1;
-        }
-        return i;
-    }
-
 
 public:
     explicit InterBiasedLevelPolicy(const plugins::Options &opts);
@@ -76,7 +63,7 @@ public:
         // node_to_part.clear();
         partition_to_id_pair.clear();
     };
-    virtual void notify_partition_transition(int parent_part, int child_part, bool first_gen) override;
+    virtual void notify_partition_transition(int parent_part, int parent_eval, int child_part, bool first_gen) override;
 };
 }
 
