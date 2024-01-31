@@ -249,7 +249,8 @@ inline int UHRSearch::greedy_policy(vector<EvaluationContext>& succ_eval) {
 SearchStatus UHRSearch::random_rollout(State rollout_state, State parent_state) {
     
     SearchNode rollout_node = search_space.get_node(rollout_state);
-    OperatorProxy roll_op = task_proxy.get_operators()[rollout_node.get_info().creating_operator];
+    OperatorID roll_op_id = rollout_node.get_info().creating_operator;
+    OperatorProxy roll_op = task_proxy.get_operators()[roll_op_id];
     int succ_g = rollout_node.get_g() + get_adjusted_cost(roll_op);
 
     State last_state = parent_state;
@@ -264,92 +265,37 @@ SearchStatus UHRSearch::random_rollout(State rollout_state, State parent_state) 
 
     while (rollout_len > 0) {
 
-        rollout_path.push_back(RolloutState(curr_state, succ_g, );
+        rollout_path.push_back(RolloutState(curr_state, succ_g, roll_op_id));
         g_costs.push_back(succ_g);
 
         State tmp = curr_state;
-        curr_state = random_policy(curr_state, last_state);
+
+        vector<OperatorID> applicable_ops;
+        successor_generator.generate_applicable_ops(parent_state, applicable_ops);
+        int i = rng->random(applicable_ops.size());
+        OperatorID op_id = applicable_ops[i];
+        OperatorProxy curr_op = task_proxy.get_operators()[op_id];
+        State chosen_s = state_registry.get_successor_state(parent_state, curr_op);
+        if (chosen_s == last_state) { 
+            i = (i+1) % applicable_ops.size();
+
+            op_id = applicable_ops[i];
+            curr_op = task_proxy.get_operators()[op_id];
+            chosen_s = state_registry.get_successor_state(parent_state, curr_op);
+        } 
+        if (chosen_s == last_state) {
+            // deadend
+        }
+
+        curr_state = chosen_s;
         last_state = tmp;
+
+        roll_op_id = op_id;
+        roll_op = task_proxy.get_operators()[roll_op_id];
+        succ_g = rollout_node.get_g() + get_adjusted_cost(roll_op);
 
         rollout_len-=1;
     }
-
-    OperatorID next_op = random_next_action(rollout_state);
-    if (next_op == OperatorID::no_operator) {
-        return IN_PROGRESS;
-    }
-    OperatorProxy op = task_proxy.get_operators()[next_op];
-    State curr_state = state_registry.get_successor_state(rollout_state, op);
-    SearchNode curr_node = search_space.get_node(curr_state);
-
-    if (curr_node.is_new())
-        curr_node.open(rollout_node, op, get_adjusted_cost(op));
-    
-    statistics.inc_generated();
-
-    int rollout_budget = budget; // idk
-    bool found_hi = false;
-    do {
-        if (check_goal_and_set_plan(curr_state)) {
-            return SOLVED;
-        }
-
-        EvaluationContext curr_eval_ctx(
-            curr_state, succ_g, false, &statistics);
-        int curr_eval = curr_eval_ctx.get_evaluator_value_or_infinity(evaluator.get());
-
-        bool keep_open = false;
-        if (curr_eval < last_eval && !found_hi) {
-
-            state_depth[curr_state] = rollout_eval;
-            types[rollout_eval].push_back(curr_state.get_id());
-
-            current_sum += std::exp(-1.0*static_cast<double>(rollout_eval) / tau);
-
-            // open_list->notify_state_transition(last_state, next_op, curr_state);
-            // open_list->insert(curr_eval_ctx, curr_state.get_id());
-            keep_open == true;
-            found_hi = true;
-        } 
-        if (curr_eval < rollout_eval) {
-
-            if (!keep_open) {
-                state_depth[curr_state] = curr_eval;//rollout_depth+1;
-                types[state_depth[curr_state]].push_back(curr_state.get_id());
-
-                current_sum += std::exp(-1.0*static_cast<double>(state_depth[curr_state]) / tau);
-            }
-            // open_list->notify_state_transition(last_state, next_op, curr_state);
-            // open_list->insert(curr_eval_ctx, curr_state.get_id());
-            rollout_budget = budget;
-            // return iterated_rollout(curr_state, limit);
-        }
-
-        next_op = random_next_action(rollout_state);
-        if (next_op == OperatorID::no_operator) {
-            return IN_PROGRESS;
-        }
-        op = task_proxy.get_operators()[next_op];
-        State succ_state = state_registry.get_successor_state(curr_state, op);
-        statistics.inc_generated();
-
-        if(search_space.get_node(curr_state).is_open() && !keep_open)
-            search_space.get_node(curr_state).close();
-
-        SearchNode succ_node = search_space.get_node(succ_state);
-        if (succ_node.is_new())
-            succ_node.open(curr_node, op, get_adjusted_cost(op));
-        last_state = curr_state;
-        last_eval = curr_eval;
-        curr_state = succ_state;
-
-        if (search_progress.check_progress(curr_eval_ctx)) {
-            statistics.print_checkpoint_line(succ_node.get_g());
-            // reward_progress();
-        }
-
-    rollout_budget-=1;
-    } while(rollout_budget > 0);
 
     return  IN_PROGRESS;
 
@@ -499,9 +445,6 @@ SearchStatus UHRSearch::step() {
             }
 
             if (check_goal_and_set_plan(succ_state)) {
-                return SOLVED;
-            }
-            if (iterated_rollout(succ_state, r_limit) == SOLVED) {
                 return SOLVED;
             }
 
