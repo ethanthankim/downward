@@ -69,9 +69,9 @@ def main():
     FF_RANDOM_SEED = int(datetime.now().timestamp())
     CONFIGS = [
                
-        IssueConfig('HIB', ["--evaluator", f"h={unit_ff}", '--search', f'eager(alt( [ single(h), hib_partition(h, biased_depth(tau=1, random_seed={FF_RANDOM_SEED}), random_min(random_seed={FF_RANDOM_SEED})) ] ), {unit_cost}) '] , driver_options=DRIVER_OPTIONS),
+        # IssueConfig('HIB', ["--evaluator", f"h={unit_ff}", '--search', f'eager(alt( [ single(h), hib_partition(h, biased_depth(tau=1, random_seed={FF_RANDOM_SEED}), random_min(random_seed={FF_RANDOM_SEED})) ] ), {unit_cost}) '] , driver_options=DRIVER_OPTIONS),
         # IssueConfig('LWMB', ["--evaluator", f"h={unit_ff}", '--search', f'eager(alt( [ single(h), lwmb_partition(h, biased_level(tau=1, random_seed={FF_RANDOM_SEED}), intra_uniform(random_seed={FF_RANDOM_SEED})) ] ), {unit_cost}) '] , driver_options=DRIVER_OPTIONS),
-        # IssueConfig('LWMB', _get_lama_first() , driver_options=DRIVER_OPTIONS)
+        IssueConfig('LWMB', _get_lama_first() , driver_options=DRIVER_OPTIONS)
     ]
 
     ATTRIBUTES = [
