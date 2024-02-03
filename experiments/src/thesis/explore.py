@@ -69,15 +69,17 @@ def main():
     FF_RANDOM_SEED = int(datetime.now().timestamp())
     CONFIGS = [
                
-        # IssueConfig('HIB', ["--evaluator", f"h={unit_ff}", '--search', f'eager(alt( [ single(h), hib_partition(h, biased_depth(tau=1, random_seed={FF_RANDOM_SEED}), random_min(random_seed={FF_RANDOM_SEED})) ] ), {unit_cost}) '] , driver_options=DRIVER_OPTIONS),
-        # IssueConfig('LWMB', ["--evaluator", f"h={unit_ff}", '--search', f'eager(alt( [ single(h), lwmb_partition(h, biased_level(tau=1, random_seed={FF_RANDOM_SEED}), intra_uniform(random_seed={FF_RANDOM_SEED})) ] ), {unit_cost}) '] , driver_options=DRIVER_OPTIONS),
-        IssueConfig('LWMB', [
-            "--search",
-            "--if-unit-cost",
-            "let(hlm, landmark_sum(lm_reasonable_orders_hps(lm_rhw()),pref=true), let(hff, ff(), lazy_greedy([hff,hlm],preferred=[hff,hlm]) ))",
-            "--if-non-unit-cost",
-            "let(hlm1, landmark_sum(lm_reasonable_orders_hps(lm_rhw()),transform=adapt_costs(one),pref=true), let(hff1, ff(transform=adapt_costs(one)), lazy_greedy([hff1,hlm1],preferred=[hff1,hlm1], cost_type=one,reopen_closed=false) ))"
-        ] , driver_options=DRIVER_OPTIONS)
+        IssueConfig('Softmin', ["--evaluator", f"h={unit_ff}", '--search', f'eager(alt( [ single(h), softmin_type_based([h, g()], ignore_size=true, random_seed={FF_RANDOM_SEED}) ] ), {unit_cost})  '] , driver_options=DRIVER_OPTIONS),
+        IssueConfig('HITS', ["--evaluator", f"h={unit_ff}", '--search', f'eager(alt( [ single(h), hib_partition(h, inter_biased_depth(tau=1, random_seed={FF_RANDOM_SEED}), intra_uniform(random_seed={FF_RANDOM_SEED})) ] ), {unit_cost}) '] , driver_options=DRIVER_OPTIONS),
+        
+        
+        # IssueConfig('LWMB', [
+        #     "--search",
+        #     "--if-unit-cost",
+        #     "let(hlm, landmark_sum(lm_reasonable_orders_hps(lm_rhw()),pref=true), let(hff, ff(), lazy_greedy([hff,hlm],preferred=[hff,hlm]) ))",
+        #     "--if-non-unit-cost",
+        #     "let(hlm1, landmark_sum(lm_reasonable_orders_hps(lm_rhw()),transform=adapt_costs(one),pref=true), let(hff1, ff(transform=adapt_costs(one)), lazy_greedy([hff1,hlm1],preferred=[hff1,hlm1], cost_type=one,reopen_closed=false) ))"
+        # ] , driver_options=DRIVER_OPTIONS)
     ]
 
     ATTRIBUTES = [
