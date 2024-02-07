@@ -60,6 +60,31 @@ def main():
             "--if-non-unit-cost",
             "let(hlm1, landmark_sum(lm_reasonable_orders_hps(lm_rhw()),transform=adapt_costs(one),pref=true), let(hff1, ff(transform=adapt_costs(one)), lazy_greedy([hff1,hlm1],preferred=[hff1,hlm1], cost_type=one,reopen_closed=false) ))"
         ]
+    
+    def _get_lama_configs():
+        FF_RANDOM_SEED = int(datetime.now().timestamp())
+        return [
+            IssueConfig('Softmin-lama', ["--evaluator", 
+                        "hlm=landmark_sum(lm_factory=lm_rhw(use_orders=true),transform=adapt_costs(one),pref=false)",
+                        "--evaluator", 
+                        "hff=ff(transform=adapt_costs(one))",
+                        "--search", f"lazy(alt([single(hff),single(hff,pref_only=true),single(hlm),single(hlm,pref_only=true),softmin_type_based([hff,g()], random_seed={FF_RANDOM_SEED})],boost=1000),preferred=[hff,hlm],cost_type=one,reopen_closed=false)"] , driver_options=DRIVER_OPTIONS),
+            IssueConfig('Type-lama', ["--evaluator", 
+                        "hlm=landmark_sum(lm_factory=lm_rhw(use_orders=true),transform=adapt_costs(one),pref=false)",
+                        "--evaluator", 
+                        "hff=ff(transform=adapt_costs(one))",
+                        "--search", f"lazy(alt([single(hff),single(hff,pref_only=true),single(hlm),single(hlm,pref_only=true), type_based([hff, g()], random_seed={FF_RANDOM_SEED})],boost=1000),preferred=[hff,hlm],cost_type=one,reopen_closed=false)"] , driver_options=DRIVER_OPTIONS),
+            IssueConfig('HI-lama', ["--evaluator", 
+                        "hlm=landmark_sum(lm_factory=lm_rhw(use_orders=true),transform=adapt_costs(one),pref=false)",
+                        "--evaluator", 
+                        "hff=ff(transform=adapt_costs(one))",
+                        "--search", f"lazy(alt([single(hff),single(hff,pref_only=true),single(hlm),single(hlm,pref_only=true), hib_partition(hff, biased_depth(tau=1, random_seed={FF_RANDOM_SEED}), intra_uniform(random_seed={FF_RANDOM_SEED}))],boost=1000),preferred=[hff,hlm],cost_type=one,reopen_closed=false)"] , driver_options=DRIVER_OPTIONS),
+            IssueConfig('LWM-lama', ["--evaluator", 
+                        "hlm=landmark_sum(lm_factory=lm_rhw(use_orders=true),transform=adapt_costs(one),pref=false)",
+                        "--evaluator", 
+                        "hff=ff(transform=adapt_costs(one))",
+                        "--search", f"lazy(alt([single(hff),single(hff,pref_only=true),single(hlm),single(hlm,pref_only=true),lwmb_partition(hff, biased_depth(tau=1, random_seed={FF_RANDOM_SEED}), intra_biased(random_seed={FF_RANDOM_SEED}))],boost=1000),preferred=[hff,hlm],cost_type=one,reopen_closed=false)"] , driver_options=DRIVER_OPTIONS),
+        ]
 
     normal_ff = "ff()"
     unit_ff = "ff(transform=adapt_costs(cost_type=one))"
@@ -67,20 +92,13 @@ def main():
     real_cost = 'cost_type=normal'
 
     FF_RANDOM_SEED = int(datetime.now().timestamp())
-    CONFIGS = [
+    # CONFIGS = [
                
-        IssueConfig('Softmin', ["--evaluator", f"h={unit_ff}", '--search', f'eager(alt( [ single(h), softmin_type_based([h, g()], ignore_size=true, random_seed={FF_RANDOM_SEED}) ] ), {unit_cost})  '] , driver_options=DRIVER_OPTIONS),
-        IssueConfig('HITS', ["--evaluator", f"h={unit_ff}", '--search', f'eager(alt( [ single(h), hib_partition(h, biased_depth(tau=1, random_seed={FF_RANDOM_SEED}), intra_uniform(random_seed={FF_RANDOM_SEED})) ] ), {unit_cost}) '] , driver_options=DRIVER_OPTIONS),
+        # IssueConfig('Softmin', ["--evaluator", f"h={unit_ff}", '--search', f'eager(alt( [ single(h), softmin_type_based([h, g()], ignore_size=true, random_seed={FF_RANDOM_SEED}) ] ), {unit_cost})  '] , driver_options=DRIVER_OPTIONS),
+        # IssueConfig('HITS', ["--evaluator", f"h={unit_ff}", '--search', f'eager(alt( [ single(h), hib_partition(h, biased_depth(tau=1, random_seed={FF_RANDOM_SEED}), intra_uniform(random_seed={FF_RANDOM_SEED})) ] ), {unit_cost}) '] , driver_options=DRIVER_OPTIONS),
         
-        
-        # IssueConfig('LWMB', [
-        #     "--search",
-        #     "--if-unit-cost",
-        #     "let(hlm, landmark_sum(lm_reasonable_orders_hps(lm_rhw()),pref=true), let(hff, ff(), lazy_greedy([hff,hlm],preferred=[hff,hlm]) ))",
-        #     "--if-non-unit-cost",
-        #     "let(hlm1, landmark_sum(lm_reasonable_orders_hps(lm_rhw()),transform=adapt_costs(one),pref=true), let(hff1, ff(transform=adapt_costs(one)), lazy_greedy([hff1,hlm1],preferred=[hff1,hlm1], cost_type=one,reopen_closed=false) ))"
-        # ] , driver_options=DRIVER_OPTIONS)
-    ]
+    # ]
+    CONFIGS = _get_lama_configs()
 
     ATTRIBUTES = [
         "error",
