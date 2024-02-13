@@ -47,6 +47,13 @@ def parse_args():
         dest="time_limit",
         help="the overall time limit for each search algorithm."
     )
+
+    ARGPARSER.add_argument(
+        "--overall-memory-limit", 
+        default="4G",
+        dest="memory_limit",
+        help="the overall memory limit for each search algorithm."
+    )
     
     return ARGPARSER.parse_args()
 
@@ -57,6 +64,9 @@ def get_benchmark_dir():
 
 def get_time_limit():
     return ARGS.time_limit
+
+def get_memory_limit():
+    return ARGS.memory_limit
 
 def no_search():
     return bool(ARGS.no_search)

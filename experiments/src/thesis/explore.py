@@ -16,7 +16,7 @@ def main():
     REVISION_CACHE = os.environ.get("DOWNWARD_REVISION_CACHE")
     SEARCH_REVS = ["dawson-masters"]
     BUILD_OPTIONS = []
-    DRIVER_OPTIONS = ["--overall-time-limit", setup.get_time_limit()]
+    DRIVER_OPTIONS = ["--overall-time-limit", setup.get_time_limit(), "--overall-memory-limit", setup.get_memory_limit()]
     ENVIRONMENT = LocalEnvironment(processes=multiprocessing.cpu_count()-1)
     SUITE = setup.get_suite(BENCHMARKS_DIR)
 
@@ -64,26 +64,26 @@ def main():
     def _get_lama_configs():
         FF_RANDOM_SEED = int(datetime.now().timestamp())
         return [
-            IssueConfig('Softmin-lama', ["--evaluator", 
-                        "hlm=landmark_sum(lm_factory=lm_rhw(use_orders=true),transform=adapt_costs(one),pref=false)",
-                        "--evaluator", 
-                        "hff=ff(transform=adapt_costs(one))",
-                        "--search", f"lazy(alt([single(hff),single(hff,pref_only=true),single(hlm),single(hlm,pref_only=true),softmin_type_based([hff,g()], random_seed={FF_RANDOM_SEED})],boost=1000),preferred=[hff,hlm],cost_type=one,reopen_closed=false)"] , driver_options=DRIVER_OPTIONS),
-            IssueConfig('Type-lama', ["--evaluator", 
-                        "hlm=landmark_sum(lm_factory=lm_rhw(use_orders=true),transform=adapt_costs(one),pref=false)",
-                        "--evaluator", 
-                        "hff=ff(transform=adapt_costs(one))",
-                        "--search", f"lazy(alt([single(hff),single(hff,pref_only=true),single(hlm),single(hlm,pref_only=true), type_based([hff, g()], random_seed={FF_RANDOM_SEED})],boost=1000),preferred=[hff,hlm],cost_type=one,reopen_closed=false)"] , driver_options=DRIVER_OPTIONS),
+            # IssueConfig('Softmin-lama', ["--evaluator", 
+            #             "hlm=landmark_sum(lm_factory=lm_rhw(use_orders=true),transform=adapt_costs(one),pref=false)",
+            #             "--evaluator", 
+            #             "hff=ff(transform=adapt_costs(one))",
+            #             "--search", f"lazy(alt([single(hff),single(hff,pref_only=true),single(hlm),single(hlm,pref_only=true),softmin_type_based([hff,g()], random_seed={FF_RANDOM_SEED})],boost=1000),preferred=[hff,hlm],cost_type=one,reopen_closed=false)"] , driver_options=DRIVER_OPTIONS),
+            # IssueConfig('Type-lama', ["--evaluator", 
+            #             "hlm=landmark_sum(lm_factory=lm_rhw(use_orders=true),transform=adapt_costs(one),pref=false)",
+            #             "--evaluator", 
+            #             "hff=ff(transform=adapt_costs(one))",
+            #             "--search", f"lazy(alt([single(hff),single(hff,pref_only=true),single(hlm),single(hlm,pref_only=true), type_based([hff, g()], random_seed={FF_RANDOM_SEED})],boost=1000),preferred=[hff,hlm],cost_type=one,reopen_closed=false)"] , driver_options=DRIVER_OPTIONS),
             IssueConfig('HI-lama', ["--evaluator", 
                         "hlm=landmark_sum(lm_factory=lm_rhw(use_orders=true),transform=adapt_costs(one),pref=false)",
                         "--evaluator", 
                         "hff=ff(transform=adapt_costs(one))",
-                        "--search", f"lazy(alt([single(hff),single(hff,pref_only=true),single(hlm),single(hlm,pref_only=true), hib_partition(hff, biased_depth(tau=1, random_seed={FF_RANDOM_SEED}), intra_uniform(random_seed={FF_RANDOM_SEED}))],boost=1000),preferred=[hff,hlm],cost_type=one,reopen_closed=false)"] , driver_options=DRIVER_OPTIONS),
-            IssueConfig('LWM-lama', ["--evaluator", 
-                        "hlm=landmark_sum(lm_factory=lm_rhw(use_orders=true),transform=adapt_costs(one),pref=false)",
-                        "--evaluator", 
-                        "hff=ff(transform=adapt_costs(one))",
-                        "--search", f"lazy(alt([single(hff),single(hff,pref_only=true),single(hlm),single(hlm,pref_only=true),lwmb_partition(hff, biased_depth(tau=1, random_seed={FF_RANDOM_SEED}), intra_biased(random_seed={FF_RANDOM_SEED}))],boost=1000),preferred=[hff,hlm],cost_type=one,reopen_closed=false)"] , driver_options=DRIVER_OPTIONS),
+                        "--search", f"eager(alt([single(hff),single(hff,pref_only=true),single(hlm),single(hlm,pref_only=true), hib_partition(hff, biased_depth(tau=1, random_seed={FF_RANDOM_SEED}), intra_uniform(random_seed={FF_RANDOM_SEED}))],boost=1000),preferred=[hff,hlm],cost_type=one,reopen_closed=false)"] , driver_options=DRIVER_OPTIONS),
+            # IssueConfig('LWM-lama', ["--evaluator", 
+            #             "hlm=landmark_sum(lm_factory=lm_rhw(use_orders=true),transform=adapt_costs(one),pref=false)",
+            #             "--evaluator", 
+            #             "hff=ff(transform=adapt_costs(one))",
+            #             "--search", f"lazy(alt([single(hff),single(hff,pref_only=true),single(hlm),single(hlm,pref_only=true),lwmb_partition(hff, biased_depth(tau=1, random_seed={FF_RANDOM_SEED}), intra_biased(random_seed={FF_RANDOM_SEED}))],boost=1000),preferred=[hff,hlm],cost_type=one,reopen_closed=false)"] , driver_options=DRIVER_OPTIONS),
         ]
 
     normal_ff = "ff()"
@@ -92,13 +92,13 @@ def main():
     real_cost = 'cost_type=normal'
 
     FF_RANDOM_SEED = int(datetime.now().timestamp())
-    # CONFIGS = [
+    CONFIGS = [
                
         # IssueConfig('Softmin', ["--evaluator", f"h={unit_ff}", '--search', f'eager(alt( [ single(h), softmin_type_based([h, g()], ignore_size=true, random_seed={FF_RANDOM_SEED}) ] ), {unit_cost})  '] , driver_options=DRIVER_OPTIONS),
-        # IssueConfig('HITS', ["--evaluator", f"h={unit_ff}", '--search', f'eager(alt( [ single(h), hib_partition(h, biased_depth(tau=1, random_seed={FF_RANDOM_SEED}), intra_uniform(random_seed={FF_RANDOM_SEED})) ] ), {unit_cost}) '] , driver_options=DRIVER_OPTIONS),
+        IssueConfig('HITS', ["--evaluator", f"h={unit_ff}", '--search', f'eager(alt( [ single(h), hib_partition(h, biased_depth(tau=1, random_seed={FF_RANDOM_SEED}), intra_uniform(random_seed={FF_RANDOM_SEED})) ] ), {unit_cost}) '] , driver_options=DRIVER_OPTIONS),
         
-    # ]
-    CONFIGS = _get_lama_configs()
+    ]
+    # CONFIGS = _get_lama_configs()
 
     ATTRIBUTES = [
         "error",
