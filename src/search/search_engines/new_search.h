@@ -4,6 +4,7 @@
 #include "../open_list.h"
 #include "../search_engine.h"
 #include "../utils/rng.h"
+#include "../task_utils/task_properties.h"
 
 #include <memory>
 #include <vector>
@@ -34,13 +35,27 @@ class NewSearch : public SearchEngine {
     // PerStateInformation<StateType> state_info;
     // std::map<int, utils::HashMap<int, std::vector<StateID>>, std::greater<int>> types;
     
-    PerStateInformation<int> state_depth;
-    std::map<int, std::vector<StateID>> types;
-    int next_type = 0;
+    enum RolloutResult { UHR, GOAL };
+    struct OpenState {
+        int depth;
+        int op_index;
+        bool greedily_expanded;
+        std::vector<OperatorID> operators;
+        OpenState(int depth, int op_index, bool greedily_expanded, std::vector<OperatorID> &operators)
+            : depth(depth), op_index(op_index), greedily_expanded(greedily_expanded), operators(operators) {
+        }
+        OpenState() :
+            depth(0), op_index(-1) {} 
+    };
+    PerStateInformation<OpenState> open_states;
+    std::map<int, std::vector<std::vector<StateID>>, std::greater<int>> hi_types;
     double tau;
-    int r_limit;
     double current_sum;
-    int budget;
+    bool initial_expansion;
+
+    // the 'type' segments along a rollout for easy addition to type system
+    std::vector<std::vector<State>> active_rollout_path_segments;
+
     // std::shared_ptr<Evaluator> f_evaluator;
 
     // std::vector<Evaluator *> path_dependent_evaluators;
@@ -56,7 +71,12 @@ class NewSearch : public SearchEngine {
 protected:
     virtual void initialize() override;
     OperatorID random_next_action(State s);
-    SearchStatus iterated_rollout(State rollout_root, int r_limit);
+    OperatorID get_next_rollout_start(State s);
+    bool open_rollout_node(State s, OperatorID op_id, State parent_s);
+    // SearchStatus iterated_rollout(State rollout_root, int r_limit);
+    RolloutResult greedy_rollout(const State rollout_state);
+    RolloutResult random_rollout(const State rollout_state, int start_h, int rollout_limit);
+    bool partially_expand_state(SearchNode& expand_state);
     virtual SearchStatus step() override;
 
 public:

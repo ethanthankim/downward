@@ -22,10 +22,6 @@ public:
             "tau",
             "temperature",
             "1.0");
-        add_option<int>(
-            "r_limit",
-            "recursion limit on iterated rollouts",
-            "2");
         // add_list_option<shared_ptr<Evaluator>>(
         //     "preferred",
         //     "use preferred operators of these evaluators",
