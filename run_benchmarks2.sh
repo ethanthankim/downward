@@ -17,6 +17,9 @@ if [ ! -s "$OUTPUT_FILE" ]; then
     echo -e "Problem_Name\tPlan_Length\tPlan_Cost\tTotal_Time\tExpanded\tReopened\tEvaluated\tGenerated" >> "$OUTPUT_FILE"
 fi
 
+# Initialize total runtime
+TOTAL_RUNTIME=0
+
 # Iterate over all subdirectories in the benchmarks root directory
 for BENCHMARK_DIR in "$BENCHMARKS_ROOT_DIR"/*; do
     # Check if it's a directory
@@ -32,6 +35,9 @@ for BENCHMARK_DIR in "$BENCHMARKS_ROOT_DIR"/*; do
         NUM_PROBLEMS=$(find "$BENCHMARK_DIR" -maxdepth 1 -type f -name "*.pddl" | grep -v "$(basename "$DOMAIN_FILE")" | wc -l)
         CURRENT_PROBLEM=1
 
+        # Start time for folder
+        FOLDER_START_TIME=$(date +%s.%N)
+
         # Iterate over all PDDL problem files in the current benchmark directory
         for PROBLEM_FILE in "$BENCHMARK_DIR"/*.pddl; do
             # Skip the domain file
@@ -46,7 +52,7 @@ for BENCHMARK_DIR in "$BENCHMARKS_ROOT_DIR"/*; do
             # Redirect all output to a temporary file
             TEMP_OUTPUT=$(mktemp)
             python3 fast-downward.py \
-                --overall-time-limit 10s \
+                --overall-time-limit 5m \
                 "$DOMAIN_FILE" "$PROBLEM_FILE" \
                 --evaluator "hff=ff()" \
                 --search "eager(open=type_based([hff], random_seed=-1))" \
@@ -70,5 +76,20 @@ for BENCHMARK_DIR in "$BENCHMARKS_ROOT_DIR"/*; do
             # Increment the current problem count
             ((CURRENT_PROBLEM++))
         done
+
+        # End time for folder
+        FOLDER_END_TIME=$(date +%s)
+
+        # Calculate runtime for folder
+        FOLDER_RUNTIME=$(echo "$FOLDER_END_TIME - $FOLDER_START_TIME" | bc -l)
+
+        # Add folder runtime to total runtime
+        TOTAL_RUNTIME=$(echo "$TOTAL_RUNTIME + $FOLDER_RUNTIME" | bc)
+        
+        # Print folder runtime
+        echo "Folder runtime: $FOLDER_RUNTIME seconds" >> "$OUTPUT_FILE"
     fi
 done
+
+# Print total runtime at the end of the output file
+echo "Total runtime: $TOTAL_RUNTIME seconds" >> "$OUTPUT_FILE"
