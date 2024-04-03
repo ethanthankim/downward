@@ -14,6 +14,7 @@
 #include <memory>
 #include <unordered_map>
 #include <vector>
+#include <iostream>
 
 using namespace std;
 
@@ -46,13 +47,38 @@ public:
 };
 
 template<class Entry>
+// void TypeBasedOpenList<Entry>::do_insertion(
+//     EvaluationContext &eval_context, const Entry &entry) {
+//     vector<int> key;
+//     key.reserve(evaluators.size());
+//     for (const shared_ptr<Evaluator> &evaluator : evaluators) {
+//         key.push_back(
+//             eval_context.get_evaluator_value_or_infinity(evaluator.get()));
+//     }
+
+//     auto it = key_to_bucket_index.find(key);
+//     if (it == key_to_bucket_index.end()) {
+//         key_to_bucket_index[key] = keys_and_buckets.size();
+//         keys_and_buckets.push_back(make_pair(move(key), Bucket({entry})));
+//     } else {
+//         size_t bucket_index = it->second;
+//         assert(utils::in_bounds(bucket_index, keys_and_buckets));
+//         keys_and_buckets[bucket_index].second.push_back(entry);
+//     }
+// }
 void TypeBasedOpenList<Entry>::do_insertion(
     EvaluationContext &eval_context, const Entry &entry) {
     vector<int> key;
     key.reserve(evaluators.size());
-    for (const shared_ptr<Evaluator> &evaluator : evaluators) {
-        key.push_back(
-            eval_context.get_evaluator_value_or_infinity(evaluator.get()));
+    // Bucket width is range of values we want in buckets (i.e bucket_width = 5 would be 0-4,5-9,etc)
+    int bucket_width = 5;
+
+    for (size_t i = 0; i < evaluators.size(); ++i) {
+        int value = eval_context.get_evaluator_value_or_infinity(evaluators[i].get());
+
+        // Determine bucket index
+        int bucket_index = value / bucket_width; // Divide value by width to get bucket index
+        key.push_back(bucket_index);
     }
 
     auto it = key_to_bucket_index.find(key);

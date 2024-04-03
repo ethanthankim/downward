@@ -49,7 +49,7 @@ for BENCHMARK_DIR in "$BENCHMARKS_ROOT_DIR"/*; do
                 --overall-time-limit 10s \
                 "$DOMAIN_FILE" "$PROBLEM_FILE" \
                 --evaluator "hff=ff()" \
-                --search "eager_greedy([hff], preferred=[hff])" \
+                --search "eager(open=type_based([hff], random_seed=-1))" \
                 > "$TEMP_OUTPUT" 2>&1
 
             # Extract relevant information
