@@ -71,7 +71,7 @@ void TypeBasedOpenList<Entry>::do_insertion(
 //     vector<int> key;
 //     key.reserve(evaluators.size());
 //     // Bucket width is range of values we want in buckets (i.e bucket_width = 5 would be 0-4,5-9,etc)
-//     int bucket_width = 5;
+//     int bucket_width = 2;
 
 //     for (size_t i = 0; i < evaluators.size(); ++i) {
 //         int value = eval_context.get_evaluator_value_or_infinity(evaluators[i].get());
