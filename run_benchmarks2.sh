@@ -61,7 +61,7 @@ for BENCHMARK_DIR in "$BENCHMARKS_ROOT_DIR"/*; do
             # Extract relevant information
             PLAN_LENGTH=$(awk '/Plan length:/ {print $(NF-1)}' "$TEMP_OUTPUT")
             PLAN_COST=$(awk '/Plan cost:/ {print $NF}' "$TEMP_OUTPUT")
-            TOTAL_TIME=$(awk '/Total time:/ {print $NF}' "$TEMP_OUTPUT")
+            TOTAL_TIME=$(awk '/Total time:/ {print substr($NF, 1, length($NF)-1)}' "$TEMP_OUTPUT")
             EXPANDED=$(awk '/Expanded/ {print $(NF-1)}' "$TEMP_OUTPUT")
             REOPENED=$(awk '/Reopened/ {print $(NF-1)}' "$TEMP_OUTPUT")
             EVALUATED=$(awk '/Evaluated/ {print $(NF-1)}' "$TEMP_OUTPUT")
@@ -78,7 +78,7 @@ for BENCHMARK_DIR in "$BENCHMARKS_ROOT_DIR"/*; do
         done
 
         # End time for folder
-        FOLDER_END_TIME=$(date +%s)
+        FOLDER_END_TIME=$(date +%s.%N)
 
         # Calculate runtime for folder
         FOLDER_RUNTIME=$(echo "$FOLDER_END_TIME - $FOLDER_START_TIME" | bc -l)
