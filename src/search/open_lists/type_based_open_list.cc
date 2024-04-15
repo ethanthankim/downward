@@ -47,25 +47,26 @@ public:
 };
 
 template<class Entry>
-void TypeBasedOpenList<Entry>::do_insertion(
-    EvaluationContext &eval_context, const Entry &entry) {
-    vector<int> key;
-    key.reserve(evaluators.size());
-    for (const shared_ptr<Evaluator> &evaluator : evaluators) {
-        key.push_back(
-            eval_context.get_evaluator_value_or_infinity(evaluator.get()));
-    }
+// void TypeBasedOpenList<Entry>::do_insertion(
+//     EvaluationContext &eval_context, const Entry &entry) {
+//     vector<int> key;
+//     key.reserve(evaluators.size());
+//     for (const shared_ptr<Evaluator> &evaluator : evaluators) {
+//         key.push_back(
+//             eval_context.get_evaluator_value_or_infinity(evaluator.get()));
+//     }
 
-    auto it = key_to_bucket_index.find(key);
-    if (it == key_to_bucket_index.end()) {
-        key_to_bucket_index[key] = keys_and_buckets.size();
-        keys_and_buckets.push_back(make_pair(move(key), Bucket({entry})));
-    } else {
-        size_t bucket_index = it->second;
-        assert(utils::in_bounds(bucket_index, keys_and_buckets));
-        keys_and_buckets[bucket_index].second.push_back(entry);
-    }
-}
+//     auto it = key_to_bucket_index.find(key);
+//     if (it == key_to_bucket_index.end()) {
+//         key_to_bucket_index[key] = keys_and_buckets.size();
+//         keys_and_buckets.push_back(make_pair(move(key), Bucket({entry})));
+//     } else {
+//         size_t bucket_index = it->second;
+//         assert(utils::in_bounds(bucket_index, keys_and_buckets));
+//         keys_and_buckets[bucket_index].second.push_back(entry);
+//     }
+// }
+/* Static Bucket Width*/
 // void TypeBasedOpenList<Entry>::do_insertion(
 //     EvaluationContext &eval_context, const Entry &entry) {
 //     vector<int> key;
@@ -91,6 +92,47 @@ void TypeBasedOpenList<Entry>::do_insertion(
 //         keys_and_buckets[bucket_index].second.push_back(entry);
 //     }
 // }
+/* Variable Bucket Width */
+void TypeBasedOpenList<Entry>::do_insertion(
+    EvaluationContext &eval_context, const Entry &entry) {
+    vector<int> key;
+    key.reserve(evaluators.size());
+    // Bucket width is range of values we want in buckets (i.e bucket_width = 5 would be 0-4,5-9,etc)
+    // bucket width will depend on evaluator value (smaller h values are closer to goal so will be bw=1
+    // whereas large h values will be bucketed more)
+    int bucket_width = 1;
+    // offset used to create unique indicies (value/bucket_width would give 5 for value=5 but also value=10 and 11)
+    int offset = 0;
+    int bucket_index;
+
+    for (size_t i = 0; i < evaluators.size(); ++i) {
+        int value = eval_context.get_evaluator_value_or_infinity(evaluators[i].get());
+
+        if (value >= 10 && value < 50) {
+            bucket_width = 2;
+            offset = 5;
+        } else if (value >= 50 && value < 100) {
+            bucket_width = 5;
+            offset = 20;
+        } else if (value >= 100) {
+            bucket_width = 10;
+            offset = 30;
+        }
+
+        bucket_index = (value / bucket_width) + offset;
+        key.push_back(bucket_index);
+    }
+
+    auto it = key_to_bucket_index.find(key);
+    if (it == key_to_bucket_index.end()) {
+        key_to_bucket_index[key] = keys_and_buckets.size();
+        keys_and_buckets.push_back(make_pair(move(key), Bucket({entry})));
+    } else {
+        size_t bucket_index = it->second;
+        assert(utils::in_bounds(bucket_index, keys_and_buckets));
+        keys_and_buckets[bucket_index].second.push_back(entry);
+    }
+}
 
 template<class Entry>
 TypeBasedOpenList<Entry>::TypeBasedOpenList(const plugins::Options &opts)
