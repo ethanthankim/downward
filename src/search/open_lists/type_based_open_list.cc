@@ -47,6 +47,9 @@ public:
 };
 
 template<class Entry>
+
+/* Original do_insertion method */
+
 // void TypeBasedOpenList<Entry>::do_insertion(
 //     EvaluationContext &eval_context, const Entry &entry) {
 //     vector<int> key;
@@ -66,7 +69,9 @@ template<class Entry>
 //         keys_and_buckets[bucket_index].second.push_back(entry);
 //     }
 // }
+
 /* Static Bucket Width*/
+
 // void TypeBasedOpenList<Entry>::do_insertion(
 //     EvaluationContext &eval_context, const Entry &entry) {
 //     vector<int> key;
@@ -92,12 +97,13 @@ template<class Entry>
 //         keys_and_buckets[bucket_index].second.push_back(entry);
 //     }
 // }
+
 /* Variable Bucket Width */
+
 void TypeBasedOpenList<Entry>::do_insertion(
     EvaluationContext &eval_context, const Entry &entry) {
     vector<int> key;
     key.reserve(evaluators.size());
-    // Bucket width is range of values we want in buckets (i.e bucket_width = 5 would be 0-4,5-9,etc)
     // bucket width will depend on evaluator value (smaller h values are closer to goal so will be bw=1
     // whereas large h values will be bucketed more)
     int bucket_width = 1;

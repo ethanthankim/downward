@@ -55,7 +55,7 @@ for BENCHMARK_DIR in "$BENCHMARKS_ROOT_DIR"/*; do
                 --overall-time-limit 5m \
                 "$DOMAIN_FILE" "$PROBLEM_FILE" \
                 --evaluator "hff=ff()" \
-                --search "eager(alt([single(hff,pref_only=false), type_based([hff], random_seed=-1)], boost=0))" \
+                --search "eager(alt([single(hff,pref_only=false), type_based([hff], random_seed=1)], boost=0))" \
                 > "$TEMP_OUTPUT" 2>&1
 
             # Extract relevant information
